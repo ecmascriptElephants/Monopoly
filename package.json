@@ -1,0 +1,19 @@
+{
+  "name": "monopoly",
+  "version": "1.0.0",
+  "description": "a web app for monopoly",
+  "main": "server/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ecmascriptElephants/Monopoly.git"
+  },
+  "author": "Jinwei, Kyle & RJ",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ecmascriptElephants/Monopoly/issues"
+  },
+  "homepage": "https://github.com/ecmascriptElephants/Monopoly#readme"
+}

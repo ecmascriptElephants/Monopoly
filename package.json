@@ -4,7 +4,8 @@
   "description": "a web app for monopoly",
   "main": "server/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ./"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,16 @@
   "bugs": {
     "url": "https://github.com/ecmascriptElephants/Monopoly/issues"
   },
-  "homepage": "https://github.com/ecmascriptElephants/Monopoly#readme"
+  "homepage": "https://github.com/ecmascriptElephants/Monopoly#readme",
+  "dependencies": {
+    "express": "^4.14.1",
+    "react": "^15.4.2",
+    "react-router": "^3.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-promise": "^3.4.1",
+    "eslint-plugin-standard": "^2.0.1"
+  }
 }

@@ -8,30 +8,29 @@ module.exports = {
     publicPath: '/public/',
     filename: 'bundle.js'
   },
-  resolve: {
-    extentions: ['.js', '.jsx', '.json']
-  },
   devServer: {
-    publicPath: '/public/'
+    publicPath: '/public/',
+    historyApiFallback: true,
+    contentBase: './'
   },
   module: {
-    preLoaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         loader: 'eslint-loader',
-        exclude: /node_modules/
-      }
-    ],
-    loaders: [
+        exclude: /node_modules/,
+        enforce: 'pre'
+      },
       {
         test: /\.jsx?$/,
-        loader: 'babel-loader'
+        loader: 'babel-loader',
+        enforce: 'post'
       },
       {
         test: /\.json$/,
-        loader: 'json-loader'
+        loader: 'json-loader',
+        enforce: 'post'
       }
-
     ]
   }
 }

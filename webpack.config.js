@@ -2,7 +2,7 @@ const path = require('path')
 
 module.exports = {
   context: __dirname,
-  entry: './client/app.js',
+  entry: './client/app.jsx',
   output: {
     path: path.join(__dirname, '/public'),
     publicPath: '/public/',
@@ -10,8 +10,12 @@ module.exports = {
   },
   devServer: {
     publicPath: '/public/',
+    open: true,
     historyApiFallback: true,
-    contentBase: './'
+    contentBase: './index'
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.less', '.scss', '.css']
   },
   module: {
     rules: [
@@ -22,9 +26,9 @@ module.exports = {
         enforce: 'pre'
       },
       {
-        test: /\.jsx?$/,
-        loader: 'babel-loader',
-        enforce: 'post'
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: 'babel-loader'
       },
       {
         test: /\.json$/,

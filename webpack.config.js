@@ -2,36 +2,39 @@ const path = require('path')
 
 module.exports = {
   context: __dirname,
-  entry: './client/app.js',
+  entry: './client/app.jsx',
   output: {
     path: path.join(__dirname, '/public'),
     publicPath: '/public/',
     filename: 'bundle.js'
   },
-  resolve: {
-    extentions: ['.js', '.jsx', '.json']
-  },
   devServer: {
-    publicPath: '/public/'
+    publicPath: '/public/',
+    open: true,
+    historyApiFallback: true,
+    contentBase: './index'
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.less', '.scss', '.css']
   },
   module: {
-    preLoaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         loader: 'eslint-loader',
-        exclude: /node_modules/
-      }
-    ],
-    loaders: [
+        exclude: /node_modules/,
+        enforce: 'pre'
+      },
       {
-        test: /\.jsx?$/,
-        loader: 'babel-loader'
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: 'babel-loader'
       },
       {
         test: /\.json$/,
-        loader: 'json-loader'
+        loader: 'json-loader',
+        enforce: 'post'
       }
-
     ]
   }
 }

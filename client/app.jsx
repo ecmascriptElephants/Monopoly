@@ -1,10 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-const App = () => {
+import DiceRoll from './components/dice_roll'
+
+const App = function () {
   return (
     <div>
-      HEllo
+      <div>
+        Hello
+      </div>
+      <DiceRoll />
     </div>
   )
 }

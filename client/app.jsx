@@ -7,9 +7,12 @@ class App extends React.Component {
 
   render () {
     return (
-      <div className='board'>
-        <Symbol />
+      <div>
+        <h1>Monopoly!</h1>
         <DiceRoll />
+        <div className='board'>
+          <Symbol />
+        </div>
       </div>
     )
   }

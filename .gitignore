@@ -1,3 +1,5 @@
 node_modules
 public
 bundle.js
+debug.log
+npm-debug.log

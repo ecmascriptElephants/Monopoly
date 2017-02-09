@@ -1,17 +1,18 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-
+import Symbol from './components/Symbol'
 import DiceRoll from './components/dice_roll'
 
-const App = function () {
-  return (
-    <div>
-      <div>
-        Hello
+class App extends React.Component {
+
+  render () {
+    return (
+      <div className='board'>
+        <Symbol />
+        <DiceRoll />
       </div>
-      <DiceRoll />
-    </div>
-  )
+    )
+  }
 }
 
 ReactDOM.render(<App />, document.getElementById('container'))

@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Symbol from './components/Symbol'
+// import Symbol from './components/Symbol'
 import DiceRoll from './components/dice_roll'
+import Board from './components/board'
 
 class App extends React.Component {
 
@@ -10,9 +11,7 @@ class App extends React.Component {
       <div>
         <h1>Monopoly!</h1>
         <DiceRoll />
-        <div className='board'>
-          <Symbol />
-        </div>
+        <Board />
       </div>
     )
   }

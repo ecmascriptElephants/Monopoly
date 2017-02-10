@@ -6,7 +6,7 @@
   "scripts": {
     "start-dev": "webpack-dev-server",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint js/**/*.js jsx/**/*.jsx"
+    "lint": "node_modules/.bin/eslint server/**/*.js --quiet"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,6 @@
   "homepage": "https://github.com/ecmascriptElephants/Monopoly#readme",
   "dependencies": {
     "body-parser": "^1.16.0",
-    "eslint-loader": "^1.6.1",
     "express": "^4.14.1",
     "knex": "^0.12.6",
     "morgan": "^1.8.0",
@@ -44,6 +43,7 @@
     "eslint-config-standard": "^6.2.1",
     "eslint-config-standard-jsx": "^3.3.0",
     "eslint-config-standard-react": "^4.2.0",
+    "eslint-loader": "^1.6.1",
     "eslint-plugin-promise": "^3.4.1",
     "eslint-plugin-react": "^6.9.0",
     "eslint-plugin-standard": "^2.0.1",

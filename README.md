@@ -8,9 +8,7 @@ Show what the library does as concisely as possible, developers should be able t
 
 # Style-Guide
 
-Standard - JavaScript Style Guide
-https://cdn.rawgit.com/feross/standard/master/badge.svg
-https://github.com/feross/standard
+[![Standard - JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
 # Motivation
 

@@ -4,12 +4,12 @@ module.exports = {
   context: __dirname,
   entry: './client/app.jsx',
   output: {
-    path: path.join(__dirname, '/public'),
-    publicPath: '/public/',
+    path: path.join(__dirname, '/src'),
+    publicPath: '/src/',
     filename: 'bundle.js'
   },
   devServer: {
-    publicPath: '/public/',
+    publicPath: '/src/',
     open: true,
     historyApiFallback: true,
     contentBase: './index'

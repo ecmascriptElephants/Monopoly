@@ -8,8 +8,8 @@ const app = express()
 const port = process.env.PORT || 8000
 app.use(bodyParser.json())
 app.use(morgan('dev'))
-app.use(express.static(path.join(__dirname, '../public')))
 app.use(express.static(path.join(__dirname, '../index')))
+app.use(express.static(path.join(__dirname, '../src')))
 // routes(app, express)
 
 app.listen(port, () => {

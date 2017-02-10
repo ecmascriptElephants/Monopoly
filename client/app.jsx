@@ -1,20 +1,20 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-// import Symbol from './components/Symbol'
-import DiceRoll from './components/dice_roll'
+import { render } from 'react-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 import Board from './components/board'
+import Land from './components/landing'
 
 class App extends React.Component {
-
   render () {
     return (
-      <div>
-        <h1>Monopoly!</h1>
-        <DiceRoll />
-        <Board />
-      </div>
+      <Router>
+        <div>
+          <Route exact path='/' component={Land} />
+          <Route path='/board' component={Board} />
+        </div>
+      </Router>
     )
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('container'))
+render(<App />, document.getElementById('container'))

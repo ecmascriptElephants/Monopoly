@@ -1,9 +1,23 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway', sans-serif;
+}
 .board {
   /*postion: relative;*/
+  display: flex;
   margin: 0 auto;
-  width: 500px;
-  height: 500px;
+  width: 80%;
   border: 1px solid black;
+  background-image: url('https://images-na.ssl-images-amazon.com/images/I/81oC5pYhh2L._SL1500_.jpg');
+  background-size: contain ;
+  background-repeat: no-repeat;
+}
+
+.board:after {
+   content: "";
+  display: block;
+  padding-bottom: 100%;
 }
 
 .symbol {
@@ -18,4 +32,52 @@
 #tophat {
   width: 50px;
   height: 50px;
+}
+
+.flexrow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: 13%
+}
+
+.flexcol {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  width: 100%;
+}
+.flexside {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  overflow: auto;
+  width: 13.5%;
+  height: 100%;
+}
+.item {
+  border: 1px solid black;   /* <-- just for demonstration */
+  height: 100%;
+  width: 96%;
+}
+
+.col_item {
+  border: 1px solid black;   /* <-- just for demonstration */
+  height: 100px;
+  width: 130px;
+}
+.flexmiddle {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: 74%;
+ justify-content: space-between;  
+}
+
+.top {
+  width: 160%;
+  height: 100%;
 }

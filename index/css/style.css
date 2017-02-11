@@ -81,3 +81,13 @@
   width: 160%;
   height: 100%;
 }
+
+.ui.vertical.segment:last-child {
+    width: 40%;
+    border-bottom: none;
+    margin: auto;
+}
+
+.ui.container {
+    padding-top: 145px;
+}

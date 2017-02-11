@@ -8,6 +8,7 @@ module.exports = {
     publicPath: '/src/',
     filename: 'bundle.js'
   },
+  devtool: '#eval-source-map',
   devServer: {
     publicPath: '/src/',
     open: true,

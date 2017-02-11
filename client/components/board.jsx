@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Symbol from './Symbol'
-import DiceRoll from './dice_roll'
+// import DiceRoll from './dice_roll'
+import Player from './player'
 
 class Board extends Component {
   constructor (props) {
@@ -12,9 +13,9 @@ class Board extends Component {
   render () {
     return (
       <div>
-        <DiceRoll />
+        <Player name='RJ' piece='Hat' />
         <div className='board parent'>
-          <Symbol style={{ 'order': 0 }} />
+          <Symbol />
           <div className='wire'>
             <div className='flexcol'>
               <div className='flexrow'>

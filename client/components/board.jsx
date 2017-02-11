@@ -7,22 +7,11 @@ const Board = () => {
     <div>
       <DiceRoll />
       <div className='board parent'>
-        <div className='flexcol'>
-          <div className='flexrow'>
-            <div className='top' />
-            <div className='item' />
-            <div className='item' />
-            <div className='item' />
-            <div className='item' />
-            <div className='item' />
-            <div className='item' />
-            <div className='item' />
-            <div className='item' />
-            <div className='item' />
-            <div className='top' />
-          </div>
-          <div className='flexmiddle'>
-            <div className='flexside'>
+        <Symbol style={{'order': 0}} />
+        <div className='wire'>
+          <div className='flexcol'>
+            <div className='flexrow'>
+              <div className='top' />
               <div className='item' />
               <div className='item' />
               <div className='item' />
@@ -32,35 +21,48 @@ const Board = () => {
               <div className='item' />
               <div className='item' />
               <div className='item' />
+              <div className='top' />
             </div>
-            <div className='flexside'>
-              <div className='item' />
-              <div className='item' />
-              <div className='item' />
-              <div className='item' />
-              <div className='item' />
-              <div className='item' />
-              <div className='item' />
-              <div className='item' />
-              <div className='item' />
+            <div className='flexmiddle'>
+              <div className='flexside'>
+                <div className='item' />
+                <div className='item' />
+                <div className='item' />
+                <div className='item' />
+                <div className='item' />
+                <div className='item' />
+                <div className='item' />
+                <div className='item' />
+                <div className='item' />
+              </div>
+              <div className='flexside'>
+                <div className='item' />
+                <div className='item' />
+                <div className='item' />
+                <div className='item' />
+                <div className='item' />
+                <div className='item' />
+                <div className='item' />
+                <div className='item' />
+                <div className='item' />
+              </div>
             </div>
-          </div>
-          <div className='flexrow'>
-            <div className='top' />
-            <div className='item' />
-            <div className='item' />
-            <div className='item' />
-            <div className='item' />
-            <div className='item' />
-            <div className='item' />
-            <div className='item' />
-            <div className='item' />
-            <div className='item' />
-            <div className='top' />
+            <div className='flexrow'>
+              <div className='top' />
+              <div className='item' />
+              <div className='item' />
+              <div className='item' />
+              <div className='item' />
+              <div className='item' />
+              <div className='item' />
+              <div className='item' />
+              <div className='item' />
+              <div className='item' />
+              <div className='top'style={{'order': 0}} />
+            </div>
           </div>
         </div >
       </div >
-      <Symbol />
     </div >
   )
 }

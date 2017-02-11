@@ -1,5 +1,5 @@
 import React from 'react'
-// import Symbol from './components/Symbol'
+import Symbol from './Symbol'
 import DiceRoll from './dice_roll'
 
 const Board = () => {
@@ -60,6 +60,7 @@ const Board = () => {
           </div>
         </div >
       </div >
+      <Symbol />
     </div >
   )
 }

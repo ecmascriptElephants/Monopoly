@@ -28,11 +28,8 @@
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.2",
-<<<<<<< HEAD
     "react-router": "^4.0.0-beta.5",
-=======
     "react-router-dom": "^4.0.0-beta.5",
->>>>>>> routes
     "redux": "^3.6.0",
     "semantic-ui-react": "^0.64.7",
     "standard-react": "^4.0.0"

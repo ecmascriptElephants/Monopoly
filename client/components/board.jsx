@@ -15,7 +15,7 @@ class Board extends Component {
       <div>
         <Player name='RJ' piece='Hat' />
         <div className='board parent'>
-          <Symbol />
+          <Symbol className='token' left='96%' top='96%' />
           <div className='wire'>
             <div className='flexcol'>
               <div className='flexrow'>

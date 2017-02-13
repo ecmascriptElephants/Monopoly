@@ -27,20 +27,18 @@ class Player extends Component {
 
   render () {
     return (
-      <div>
-        <Container>
-          <Segment raised vertical compact>
-            <Header as='h6' icon textAlign='center'>
-              <Icon name='users' circular />
-              <Header.Content>
-                {this.state.name}
-              </Header.Content>
-            </Header>
-            <Divider />
-            <Button secondary fluid>Roll Dice</Button>
-          </Segment>
-        </Container>
-      </div>
+      <Container className='pcard'>
+        <Segment raised vertical compact className='content'>
+          <Header as='h6' icon textAlign='center'>
+            <Icon name='users' circular />
+            <Header.Content>
+              {this.state.name}
+            </Header.Content>
+          </Header>
+          <Divider />
+          <Button secondary fluid>Roll Dice</Button>
+        </Segment>
+      </Container>
     )
   }
 }

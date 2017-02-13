@@ -4,13 +4,9 @@
   "description": "a web app for monopoly",
   "main": "server/server.js",
   "scripts": {
-<<<<<<< HEAD
-    "test": "echo \"Error: no test specified\" && exit 1"
-=======
     "start-dev": "webpack-dev-server",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "node_modules/.bin/eslint server/**/*.js"
->>>>>>> dev
   },
   "repository": {
     "type": "git",
@@ -21,9 +17,6 @@
   "bugs": {
     "url": "https://github.com/ecmascriptElephants/Monopoly/issues"
   },
-<<<<<<< HEAD
-  "homepage": "https://github.com/ecmascriptElephants/Monopoly#readme"
-=======
   "homepage": "https://github.com/ecmascriptElephants/Monopoly#readme",
   "dependencies": {
     "body-parser": "^1.16.0",
@@ -64,5 +57,4 @@
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.3.0"
   }
->>>>>>> dev
 }

@@ -3,3 +3,4 @@ debug.log
 npm-debug.log
 src
 .idea
+env

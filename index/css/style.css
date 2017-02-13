@@ -4,7 +4,7 @@
     font-family: 'Raleway', sans-serif;
 }
 .board {
-  /*postion: relative;*/
+  position: relative;
   display: flex;
   margin: 0 auto;
   width: 80%;
@@ -21,17 +21,14 @@
 }
 
 .symbol {
-  position: relative;
-  width: 50px;
-  height: 50px;
-  border: 3px solid blue;
-  top: 400px;
-  left: 400px;
+  position: absolute;
+  z-index: 20;
+  display: flex;
 }
 
 #tophat {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
 }
 
 .flexrow {
@@ -60,7 +57,7 @@
 .item {
   border: 1px solid black;   /* <-- just for demonstration */
   height: 100%;
-  width: 96%;
+  width: 100%;
 }
 
 .col_item {
@@ -90,4 +87,21 @@
 
 .ui.container {
     padding-top: 145px;
+}
+
+.wire {
+ display: flex;
+ width: 100%;
+ z-index: 10;
+ height: 100%;
+ position: absolute
+}
+
+.pcard {
+  float: right;
+  width: 17%!important;
+}
+
+.content {
+  width: 100%!important;
 }

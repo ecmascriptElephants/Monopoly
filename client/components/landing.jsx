@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Input, Icon, Divider } from 'semantic-ui-react'
+
 class Land extends Component {
 
   render () {

@@ -123,7 +123,6 @@ class DiceRoll extends Component {
             {this.state.doublesComment}
           </div>
           <button className='dice-roll-btn' onClick={() => { this.handleDiceRollButtonClick() }}>
-            {/* onClick={this.handleDiceRollButtonClick} */}
             Roll Dice!
           </button>
         </div>
@@ -132,7 +131,7 @@ class DiceRoll extends Component {
             {`The next user to roll is ${this.state.userNames[this.state.currentUser]} @ position ${this.state.userPositions[this.state.currentUser]}`}
           </div>
           <div className='UserPositionsArray'>
-            {/* <h5>{`The current state of user positions is ${this.state.userPositions}`}</h5>
+            <h5>{`The current state of user positions is ${this.state.userPositions}`}</h5>
             <h5>{`${this.state.userNames[0]} is at position ${this.state.userPositions[0]}`}</h5>
             <h5>{`${this.state.userNames[1]} is at position ${this.state.userPositions[1]}`}</h5>
             <h5>{`${this.state.userNames[2]} is at position ${this.state.userPositions[2]}`}</h5>
@@ -140,7 +139,7 @@ class DiceRoll extends Component {
             <h5>{`${this.state.userNames[4]} is at position ${this.state.userPositions[4]}`}</h5>
             <h5>{`${this.state.userNames[5]} is at position ${this.state.userPositions[5]}`}</h5>
             <h5>{`${this.state.userNames[6]} is at position ${this.state.userPositions[6]}`}</h5>
-            <h5>{`${this.state.userNames[7]} is at position ${this.state.userPositions[7]}`}</h5> */}
+            <h5>{`${this.state.userNames[7]} is at position ${this.state.userPositions[7]}`}</h5>
           </div>
         </div>
       </div>

@@ -2,10 +2,10 @@ import React from 'react'
 
 const Symbol = function (props) {
   console.log('in symbol.js left = ', props.left, 'top = ', props.top)
-  let left = props.left
-  let top = props.top
-  let userNumber = props.userNumber
-  let userImages = [
+  const left = props.left
+  const top = props.top
+  const userNumber = props.userNumber
+  const userImages = [
     'https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAIhAAAAJGFmNWU1YzNhLWJjY2YtNDgzOS1iNzc1LTkyYjY1NzhlMWRkYw.jpg',
     'https://media.licdn.com/mpr/mpr/shrink_100_100/AAEAAQAAAAAAAAMcAAAAJGU0YTBkZTc4LTdiNWQtNDZmYi1iOWE1LTkwNDdkNjQwYmRhNw.jpg',
     'https://pbs.twimg.com/profile_images/625466783818887168/O3TO0NvV.jpg',
@@ -19,7 +19,7 @@ const Symbol = function (props) {
   // 'http://www.spore.com/static/avatar/500/231/078/black-top-hat.jpg'
   // 'Jeremy', 'Kyle', 'RJ', 'Joseph', 'Jeff', 'Justin', 'Jerry', 'Nino']
   return (
-    <div className='symbol' style={{left, top}}>
+    <div className='symbol' style={{ left, top }}>
       <img id='tophat' alt='' src={userImages[userNumber]} />
     </div>
   )

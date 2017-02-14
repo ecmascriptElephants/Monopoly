@@ -6,6 +6,8 @@ import Player from './player'
 class Board extends Component {
   constructor (props) {
     super(props)
+    this.dice = this.dice.bind(this)
+
     this.state = {
       user0: [97, 97],
       user1: [97, 97],
@@ -16,12 +18,11 @@ class Board extends Component {
       user6: [97, 97],
       user7: [97, 97]
     }
-    this.dice = this.dice.bind(this)
   }
 
   dice (userPositionsArray) {
     console.log(userPositionsArray)
-    var location = [
+    const location = [
       [97, 97], [97, 83], [97, 75], [97, 66.5], [97, 58.5], [97, 50], [97, 42], [97, 34], [97, 25.5], [97, 17.5], [97, 2.5],
       [84.5, 2.5], [76.4, 2.5], [68.2, 2.5], [60, 2.5], [51.8, 2.5], [43.5, 2.5], [35.4, 2.5], [27.1, 2.5], [19, 2.5], [7, 2.5],
       [7, 17.5], [7, 25.5], [7, 34], [7, 42], [7, 50], [7, 58.5], [7, 66.5], [7, 75], [7, 83],
@@ -45,14 +46,14 @@ class Board extends Component {
         <DiceRoll dice={this.dice} />
         <Player name='RJ' piece='Hat' />
         <div className='board parent'>
-          <Symbol className='token0' left={this.state.user0[1]+'%'} top={this.state.user0[0]+'%'} userNumber={0}/>
-          <Symbol className='token1' left={this.state.user1[1]+'%'} top={this.state.user1[0]-2+'%'} userNumber={1}/>
-          <Symbol className='token2' left={this.state.user2[1]+'%'} top={this.state.user2[0]-4+'%'} userNumber={2}/>
-          <Symbol className='token3' left={this.state.user3[1]+'%'} top={this.state.user3[0]-6+'%'} userNumber={3}/>
-          <Symbol className='token4' left={this.state.user4[1]-2+'%'} top={this.state.user4[0]+'%'} userNumber={4}/>
-          <Symbol className='token5' left={this.state.user5[1]-2+'%'} top={this.state.user5[0]-2+'%'} userNumber={5}/>
-          <Symbol className='token6' left={this.state.user6[1]-2+'%'} top={this.state.user6[0]-4+'%'} userNumber={6}/>
-          <Symbol className='token7' left={this.state.user7[1]-2+'%'} top={this.state.user7[0]-6+'%'} userNumber={7}/>
+          <Symbol className='token0' left={`${this.state.user0[1]}%`} top={`${this.state.user0[0]}%`} userNumber={0} />
+          <Symbol className='token1' left={`${this.state.user1[1]}%`} top={`${this.state.user1[0] - 2}%`} userNumber={1} />
+          <Symbol className='token2' left={`${this.state.user2[1]}%`} top={`${this.state.user2[0] - 4}%`} userNumber={2} />
+          <Symbol className='token3' left={`${this.state.user3[1]}%`} top={`${this.state.user3[0] - 6}%`} userNumber={3} />
+          <Symbol className='token4' left={`${this.state.user4[1] - 2}%`} top={`${this.state.user4[0]}%`} userNumber={4} />
+          <Symbol className='token5' left={`${this.state.user5[1] - 2}%`} top={`${this.state.user5[0] - 2}%`} userNumber={5} />
+          <Symbol className='token6' left={`${this.state.user6[1] - 2}%`} top={`${this.state.user6[0] - 4}%`} userNumber={6} />
+          <Symbol className='token7' left={`${this.state.user7[1] - 2}%`} top={`${this.state.user7[0] - 6}%`} userNumber={7} />
           <div className='wire'>
             <div className='flexcol'>
               <div className='flexrow'>

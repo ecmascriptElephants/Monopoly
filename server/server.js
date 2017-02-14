@@ -10,15 +10,6 @@ const config = require('../config/config')
 
 const User = require('./models/user')
 
-const knex = require('knex')({
-  client: 'mysql',
-  connection: {
-    host: 'localhost:3306',
-    user: 'root',
-    database: 'monopoly'
-  }
-})
-
 const app = express()
 const port = process.env.PORT || 8000
 
@@ -67,7 +58,7 @@ passport.use('local-login', new LocalStrategy({
   if(result.length === 0) {
     console.log('User not found!')
   } else {
-    
+
   }
 })
 }

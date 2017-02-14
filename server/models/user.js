@@ -20,4 +20,7 @@ User.addUser = (username, password) => {
     })
 }
 
+User.addUser('test', '123')
+console.log('test adding')
+
 module.exports = User

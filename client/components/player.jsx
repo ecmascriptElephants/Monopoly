@@ -23,6 +23,8 @@ class Player extends Component {
     this.buyProperty = this.buyProperty.bind(this)
     this.mortgageProperty = this.mortgageProperty.bind(this)
     this.unMortgageProperty = this.unMortgageProperty.bind(this)
+    this.buyHouse = this.buyHouse.bind(this)
+    this.sellHouse = this.sellHouse.bind(this)
   }
 
   increaseFunds (value) {
@@ -73,7 +75,7 @@ class Player extends Component {
     let tempProperty = this.state.property
     let unMortgageAmount = 0
     tempProperty.forEach( property => {
-      if(property.Position === propertyPosition && property.Mortgaged) {
+      if (property.Position === propertyPosition && property.Mortgaged) {
         property.Mortgaged = false
         unMortgageAmount = property.PropertyObj.UNMORTGAGE_PRICE
       }
@@ -84,35 +86,52 @@ class Player extends Component {
     }
   }
 
-  // buyHouse (propertyPosition) {
-  //   let propertiesArray = this.state.property
-  //   let propertyPrice = 0
-  //   rules.Properties.forEach( property => {
-  //     if(property.BOARD_POSITION === propertyPosition) {
-  //       propertyPrice = property.PRICE
-  //       propertiesArray.push(property)
-  //     }
-  //   })
-    // this.reduceFunds (propertyPrice)
-  //   this.setState = {
-  //     property: propertiesArray
-  //   }
-  // }
+  buyHouse (propertyPosition) {
+    let propertiesArray = this.state.property
+    let housePrice = 0
+    let numberOfPropsNeededForMonopoly = 0
+    let propertyGroup = ''
+    propertiesArray.forEach( property => {
+      if (property.Position === propertyPosition && property.PropertyObj.ALLOWS_HOUSES && property.Houses < 5) {
+        housePrice = property.PropertyObj.HOUSE_PRICE
+        numberOfPropsNeededForMonopoly = property.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP
+        propertyGroup = property.PropertyObj.PROPERTY_GROUP
+        property.Houses += 1
+      }
+    })
+    let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property) => {
+      if(property.PropertyObj.PROPERTY_GROUP === propertyGroup) {
+        numberOfPropertiesInGroup += 1
+      }
+    }, 0)
+    if(numberOfPropsNeededForMonopoly === propertiesInGroupCount && this.state.money >= housePrice) {
+      this.reduceFunds (housePrice)
+      this.setState = {
+        property: propertiesArray
+      }
+    } else {
+      if(this.state.money < housePrice) {
+        console.log('You do not have sufficient funds to purchase additional houses')
+      } else {
+        console.log(`You need ${numberOfPropsNeededForMonopoly} properties in order to have a monopoly, but you only have ${propertiesInGroupCount}.`)
+      }
+    }
+  }
 
-  // sellHouse (propertyPosition) {
-  //   let propertiesArray = this.state.property
-  //   let propertyPrice = 0
-  //   rules.Properties.forEach( property => {
-  //     if(property.BOARD_POSITION === propertyPosition) {
-  //       propertyPrice = property.PRICE
-  //       propertiesArray.push(property)
-  //     }
-  //   })
-  //   this.reduceFunds (propertyPrice)
-  //   this.setState = {
-  //     property: propertiesArray
-  //   }
-  // }
+  sellHouse (propertyPosition) {
+    let propertiesArray = this.state.property
+    let houseSalePrice = 0
+    propertiesArray.forEach( property => {
+      if(property.Position === propertyPosition && property.Houses > 0) {
+        houseSalePrice = property.PropertyObj.HOUSE_SALE_PRICE
+        property.Houses -= 1
+      }
+    })
+    this.increaseFunds (houseSalePrice)
+    this.setState = {
+      property: propertiesArray
+    }
+  }
 
   render () {
     return (

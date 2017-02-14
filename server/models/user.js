@@ -7,20 +7,17 @@ User.findByUsername = (username, cb) => {
       console.log('user', user)
       return cb(user)
     })
-    .catch((err) => {console.error(err)})
+    .catch((err) => { console.error(err) })
 }
 
 User.addUser = (username, password) => {
   return db('users').insert({username: username, password: password})
-    .then(function(username) {
-      console.log('user '+username+' has added to the db!')
+    .then(function (username) {
+      console.log('user ' + username + ' has added to the db!')
     })
-    .catch(function(err) {
+    .catch(function (err) {
       console.error(err)
     })
 }
-
-User.addUser('test', '123')
-console.log('test adding')
 
 module.exports = User

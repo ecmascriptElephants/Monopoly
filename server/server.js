@@ -5,11 +5,10 @@ const path = require('path')
 const routes = require('./routes/routes.js')
 const passport = require('passport')
 const FacebookStrategy = require('passport-facebook').Strategy
+const config = require('../config/fb')
 const LocalStrategy = require('passport-local').Strategy
-const config = require('../config/config')
-
 const User = require('./models/user')
-
+const db = require('./models/db')
 const app = express()
 const port = process.env.PORT || 8000
 
@@ -19,15 +18,74 @@ passport.use(new FacebookStrategy({
   clientID: config.clientID,
   clientSecret: config.clientSecret,
   callbackURL: config.callbackURL
-  },
+},
   (accessToken, refreshToken, profile, done) => {
     process.nextTick(() => {
-      // check if user exists in our db
+      // const photo = `https://graph.facebook.com/${profile.username}/picture?width=200&height=200&access_token=${accessToken}`
+      // profile.photo = photo
+      db.raw(`SELECT  * FROM fb_user where fbID = ${Number(profile.id)}`)
+      .then((result) => {
+        console.log(result)
+        if (result[0].length === 0) {
+          db.raw(`INSERT INTO fb_user VALUES (null, ${Number(profile.id)}, '${profile.displayName}')`)
+          .then(() => {
+            return done(null, profile)
+          })
+        } else {
+          return done(null, profile)
+        }
+      })
       console.log('fb profile id', profile.id)
-      return done(null, profile);
     })
   }
 ))
+
+passport.use('local-signup', new LocalStrategy({
+  usernameField: 'username',
+  passwordField: 'password',
+  passReqToCallback: true
+},
+  (req, username, password, done) => {
+    process.nextTick(() => {
+      // find a user in the db with given username
+      User.findByUsername(username, (result) => {
+        if (result.length === 0) {
+          User.addUser(username, password)
+        } else {
+          console.log('user exited')
+        }
+      })
+    })
+  }
+))
+
+passport.use('local-login', new LocalStrategy({
+  usernameField: 'username',
+  passwordField: 'password',
+  passReqToCallback: true
+},
+  (req, username, password, done) => {
+    User.findByUsername(username, (result) => {
+      if (result.length === 0) {
+        console.log('User not found!')
+      } else {
+
+      }
+    })
+  }
+))
+
+app.all('*', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'accept, content-type, x-parse-application-id, x-parse-rest-api-key, x-parse-session-token')
+  // intercept OPTIONS method
+  if (req.method === 'OPTIONS') {
+    res.send(200)
+  } else {
+    next()
+  }
+})
 
 passport.use('local-signup', new LocalStrategy({
   usernameField: 'username',

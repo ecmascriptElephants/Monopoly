@@ -3,4 +3,5 @@ debug.log
 npm-debug.log
 src
 .idea
+fb.js
 env

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Input, Icon, Divider } from 'semantic-ui-react'
+
 class Land extends Component {
 
   render () {
@@ -10,7 +11,7 @@ class Land extends Component {
             <Icon name='users' circular />
             <Header.Content>
               Hackopoly
-            </Header.Content>
+      </Header.Content>
           </Header>
           <Input focus fluid placeholder='Username' />
           <Divider horizontal />
@@ -20,7 +21,7 @@ class Land extends Component {
           <Divider horizontal>Or</Divider>
           <Button secondary fluid>Sign Up</Button>
           <Divider horizontal />
-          <Button fluid color='facebook'>
+          <Button fluid color='facebook' href='/auth/facebook'>
             <Icon name='facebook' /> Facebook
           </Button>
         </Segment>

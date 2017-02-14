@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Input, Icon, Divider } from 'semantic-ui-react'
+import axios from 'axios'
 class Land extends Component {
   // constructor (props) {
   //   super(props)
@@ -35,7 +36,12 @@ class Land extends Component {
   //     message: ''
   //   })
   // }
-
+  handleFBSubmit () {
+    axios.get('/auth/facebook')
+      .then((res) => console.log('make request'))
+      .catch((err) => console.error(err, 'here'))
+    console.log('fb button clicked!')
+  }
   render () {
     return (
       <Container>
@@ -44,7 +50,7 @@ class Land extends Component {
             <Icon name='users' circular />
             <Header.Content>
               Hackopoly
-            </Header.Content>
+      </Header.Content>
           </Header>
           <Input focus fluid placeholder='Username' />
           <Divider horizontal />
@@ -54,7 +60,7 @@ class Land extends Component {
           <Divider horizontal>Or</Divider>
           <Button secondary fluid>Sign Up</Button>
           <Divider horizontal />
-          <Button fluid color='facebook'>
+          <Button fluid color='facebook' href='/auth/facebook'>
             <Icon name='facebook' /> Facebook
     </Button>
         </Segment>

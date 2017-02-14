@@ -39,7 +39,7 @@ export default class FacebookButton extends React.Component {
   render () {
     return (
       <div>
-        <div className='fb-login-button'
+        <div className='fb-login-button'>
           data-max-rows='1'
           data-size='xlarge'
           data-show-faces='false'

@@ -83,7 +83,7 @@ class DiceRoll extends Component {
     updatedUserPositions[this.state.currentUser] = updatedCurrentUserPosition
     // update the current user to the next user
     let newCurrentUser = (this.state.currentUser + 1) % this.state.userPositions.length
-    if(doubles === 1 || doubles === 2) {
+    if (doubles === 1 || doubles === 2) {
       newCurrentUser = this.state.currentUser
     }
     // check if the user is landing on or passing go, NOTE still need to deal with jail

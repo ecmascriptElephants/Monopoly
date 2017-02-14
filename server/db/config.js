@@ -12,7 +12,12 @@
 // -- Table 'Games'
 // -- Holds Game States for All Games
 // -- ---
-
+// CREATE TABLE `monopoly`.`fb_user` (
+//   `id` INT NOT NULL AUTO_INCREMENT,
+//   `fbID` VARCHAR(45) NOT NULL,
+//   `displayname` VARCHAR(45) NULL,
+//   PRIMARY KEY (`id`),
+//   UNIQUE INDEX `fbID_UNIQUE` (`fbID` ASC));
 // DROP TABLE IF EXISTS `Games`;
 
 // CREATE TABLE `Games` (

@@ -20,5 +20,4 @@ User.addUser = (username, password) => {
     })
 }
 
-
 module.exports = User

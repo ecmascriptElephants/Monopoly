@@ -86,8 +86,44 @@ app.all('*', (req, res, next) => {
     next()
   }
 })
-app.use(passport.initialize())
-app.use(passport.session())
+
+passport.use('local-signup', new LocalStrategy({
+  usernameField: 'username',
+  passwordField: 'password',
+  passReqToCallback: true
+  },
+  (req, username, password, done) => {
+    process.nextTick(() => {
+      // find a user in the db with given username
+      User.findByUsername(username, (result) => {
+        if(result.length === 0) {
+          User.addUser(username, password)
+        } else {
+          console.log('user exited')
+        }
+      })
+    })
+  }
+))
+
+passport.use('local-login', new LocalStrategy({
+  usernameField: 'username',
+  passwordField: 'password',
+  passReqToCallback: true
+},
+(req, username, password, done) => {
+  User.findByUsername(username, (result) => {
+  if(result.length === 0) {
+    console.log('User not found!')
+  } else {
+
+  }
+})
+}
+))
+
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(bodyParser.json())
 app.use(morgan('dev'))
 app.use(express.static(path.join(__dirname, '../index')))

@@ -1,6 +1,7 @@
 const userController = require('../controllers/userController')
 
 module.exports = (app, express, passport) => {
+
   app.post('/api/login', userController.login)
   app.post('/api/signup', userController.signup)
 

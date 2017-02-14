@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Icon, Divider } from 'semantic-ui-react'
-import { rules } from '../static/rules.js'
+import { rules } from '../static/rules'
 
 class Player extends Component {
   constructor (props) {
@@ -42,15 +42,15 @@ class Player extends Component {
   buyProperty (propertyPosition) {
     let propertiesArray = this.state.property
     let propertyPrice = 0
-    let newProperty = {'PropertyObj': {}, 'Mortgaged': false, 'Houses': 0, 'Position': propertyPosition}
-    rules.Properties.forEach( property => {
+    let newProperty = { PropertyObj: {}, Mortgaged: false, Houses: 0, Position: propertyPosition }
+    rules.Properties.forEach((property) => {
       if (property.BOARD_POSITION === propertyPosition) {
         propertyPrice = property.PRICE
         newProperty.PropertyObj = property
         propertiesArray.push(newProperty)
       }
     })
-    this.reduceFunds (propertyPrice)
+    this.reduceFunds(propertyPrice)
     this.setState = {
       property: propertiesArray
     }
@@ -59,13 +59,13 @@ class Player extends Component {
   mortgageProperty (propertyPosition) {
     let tempProperty = this.state.property
     let mortgageAmount = 0
-    tempProperty.forEach( property => {
-      if(property.Position === propertyPosition) {
+    tempProperty.forEach((property) => {
+      if (property.Position === propertyPosition) {
         property.Mortgaged = true
         mortgageAmount = property.PropertyObj.MORTGAGE_PRICE
       }
     })
-    this.increaseFunds (mortgageAmount)
+    this.increaseFunds(mortgageAmount)
     this.setState = {
       property: tempProperty
     }
@@ -74,13 +74,13 @@ class Player extends Component {
   unMortgageProperty (propertyPosition) {
     let tempProperty = this.state.property
     let unMortgageAmount = 0
-    tempProperty.forEach( property => {
+    tempProperty.forEach((property) => {
       if (property.Position === propertyPosition && property.Mortgaged) {
         property.Mortgaged = false
         unMortgageAmount = property.PropertyObj.UNMORTGAGE_PRICE
       }
     })
-    this.reduceFunds (unMortgageAmount)
+    this.reduceFunds(unMortgageAmount)
     this.setState = {
       property: tempProperty
     }
@@ -91,7 +91,7 @@ class Player extends Component {
     let housePrice = 0
     let numberOfPropsNeededForMonopoly = 0
     let propertyGroup = ''
-    propertiesArray.forEach( property => {
+    propertiesArray.forEach((property) => {
       if (property.Position === propertyPosition && property.PropertyObj.ALLOWS_HOUSES && property.Houses < 5) {
         housePrice = property.PropertyObj.HOUSE_PRICE
         numberOfPropsNeededForMonopoly = property.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP
@@ -100,17 +100,17 @@ class Player extends Component {
       }
     })
     let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property) => {
-      if(property.PropertyObj.PROPERTY_GROUP === propertyGroup) {
+      if (property.PropertyObj.PROPERTY_GROUP === propertyGroup) {
         numberOfPropertiesInGroup += 1
       }
     }, 0)
-    if(numberOfPropsNeededForMonopoly === propertiesInGroupCount && this.state.money >= housePrice) {
-      this.reduceFunds (housePrice)
+    if (numberOfPropsNeededForMonopoly === propertiesInGroupCount && this.state.money >= housePrice) {
+      this.reduceFunds(housePrice)
       this.setState = {
         property: propertiesArray
       }
     } else {
-      if(this.state.money < housePrice) {
+      if (this.state.money < housePrice) {
         console.log('You do not have sufficient funds to purchase additional houses')
       } else {
         console.log(`You need ${numberOfPropsNeededForMonopoly} properties in order to have a monopoly, but you only have ${propertiesInGroupCount}.`)
@@ -121,13 +121,13 @@ class Player extends Component {
   sellHouse (propertyPosition) {
     let propertiesArray = this.state.property
     let houseSalePrice = 0
-    propertiesArray.forEach( property => {
-      if(property.Position === propertyPosition && property.Houses > 0) {
+    propertiesArray.forEach((property) => {
+      if (property.Position === propertyPosition && property.Houses > 0) {
         houseSalePrice = property.PropertyObj.HOUSE_SALE_PRICE
         property.Houses -= 1
       }
     })
-    this.increaseFunds (houseSalePrice)
+    this.increaseFunds(houseSalePrice)
     this.setState = {
       property: propertiesArray
     }

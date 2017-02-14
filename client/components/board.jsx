@@ -17,7 +17,6 @@ class Board extends Component {
       user7: [97, 97]
     }
     this.dice = this.dice.bind(this)
-    console.log('here')
   }
 
   dice (userPositionsArray) {

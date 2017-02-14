@@ -45,14 +45,14 @@ class Board extends Component {
         <DiceRoll dice={this.dice} />
         <Player name='RJ' piece='Hat' />
         <div className='board parent'>
-          <Symbol className='token0' left={this.state.user0[1]+'%'} top={this.state.user0[0]+'%'} />
-          <Symbol className='token1' left={this.state.user1[1]+'%'} top={this.state.user1[0]-2+'%'} />
-          <Symbol className='token2' left={this.state.user2[1]+'%'} top={this.state.user2[0]-4+'%'} />
-          <Symbol className='token3' left={this.state.user3[1]+'%'} top={this.state.user3[0]-6+'%'} />
-          <Symbol className='token4' left={this.state.user4[1]-2+'%'} top={this.state.user4[0]+'%'} />
-          <Symbol className='token5' left={this.state.user5[1]-2+'%'} top={this.state.user5[0]-2+'%'} />
-          <Symbol className='token6' left={this.state.user6[1]-2+'%'} top={this.state.user6[0]-4+'%'} />
-          <Symbol className='token7' left={this.state.user7[1]-2+'%'} top={this.state.user7[0]-6+'%'} />
+          <Symbol className='token0' left={this.state.user0[1]+'%'} top={this.state.user0[0]+'%'} userNumber={0}/>
+          <Symbol className='token1' left={this.state.user1[1]+'%'} top={this.state.user1[0]-2+'%'} userNumber={1}/>
+          <Symbol className='token2' left={this.state.user2[1]+'%'} top={this.state.user2[0]-4+'%'} userNumber={2}/>
+          <Symbol className='token3' left={this.state.user3[1]+'%'} top={this.state.user3[0]-6+'%'} userNumber={3}/>
+          <Symbol className='token4' left={this.state.user4[1]-2+'%'} top={this.state.user4[0]+'%'} userNumber={4}/>
+          <Symbol className='token5' left={this.state.user5[1]-2+'%'} top={this.state.user5[0]-2+'%'} userNumber={5}/>
+          <Symbol className='token6' left={this.state.user6[1]-2+'%'} top={this.state.user6[0]-4+'%'} userNumber={6}/>
+          <Symbol className='token7' left={this.state.user7[1]-2+'%'} top={this.state.user7[0]-6+'%'} userNumber={7}/>
           <div className='wire'>
             <div className='flexcol'>
               <div className='flexrow'>

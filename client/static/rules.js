@@ -1,4 +1,4 @@
-{
+const rules = {
   "Community_Chest" : [
     {"Description" : "BANK ERROR IN YOUR FAVOR COLLECT $200" },
     {"Description" : "FROM SALE OF STOCK YOU GET $45" },
@@ -153,7 +153,7 @@
       "HOUSE_PRICE" : 150,
       "MORTGAGE_PRICE" : 140,
       "HOUSE_SALE_PRICE" : 75,
-      "UNMORTGAGE_PRICE" : 154
+      "UNMORTGAGE_PRICE" : 154,
       "NUMBER_OF_PROPERTIES_IN_GROUP" : 3
     },
     {"NAME" : "Mediterranean Avenue",
@@ -212,7 +212,7 @@
       "RENT" : [26, 130, 390, 900, 1100, 1275],
       "HOUSE_PRICE" : 200,
       "MORTGAGE_PRICE" : 150,
-      "HOUSE_SALE_PRICE" : 100
+      "HOUSE_SALE_PRICE" : 100,
       "UNMORTGAGE_PRICE" : 165,
       "NUMBER_OF_PROPERTIES_IN_GROUP" : 3
     },
@@ -345,7 +345,7 @@
       "HOUSE_PRICE" : 50,
       "MORTGAGE_PRICE" : 50,
       "HOUSE_SALE_PRICE" : 25,
-      "UNMORTGAGE_PRICE" : 55
+      "UNMORTGAGE_PRICE" : 55,
       "NUMBER_OF_PROPERTIES_IN_GROUP" : 3
     },
     {"NAME" : "Virginia Avenue",
@@ -374,3 +374,5 @@
     }
   ]
 }
+
+export {rules}

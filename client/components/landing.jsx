@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Input, Icon, Divider } from 'semantic-ui-react'
-import axios from 'axios'
+
 class Land extends Component {
 
   render () {

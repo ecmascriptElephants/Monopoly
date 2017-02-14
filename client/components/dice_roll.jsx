@@ -92,6 +92,7 @@ class DiceRoll extends Component {
       currentUser: newCurrentUser,
       userPositions: updatedUserPositions
     })
+    this.props.dice(this.state.userPositions)
   }
 
   handleLandOnOrPassGo (oldCurrentUserPosition, updatedCurrentUserPosition, jail) {
@@ -145,6 +146,10 @@ class DiceRoll extends Component {
       </div>
     )
   }
+}
+
+DiceRoll.propTypes = {
+  dice: React.PropTypes.func.isRequired
 }
 
 export default DiceRoll

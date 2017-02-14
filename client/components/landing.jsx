@@ -2,46 +2,7 @@ import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Input, Icon, Divider } from 'semantic-ui-react'
 import axios from 'axios'
 class Land extends Component {
-  // constructor (props) {
-  //   super(props)
-  //   this.FB = props.fb
-  //   this.state = {
-  //     message: ''
-  //   }
-  // }
-  //
-  // componentDidMount () {
-  //   this.FB.Event.subscribe('auth.logout',
-  //     this.onLogout.bind(this))
-  //   this.FB.Event.subscribe('auth.statusChange',
-  //     this.onStatusChange.bind(this))
-  // }
-  //
-  // onStatusChange (response) {
-  //   console.log(response)
-  //   var self = this
-  //
-  //   if (response.status === 'connected') {
-  //     this.FB.api('/me', function (response) {
-  //       var message = 'Welcome ' + response.name
-  //       self.setState({
-  //         message: message
-  //       })
-  //     })
-  //   }
-  // }
-  //
-  // onLogout (response) {
-  //   this.setState({
-  //     message: ''
-  //   })
-  // }
-  handleFBSubmit () {
-    axios.get('/auth/facebook')
-      .then((res) => console.log('make request'))
-      .catch((err) => console.error(err, 'here'))
-    console.log('fb button clicked!')
-  }
+
   render () {
     return (
       <Container>
@@ -62,7 +23,7 @@ class Land extends Component {
           <Divider horizontal />
           <Button fluid color='facebook' href='/auth/facebook'>
             <Icon name='facebook' /> Facebook
-    </Button>
+          </Button>
         </Segment>
       </Container>
     )

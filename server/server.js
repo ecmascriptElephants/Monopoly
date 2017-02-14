@@ -6,6 +6,8 @@ const routes = require('./routes/routes.js')
 const passport = require('passport')
 const FacebookStrategy = require('passport-facebook').Strategy
 const config = require('../config/fb')
+const LocalStrategy = require('passport-local').Strategy
+const User = require('./models/user')
 
 const app = express()
 const port = process.env.PORT || 8000

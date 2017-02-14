@@ -47,11 +47,13 @@ passport.use('local-signup', new LocalStrategy({
   passReqToCallback: true
 },
   (req, username, password, done) => {
-    console.log('here!!')
+    console.log('here!! username and pass ', username, password)
     process.nextTick(() => {
       // find a user in the db with given username
       User.findByUsername(username, (result) => {
+        console.log('result', result)
         if (result[0].length === 0) {
+          console.log('can register')
           User.addUser(username, password)
           .then(() => {
             return done(null, username)

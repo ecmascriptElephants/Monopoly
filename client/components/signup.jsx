@@ -25,7 +25,7 @@ class Signup extends Component {
   handleSignup (event) {
     event.preventDefault()
     console.log('post signup', this.state.username, this.state.password)
-    axios.post('/signup',this.state)
+    axios.post('/signup', this.state)
     .then((res) => console.log('make request'))
     .catch((err) => console.error(err))
   }
@@ -41,9 +41,9 @@ class Signup extends Component {
             </Header.Content>
           </Header>
           <Form onSubmit={this.handleSignup}>
-            <Input focus fluid name='username' placeholder='Username' onChange={this.onUsernameChange}/>
+            <Input focus fluid name='username' placeholder='Username' onChange={this.onUsernameChange} />
             <Divider horizontal />
-            <Input focus fluid name='password' placeholder='Password' type='password' onChange={this.onPasswordChange}/>
+            <Input focus fluid name='password' placeholder='Password' type='password' onChange={this.onPasswordChange} />
             <Divider horizontal />
             <Button secondary fluid type='submit'>Sign Up</Button>
           </Form>

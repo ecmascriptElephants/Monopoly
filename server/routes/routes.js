@@ -8,8 +8,7 @@ module.exports = (app, express, passport) => {
   //   passport.authenticate('local-signup',
   // })
 
-  app.post('/signup',passport.authenticate('local-signup'))
-
+  app.post('/signup', passport.authenticate('local-signup'))
 
   app.get('/auth/facebook', passport.authenticate('facebook'), (req, res) => {
     console.log('should be in here')

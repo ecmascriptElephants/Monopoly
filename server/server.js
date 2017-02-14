@@ -1,4 +1,5 @@
 const express = require('express')
+const session = require('express-session')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const path = require('path')
@@ -25,7 +26,7 @@ passport.use(new FacebookStrategy({
       // profile.photo = photo
       db.raw(`SELECT  * FROM fb_user where fbID = ${Number(profile.id)}`)
       .then((result) => {
-        console.log(result)
+        console.log('show result', result)
         if (result[0].length === 0) {
           db.raw(`INSERT INTO fb_user VALUES (null, ${Number(profile.id)}, '${profile.displayName}')`)
           .then(() => {
@@ -49,10 +50,14 @@ passport.use('local-signup', new LocalStrategy({
     process.nextTick(() => {
       // find a user in the db with given username
       User.findByUsername(username, (result) => {
-        if (result.length === 0) {
+        if (result[0].length === 0) {
           User.addUser(username, password)
+          .then(() => {
+            return done(null, username)
+          })
         } else {
-          console.log('user exited')
+          console.log('user existed')
+          // return done(null, false, req.flash('signupMessage', 'User exited.'));
         }
       })
     })
@@ -66,10 +71,17 @@ passport.use('local-login', new LocalStrategy({
 },
   (req, username, password, done) => {
     User.findByUsername(username, (result) => {
-      if (result.length === 0) {
+      if (result[0].length === 0) {
         console.log('User not found!')
+        // return done(null, false, req.flash('loginMessage', 'User not found.'))
       } else {
-
+        if (password !== result[0].password) {
+          console.log('wrong password')
+          // return done(null, false, req.flash('loginMessage', 'Incorrect password.'))
+        } else {
+          console.log('user found')
+          // return done(null, result)
+        }
       }
     })
   }
@@ -124,6 +136,14 @@ passport.use('local-login', new LocalStrategy({
 
 app.use(passport.initialize())
 app.use(passport.session())
+
+app.use(session({
+  secret: 'ecmascriptElephant',
+  resave: false,
+  saveUninitialized: true
+}))
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(bodyParser.json())
 app.use(morgan('dev'))
 app.use(express.static(path.join(__dirname, '../index')))

@@ -2,8 +2,14 @@ const userController = require('../controllers/userController')
 
 module.exports = (app, express, passport) => {
 
-  app.post('/api/login', userController.login)
-  app.post('/api/signup', userController.signup)
+  // app.post('/login', userController.login(passport))
+  // app.post('/signup', (req, res, next) => {
+  //   console.log('sign up a user',req.body)
+  //   passport.authenticate('local-signup',
+  // })
+
+  app.post('/signup',passport.authenticate('local-signup'))
+
 
   app.get('/auth/facebook', passport.authenticate('facebook'), (req, res) => {
     console.log('should be in here')

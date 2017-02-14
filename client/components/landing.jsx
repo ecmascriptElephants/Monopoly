@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Input, Icon, Divider } from 'semantic-ui-react'
-
+import {Link} from 'react-router-dom'
 class Land extends Component {
 
   render () {
@@ -15,11 +15,11 @@ class Land extends Component {
           </Header>
           <Input focus fluid placeholder='Username' />
           <Divider horizontal />
-          <Input focus fluid placeholder='Password' />
+          <Input focus fluid placeholder='Password' type='password' />
           <Divider horizontal />
           <Button secondary fluid>Login</Button>
           <Divider horizontal>Or</Divider>
-          <Button secondary fluid>Sign Up</Button>
+          <Link to='/signup'> <Button secondary fluid>Sign Up</Button></Link>
           <Divider horizontal />
           <Button fluid color='facebook' href='/auth/facebook'>
             <Icon name='facebook' /> Facebook

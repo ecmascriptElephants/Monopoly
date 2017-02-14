@@ -9,8 +9,9 @@ class App extends Component {
     return (
       <Router>
         <div>
+          {console.log('here')}
           <Route exact path='/' component={Land} />
-          <Route path='#/board' component={Board} />
+          <Route path='/board' component={Board} />
         </div>
       </Router>
     )

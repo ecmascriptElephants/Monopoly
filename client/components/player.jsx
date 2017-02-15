@@ -26,6 +26,10 @@ class Player extends Component {
     this.buyHouse = this.buyHouse.bind(this)
     this.sellHouse = this.sellHouse.bind(this)
   }
+  componentWillReceiveProps (prev) {
+    this.setState({name: prev.name})
+    console.log('in componentDidUpdate in Player.jsx')
+  }
 
   increaseFunds (value) {
     this.setState = {

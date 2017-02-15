@@ -21,6 +21,7 @@ class Board extends Component {
       user7: [97, 97]
     }
     this.dice = this.dice.bind(this)
+    console.log(this.state.username)
   }
 
   dice (userPositionsArray) {
@@ -42,7 +43,7 @@ class Board extends Component {
       user7: location[userPositionsArray[7]]
     })
   }
-  componentDidMount () {
+  componentWillMount () {
     console.log('component')
     axios.get('/user')
     .then((res) => {
@@ -50,12 +51,11 @@ class Board extends Component {
       console.log(this.state.username)
     })
   }
-
   render () {
     return (
       <div>
         <DiceRoll dice={this.dice} />
-        <Player name='RJ' piece='Hat' />
+        <Player name={this.state.username} piece='Hat' />
         <div className='board parent'>
           <Symbol className='token0' left={`${this.state.user0[1]}%`} top={`${this.state.user0[0]}%`} userNumber={0} />
           <Symbol className='token1' left={`${this.state.user1[1]}%`} top={`${this.state.user1[0] - 2}%`} userNumber={1} />

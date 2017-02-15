@@ -7,7 +7,7 @@ module.exports = (io) => {
       userStorage.push(data)
       user++
       if (user > 1) {
-        socket.emit('start game', userStorage)
+        io.sockets.emit('start game', userStorage)
       }
     })
   })

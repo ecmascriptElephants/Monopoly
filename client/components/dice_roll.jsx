@@ -197,7 +197,7 @@ class DiceRoll extends Component {
 }
 
 DiceRoll.propTypes = {
-  dice: React.PropTypes.func.isRequired
+  dice: React.PropTypes.string.isRequired
 }
 
 export default DiceRoll

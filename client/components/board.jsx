@@ -2,13 +2,15 @@ import React, { Component } from 'react'
 import Symbol from './Symbol'
 import DiceRoll from './dice_roll'
 import Player from './player'
+// import io from 'socket.io-client'
+// const socket = io()
+import axios from 'axios'
 
 class Board extends Component {
   constructor (props) {
     super(props)
-    this.dice = this.dice.bind(this)
-
     this.state = {
+      username: '',
       user0: [97, 97],
       user1: [97, 97],
       user2: [97, 97],
@@ -18,6 +20,7 @@ class Board extends Component {
       user6: [97, 97],
       user7: [97, 97]
     }
+    this.dice = this.dice.bind(this)
   }
 
   dice (userPositionsArray) {
@@ -37,6 +40,14 @@ class Board extends Component {
       user5: location[userPositionsArray[5]],
       user6: location[userPositionsArray[6]],
       user7: location[userPositionsArray[7]]
+    })
+  }
+  componentDidMount () {
+    console.log('component')
+    axios.get('/user')
+    .then((res) => {
+      this.setState({username: res.data.displayName})
+      console.log(this.state.username)
     })
   }
 

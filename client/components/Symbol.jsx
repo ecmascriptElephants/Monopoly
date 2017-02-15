@@ -16,8 +16,6 @@ const Symbol = function (props) {
     'https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAfWAAAAJDIyM2MxYmRmLTU4NGItNGI0Ny05ZjIwLThhZGM1ZWQ4ZjM2Nw.jpg'
   ]
 
-  // 'http://www.spore.com/static/avatar/500/231/078/black-top-hat.jpg'
-  // 'Jeremy', 'Kyle', 'RJ', 'Joseph', 'Jeff', 'Justin', 'Jerry', 'Nino']
   return (
     <div className='symbol' style={{ left, top }}>
       <img id='tophat' alt='' src={userImages[userNumber]} />

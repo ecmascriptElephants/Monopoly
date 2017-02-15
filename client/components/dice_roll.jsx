@@ -8,6 +8,7 @@ class DiceRoll extends Component {
     this.handleAddDiceRollToUserPosition = this.handleAddDiceRollToUserPosition.bind(this)
     this.handleLandOnOrPassGo = this.handleLandOnOrPassGo.bind(this)
     this.handleEndTurnButtonClick = this.handleEndTurnButtonClick.bind(this)
+    this.handleChancePos = this.handleChancePos.bind(this)
 
     this.state = {
       dice: [],
@@ -114,6 +115,9 @@ class DiceRoll extends Component {
     let updatedCurrentUserPosition = (oldCurrentUserPosition + die1 + die2) % 40
     // update the userPositions array with the new current players position
     updatedUserPositions[this.state.currentUser] = updatedCurrentUserPosition
+    if (updatedUserPositions[this.state.currentUser] === 7 || updatedUserPositions[this.state.currentUser] === 22 || updatedUserPositions[this.state.currentUser] === 36 ) {
+      this.handleChancePos(updatedUserPositions)
+    }
     // update the current user to the next user
     if(updatedCurrentUserPosition === 30) {
       updatedCurrentUserPosition = 10
@@ -136,6 +140,49 @@ class DiceRoll extends Component {
       })
     }
     this.props.dice(this.state.userPositions)
+  }
+
+  handleChancePos (updatedUserPositions) {
+    // get a chance card randomly
+    const card = Math.floor((16* Math.random()))
+    if (card === 0) {
+      updatedUserPositions[this.state.currentUser] = 0
+      // user money += 200
+    } else if (card === 1) {
+      // user money += 50
+      // bankmoney -= 50
+    } else if (card === 2) {
+      updatedUserPositions[this.state.currentUser] = updatedUserPositions[this.state.currentUser] - 3
+    } else if (card === 3) {
+      // 12 & 28
+      let buldDis = Math.abs(updatedUserPositions[this.state.currentUser] - 12)
+      let waterDis = Math.abs(updatedUserPositions[this.state.currentUser] - 28)
+      updatedUserPositions[this.state.currentUser] = (buldDis > waterDis) ? 28 : 12
+    } else if (card === 4) {
+
+    } else if (card === 5) {
+
+    } else if (card === 6) {
+
+    } else if (card === 7) {
+
+    } else if (card === 8) {
+
+    } else if (card === 9) {
+
+    } else if (card === 10) {
+
+    } else if (card === 11) {
+
+    } else if (card === 12) {
+
+    } else if (card === 13) {
+
+    } else if (card === 14) {
+
+    } else {
+
+    }
   }
 
   handleLandOnOrPassGo (oldCurrentUserPosition, updatedCurrentUserPosition, jail) {

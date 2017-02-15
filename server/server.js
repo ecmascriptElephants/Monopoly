@@ -9,6 +9,7 @@ const passport = require('passport')
 const FacebookStrategy = require('passport-facebook').Strategy
 const config = require('../config/fb')
 const LocalStrategy = require('passport-local').Strategy
+const flash = require('connect-flash')
 const User = require('./models/user')
 const db = require('./models/db')
 const app = express()
@@ -27,13 +28,14 @@ passport.use(new FacebookStrategy({
       // profile.photo = photo
       db.raw(`SELECT  * FROM fb_user where fbID = ${Number(profile.id)}`)
       .then((result) => {
-        console.log('show result', result)
+        // console.log('show result', result)
         if (result[0].length === 0) {
           db.raw(`INSERT INTO fb_user VALUES (null, ${Number(profile.id)}, '${profile.displayName}')`)
           .then(() => {
             return done(null, profile)
           })
         } else {
+          console.log('profile', profile)
           return done(null, profile)
         }
       })
@@ -57,7 +59,6 @@ passport.use('local-signup', new LocalStrategy({
           console.log('can register')
           bcrypt.genSalt(5, (err, salt) => {
             bcrypt.hash(password, salt, null, (err, hash) => {
-              console.log('hash', hash);
               User.addUser(username, hash)
               .then(() => {
                 return done(null, username)
@@ -83,15 +84,15 @@ passport.use('local-login', new LocalStrategy({
     User.findByUsername(username, (result) => {
       if (result[0].length === 0) {
         console.log('User not found!')
-        // return done(null, false, req.flash('loginMessage', 'User not found.'))
+        return done(null, false, req.flash('loginMessage', 'User not found.'))
       } else {
         result = JSON.parse(JSON.stringify(result[0]))
         bcrypt.compare(password, result[0].password, (err, resp) => {
           if (err) console.error(err)
           if (resp) {
-            console.log('resp',resp)
             console.log('user found, log in success')
-            return done(null, username)
+            console.log('user', result[0])
+            return done(null, result[0])
           } else {
             console.log('wrong password')
             // return done(null, false, req.flash('loginMessage', 'Incorrect password.'))
@@ -118,8 +119,9 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(flash())
 app.use(bodyParser.json())
 app.use(morgan('dev'))
 app.use(express.static(path.join(__dirname, '../index')))

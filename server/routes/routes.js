@@ -9,7 +9,7 @@ module.exports = (app, express, passport, io) => {
     failureRedirect: '/login'
   }), (req, res) => {
     passport.user = req.user
-    res.redirect('/board')
+    res.redirect('/lobby')
   })
 
   app.get('/logout', (req, res) => {
@@ -17,8 +17,8 @@ module.exports = (app, express, passport, io) => {
     res.redirect('/')
   })
 
-  app.get('/board', (req, res) => {
-    res.redirect('/#/board')
+  app.get('/lobby', (req, res) => {
+    res.redirect('/#/lobby')
   })
   app.get('/user', (req, res) => {
     res.send(passport.user)
@@ -27,7 +27,4 @@ module.exports = (app, express, passport, io) => {
   //   if (req.isAuthenticated()) return next()
   //   res.redirect('/login')
   // }
-  io.on('connection', function (client) {
-    console.log('client <connection></connection>')
-  })
 }

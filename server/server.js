@@ -14,7 +14,7 @@ const db = require('./models/db')
 const app = express()
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
-
+const ioRouter = require('./routes/io.js')
 app.use(cors())
 
 const port = process.env.PORT || 8000
@@ -138,8 +138,9 @@ app.use(morgan('dev'))
 app.use(express.static(path.join(__dirname, '../index')))
 app.use(express.static(path.join(__dirname, '../src')))
 
-routes(app, express, passport, io)
-
+routes(app, express, passport)
+ioRouter(io)
+// app.listen(port)
 server.listen(port)
 
 module.exports = app

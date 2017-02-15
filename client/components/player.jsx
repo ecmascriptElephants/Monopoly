@@ -137,20 +137,20 @@ class Player extends Component {
     }
   }
 
-  handleChanceCard () {
-    let propertiesArray = this.state.property
-    let houseSalePrice = 0
-    propertiesArray.forEach((property) => {
-      if (property.Position === propertyPosition && property.Houses > 0) {
-        houseSalePrice = property.PropertyObj.HOUSE_SALE_PRICE
-        property.Houses -= 1
-      }
-    })
-    this.increaseFunds(houseSalePrice)
-    this.setState = {
-      property: propertiesArray
-    }
-  }
+  // handleChanceCard () {
+  //   let propertiesArray = this.state.property
+  //   let houseSalePrice = 0
+  //   propertiesArray.forEach((property) => {
+  //     if (property.Position === propertyPosition && property.Houses > 0) {
+  //       houseSalePrice = property.PropertyObj.HOUSE_SALE_PRICE
+  //       property.Houses -= 1
+  //     }
+  //   })
+  //   this.increaseFunds(houseSalePrice)
+  //   this.setState = {
+  //     property: propertiesArray
+  //   }
+  // }
 
   render () {
     return (

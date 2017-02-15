@@ -55,9 +55,14 @@ passport.use('local-signup', new LocalStrategy({
         console.log('result', result)
         if (result[0].length === 0) {
           console.log('can register')
-          User.addUser(username, password)
-          .then(() => {
-            return done(null, username)
+          bcrypt.genSalt(5, (err, salt) => {
+            bcrypt.hash(password, salt, null, (err, hash) => {
+              console.log('hash', hash);
+              User.addUser(username, hash)
+              .then(() => {
+                return done(null, username)
+              })
+            })
           })
         } else {
           console.log('user existed')
@@ -81,13 +86,17 @@ passport.use('local-login', new LocalStrategy({
         // return done(null, false, req.flash('loginMessage', 'User not found.'))
       } else {
         result = JSON.parse(JSON.stringify(result[0]))
-        if (password !== result[0].password) {
-          console.log('wrong password')
-          return done(null, false, req.flash('loginMessage', 'Incorrect password.'))
-        } else {
-          console.log('user found, log in success')
-          return done(null, username)
-        }
+        bcrypt.compare(password, result[0].password, (err, resp) => {
+          if (err) console.error(err)
+          if (resp) {
+            console.log('resp',resp)
+            console.log('user found, log in success')
+            return done(null, username)
+          } else {
+            console.log('wrong password')
+            // return done(null, false, req.flash('loginMessage', 'Incorrect password.'))
+          }
+        })
       }
     })
   }

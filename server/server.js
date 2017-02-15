@@ -1,5 +1,6 @@
 const express = require('express')
 const session = require('express-session')
+const bcrypt = require('bcrypt-nodejs')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const path = require('path')
@@ -8,6 +9,7 @@ const passport = require('passport')
 const FacebookStrategy = require('passport-facebook').Strategy
 const config = require('../config/fb')
 const LocalStrategy = require('passport-local').Strategy
+const flash = require('connect-flash')
 const User = require('./models/user')
 const db = require('./models/db')
 const app = express()
@@ -26,13 +28,14 @@ passport.use(new FacebookStrategy({
       // profile.photo = photo
       db.raw(`SELECT  * FROM fb_user where fbID = ${Number(profile.id)}`)
       .then((result) => {
-        console.log('show result', result)
+        // console.log('show result', result)
         if (result[0].length === 0) {
           db.raw(`INSERT INTO fb_user VALUES (null, ${Number(profile.id)}, '${profile.displayName}')`)
           .then(() => {
             return done(null, profile)
           })
         } else {
+          console.log('profile', profile)
           return done(null, profile)
         }
       })
@@ -47,13 +50,20 @@ passport.use('local-signup', new LocalStrategy({
   passReqToCallback: true
 },
   (req, username, password, done) => {
+    console.log('here!! username and pass ', username, password)
     process.nextTick(() => {
       // find a user in the db with given username
       User.findByUsername(username, (result) => {
+        console.log('result', result)
         if (result[0].length === 0) {
-          User.addUser(username, password)
-          .then(() => {
-            return done(null, username)
+          console.log('can register')
+          bcrypt.genSalt(5, (err, salt) => {
+            bcrypt.hash(password, salt, null, (err, hash) => {
+              User.addUser(username, hash)
+              .then(() => {
+                return done(null, username)
+              })
+            })
           })
         } else {
           console.log('user existed')
@@ -70,18 +80,24 @@ passport.use('local-login', new LocalStrategy({
   passReqToCallback: true
 },
   (req, username, password, done) => {
+    // console.log('log in user', username, password)
     User.findByUsername(username, (result) => {
       if (result[0].length === 0) {
         console.log('User not found!')
-        // return done(null, false, req.flash('loginMessage', 'User not found.'))
+        return done(null, false, req.flash('loginMessage', 'User not found.'))
       } else {
-        if (password !== result[0].password) {
-          console.log('wrong password')
-          // return done(null, false, req.flash('loginMessage', 'Incorrect password.'))
-        } else {
-          console.log('user found')
-          // return done(null, result)
-        }
+        result = JSON.parse(JSON.stringify(result[0]))
+        bcrypt.compare(password, result[0].password, (err, resp) => {
+          if (err) console.error(err)
+          if (resp) {
+            console.log('user found, log in success')
+            console.log('user', result[0])
+            return done(null, result[0])
+          } else {
+            console.log('wrong password')
+            // return done(null, false, req.flash('loginMessage', 'Incorrect password.'))
+          }
+        })
       }
     })
   }
@@ -103,8 +119,9 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(flash())
 app.use(bodyParser.json())
 app.use(morgan('dev'))
 app.use(express.static(path.join(__dirname, '../index')))

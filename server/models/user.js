@@ -2,9 +2,9 @@ const db = require('./db')
 const User = {}
 
 User.findByUsername = (username, cb) => {
-  return db.raw('select * from users;')
+  return db.raw(`select * from users where username='${username}'`)
     .then((user) => {
-      console.log('user', user)
+      // console.log('user', user)
       return cb(user)
     })
     .catch((err) => { console.error(err) })

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Symbol from './Symbol'
 import DiceRoll from './dice_roll'
 import Player from './player'
+// import rules from '../static/rules.js'
 
 class Board extends Component {
   constructor (props) {
@@ -17,17 +18,17 @@ class Board extends Component {
       user5: [97, 97],
       user6: [97, 97],
       user7: [97, 97]
-    }
+    } // [top, left]
   }
 
   dice (userPositionsArray) {
-    console.log(userPositionsArray)
+    console.log('pos array',userPositionsArray)
     const location = [
       [97, 97], [97, 83], [97, 75], [97, 66.5], [97, 58.5], [97, 50], [97, 42], [97, 34], [97, 25.5], [97, 17.5], [97, 2.5],
       [84.5, 2.5], [76.4, 2.5], [68.2, 2.5], [60, 2.5], [51.8, 2.5], [43.5, 2.5], [35.4, 2.5], [27.1, 2.5], [19, 2.5], [7, 2.5],
       [7, 17.5], [7, 25.5], [7, 34], [7, 42], [7, 50], [7, 58.5], [7, 66.5], [7, 75], [7, 83],
       [7, 97], [19, 97], [27.1, 97], [35.4, 97], [43.5, 97], [51.8, 97], [60, 97], [68.2, 97], [76.4, 97], [84.5, 97]
-    ]
+    ] // [bottom, left, right, top]
     this.setState({
       user0: location[userPositionsArray[0]],
       user1: location[userPositionsArray[1]],
@@ -39,14 +40,13 @@ class Board extends Component {
       user7: location[userPositionsArray[7]]
     })
   }
-
   render () {
     return (
       <div>
         <DiceRoll dice={this.dice} />
         <Player name='RJ' piece='Hat' />
         <div className='board parent'>
-          <Symbol className='token0' left={`${this.state.user0[1]}%`} top={`${this.state.user0[0]}%`} userNumber={0} />
+          <Symbol className='token0' left={`${this.state.user0[1]}%`} top={`${this.state.user0[0]}%`} userNumber={0} pos={`$`}/>
           <Symbol className='token1' left={`${this.state.user1[1]}%`} top={`${this.state.user1[0] - 2}%`} userNumber={1} />
           <Symbol className='token2' left={`${this.state.user2[1]}%`} top={`${this.state.user2[0] - 4}%`} userNumber={2} />
           <Symbol className='token3' left={`${this.state.user3[1]}%`} top={`${this.state.user3[0] - 6}%`} userNumber={3} />

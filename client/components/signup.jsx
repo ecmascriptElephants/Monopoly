@@ -22,8 +22,8 @@ class Signup extends Component {
     this.setState({password: e.target.value})
   }
 
-  handleSignup (event) {
-    event.preventDefault()
+  handleSignup (e) {
+    e.preventDefault()
     console.log('post signup', this.state.username, this.state.password)
     axios.post('/signup', this.state)
     .then((res) => console.log('make request'))

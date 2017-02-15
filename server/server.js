@@ -1,5 +1,6 @@
 const express = require('express')
 const session = require('express-session')
+const bcrypt = require('bcrypt-nodejs')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const path = require('path')
@@ -73,17 +74,19 @@ passport.use('local-login', new LocalStrategy({
   passReqToCallback: true
 },
   (req, username, password, done) => {
+    // console.log('log in user', username, password)
     User.findByUsername(username, (result) => {
       if (result[0].length === 0) {
         console.log('User not found!')
         // return done(null, false, req.flash('loginMessage', 'User not found.'))
       } else {
+        result = JSON.parse(JSON.stringify(result[0]))
         if (password !== result[0].password) {
           console.log('wrong password')
-          // return done(null, false, req.flash('loginMessage', 'Incorrect password.'))
+          return done(null, false, req.flash('loginMessage', 'Incorrect password.'))
         } else {
-          console.log('user found')
-          // return done(null, result)
+          console.log('user found, log in success')
+          return done(null, username)
         }
       }
     })

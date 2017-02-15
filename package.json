@@ -20,6 +20,7 @@
   "homepage": "https://github.com/ecmascriptElephants/Monopoly#readme",
   "dependencies": {
     "axios": "^0.15.3",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.16.0",
     "express": "^4.14.1",
     "express-session": "^1.15.1",

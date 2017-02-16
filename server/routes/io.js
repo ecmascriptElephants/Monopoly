@@ -9,14 +9,14 @@ module.exports = (io) => {
     })
     socket.on('new game', () => {
       var gameID = 1
-      io.sockets.emit('new game', { gameID, socketID: socket.id })
+      socket.broadcast.emit('new game', { gameID, socketID: socket.id })
       socket.join(gameID.toString())
     })
 
     socket.on('join', (data) => {
       data.socketID = socket.id
       socket.join(data.gameID)
-      io.sockets.in(data.gameID).emit('player joined', data)
+      io.in(data.gameID).emit('player joined', data)
     })
   })
 }

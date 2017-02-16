@@ -12,7 +12,7 @@ class App extends Component {
         <div>
           {console.log('here')}
           <Route exact path='/' component={Land} />
-          <Route path='/board' component={Board} />
+          <Route path='/board/:id' component={Board} />
           <Route path='/signup' component={Signup} />
           <Route path='/lobby' component={Lobby} />
         </div>

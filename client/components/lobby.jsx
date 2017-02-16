@@ -7,7 +7,8 @@ class Lobby extends Component {
     super(props)
     this.state = {
       button: false,
-      username: ''
+      username: '',
+      id: 0
     }
     axios.get('/user')
     .then((res) => {
@@ -16,16 +17,16 @@ class Lobby extends Component {
     })
   }
   componentDidMount () {
-    sock.socket.on('start game', () => {
+    sock.socket.on('start game', (data) => {
       this.setState({button: true})
-      console.log(this.state.button)
+      this.setState({id: data})
     })
   }
   render () {
     return (
       <div>
         {
-          this.state.button ? <Link to='/board'><div> Hello </div></Link> : <div> Hello </div>
+          this.state.button ? <Link to={`/board:${this.state.id}`}><div> Hello </div></Link> : <div> Hello </div>
          }
         <span>{this.state.username}</span>
       </div>

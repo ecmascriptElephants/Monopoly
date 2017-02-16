@@ -11,6 +11,7 @@ class Board extends Component {
 
     this.state = {
       user0: [97, 97],
+      user0_money: 1550,
       user1: [97, 97],
       user2: [97, 97],
       user3: [97, 97],
@@ -21,16 +22,19 @@ class Board extends Component {
     } // [top, left]
   }
 
-  dice (userPositionsArray) {
+  dice (userPositionsArray, userMoney) {
     console.log('pos array',userPositionsArray)
+    console.log('user Money', userMoney)
     const location = [
       [97, 97], [97, 83], [97, 75], [97, 66.5], [97, 58.5], [97, 50], [97, 42], [97, 34], [97, 25.5], [97, 17.5], [97, 2.5],
       [84.5, 2.5], [76.4, 2.5], [68.2, 2.5], [60, 2.5], [51.8, 2.5], [43.5, 2.5], [35.4, 2.5], [27.1, 2.5], [19, 2.5], [7, 2.5],
       [7, 17.5], [7, 25.5], [7, 34], [7, 42], [7, 50], [7, 58.5], [7, 66.5], [7, 75], [7, 83],
       [7, 97], [19, 97], [27.1, 97], [35.4, 97], [43.5, 97], [51.8, 97], [60, 97], [68.2, 97], [76.4, 97], [84.5, 97]
     ] // [bottom, left, right, top]
+    const money = [3000]
     this.setState({
       user0: location[userPositionsArray[0]],
+      user0_money: money[0],
       user1: location[userPositionsArray[1]],
       user2: location[userPositionsArray[2]],
       user3: location[userPositionsArray[3]],
@@ -46,7 +50,7 @@ class Board extends Component {
         <DiceRoll dice={this.dice} />
         <Player name='RJ' piece='Hat' />
         <div className='board parent'>
-          <Symbol className='token0' left={`${this.state.user0[1]}%`} top={`${this.state.user0[0]}%`} userNumber={0} pos={`$`}/>
+          <Symbol className='token0' left={`${this.state.user0[1]}%`} top={`${this.state.user0[0]}%`} userNumber={0} money={`${this.state.user0_money}`}/>
           <Symbol className='token1' left={`${this.state.user1[1]}%`} top={`${this.state.user1[0] - 2}%`} userNumber={1} />
           <Symbol className='token2' left={`${this.state.user2[1]}%`} top={`${this.state.user2[0] - 4}%`} userNumber={2} />
           <Symbol className='token3' left={`${this.state.user3[1]}%`} top={`${this.state.user3[0] - 6}%`} userNumber={3} />

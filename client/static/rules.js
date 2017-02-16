@@ -374,6 +374,5 @@ const rules = {
     }
   ]
 }
-console.log('in rules', rules.Chance.length)
 
 export default { rules }

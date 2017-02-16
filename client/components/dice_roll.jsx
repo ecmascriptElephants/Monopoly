@@ -8,7 +8,8 @@ class DiceRoll extends Component {
     this.handleAddDiceRollToUserPosition = this.handleAddDiceRollToUserPosition.bind(this)
     this.handleLandOnOrPassGo = this.handleLandOnOrPassGo.bind(this)
     this.handleEndTurnButtonClick = this.handleEndTurnButtonClick.bind(this)
-    this.handleChancePos = this.handleChancePos.bind(this)
+    this.handleChanceCard = this.handleChanceCard.bind(this)
+    this.handleCommunity = this.handleCommunity.bind(this)
 
     this.state = {
       dice: [],
@@ -23,7 +24,8 @@ class DiceRoll extends Component {
       userNames: ['Jeremy', 'Kyle', 'RJ', 'Joseph', 'Jeff', 'Justin', 'Jerry', 'Nino'],
       // up to 8 players all starting on GO or position 1
       userPositions: [0, 0, 0, 0, 0, 0, 0, 0],
-      jailPositions: [0, 0, 0, 0, 0, 0, 0, 0]
+      jailPositions: [0, 0, 0, 0, 0, 0, 0, 0],
+      userMoney: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500]
     }
   }
 
@@ -114,12 +116,17 @@ class DiceRoll extends Component {
     // update current player's position based on diceroll
     let updatedCurrentUserPosition = (oldCurrentUserPosition + die1 + die2) % 40
     // update the userPositions array with the new current players position
-    updatedUserPositions[this.state.currentUser] = updatedCurrentUserPosition
+    updatedUserPositions[this.state.currentUser] = 7
+    // store userMoney array
+    let userMoney = this.state.userMoney
     if (updatedUserPositions[this.state.currentUser] === 7 || updatedUserPositions[this.state.currentUser] === 22 || updatedUserPositions[this.state.currentUser] === 36 ) {
-      this.handleChancePos(updatedUserPositions)
+      this.handleChanceCard(updatedUserPositions, userMoney)
+    }
+    if (updatedUserPositions[this.state.currentUser] === 2 || updatedUserPositions[this.state.currentUser] === 17 || updatedUserPositions[this.state.currentUser] === 33 ) {
+      this.handleCommunity(updatedUserPositions, userMoney)
     }
     // update the current user to the next user
-    if(updatedCurrentUserPosition === 30) {
+    if (updatedCurrentUserPosition === 30) {
       updatedCurrentUserPosition = 10
       updatedUserPositions[this.state.currentUser] = updatedCurrentUserPosition
       updatedJailPositions = this.state.jailPositions
@@ -142,22 +149,73 @@ class DiceRoll extends Component {
     this.props.dice(this.state.userPositions)
   }
 
-  handleChancePos (updatedUserPositions) {
-    // get a chance card randomly
+  handleChanceCard (updatedUserPositions, userMoney) {
     const card = Math.floor((16* Math.random()))
+    // const card = 2
+    console.log('card', card)
     if (card === 0) {
       updatedUserPositions[this.state.currentUser] = 0
       // user money += 200
+      userMoney[this.state.currentUser] += 200
     } else if (card === 1) {
-      // user money += 50
-      // bankmoney -= 50
+      userMoney[this.state.currentUser] += 50
     } else if (card === 2) {
-      updatedUserPositions[this.state.currentUser] = updatedUserPositions[this.state.currentUser] - 3
+      updatedUserPositions[this.state.currentUser] -= 3
     } else if (card === 3) {
       // 12 & 28
       let buldDis = Math.abs(updatedUserPositions[this.state.currentUser] - 12)
       let waterDis = Math.abs(updatedUserPositions[this.state.currentUser] - 28)
       updatedUserPositions[this.state.currentUser] = (buldDis > waterDis) ? 28 : 12
+      // state for properties,
+      //if unowned, buy and money enough? UserMoney -= 150; bankMoney += 150
+      // if owned, roll,again UserMoney -= diceNum*10; User[own].money += diceNum*10
+    } else if (card === 4) {
+      updatedUserPositions[this.state.currentUser] = 10
+    } else if (card === 5) {
+      // UserMoney -= 15; bankMoney += 15
+    } else if (card === 6) {
+      updatedUserPositions[this.state.currentUser] = 11
+      // check if pass GO, yes? UserMoney += 200; bankMoney -= 200
+    } else if (card === 7) {
+      // currentUser.money -= 50*num of player;
+      // players.forEach(player => if(player !== currentUser) player.money += 50)
+    } else if (card === 8) {
+      let readingDis = updatedUserPositions[this.state.currentUser] - 5
+      let pennDis = updatedUserPositions[this.state.currentUser] - 15
+      let boDis = updatedUserPositions[this.state.currentUser] - 25
+      let shortDis = updatedUserPositions[this.state.currentUser] - 35
+
+
+    } else if (card === 9) {
+      // TAKE A RIDE ON THE READING. IF YOU PASS GO COLLECCT $200
+
+    } else if (card === 10) {
+      // same as 8
+    } else if (card === 11) {
+      updatedUserPositions[this.state.currentUser] = 39
+      // buy or pay rent
+    } else if (card === 12) {
+
+    } else if (card === 13) {
+
+    } else if (card === 14) {
+
+    } else {
+
+    }
+  }
+
+  handleCommunity (updatedUserPositions, userMoney) {
+    const card = Math.floor((16* Math.random()))
+    // const card = 2
+    if (card === 0) {
+
+    } else if (card === 1) {
+
+    } else if (card === 2) {
+
+    } else if (card === 3) {
+
     } else if (card === 4) {
 
     } else if (card === 5) {

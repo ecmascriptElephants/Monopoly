@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Header, Container, Segment, Icon, Divider } from 'semantic-ui-react'
+import { Button, Header, Container, Segment, Icon, Divider, Message } from 'semantic-ui-react'
 import { rules } from '../static/rules'
 
 class Player extends Component {
@@ -9,7 +9,7 @@ class Player extends Component {
       name: props.name,
       piece: props.piece,
       money: 1500,
-      property: [],
+      property: ['house'],
       // property: [{'PropertyObj': {PropertyObj}, 'Mortaged': false, 'Houses': 0, 'Position': 0}],
       hasCommunityChestGetOutOfJailFree: false,
       hasChanceGetOutOfJailFree: false,
@@ -159,6 +159,9 @@ class Player extends Component {
             </Header.Content>
           </Header>
           <Divider />
+          <Message>
+            {this.state.money}
+          </Message>
           <Button secondary fluid>Roll Dice</Button>
         </Segment>
       </Container>

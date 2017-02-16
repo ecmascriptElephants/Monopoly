@@ -1,15 +1,15 @@
 import io from 'socket.io-client'
-import Dice from '../components/dice_roll'
-import React from 'react'
 const socket = io.connect('/')
 
 module.exports = {
-  playerJoined: function (userInfo) {
-    socket.emit('player joined', userInfo)
+  socket,
+  userJoined: function (userInfo) {
+    socket.emit('user joined', userInfo)
   },
-  socket
+  newGame: function () {
+    socket.emit('new game')
+  },
+  join: function (gameID) {
+    socket.emit('join', {gameID})
+  }
 }
-
-socket.on('start game', () => {
-  <Dice dice='true' />
-})

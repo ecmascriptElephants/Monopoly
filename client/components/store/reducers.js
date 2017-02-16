@@ -1,6 +1,6 @@
 import { SET_GAME_ID, SET_USERNAME } from './actions'
 const DEFAULT_STATE = {
-  gameID: '0',
+  gameID: 0,
   username: ''
 }
 

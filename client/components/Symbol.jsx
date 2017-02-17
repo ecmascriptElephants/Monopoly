@@ -1,7 +1,6 @@
 import React from 'react'
 
 const Symbol = function (props) {
-  console.log('in symbol.js left = ', props.left, 'top = ', props.top)
   const left = props.left
   const top = props.top
   const userNumber = props.userNumber

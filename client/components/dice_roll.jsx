@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import sock from '../helper/socket'
+import { connect } from 'react-redux'
 class DiceRoll extends Component {
   constructor (props) {
     super(props)
@@ -28,6 +29,7 @@ class DiceRoll extends Component {
 
   componentDidMount () {
     sock.socket.on('yourTurn', () => {
+      console.log('here')
       this.setState({diceRollButtonVisible: true})
     })
   }
@@ -69,7 +71,7 @@ class DiceRoll extends Component {
       diceRollButtonVisible: false,
       endTurnButtonVisible: false
     })
-    sock.end(this.props.gameID)
+    sock.end({gameID: this.props.gameID})
   }
 
   handleDoubles (die1, die2) {
@@ -198,9 +200,20 @@ class DiceRoll extends Component {
     )
   }
 }
-
-DiceRoll.propTypes = {
-  dice: React.PropTypes.string.isRequired
+const mapStateToProps = (state) => {
+  return {
+    username: state.username,
+    gameID: state.gameID,
+    userID: state.userID
+  }
 }
 
-export default DiceRoll
+DiceRoll.propTypes = {
+  dice: React.PropTypes.func.isRequired,
+  dispatch: React.PropTypes.func.isRequired,
+  username: React.PropTypes.string.isRequired,
+  gameID: React.PropTypes.number.isRequired,
+  userID: React.PropTypes.string.isRequired
+}
+
+export default connect(mapStateToProps)(DiceRoll)

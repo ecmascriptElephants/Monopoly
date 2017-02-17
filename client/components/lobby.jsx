@@ -21,6 +21,7 @@ class Lobby extends Component {
 
     this.joinGame = this.joinGame.bind(this)
     this.newGame = this.newGame.bind(this)
+    this.startGame = this.startGame.bind(this)
   }
   componentDidMount () {
     sock.socket.on('new game', (data) => {
@@ -41,7 +42,7 @@ class Lobby extends Component {
   }
 
   startGame () {
-    sock.start()
+    sock.start({gameID: this.props.gameID})
   }
 
   render () {

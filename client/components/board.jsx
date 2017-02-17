@@ -50,7 +50,7 @@ class Board extends Component {
         <div className='board parent'>
           {
             this.state.players.map((player, index) => {
-              return <Symbol className={`token${index}`} left={`${this.state.user[1]}%`} top={`${this.state.user[0] - index}%`} userNumber={index} />
+              return <Symbol className={`token${index}`} left={`${this.state.user[1]}%`} top={`${this.state.user[0] - index}%`} userNumber={index} key={index} />
             })
           }
           <div className='wire'>

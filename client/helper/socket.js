@@ -4,7 +4,6 @@ const socket = io.connect('/')
 module.exports = {
   socket,
   init: (data) => {
-    console.log('init in socket')
     socket.emit('load', data)
   },
   userJoined: (userInfo) => {
@@ -16,8 +15,8 @@ module.exports = {
   join: (data) => {
     socket.emit('join', data)
   },
-  start: () => {
-    socket.emit('start')
+  start: (data) => {
+    socket.emit('start', data)
   },
   end: (data) => {
     socket.emit('endTurn', data)

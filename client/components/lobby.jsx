@@ -29,6 +29,7 @@ class Lobby extends Component {
     })
     sock.socket.on('player joined', (data) => {
       this.setState({join: false, start: true})
+      this.props.dispatch(setGameID(data.gameID))
     })
   }
   newGame () {

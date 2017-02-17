@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import sock from '../helper/socket'
 class DiceRoll extends Component {
   constructor (props) {
     super(props)
@@ -19,13 +19,18 @@ class DiceRoll extends Component {
       diceRollButtonVisible: false,
       // needs to be updated gamestate authentication
       endTurnButtonVisible: false,
-      userNames: ['Jeremy', 'Kyle', 'RJ', 'Joseph', 'Jeff', 'Justin', 'Jerry', 'Nino'],
+      userNames: [],
       // up to 8 players all starting on GO or position 1
-      userPositions: [0, 0, 0, 0, 0, 0, 0, 0],
-      jailPositions: [0, 0, 0, 0, 0, 0, 0, 0]
+      userPositions: [],
+      jailPositions: []
     }
   }
 
+  componentDidMount () {
+    sock.socket.on('turn', () => {
+      this.setState({diceRollButtonVisible: true})
+    })
+  }
   handleDiceRollButtonClick () {
     const die1 = 1 + Math.floor((6 * Math.random()))
     const die2 = 1 + Math.floor((6 * Math.random()))
@@ -38,7 +43,6 @@ class DiceRoll extends Component {
         doublesComment: '',
         diceRollButtonVisible: false,
         endTurnButtonVisible: true
-
       })
     } else if (die1 === die2) {
       this.handleDoubles(die1, die2)
@@ -61,9 +65,7 @@ class DiceRoll extends Component {
   }
 
   handleEndTurnButtonClick () {
-    let newCurrentUser = (this.state.currentUser + 1) % this.state.userPositions.length
     this.setState({
-      currentUser: newCurrentUser,
       diceRollButtonVisible: false,
       endTurnButtonVisible: false
     })

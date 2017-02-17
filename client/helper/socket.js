@@ -3,6 +3,10 @@ const socket = io.connect('/')
 
 module.exports = {
   socket,
+  init: function (data) {
+    console.log('init in socket')
+    socket.emit('load', data)
+  },
   userJoined: function (userInfo) {
     socket.emit('user joined', userInfo)
   },

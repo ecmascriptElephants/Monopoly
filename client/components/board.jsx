@@ -2,14 +2,16 @@ import React, { Component } from 'react'
 import Symbol from './Symbol'
 import DiceRoll from './dice_roll'
 import Player from './player'
-import socket from '../helper/socket'
+import sock from '../helper/socket'
 import { connect } from 'react-redux'
 class Board extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      user: [97, 97]
+      user: [97, 97],
+      players: []
     }
+    sock.init({gameID: this.props.gameID})
     this.dice = this.dice.bind(this)
   }
 
@@ -32,16 +34,25 @@ class Board extends Component {
       user7: location[userPositionsArray[7]]
     })
   }
-  componentWillMount () {
+  componentDidMount () {
+    sock.socket.on('users', (data) => {
+      console.log(data)
+      this.setState({players: data.players})
+      console.log(this.state.players)
+    })
   }
 
   render () {
     return (
       <div>
         <DiceRoll dice={this.dice} />
-        <Player name={this.state.username} piece='Hat' />
+        <Player name={this.props.username} piece='Hat' />
         <div className='board parent'>
-          <Symbol className='token0' left={`${this.state.user[1]}%`} top={`${this.state.user[0]}%`} userNumber={0} />
+          {
+            this.state.players.map((player, index) => {
+              return <Symbol className={`token${index}`} left={`${this.state.user[1]}%`} top={`${this.state.user[0] - index}%`} userNumber={index} />
+            })
+          }
           <div className='wire'>
             <div className='flexcol'>
               <div className='flexrow'>

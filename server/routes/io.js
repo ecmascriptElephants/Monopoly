@@ -1,4 +1,4 @@
-var game = {}
+var game = {i: 0}
 module.exports = (io) => {
   let user = 0
   let userStorage = []
@@ -15,11 +15,10 @@ module.exports = (io) => {
     })
 
     socket.on('join', (data) => {
-      console.log(data)
       data.socketID = socket.id
       socket.join(data.gameID)
       game[data.gameID].push(data)
-      io.in(data.gameID).emit('player joined')
+      io.in(data.gameID).emit('player joined', data)
     })
 
     socket.on('start', () => {
@@ -27,14 +26,12 @@ module.exports = (io) => {
     })
 
     socket.on('load', (data) => {
-      socket.emit('users', {players: game[data.gameID]})
+      io.emit('users', {players: game[data.gameID]})
+      socket.emit('firstPlayer')
+    })
+
+    socket.on('endTurn', () => {
+
     })
   })
 }
-
-// function joinGame (data) {
-//   if (socket.manager.rooms['/' + data.gameID]) {
-
-//   }
-
-// }

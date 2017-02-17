@@ -3,20 +3,23 @@ const socket = io.connect('/')
 
 module.exports = {
   socket,
-  init: function (data) {
+  init: (data) => {
     console.log('init in socket')
     socket.emit('load', data)
   },
-  userJoined: function (userInfo) {
+  userJoined: (userInfo) => {
     socket.emit('user joined', userInfo)
   },
-  newGame: function (data) {
+  newGame: (data) => {
     socket.emit('new game', data)
   },
-  join: function (data) {
+  join: (data) => {
     socket.emit('join', data)
   },
-  start: function () {
+  start: () => {
     socket.emit('start')
+  },
+  end: (data) => {
+    socket.emit('endTurn', data)
   }
 }

@@ -1,4 +1,4 @@
-var game = {i: 0}
+var game = {}
 module.exports = (io) => {
   let user = 0
   let userStorage = []
@@ -10,14 +10,15 @@ module.exports = (io) => {
     socket.on('new game', (data) => {
       var gameID = 1
       socket.broadcast.emit('new game', { gameID, socketID: socket.id })
-      game[gameID] = [data]
+      data.socketID = socket.id
+      game[gameID] = {i: 0, playerInfo: [data]}
       socket.join(gameID.toString())
     })
 
     socket.on('join', (data) => {
       data.socketID = socket.id
       socket.join(data.gameID)
-      game[data.gameID].push(data)
+      game[data.gameID].playerInfo.push(data)
       io.in(data.gameID).emit('player joined', data)
     })
 
@@ -26,12 +27,20 @@ module.exports = (io) => {
     })
 
     socket.on('load', (data) => {
-      io.emit('users', {players: game[data.gameID]})
-      socket.emit('firstPlayer')
+      let obj = game[data.gameID]
+      console.log(obj)
+      io.emit('users', {players: obj['playerInfo']})
+      // console.log(obj.playerInfo[obj.])
+      // console.log(obj[data.gameID])
+      socket.broadcast.to(obj.playerInfo[obj.i++].socketID).emit('yourTurn')
     })
 
-    socket.on('endTurn', () => {
-
+    socket.on('endTurn', (data) => {
+      let obj = game[data.gameID]
+      if (obj.i === obj.playerInfo.length) {
+        obj.i = 0
+      }
+      socket.broadcast.to(obj.playerInfo[obj.i++]).emit('yourTurn')
     })
   })
 }

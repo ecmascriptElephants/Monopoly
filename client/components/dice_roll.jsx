@@ -27,7 +27,7 @@ class DiceRoll extends Component {
   }
 
   componentDidMount () {
-    sock.socket.on('turn', () => {
+    sock.socket.on('yourTurn', () => {
       this.setState({diceRollButtonVisible: true})
     })
   }
@@ -69,6 +69,7 @@ class DiceRoll extends Component {
       diceRollButtonVisible: false,
       endTurnButtonVisible: false
     })
+    sock.end(this.props.gameID)
   }
 
   handleDoubles (die1, die2) {

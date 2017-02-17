@@ -2,13 +2,12 @@ import React, { Component } from 'react'
 import Symbol from './Symbol'
 import DiceRoll from './dice_roll'
 import Player from './player'
-import axios from 'axios'
 import socket from '../helper/socket'
+import { connect } from 'react-redux'
 class Board extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      username: '',
       user: [97, 97]
     }
     this.dice = this.dice.bind(this)
@@ -34,12 +33,6 @@ class Board extends Component {
     })
   }
   componentWillMount () {
-    console.log('component')
-    axios.get('/user')
-    .then((res) => {
-      this.setState({username: res.data.displayName})
-      socket.playerJoined(res.data)
-    })
   }
 
   render () {
@@ -188,5 +181,18 @@ class Board extends Component {
     )
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    username: state.username,
+    gameID: state.gameID,
+    userID: state.userID
+  }
+}
 
-export default Board
+Board.propTypes = {
+  dispatch: React.PropTypes.func.isRequired,
+  username: React.PropTypes.string.isRequired,
+  gameID: React.PropTypes.number.isRequired,
+  userID: React.PropTypes.string.isRequired
+}
+export default connect(mapStateToProps)(Board)

@@ -1,4 +1,4 @@
-
+var game = {}
 module.exports = (io) => {
   let user = 0
   let userStorage = []
@@ -7,16 +7,27 @@ module.exports = (io) => {
       userStorage.push(data)
       user++
     })
-    socket.on('new game', () => {
+    socket.on('new game', (data) => {
       var gameID = 1
       socket.broadcast.emit('new game', { gameID, socketID: socket.id })
+      game[gameID] = [data]
       socket.join(gameID.toString())
     })
 
     socket.on('join', (data) => {
+      console.log(data)
       data.socketID = socket.id
       socket.join(data.gameID)
-      io.in(data.gameID).emit('player joined', data)
+      game[data.gameID].push(data)
+      io.in(data.gameID).emit('player joined')
+    })
+
+    socket.on('start', () => {
+      socket.emit('redirect')
+    })
+
+    socket.on('load', (data) => {
+      socket.emit('users', {players: game[data.gameID]})
     })
   })
 }

@@ -6,10 +6,13 @@ module.exports = {
   userJoined: function (userInfo) {
     socket.emit('user joined', userInfo)
   },
-  newGame: function () {
-    socket.emit('new game')
+  newGame: function (data) {
+    socket.emit('new game', data)
   },
-  join: function (gameID) {
-    socket.emit('join', {gameID})
+  join: function (data) {
+    socket.emit('join', data)
+  },
+  start: function () {
+    socket.emit('start')
   }
 }

@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
+import { setUserPositions } from './store/actionCreators'
+
 class DiceRoll extends Component {
   constructor (props) {
     super(props)
@@ -9,7 +11,6 @@ class DiceRoll extends Component {
     this.handleAddDiceRollToUserPosition = this.handleAddDiceRollToUserPosition.bind(this)
     this.handleLandOnOrPassGo = this.handleLandOnOrPassGo.bind(this)
     this.handleEndTurnButtonClick = this.handleEndTurnButtonClick.bind(this)
-
     this.state = {
       dice: [],
       diceSum: 0,
@@ -21,22 +22,20 @@ class DiceRoll extends Component {
       // needs to be updated gamestate authentication
       endTurnButtonVisible: false,
       userNames: [],
-      // up to 8 players all starting on GO or position 1
-      userPositions: [],
-      jailPositions: []
+      jailPositions: [],
+      index: null
     }
   }
 
   componentDidMount () {
-    sock.socket.on('yourTurn', () => {
-      console.log('here')
-      this.setState({diceRollButtonVisible: true})
+    sock.socket.on('yourTurn', (index) => {
+      this.setState({diceRollButtonVisible: true, index})
     })
   }
   handleDiceRollButtonClick () {
     const die1 = 1 + Math.floor((6 * Math.random()))
     const die2 = 1 + Math.floor((6 * Math.random()))
-    if (this.state.userPositions[this.state.currentUser] + die1 + die2 === 30) {
+    if (this.props.userPosArray[this.state.index] + die1 + die2 === 30) {
       this.setState({
         dice: [die1, die2],
         diceSum: die1 + die2,
@@ -108,15 +107,11 @@ class DiceRoll extends Component {
   }
 
   handleAddDiceRollToUserPosition (die1, die2, doubles) {
-    console.log('handleAddDiceRollToUserPosition has been invoked!', this.state.userPositions[this.state.currentUser], die1 + die2)
-    // store userPositions array
-    let updatedUserPositions = this.state.userPositions
-    // current player's old position
-    let oldCurrentUserPosition = updatedUserPositions[this.state.currentUser]
-    // update current player's position based on diceroll
-    let updatedCurrentUserPosition = (oldCurrentUserPosition + die1 + die2) % 40
-    // update the userPositions array with the new current players position
-    updatedUserPositions[this.state.currentUser] = updatedCurrentUserPosition
+    let updatedPosition = (this.props.userPosArray[this.state.index] + die1 + die2) % 40
+    console.log('updated position' + updatedPosition)
+    console.log('before update' + this.props.userPosArray)
+    this.props.dispatch(setUserPositions(updatedPosition, this.state.index))
+    console.log('after  update' + this.props.userPosArray)
     // update the current user to the next user
     // if (updatedCurrentUserPosition === 30) {
     //   updatedCurrentUserPosition = 10
@@ -137,7 +132,7 @@ class DiceRoll extends Component {
     //     userPositions: updatedUserPositions
     //   })
     // }
-    this.props.dice(this.state.userPositions)
+    this.props.dice(this.state.index)
   }
 
   handleLandOnOrPassGo (oldCurrentUserPosition, updatedCurrentUserPosition, jail) {
@@ -204,7 +199,8 @@ const mapStateToProps = (state) => {
   return {
     username: state.username,
     gameID: state.gameID,
-    userID: state.userID
+    userID: state.userID,
+    userPosArray: state.userPosArray
   }
 }
 
@@ -213,7 +209,8 @@ DiceRoll.propTypes = {
   dispatch: React.PropTypes.func.isRequired,
   username: React.PropTypes.string.isRequired,
   gameID: React.PropTypes.number.isRequired,
-  userID: React.PropTypes.string.isRequired
+  userID: React.PropTypes.string.isRequired,
+  userPosArray: React.PropTypes.array.isRequired
 }
 
 export default connect(mapStateToProps)(DiceRoll)

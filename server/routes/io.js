@@ -37,7 +37,7 @@ module.exports = (io) => {
       // console.log(gameObj.playerInfo[gameObj.])
       // console.log(gameObj[data.gameID])
       // console.log('how many times', gameObj.playerInfo[gameObj.i].socketID)
-      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn')
+      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn', gameObj.i)
     })
 
     socket.on('endTurn', (data) => {
@@ -46,7 +46,7 @@ module.exports = (io) => {
       if (gameObj.i >= gameObj.playerInfo.length) {
         gameObj.i = 0
       }
-      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn')
+      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn', gameObj.i)
     })
   })
 }

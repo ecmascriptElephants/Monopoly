@@ -375,4 +375,4 @@ const rules = {
   ]
 }
 
-export default { rules }
+export default rules

@@ -8,7 +8,6 @@ class Board extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      user: [97, 97],
       players: []
     }
     sock.init({gameID: this.props.gameID})
@@ -16,13 +15,13 @@ class Board extends Component {
   }
 
   dice (userPositionsArray) {
-    console.log(userPositionsArray)
     const location = [
       [97, 97], [97, 83], [97, 75], [97, 66.5], [97, 58.5], [97, 50], [97, 42], [97, 34], [97, 25.5], [97, 17.5], [97, 2.5],
       [84.5, 2.5], [76.4, 2.5], [68.2, 2.5], [60, 2.5], [51.8, 2.5], [43.5, 2.5], [35.4, 2.5], [27.1, 2.5], [19, 2.5], [7, 2.5],
       [7, 17.5], [7, 25.5], [7, 34], [7, 42], [7, 50], [7, 58.5], [7, 66.5], [7, 75], [7, 83],
       [7, 97], [19, 97], [27.1, 97], [35.4, 97], [43.5, 97], [51.8, 97], [60, 97], [68.2, 97], [76.4, 97], [84.5, 97]
     ]
+
     this.setState({
       user0: location[userPositionsArray[0]],
       user1: location[userPositionsArray[1]],
@@ -38,7 +37,6 @@ class Board extends Component {
     sock.socket.on('users', (data) => {
       console.log(data)
       this.setState({players: data.players})
-      console.log(this.state.players)
     })
   }
 
@@ -50,7 +48,11 @@ class Board extends Component {
         <div className='board parent'>
           {
             this.state.players.map((player, index) => {
-              return <Symbol className={`token${index}`} left={`${this.state.user[1]}%`} top={`${this.state.user[0] - index}%`} userNumber={index} key={index} />
+              if (index <= 3) {
+                return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0] - (index + index)}%`} userNumber={index} key={index} />
+              } else {
+                return <Symbol className={`token${index}`} left={`${player.userPosition[1] - 2}%`} top={`${player.userPosition[0] - index}%`} userNumber={index} key={index} />
+              }
             })
           }
           <div className='wire'>

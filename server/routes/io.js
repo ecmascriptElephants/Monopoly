@@ -1,4 +1,4 @@
-var game = {}
+let game = {}
 module.exports = (io) => {
   let user = 0
   let userStorage = []
@@ -8,19 +8,21 @@ module.exports = (io) => {
       user++
     })
     socket.on('new game', (data) => {
-      var gameID = 1
+      let gameID = 1
       socket.broadcast.emit('new game', { gameID, socketID: socket.id })
       data.socketID = socket.id
+      data.userPosition = [97, 97]
       game[gameID] = {i: 0, playerInfo: [data]}
       socket.join(gameID.toString())
     })
 
     socket.on('join', (data) => {
-      var obj = game[data.gameID]
+      let gameObj = game[data.gameID]
       data.socketID = socket.id
+      data.userPosition = [97, 97]
       socket.join(data.gameID)
-      obj.playerInfo.push(data)
-      socket.broadcast.to(obj.playerInfo[obj.i].socketID).emit('player joined', data)
+      gameObj.playerInfo.push(data)
+      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('player joined', data)
     })
 
     socket.on('start', (data) => {
@@ -29,22 +31,22 @@ module.exports = (io) => {
     })
 
     socket.on('load', (data) => {
-      let obj = game[data.gameID]
-      // console.log(obj.playerInfo[obj.i].socketID)
-      io.emit('users', {players: obj['playerInfo']})
-      // console.log(obj.playerInfo[obj.])
-      // console.log(obj[data.gameID])
-      // console.log('how many times', obj.playerInfo[obj.i].socketID)
-      socket.broadcast.to(obj.playerInfo[obj.i].socketID).emit('yourTurn')
+      let gameObj = game[data.gameID]
+      // console.log(gameObj.playerInfo[gameObj.i].socketID)
+      io.emit('users', {players: gameObj['playerInfo']})
+      // console.log(gameObj.playerInfo[gameObj.])
+      // console.log(gameObj[data.gameID])
+      // console.log('how many times', gameObj.playerInfo[gameObj.i].socketID)
+      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn')
     })
 
     socket.on('endTurn', (data) => {
-      let obj = game[data.gameID]
-      obj.i++
-      if (obj.i >= obj.playerInfo.length) {
-        obj.i = 0
+      let gameObj = game[data.gameID]
+      gameObj.i++
+      if (gameObj.i >= gameObj.playerInfo.length) {
+        gameObj.i = 0
       }
-      socket.broadcast.to(obj.playerInfo[obj.i].socketID).emit('yourTurn')
+      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn')
     })
   })
 }

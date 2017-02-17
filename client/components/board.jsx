@@ -13,18 +13,21 @@ class Board extends Component {
     sock.init({gameID: this.props.gameID})
     this.dice = this.dice.bind(this)
   }
+  componentWillReceiveProps (nextProps) {
+    this.dice(nextProps.index, nextProps.userPosArray)
+  }
 
-  dice (index) {
+  dice (index, array) {
     const location = [
       [97, 97], [97, 83], [97, 75], [97, 66.5], [97, 58.5], [97, 50], [97, 42], [97, 34], [97, 25.5], [97, 17.5], [97, 2.5],
       [84.5, 2.5], [76.4, 2.5], [68.2, 2.5], [60, 2.5], [51.8, 2.5], [43.5, 2.5], [35.4, 2.5], [27.1, 2.5], [19, 2.5], [7, 2.5],
       [7, 17.5], [7, 25.5], [7, 34], [7, 42], [7, 50], [7, 58.5], [7, 66.5], [7, 75], [7, 83],
       [7, 97], [19, 97], [27.1, 97], [35.4, 97], [43.5, 97], [51.8, 97], [60, 97], [68.2, 97], [76.4, 97], [84.5, 97]
     ]
-    console.log(this.state.players[index].userPosition)
-    console.log(location[this.props.userPosArray[index]])
-    console.log(this.props.userPosArray)
-    this.setState.players[index].userPosition = location[this.props.userPosArray[index]]
+    let players = [...this.state.players]
+    players[index].userPosition = location[array[index]]
+    this.setState({players})
+    // this.setState.players[index].userPosition = location[array[index]]
     // this.setState({
     //   user0: location[userPositionsArray[0]],
     //   user1: location[userPositionsArray[1]],
@@ -202,7 +205,8 @@ const mapStateToProps = (state) => {
     username: state.username,
     gameID: state.gameID,
     userID: state.userID,
-    userPosArray: state.userPosArray
+    userPosArray: state.userPosArray,
+    index: state.index
   }
 }
 
@@ -211,6 +215,7 @@ Board.propTypes = {
   username: React.PropTypes.string.isRequired,
   gameID: React.PropTypes.number.isRequired,
   userID: React.PropTypes.string.isRequired,
-  userPosArray: React.PropTypes.array.isRequired
+  userPosArray: React.PropTypes.array.isRequired,
+  index: React.PropTypes.number.isRequired
 }
 export default connect(mapStateToProps)(Board)

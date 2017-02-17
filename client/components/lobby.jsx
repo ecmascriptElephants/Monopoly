@@ -29,28 +29,28 @@ class Lobby extends Component {
       this.props.dispatch(setGameID(data.gameID))
     })
     sock.socket.on('player joined', (data) => {
-      this.setState({join: false, start: true})
+      this.setState({ join: false, start: true })
       this.props.dispatch(setGameID(data.gameID))
     })
   }
   newGame () {
-    sock.newGame({username: this.props.username, userID: this.props.userID})
+    sock.newGame({ username: this.props.username, userID: this.props.userID })
   }
 
   joinGame () {
-    sock.join({username: this.props.username, userID: this.props.userID, gameID: this.props.gameID})
+    sock.join({ username: this.props.username, userID: this.props.userID, gameID: this.props.gameID })
   }
 
   startGame () {
-    sock.start({gameID: this.props.gameID})
+    sock.start({ gameID: this.props.gameID })
   }
 
   render () {
     return (
       <div>
         <button onClick={this.newGame}> New Game </button>
-        {this.state.join ? <button onClick={this.joinGame}> Join Game </button> : null }
-        {this.state.start ? <Link to='/board'><button onClick={this.startGame}> Start Game </button></Link> : null }
+        {this.state.join ? <button onClick={this.joinGame}> Join Game </button> : null}
+        {this.state.start ? <Link to='/board'><button onClick={this.startGame}> Start Game </button></Link> : null}
         <span>{this.props.username}</span>
       </div>
     )

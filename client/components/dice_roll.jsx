@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
-import { setUserPositions } from './store/actionCreators'
+import { setUserPositions, setIndex } from './store/actionCreators'
 
 class DiceRoll extends Component {
   constructor (props) {
@@ -22,14 +22,14 @@ class DiceRoll extends Component {
       // needs to be updated gamestate authentication
       endTurnButtonVisible: false,
       userNames: [],
-      jailPositions: [],
-      index: null
+      jailPositions: []
     }
   }
-
   componentDidMount () {
     sock.socket.on('yourTurn', (index) => {
-      this.setState({diceRollButtonVisible: true, index})
+      this.setState({diceRollButtonVisible: true})
+      this.props.dispatch(setIndex(index))
+      console.log(this.props.index)
     })
   }
   handleDiceRollButtonClick () {
@@ -70,7 +70,7 @@ class DiceRoll extends Component {
       diceRollButtonVisible: false,
       endTurnButtonVisible: false
     })
-    sock.end({gameID: this.props.gameID})
+    sock.end({ gameID: this.props.gameID })
   }
 
   handleDoubles (die1, die2) {
@@ -107,11 +107,8 @@ class DiceRoll extends Component {
   }
 
   handleAddDiceRollToUserPosition (die1, die2, doubles) {
-    let updatedPosition = (this.props.userPosArray[this.state.index] + die1 + die2) % 40
-    console.log('updated position' + updatedPosition)
-    console.log('before update' + this.props.userPosArray)
-    this.props.dispatch(setUserPositions(updatedPosition, this.state.index))
-    console.log('after  update' + this.props.userPosArray)
+    let updatedPosition = (this.props.userPosArray[this.props.index] + die1 + die2) % 40
+    this.props.dispatch(setUserPositions(updatedPosition, this.props.index))
     // update the current user to the next user
     // if (updatedCurrentUserPosition === 30) {
     //   updatedCurrentUserPosition = 10
@@ -132,7 +129,6 @@ class DiceRoll extends Component {
     //     userPositions: updatedUserPositions
     //   })
     // }
-    this.props.dice(this.state.index)
   }
 
   handleLandOnOrPassGo (oldCurrentUserPosition, updatedCurrentUserPosition, jail) {
@@ -200,7 +196,8 @@ const mapStateToProps = (state) => {
     username: state.username,
     gameID: state.gameID,
     userID: state.userID,
-    userPosArray: state.userPosArray
+    userPosArray: state.userPosArray,
+    index: state.index
   }
 }
 
@@ -210,7 +207,8 @@ DiceRoll.propTypes = {
   username: React.PropTypes.string.isRequired,
   gameID: React.PropTypes.number.isRequired,
   userID: React.PropTypes.string.isRequired,
-  userPosArray: React.PropTypes.array.isRequired
+  userPosArray: React.PropTypes.array.isRequired,
+  index: React.PropTypes.number.isRequired
 }
 
 export default connect(mapStateToProps)(DiceRoll)

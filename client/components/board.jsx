@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import Symbol from './Symbol'
 import DiceRoll from './dice_roll'
 import Player from './player'
-// import rules from '../static/rules.js'
+import userNames from './user_order'
+import rules from '../static/rules.js'
 
 class Board extends Component {
   constructor (props) {
@@ -23,7 +24,7 @@ class Board extends Component {
   }
 
   dice (userPositionsArray, userMoney) {
-    console.log('pos array',userPositionsArray)
+    console.log('pos array', userPositionsArray)
     // console.log('user Money', userMoney)
     const location = [
       [97, 97], [97, 83], [97, 75], [97, 66.5], [97, 58.5], [97, 50], [97, 42], [97, 34], [97, 25.5], [97, 17.5], [97, 2.5],
@@ -47,17 +48,17 @@ class Board extends Component {
   render () {
     return (
       <div>
-        <DiceRoll dice={this.dice} userMoney={this.userMoney} />
+        <DiceRoll dice={this.dice} userMoney={this.userMoney} userNames={this.userNames} />
         <Player name='RJ' piece='Hat' />
         <div className='board parent'>
-          <Symbol className='token0' left={`${this.state.user0[1]}%`} top={`${this.state.user0[0]}%`} userNumber={0} money={`${this.state.user0_money}`}/>
-          <Symbol className='token1' left={`${this.state.user1[1]}%`} top={`${this.state.user1[0] - 2}%`} userNumber={1} />
-          <Symbol className='token2' left={`${this.state.user2[1]}%`} top={`${this.state.user2[0] - 4}%`} userNumber={2} />
-          <Symbol className='token3' left={`${this.state.user3[1]}%`} top={`${this.state.user3[0] - 6}%`} userNumber={3} />
-          <Symbol className='token4' left={`${this.state.user4[1] - 2}%`} top={`${this.state.user4[0]}%`} userNumber={4} />
-          <Symbol className='token5' left={`${this.state.user5[1] - 2}%`} top={`${this.state.user5[0] - 2}%`} userNumber={5} />
-          <Symbol className='token6' left={`${this.state.user6[1] - 2}%`} top={`${this.state.user6[0] - 4}%`} userNumber={6} />
-          <Symbol className='token7' left={`${this.state.user7[1] - 2}%`} top={`${this.state.user7[0] - 6}%`} userNumber={7} />
+          <Symbol className='token0' left={`${this.state.user0[1]}%`} top={`${this.state.user0[0]}%`} userNumber={userNames[0][1]} money={`${this.state.user0_money}`} />
+          <Symbol className='token1' left={`${this.state.user1[1]}%`} top={`${this.state.user1[0] - 2}%`} userNumber={userNames[1][1]} />
+          <Symbol className='token2' left={`${this.state.user2[1]}%`} top={`${this.state.user2[0] - 4}%`} userNumber={userNames[2][1]} />
+          <Symbol className='token3' left={`${this.state.user3[1]}%`} top={`${this.state.user3[0] - 6}%`} userNumber={userNames[3][1]} />
+          <Symbol className='token4' left={`${this.state.user4[1] - 2}%`} top={`${this.state.user4[0]}%`} userNumber={userNames[4][1]} />
+          <Symbol className='token5' left={`${this.state.user5[1] - 2}%`} top={`${this.state.user5[0] - 2}%`} userNumber={userNames[5][1]} />
+          <Symbol className='token6' left={`${this.state.user6[1] - 2}%`} top={`${this.state.user6[0] - 4}%`} userNumber={userNames[6][1]} />
+          <Symbol className='token7' left={`${this.state.user7[1] - 2}%`} top={`${this.state.user7[0] - 6}%`} userNumber={userNames[7][1]} />
           <div className='wire'>
             <div className='flexcol'>
               <div className='flexrow'>

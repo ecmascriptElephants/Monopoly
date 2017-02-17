@@ -46,6 +46,7 @@ module.exports = (io) => {
       if (gameObj.i >= gameObj.playerInfo.length) {
         gameObj.i = 0
       }
+      io.in(data.gameID).emit('update position', {pos: data.pos, index: data.index})
       socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn', gameObj.i)
     })
   })

@@ -20,5 +20,8 @@ module.exports = {
   },
   end: (data) => {
     socket.emit('endTurn', data)
+  },
+  updatePos: (data) => {
+    socket.emit('dice rolled', data)
   }
 }

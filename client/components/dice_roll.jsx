@@ -25,9 +25,13 @@ class DiceRoll extends Component {
       jailPositions: []
     }
   }
+
+  componentWillReceiveProps (nextProps) {
+    sock.updatePos({gameID: this.props.gameID, pos: this.props.userPosArray[this.props.index], index: this.props.index})
+  }
   componentDidMount () {
     sock.socket.on('yourTurn', (index) => {
-      this.setState({diceRollButtonVisible: true})
+      this.setState({ diceRollButtonVisible: true })
       this.props.dispatch(setIndex(index))
       console.log(this.props.index)
     })
@@ -70,7 +74,7 @@ class DiceRoll extends Component {
       diceRollButtonVisible: false,
       endTurnButtonVisible: false
     })
-    sock.end({ gameID: this.props.gameID })
+    sock.end({ gameID: this.props.gameID, pos: this.props.userPosArray[this.props.index], index: this.props.index })
   }
 
   handleDoubles (die1, die2) {
@@ -109,26 +113,6 @@ class DiceRoll extends Component {
   handleAddDiceRollToUserPosition (die1, die2, doubles) {
     let updatedPosition = (this.props.userPosArray[this.props.index] + die1 + die2) % 40
     this.props.dispatch(setUserPositions(updatedPosition, this.props.index))
-    // update the current user to the next user
-    // if (updatedCurrentUserPosition === 30) {
-    //   updatedCurrentUserPosition = 10
-    //   updatedUserPositions[this.state.currentUser] = updatedCurrentUserPosition
-    //   updatedJailPositions = this.state.jailPositions
-    //   updatedJailPositions[this.state.currentUser] = 1
-    //   this.setState({
-    //     userPositions: updatedUserPositions,
-    //     jailPositions: updatedJailPositions,
-    //     doublesComment: 'You landed on Go-To-Jail. Go To Jail. Go Directly To Jail. Do Not Pass' +
-    //     ' Go. Do Not Collect $200.'
-    //   })
-    // } else {
-    //   // check if the user is landing on or passing go, NOTE still need to deal with jail
-    //   this.handleLandOnOrPassGo(oldCurrentUserPosition, updatedCurrentUserPosition)
-    //   this.setState({
-    //     // currentUser: newCurrentUser,
-    //     userPositions: updatedUserPositions
-    //   })
-    // }
   }
 
   handleLandOnOrPassGo (oldCurrentUserPosition, updatedCurrentUserPosition, jail) {

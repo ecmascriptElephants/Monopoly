@@ -26,25 +26,14 @@ class Board extends Component {
     ]
     let players = [...this.state.players]
     players[index].userPosition = location[value]
+    console.log('player updated', value)
     this.setState({players})
-    // this.setState.players[index].userPosition = location[array[index]]
-    // this.setState({
-    //   user0: location[userPositionsArray[0]],
-    //   user1: location[userPositionsArray[1]],
-    //   user2: location[userPositionsArray[2]],
-    //   user3: location[userPositionsArray[3]],
-    //   user4: location[userPositionsArray[4]],
-    //   user5: location[userPositionsArray[5]],
-    //   user6: location[userPositionsArray[6]],
-    //   user7: location[userPositionsArray[7]]
-    // })
   }
   componentDidMount () {
     sock.socket.on('users', (data) => {
       this.setState({players: data.players})
     })
     sock.socket.on('update position', (data) => {
-      console.log(data)
       this.dice(data.pos, data.index)
     })
   }

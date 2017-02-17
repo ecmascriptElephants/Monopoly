@@ -12,7 +12,7 @@ module.exports = (io) => {
       socket.broadcast.emit('new game', { gameID, socketID: socket.id })
       data.socketID = socket.id
       data.userPosition = [97, 97]
-      game[gameID] = {i: 0, playerInfo: [data]}
+      game[gameID] = { i: 0, playerInfo: [data] }
       socket.join(gameID.toString())
     })
 
@@ -33,7 +33,7 @@ module.exports = (io) => {
     socket.on('load', (data) => {
       let gameObj = game[data.gameID]
       // console.log(gameObj.playerInfo[gameObj.i].socketID)
-      io.emit('users', {players: gameObj['playerInfo']})
+      io.emit('users', { players: gameObj['playerInfo'] })
       // console.log(gameObj.playerInfo[gameObj.])
       // console.log(gameObj[data.gameID])
       // console.log('how many times', gameObj.playerInfo[gameObj.i].socketID)
@@ -46,8 +46,12 @@ module.exports = (io) => {
       if (gameObj.i >= gameObj.playerInfo.length) {
         gameObj.i = 0
       }
-      io.in(data.gameID).emit('update position', {pos: data.pos, index: data.index})
+      io.in(data.gameID).emit('update position', { pos: data.pos, index: data.index })
       socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn', gameObj.i)
+    })
+
+    socket.on('dice rolled', (data) => {
+      socket.broadcast.to(data.gameID).emit('update position', { pos: data.pos, index: data.index })
     })
   })
 }

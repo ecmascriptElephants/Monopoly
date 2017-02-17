@@ -27,7 +27,7 @@ class DiceRoll extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    sock.updatePos({gameID: this.props.gameID, pos: this.props.userPosArray[this.props.index], index: this.props.index})
+    sock.updatePos({gameID: nextProps.gameID, pos: nextProps.userPosArray[nextProps.index], index: nextProps.index})
   }
   componentDidMount () {
     sock.socket.on('yourTurn', (index) => {

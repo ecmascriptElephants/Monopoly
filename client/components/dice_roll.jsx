@@ -803,7 +803,7 @@ class DiceRoll extends Component {
 const mapStateToProps = (state) => {
   return {
     username: state.username,
-    gameID: state.gameI
+    gameID: state.gameID,
     userID: state.userID,
     userPosArray: state.userPosArray,
     index: state.index

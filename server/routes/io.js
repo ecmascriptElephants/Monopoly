@@ -53,5 +53,12 @@ module.exports = (io) => {
     socket.on('dice rolled', (data) => {
       socket.broadcast.to(data.gameID).emit('update position', { pos: data.pos, index: data.index })
     })
+
+    socket.on('send chat', (data) => {
+      socket.broadcast.to(data.userID).emit()
+    })
+
+    
+
   })
 }

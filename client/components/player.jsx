@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { Button, Header, Container, Segment, Icon, Divider, Message } from 'semantic-ui-react'
+import { Header, Container, Segment, Icon, Divider, Message } from 'semantic-ui-react'
 import { rules } from '../static/rules'
+import DiceRoll from './dice_roll'
 
 class Player extends Component {
   constructor (props) {
@@ -167,7 +168,7 @@ class Player extends Component {
           <Message>
             {this.state.money}
           </Message>
-          <Button secondary fluid>Roll Dice</Button>
+          <DiceRoll dice={this.dice} />
         </Segment>
       </Container>
     )

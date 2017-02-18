@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import Symbol from './Symbol'
-import DiceRoll from './dice_roll'
 import Player from './player'
 // import userNames from './user_order'
 // import rules from '../static/rules.js'
@@ -44,7 +43,6 @@ class Board extends Component {
   render () {
     return (
       <div>
-        <DiceRoll dice={this.dice} />
         <Player name={this.props.username} piece='Hat' />
         <div className='board parent'>
           {

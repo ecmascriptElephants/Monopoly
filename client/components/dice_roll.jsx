@@ -4,7 +4,7 @@ import userNames from './user_order'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import { setUserPositions, setIndex } from './store/actionCreators'
-
+import { Button } from 'semantic-ui-react'
 class DiceRoll extends Component {
   constructor (props) {
     super(props)
@@ -204,8 +204,7 @@ class DiceRoll extends Component {
         moveTokenButtonVisible: false,
         endTurnButtonVisible: true
       })
-    }
-    else if (updatedCurrentUserPosition === 1 || updatedCurrentUserPosition === 3 || updatedCurrentUserPosition === 5 || updatedCurrentUserPosition === 6 || updatedCurrentUserPosition === 8 || updatedCurrentUserPosition === 9 || updatedCurrentUserPosition === 11 || updatedCurrentUserPosition === 12 || updatedCurrentUserPosition === 13 || updatedCurrentUserPosition === 14 || updatedCurrentUserPosition === 15 || updatedCurrentUserPosition === 16 || updatedCurrentUserPosition === 18 || updatedCurrentUserPosition === 19 || updatedCurrentUserPosition === 21 || updatedCurrentUserPosition === 23 || updatedCurrentUserPosition === 24 || updatedCurrentUserPosition === 25 || updatedCurrentUserPosition === 26 || updatedCurrentUserPosition === 27 || updatedCurrentUserPosition === 28 || updatedCurrentUserPosition === 29 || updatedCurrentUserPosition === 31 || updatedCurrentUserPosition === 32 || updatedCurrentUserPosition === 34 || updatedCurrentUserPosition === 35 || updatedCurrentUserPosition === 37 || updatedCurrentUserPosition === 39) {
+    } else if (updatedCurrentUserPosition === 1 || updatedCurrentUserPosition === 3 || updatedCurrentUserPosition === 5 || updatedCurrentUserPosition === 6 || updatedCurrentUserPosition === 8 || updatedCurrentUserPosition === 9 || updatedCurrentUserPosition === 11 || updatedCurrentUserPosition === 12 || updatedCurrentUserPosition === 13 || updatedCurrentUserPosition === 14 || updatedCurrentUserPosition === 15 || updatedCurrentUserPosition === 16 || updatedCurrentUserPosition === 18 || updatedCurrentUserPosition === 19 || updatedCurrentUserPosition === 21 || updatedCurrentUserPosition === 23 || updatedCurrentUserPosition === 24 || updatedCurrentUserPosition === 25 || updatedCurrentUserPosition === 26 || updatedCurrentUserPosition === 27 || updatedCurrentUserPosition === 28 || updatedCurrentUserPosition === 29 || updatedCurrentUserPosition === 31 || updatedCurrentUserPosition === 32 || updatedCurrentUserPosition === 34 || updatedCurrentUserPosition === 35 || updatedCurrentUserPosition === 37 || updatedCurrentUserPosition === 39) {
       if (this.propertyIsOwned(updatedCurrentUserPosition) === false) {
         console.log('dice_roll.jsx line 177: The User landed on an unowned property')
         this.setState({
@@ -217,12 +216,12 @@ class DiceRoll extends Component {
         let propertyOwner = this.propertyIsOwned(updatedCurrentUserPosition)
         let rentOwed = 0
         let propName = ''
-          this.state.userProperties[propertyOwner].forEach(prop => {
-            if(prop.Position === updatedCurrentUserPosition) {
-              propName = prop.PropertyObj.NAME
-              rentOwed = prop.PropertyObj.RENT[prop.Houses]
-            }
-          })
+        this.state.userProperties[propertyOwner].forEach(prop => {
+          if (prop.Position === updatedCurrentUserPosition) {
+            propName = prop.PropertyObj.NAME
+            rentOwed = prop.PropertyObj.RENT[prop.Houses]
+          }
+        })
         this.setState({
           payRentButtonVisible: true,
           payRentComment: `You landed on ${propName}. Pay ${rentOwed} to ${this.state.userNames[propertyOwner]}.`,
@@ -232,16 +231,14 @@ class DiceRoll extends Component {
           propertyOwner: propertyOwner
         })
       }
-    }
-    else if (doubles === 1 || doubles === 2) {
+    } else if (doubles === 1 || doubles === 2) {
       this.setState({
         userPositions: updatedUserPositions,
         moveTokenButtonVisible: false,
         diceRollButtonVisible: true
       })
       // todo: for now the below works for every other space not specified
-    }
-    else if (!doubles) {
+    } else if (!doubles) {
       this.setState({
         userPositions: updatedUserPositions,
         moveTokenButtonVisible: false,
@@ -533,11 +530,11 @@ class DiceRoll extends Component {
     let updatedUserMoney = this.state.userMoney
     let doubles = this.state.doubles
 
-    if(updatedUserMoney[currentUser] < rentOwed)
+    if (updatedUserMoney[currentUser] < rentOwed) {
       this.setState({
         payRentComment: `You owe ${rentOwed}, but only have ${updatedUserMoney[currentUser]}`
       })
-    else {
+    } else {
       updatedUserMoney[currentUser] -= rentOwed
       updatedUserMoney[propertyOwner] += rentOwed
       if (!doubles) {
@@ -682,33 +679,31 @@ class DiceRoll extends Component {
             <div className='dice-roll-btn_div'>
               {this.state.diceRollButtonVisible
                 ? <div>
-                    <div>{`${this.state.userNames[this.props.index]} it is your turn. Roll the dice!`}</div>
-                    <button className='dice-roll-btn' onClick={() => { this.handleDiceRollButtonClick() }}>
-                      Roll Dice!
-                    </button>
-                  </div> : null
+                  <div>{`${this.state.userNames[this.props.index]} it is your turn. Roll the dice!`}</div>
+                  <Button secondary fluid onClick={() => { this.handleDiceRollButtonClick() }}>Roll Dice</Button>
+                </div> : null
               }
             </div>
             <div className='move-token-btn_div'>
               {this.state.moveTokenButtonVisible
                 ? <div>
-                    <div className='dice'>
-                      <div className='die1'>
-                        {`die1: ${this.state.dice[0]}`}
-                      </div>
-                      <div className='die2'>
-                        {`die2: ${this.state.dice[1]}`}
-                      </div>
-                      {/* <div>{this.state.diceSum}</div> */}
-                      <div>
-                        {this.state.diceSumComment}
-                      </div>
+                  <div className='dice'>
+                    <div className='die1'>
+                      {`die1: ${this.state.dice[0]}`}
                     </div>
-                    <div className='doubles-comment_div'>{this.state.doublesComment}</div>
-                    <button className='move-token-btn' onClick={() => { this.handleMoveTokenButtonClick() }}>
+                    <div className='die2'>
+                      {`die2: ${this.state.dice[1]}`}
+                    </div>
+                    {/* <div>{this.state.diceSum}</div> */}
+                    <div>
+                      {this.state.diceSumComment}
+                    </div>
+                  </div>
+                  <div className='doubles-comment_div'>{this.state.doublesComment}</div>
+                  <button className='move-token-btn' onClick={() => { this.handleMoveTokenButtonClick() }}>
                       Move Your Token!
                     </button>
-                  </div> : null
+                </div> : null
               }
             </div>
             <div className='pick-chance-btn_div'>
@@ -717,9 +712,8 @@ class DiceRoll extends Component {
                   <div className='chance_div'>
                     You land on a chance space!
                   </div>
-                  <button className='chance-btn' onClick={() => { this.handleChanceButtonClick() }}>
-                  Pick a Chance Card!
-                  </button>
+                  <div className='doubles-comment_div'>{this.state.doublesComment}</div>
+                  <Button secondary fluid onClick={() => { this.handleMoveTokenButtonClick() }}>  Move Your Token! </Button>
                 </div> : null
               }
             </div>
@@ -729,9 +723,7 @@ class DiceRoll extends Component {
                   <div className='community_div'>
                     You land on a community chest space!
                   </div>
-                  <button className='community-btn' onClick={() => { this.handleCommunityButtonClick() }}>
-                  Pick a Community Chest Card!
-                  </button>
+                  <Button secondary fluid onClick={() => { this.handleEndTurnButtonClick() }}>  End Turn </Button>
                 </div> : null
               }
             </div>
@@ -745,8 +737,8 @@ class DiceRoll extends Component {
               }
             </div>
             <div className='pay-rent-btn_div'>
-              {this.state.payRentButtonVisible ?
-                <div>
+              {this.state.payRentButtonVisible
+                ? <div>
                   <div className='rent-comment'>
                     {this.state.payRentComment}
                   </div>
@@ -785,16 +777,14 @@ class DiceRoll extends Component {
           </div>
           <div className='CurrentUserProperties'>
             <div>
-              Properties : {this.state.userProperties[this.state.currentUser].map(e => ' '+e.PropertyObj.NAME)}
+              Properties : {this.state.userProperties[this.state.currentUser].map(e => ' ' + e.PropertyObj.NAME)}
               {this.state.userProperties[this.state.currentUser].forEach(propObj => console.log(propObj.PropertyObj.NAME))}
             </div>
           </div>
         </div>
         <div className='UserPositions'>
-          <div className='CurrentUser'>
-          </div>
-          <div className='UserPositionsArray'>
-          </div>
+          <div className='CurrentUser' />
+          <div className='UserPositionsArray' />
         </div>
       </div>
     )

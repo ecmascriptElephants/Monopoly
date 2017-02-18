@@ -700,9 +700,7 @@ class DiceRoll extends Component {
                     </div>
                   </div>
                   <div className='doubles-comment_div'>{this.state.doublesComment}</div>
-                  <button className='move-token-btn' onClick={() => { this.handleMoveTokenButtonClick() }}>
-                      Move Your Token!
-                    </button>
+                  <Button secondary fluid onClick={() => { this.handleMoveTokenButtonClick() }}>  Move Your Token! </Button>
                 </div> : null
               }
             </div>
@@ -710,10 +708,10 @@ class DiceRoll extends Component {
               {this.state.chanceButtonVisible
                 ? <div>
                   <div className='chance_div'>
-                    You land on a chance space!
+                    You landed on a chance space!
                   </div>
                   <div className='doubles-comment_div'>{this.state.doublesComment}</div>
-                  <Button secondary fluid onClick={() => { this.handleMoveTokenButtonClick() }}>  Move Your Token! </Button>
+                  <Button secondary fluid onClick={() => { this.handleChanceButtonClick() }}>  Pick a Chance Card! </Button>
                 </div> : null
               }
             </div>
@@ -721,18 +719,16 @@ class DiceRoll extends Component {
               {this.state.communityButtonVisible
                 ? <div>
                   <div className='community_div'>
-                    You land on a community chest space!
+                    You landed on a community chest space!
                   </div>
-                  <Button secondary fluid onClick={() => { this.handleEndTurnButtonClick() }}>  End Turn </Button>
+                  <Button secondary fluid onClick={() => { this.handleCommunityButtonClick() }}>  Pick a Community Chest Card! </Button>
                 </div> : null
               }
             </div>
             <div className='buy-property-btn_div'>
               {this.state.buyPropertyButtonVisible
                 ? <div>
-                  <button className='buy-property-btn' onClick={() => { this.handleBuyPropertyButtonClick() }}>
-                    Buy this Property!
-                  </button>
+                  <Button secondary fluid onClick={() => { this.handleBuyPropertyButtonClick() }}>  Buy This Property. </Button>
                 </div> : null
               }
             </div>
@@ -742,9 +738,7 @@ class DiceRoll extends Component {
                   <div className='rent-comment'>
                     {this.state.payRentComment}
                   </div>
-                  <button className='pay-rent-btn' onClick={() => { this.handlePayRentButtonClick() }}>
-                    Pay Rent!
-                  </button>
+                    <Button secondary fluid onClick={() => { this.handlePayRentButtonClick() }}>  Pay Rent. </Button>
                 </div> : null
               }
             </div>
@@ -760,9 +754,7 @@ class DiceRoll extends Component {
                   <div className='property-comment_div'>
                     {this.state.buyPropertyComment}
                   </div>
-                  <button className='end-turn-btn' onClick={() => { this.handleEndTurnButtonClick() }}>
-                    End Turn.
-                  </button>
+                  <Button secondary fluid onClick={() => { this.handleEndTurnButtonClick() }}>  End Turn. </Button>
                 </div> : null
               }
             </div>

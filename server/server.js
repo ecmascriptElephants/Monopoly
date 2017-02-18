@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt-nodejs')
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const path = require('path')
-const cors = require('cors')
 const routes = require('./routes/routes.js')
 const passport = require('passport')
 const FacebookStrategy = require('passport-facebook').Strategy
@@ -14,11 +13,6 @@ const flash = require('connect-flash')
 const User = require('./models/user')
 const db = require('./models/db')
 const app = express()
-const server = require('http').createServer(app)
-const io = require('socket.io')(server)
-const ioRouter = require('./routes/io.js')
-app.use(cors())
-
 const port = process.env.PORT || 8000
 
 passport.serializeUser((user, done) => done(null, user))
@@ -30,17 +24,22 @@ passport.use(new FacebookStrategy({
 },
   (accessToken, refreshToken, profile, done) => {
     process.nextTick(() => {
+      // const photo = `https://graph.facebook.com/${profile.username}/picture?width=200&height=200&access_token=${accessToken}`
+      // profile.photo = photo
       db.raw(`SELECT  * FROM fb_user where fbID = ${Number(profile.id)}`)
-        .then((result) => {
-          if (result[0].length === 0) {
-            db.raw(`INSERT INTO fb_user VALUES (null, ${Number(profile.id)}, '${profile.displayName}')`)
-              .then(() => {
-                return done(null, profile)
-              })
-          } else {
+      .then((result) => {
+        // console.log('show result', result)
+        if (result[0].length === 0) {
+          db.raw(`INSERT INTO fb_user VALUES (null, ${Number(profile.id)}, '${profile.displayName}')`)
+          .then(() => {
             return done(null, profile)
-          }
-        })
+          })
+        } else {
+          console.log('profile', profile)
+          return done(null, profile)
+        }
+      })
+      console.log('fb profile id', profile.id)
     })
   }
 ))
@@ -103,44 +102,18 @@ passport.use('local-login', new LocalStrategy({
     })
   }
 ))
-passport.use('local-signup', new LocalStrategy({
-  usernameField: 'username',
-  passwordField: 'password',
-  passReqToCallback: true
-},
-  (req, username, password, done) => {
-    process.nextTick(() => {
-      // find a user in the db with given username
-      User.findByUsername(username, (result) => {
-        if (result.length === 0) {
-          User.addUser(username, password)
-        } else {
-          console.log('user exited')
-        }
-      })
-    })
+
+app.all('*', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'accept, content-type, x-parse-application-id, x-parse-rest-api-key, x-parse-session-token')
+  // intercept OPTIONS method
+  if (req.method === 'OPTIONS') {
+    res.send(200)
+  } else {
+    next()
   }
-))
-
-passport.use('local-login', new LocalStrategy({
-  usernameField: 'username',
-  passwordField: 'password',
-  passReqToCallback: true
-},
-  (req, username, password, done) => {
-    User.findByUsername(username, (result) => {
-      if (result.length === 0) {
-        console.log('User not found!')
-      } else {
-
-      }
-    })
-  }
-))
-
-app.use(passport.initialize())
-app.use(passport.session())
-
+})
 app.use(session({
   secret: 'ecmascriptElephant',
   resave: false,
@@ -153,10 +126,10 @@ app.use(bodyParser.json())
 app.use(morgan('dev'))
 app.use(express.static(path.join(__dirname, '../index')))
 app.use(express.static(path.join(__dirname, '../src')))
-
 routes(app, express, passport)
-ioRouter(io)
-// app.listen(port)
-server.listen(port)
+
+app.listen(port, () => {
+  console.log('Listening on port ', port)
+})
 
 module.exports = app

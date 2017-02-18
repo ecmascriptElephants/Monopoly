@@ -1,6 +1,5 @@
 const userController = require('../controllers/userController')
 
-
 module.exports = (app, express, passport) => {
   app.post('/signup', passport.authenticate('local-signup', {
     failureRedirect: '/signup'
@@ -23,20 +22,20 @@ module.exports = (app, express, passport) => {
   app.get('/auth/facebook', passport.authenticate('facebook'), (req, res) => {
     console.log('should be in here')
   })
-
   app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-    authType: 'rerequest',
+    successRedirect: '/board',
     failureRedirect: '/login'
-  }), (req, res) => {
-    passport.user = req.user
-    res.redirect('/lobby')
-  })
+  }), (req, res) => res.redirect('/'))
 
   app.get('/logout', (req, res) => {
     req.logout()
     res.redirect('/')
   })
 
+  app.get('/board', (req, res) => {
+    console.log('here')
+    res.redirect('/#/board')
+  })
 
   app.get('/', (req, res) => {
     res.redirect('/#/')
@@ -46,11 +45,4 @@ module.exports = (app, express, passport) => {
     if (req.isAuthenticated()) return next()
     res.redirect('/login')
   }
-
-  app.get('/lobby', (req, res) => {
-    res.redirect('/#/lobby')
-  })
-  app.get('/user', (req, res) => {
-    res.send(passport.user)
-  })
 }

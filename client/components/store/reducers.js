@@ -3,13 +3,15 @@ import {
   SET_USERNAME,
   SET_USER_ID,
   SET_USERS_POSITIONS,
-  SET_INDEX
+  SET_INDEX,
+  SET_CASH
 } from './actions'
 const DEFAULT_STATE = {
   gameID: 0,
   username: '',
   userID: '',
   userPosArray: [0, 0, 0, 0, 0, 0, 0, 0],
+  userCashArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500],
   index: -1
 }
 
@@ -46,6 +48,16 @@ const setUserPosition = (state, action) => {
   return newState
 }
 
+const setUserCash = (state, action) => {
+  let cash = state.userCashArray[action.index] + action.cash
+  let newArr = [...state.userCashArray.slice(0, action.index),
+    cash,
+    ...state.userCashArray.slice(action.index + 1)]
+  const newState = {}
+  Object.assign(newState, state, { userCashArray: newArr })
+  return newState
+}
+
 const rootReducer = (state = DEFAULT_STATE, action) => {
   switch (action.type) {
     case SET_GAME_ID:
@@ -59,8 +71,13 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_USERS_POSITIONS:
       return setUserPosition(state, action)
+
     case SET_INDEX:
       return setIndex(state, action)
+
+    case SET_CASH:
+      return setUserCash(state, action)
+
     default:
       return state
   }

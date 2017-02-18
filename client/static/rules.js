@@ -1,42 +1,134 @@
 const rules = {
   Community_Chest: [
-    { Description: 'BANK ERROR IN YOUR FAVOR COLLECT $200' },
-    { Description: 'FROM SALE OF STOCK YOU GET $45' },
-    { Description: 'PAY HOSPITAL $100' },
-    { Description: 'COLLECT $50 FROM EVERY PLAYER' },
-    { Description: 'DOCTOR"S FEE PAY $50' },
-    { Description: 'YOU INHERIT $100' },
-    { Description: 'ADVANCE TO GO COLLECT $200' },
-    { Description: 'PAY SCHOOL TAX OF $150' },
-    { Description: 'XMAS FUND MATURES COLLECT $100' },
-    { Description: 'RECEIVE FOR SERVICES $25' },
-    { Description: 'INCOME TAX REFUND COLLECT $20' },
-    { Description: 'LIFE INSURANCE MATURES COLLECT $100' },
-    { Description: 'GO TO JAIL GO DIRECTLY TO JAIL DO NOT PASS GO DO NOT COLLECT $200' },
-    { Description: 'YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST COLLECT $10' },
-    { Description: 'YOU ARE ASSESSED FOR STREET REPAIRS $40 PER HOUSE $115 PER HOTEL' },
-    { Description: 'GET OUT OF JAIL FREE' }
+    {
+      Description: 'BANK ERROR IN YOUR FAVOR COLLECT $200',
+      Cash: 200
+    },
+    {
+      Description: 'FROM SALE OF STOCK YOU GET $45',
+      Cash: 45
+    },
+    {
+      Description: 'PAY HOSPITAL $100',
+      Cash: -45
+    },
+    {
+      Description: 'COLLECT $50 FROM EVERY PLAYER',
+      'Special': 'Special'
+    },
+    {
+      Description: 'DOCTOR"S FEE PAY $50',
+      Cash: -50
+    },
+    {
+      Description: 'YOU INHERIT $100',
+      Cash: 100
+    },
+    {
+      Description: 'ADVANCE TO GO COLLECT $200',
+      Position: 0
+    },
+    {
+      Description: 'PAY SCHOOL TAX OF $150',
+      Cash: -150
+    },
+    {
+      Description: 'XMAS FUND MATURES COLLECT $100',
+      Cash: 100
+    },
+    {
+      Description: 'RECEIVE FOR SERVICES $25',
+      Cash: 25
+    },
+    {
+      Description: 'INCOME TAX REFUND COLLECT $20',
+      Cash: 20
+    },
+    {
+      Description: 'LIFE INSURANCE MATURES COLLECT $100',
+      Cash: 20
+    },
+    {
+      Description: 'GO TO JAIL GO DIRECTLY TO JAIL DO NOT PASS GO DO NOT COLLECT $200',
+      Position: 'JAIL'
+    },
+    {
+      Description: 'YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST COLLECT $10',
+      Cash: 10
+    },
+    {
+      Description: 'YOU ARE ASSESSED FOR STREET REPAIRS $40 PER HOUSE $115 PER HOTEL',
+      House: 40,
+      Hotel: 115
+    },
+    {
+      Description: 'GET OUT OF JAIL FREE',
+      Code: 'Jail-Free'
+    }
   ],
   Chance: [
-    { Description: 'ADVANCE TO GO COLLECT $200' },
-    { Description: 'BANK PAYS YOU DIVIDEND OF $50' },
-    { Description: 'GO BACK 3 SPACES' },
-    { Description: 'ADVANCE TOKEN TO NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL TEN TIMES THE AMOUNT THROWN.' },
-    { Description: 'GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.' },
-    { Description: 'PAY POOR TAX OF $15' },
-    { Description: 'ADVANCE TO ST. CHARLES PLACE. IF YOU PASS GO, COLLECT $200.' },
-    { Description: 'YOU HAVE BEEN ELECTED CHAIRMAN OF THE BOARD. PAY EACH PLAYER $50.' },
+    {
+      Description: 'ADVANCE TO GO COLLECT $200',
+      Cash: +200
+    },
+    {
+      Description: 'BANK PAYS YOU DIVIDEND OF $50',
+      Cash: 50
+    },
+    {
+      Description: 'GO BACK 3 SPACES',
+      Position: -3
+    },
+    {
+      Description: 'ADVANCE TOKEN TO NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL TEN TIMES THE AMOUNT THROWN.',
+      Special: 'Special'
+    },
+    {
+      Description: 'GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.',
+      Position: 'JAIL'
+    },
+    {
+      Description: 'PAY POOR TAX OF $15',
+      Cash: -15
+    },
+    {
+      Description: 'ADVANCE TO ST. CHARLES PLACE. IF YOU PASS GO, COLLECT $200.',
+      Position: 11,
+      Pay: true
+    },
+    {
+      Description: 'YOU HAVE BEEN ELECTED CHAIRMAN OF THE BOARD. PAY EACH PLAYER $50.',
+      Special: 'Special'
+    },
     { Description: 'ADVANCE TOKEN TO THE NEAREST RAILROAD AND PAY OWNER TWICE THE RENTAL TO WHICH HE IS OTHERWISE ENTITLED. IF RAILROAD IS UNOWNED, YOU MAY BUY IT FROM THE BANK.' },
-    { Description: 'TAKE A RIDE ON THE READING. IF YOU PASS GO COLLECCT $200' },
+    {
+      Description: 'TAKE A RIDE ON THE READING. IF YOU PASS GO COLLECCT $200',
+      Position: 5,
+      Pay: true
+    },
     { Description: 'ADVANCE TOKEN TO THE NEAREST RAILROAD AND PAY OWNER TWICE THE RENTAL TO WHICH HE IS OTHERWISE ENTITLED. IF RAILROAD IS UNOWNED, YOU MAY BUY IT FROM THE BANK.' },
-    { Description: 'TAKE A WALK ON THE BOARD WALK. ADVANCE TOKEN TO BOARD WALK' },
-    { Description: 'YOUR BUILDING AND LOAN MATURES. COLLECT $150' },
+    {
+      Description: 'TAKE A WALK ON THE BOARD WALK. ADVANCE TOKEN TO BOARD WALK',
+      Postion: 39
+    },
+    {
+      Description: 'YOUR BUILDING AND LOAN MATURES. COLLECT $150',
+      Cash: 150
+    },
     { Description: 'ADVANCE TO ILLINOIS AVE' },
-    { Description: 'MAKE GENERAL REPAIRS ON ALL YOUR PROPERTY. FOR EACH HOUSE PAY $25. FOR EACH HOTEL PAY $100.' },
-    { Description: 'GET OUT OF JAIL FREE' }
+    {
+      Description: 'MAKE GENERAL REPAIRS ON ALL YOUR PROPERTY. FOR EACH HOUSE PAY $25. FOR EACH HOTEL PAY $100.',
+      House: -25,
+      Hotel: -100
+    },
+    {
+      Description: 'GET OUT OF JAIL FREE',
+      Code: 'Jail-Free'
+    }
   ],
   Properties: [
-    { NAME: 'Atlantic Avenue',
+    {
+      NAME: 'Atlantic Avenue',
       PROPERTY_GROUP: 'Yellow',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 26,
@@ -48,7 +140,8 @@ const rules = {
       UNMORTGAGE_PRICE: 143,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'B & O Railroad',
+    {
+      NAME: 'B & O Railroad',
       PROPERTY_GROUP: 'Stations',
       ALLOWS_HOUSES: false,
       BOARD_POSITION: 25,
@@ -60,7 +153,8 @@ const rules = {
       UNMORTGAGE_PRICE: 110,
       NUMBER_OF_PROPERTIES_IN_GROUP: 4
     },
-    { NAME: 'Baltic Avenue',
+    {
+      NAME: 'Baltic Avenue',
       PROPERTY_GROUP: 'Brown',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 3,
@@ -72,7 +166,8 @@ const rules = {
       UNMORTGAGE_PRICE: 33,
       NUMBER_OF_PROPERTIES_IN_GROUP: 2
     },
-    { NAME: 'Boardwalk',
+    {
+      NAME: 'Boardwalk',
       PROPERTY_GROUP: 'Dark Blue',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 39,
@@ -84,7 +179,8 @@ const rules = {
       UNMORTGAGE_PRICE: 220,
       NUMBER_OF_PROPERTIES_IN_GROUP: 2
     },
-    { NAME: 'Connecticut Avenue',
+    {
+      NAME: 'Connecticut Avenue',
       PROPERTY_GROUP: 'Light Blue',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 9,
@@ -96,7 +192,8 @@ const rules = {
       UNMORTGAGE_PRICE: 66,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'Electric Company',
+    {
+      NAME: 'Electric Company',
       PROPERTY_GROUP: 'Utilities',
       ALLOWS_HOUSE: false,
       BOARD_POSITION: 12,
@@ -108,7 +205,8 @@ const rules = {
       UNMORTGAGE_PRICE: 82,
       NUMBER_OF_PROPERTIES_IN_GROUP: 2
     },
-    { NAME: 'Illinois Avenue',
+    {
+      NAME: 'Illinois Avenue',
       PROPERTY_GROUP: 'Red',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 24,
@@ -120,7 +218,8 @@ const rules = {
       UNMORTGAGE_PRICE: 132,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'Indiana Avenue',
+    {
+      NAME: 'Indiana Avenue',
       PROPERTY_GROUP: 'Red',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 23,
@@ -132,7 +231,8 @@ const rules = {
       UNMORTGAGE_PRICE: 121,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'Kentucky Avenue',
+    {
+      NAME: 'Kentucky Avenue',
       PROPERTY_GROUP: 'Red',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 21,
@@ -144,7 +244,8 @@ const rules = {
       UNMORTGAGE_PRICE: 121,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'Marvin Gardens',
+    {
+      NAME: 'Marvin Gardens',
       PROPERTY_GROUP: 'Yellow',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 29,
@@ -156,7 +257,8 @@ const rules = {
       UNMORTGAGE_PRICE: 154,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'Mediterranean Avenue',
+    {
+      NAME: 'Mediterranean Avenue',
       PROPERTY_GROUP: 'Brown',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 1,
@@ -168,7 +270,8 @@ const rules = {
       UNMORTGAGE_PRICE: 33,
       NUMBER_OF_PROPERTIES_IN_GROUP: 2
     },
-    { NAME: 'New York Avenue',
+    {
+      NAME: 'New York Avenue',
       PROPERTY_GROUP: 'Orange',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 19,
@@ -180,7 +283,8 @@ const rules = {
       UNMORTGAGE_PRICE: 110,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'North Carolina Avenue',
+    {
+      NAME: 'North Carolina Avenue',
       PROPERTY_GROUP: 'Green',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 32,
@@ -192,7 +296,8 @@ const rules = {
       UNMORTGAGE_PRICE: 165,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'Oriental Avenue',
+    {
+      NAME: 'Oriental Avenue',
       PROPERTY_GROUP: 'Light Blue',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 6,
@@ -204,7 +309,8 @@ const rules = {
       UNMORTGAGE_PRICE: 65,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'Pacific Avenue',
+    {
+      NAME: 'Pacific Avenue',
       PROPERTY_GROUP: 'Green',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 31,
@@ -216,7 +322,8 @@ const rules = {
       UNMORTGAGE_PRICE: 165,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'Park Place',
+    {
+      NAME: 'Park Place',
       PROPERTY_GROUP: 'Dark Blue',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 37,
@@ -228,7 +335,8 @@ const rules = {
       UNMORTGAGE_PRICE: 192,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'Pennsylvania Avenue',
+    {
+      NAME: 'Pennsylvania Avenue',
       PROPERTY_GROUP: 'Green',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 34,
@@ -240,7 +348,8 @@ const rules = {
       UNMORTGAGE_PRICE: 176,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'Pennsylvania Railroad',
+    {
+      NAME: 'Pennsylvania Railroad',
       PROPERTY_GROUP: 'Stations',
       ALLOWS_HOUSES: false,
       BOARD_POSITION: 15,
@@ -252,7 +361,8 @@ const rules = {
       UNMORTGAGE_PRICE: 110,
       NUMBER_OF_PROPERTIES_IN_GROUP: 4
     },
-    { NAME: 'Reading Railroad',
+    {
+      NAME: 'Reading Railroad',
       PROPERTY_GROUP: 'Stations',
       ALLOWS_HOUSES: false,
       BOARD_POSITION: 5,
@@ -264,7 +374,8 @@ const rules = {
       UNMORTGAGE_PRICE: 110,
       NUMBER_OF_PROPERTIES_IN_GROUP: 4
     },
-    { NAME: 'Short Line',
+    {
+      NAME: 'Short Line',
       PROPERTY_GROUP: 'Stations',
       ALLOWS_HOUSES: false,
       BOARD_POSITION: 35,
@@ -276,7 +387,8 @@ const rules = {
       UNMORTGAGE_PRICE: 110,
       NUMBER_OF_PROPERTIES_IN_GROUP: 4
     },
-    { NAME: 'St. Charles Place',
+    {
+      NAME: 'St. Charles Place',
       PROPERTY_GROUP: 'Pink',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 11,
@@ -288,7 +400,8 @@ const rules = {
       UNMORTGAGE_PRICE: 77,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'St. James Place',
+    {
+      NAME: 'St. James Place',
       PROPERTY_GROUP: 'Orange',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 16,
@@ -300,7 +413,8 @@ const rules = {
       UNMORTGAGE_PRICE: 99,
       NUMBER_OF_PROPERTIES_IN_GROUP: 2
     },
-    { NAME: 'States Avenue',
+    {
+      NAME: 'States Avenue',
       PROPERTY_GROUP: 'Pink',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 13,
@@ -312,7 +426,8 @@ const rules = {
       UNMORTGAGE_PRICE: 77,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'Tennessee Avenue',
+    {
+      NAME: 'Tennessee Avenue',
       PROPERTY_GROUP: 'Orange',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 18,
@@ -324,7 +439,8 @@ const rules = {
       UNMORTGAGE_PRICE: 99,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'Ventnor Avenue',
+    {
+      NAME: 'Ventnor Avenue',
       PROPERTY_GROUP: 'Yellow',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 27,
@@ -336,7 +452,8 @@ const rules = {
       UNMORTGAGE_PRICE: 143,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'Vermont Avenue',
+    {
+      NAME: 'Vermont Avenue',
       PROPERTY_GROUP: 'Light Blue',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 8,
@@ -348,7 +465,8 @@ const rules = {
       UNMORTGAGE_PRICE: 55,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'Virginia Avenue',
+    {
+      NAME: 'Virginia Avenue',
       PROPERTY_GROUP: 'Pink',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 14,
@@ -360,7 +478,8 @@ const rules = {
       UNMORTGAGE_PRICE: 88,
       NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
-    { NAME: 'Water Works',
+    {
+      NAME: 'Water Works',
       PROPERTY_GROUP: 'Utilities',
       ALLOWS_HOUSES: false,
       BOARD_POSITION: 28,

@@ -7,7 +7,6 @@ const Symbol = function (props) {
   const left = props.left
   const top = props.top
   const userNumber = props.userNumber
-  const position = props.position
   const userImages = [
     'https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAIhAAAAJGFmNWU1YzNhLWJjY2YtNDgzOS1iNzc1LTkyYjY1NzhlMWRkYw.jpg',
     'https://media.licdn.com/mpr/mpr/shrink_100_100/AAEAAQAAAAAAAAMcAAAAJGU0YTBkZTc4LTdiNWQtNDZmYi1iOWE1LTkwNDdkNjQwYmRhNw.jpg',

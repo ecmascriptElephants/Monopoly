@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import Symbol from './Symbol'
 import DiceRoll from './dice_roll'
 import Player from './player'
-import userNames from './user_order'
-import rules from '../static/rules.js'
+// import userNames from './user_order'
+// import rules from '../static/rules.js'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
 
@@ -13,7 +13,7 @@ class Board extends Component {
     this.state = {
       players: []
     }
-    sock.init({gameID: this.props.gameID})
+    sock.init({ gameID: this.props.gameID })
     this.dice = this.dice.bind(this)
   }
   componentWillReceiveProps (nextProps) {
@@ -21,7 +21,6 @@ class Board extends Component {
   }
 
   dice (value, index) {
-
     const location = [
       [97, 97], [97, 83], [97, 75], [97, 66.5], [97, 58.5], [97, 50], [97, 42], [97, 34], [97, 25.5], [97, 17.5], [97, 2.5],
       [84.5, 2.5], [76.4, 2.5], [68.2, 2.5], [60, 2.5], [51.8, 2.5], [43.5, 2.5], [35.4, 2.5], [27.1, 2.5], [19, 2.5], [7, 2.5],
@@ -29,13 +28,14 @@ class Board extends Component {
       [7, 97], [19, 97], [27.1, 97], [35.4, 97], [43.5, 97], [51.8, 97], [60, 97], [68.2, 97], [76.4, 97], [84.5, 97]
     ]
     let players = [...this.state.players]
+    console.log(index)
     players[index].userPosition = location[value]
     console.log('player updated', value)
-    this.setState({players})
+    this.setState({ players })
   }
   componentDidMount () {
     sock.socket.on('users', (data) => {
-      this.setState({players: data.players})
+      this.setState({ players: data.players })
     })
     sock.socket.on('update position', (data) => {
       this.dice(data.pos, data.index)

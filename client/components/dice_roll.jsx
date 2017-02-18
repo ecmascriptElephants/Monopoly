@@ -4,7 +4,7 @@ import userNames from './user_order'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import { setUserPositions, setIndex } from './store/actionCreators'
-
+import { Button } from 'semantic-ui-react'
 class DiceRoll extends Component {
   constructor (props) {
     super(props)
@@ -480,9 +480,7 @@ class DiceRoll extends Component {
               {this.state.diceRollButtonVisible
                 ? <div>
                   <div>{`${this.state.userNames[this.props.index]} it is your turn. Roll the dice!`}</div>
-                  <button className='dice-roll-btn' onClick={() => { this.handleDiceRollButtonClick() }}>
-                    Roll Dice!
-                  </button>
+                  <Button secondary fluid onClick={() => { this.handleDiceRollButtonClick() }}>Roll Dice</Button>
                 </div> : null
               }
             </div>
@@ -502,9 +500,7 @@ class DiceRoll extends Component {
                     </div>
                   </div>
                   <div className='doubles-comment_div'>{this.state.doublesComment}</div>
-                  <button className='move-token-btn' onClick={() => { this.handleMoveTokenButtonClick() }}>
-                    Move Your Token!
-                  </button>
+                  <Button secondary fluid onClick={() => { this.handleMoveTokenButtonClick() }}>  Move Your Token! </Button>
                 </div> : null
               }
             </div>
@@ -514,9 +510,7 @@ class DiceRoll extends Component {
                   <div className='property-comment_div'>
                     {this.state.propertyComment}
                   </div>
-                  <button className='end-turn-btn' onClick={() => { this.handleEndTurnButtonClick() }}>
-                    End Turn.
-                  </button>
+                  <Button secondary fluid onClick={() => { this.handleEndTurnButtonClick() }}>  End Turn </Button>
                 </div> : null
               }
             </div>

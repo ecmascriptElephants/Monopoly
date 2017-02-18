@@ -1,3 +1,4 @@
+// todo: change userNames array to be dynamic with sockets
 const userNames = [['Jeremy', 0], ['Kyle', 1], ['RJ', 2], ['Joseph', 3], ['Jeff', 4], ['Justin', 5], ['Jerry', 6], ['Nino', 7]]
 
 const shuffle = array => {

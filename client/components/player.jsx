@@ -27,6 +27,10 @@ class Player extends Component {
     this.buyHouse = this.buyHouse.bind(this)
     this.sellHouse = this.sellHouse.bind(this)
   }
+  componentWillReceiveProps (prev) {
+    this.setState({name: prev.name})
+    console.log('in componentDidUpdate in Player.jsx')
+  }
 
   increaseFunds (value) {
     this.setState = {
@@ -134,20 +138,20 @@ class Player extends Component {
     }
   }
 
-  handleChanceCard () {
-    let propertiesArray = this.state.property
-    let houseSalePrice = 0
-    propertiesArray.forEach((property) => {
-      if (property.Position === propertyPosition && property.Houses > 0) {
-        houseSalePrice = property.PropertyObj.HOUSE_SALE_PRICE
-        property.Houses -= 1
-      }
-    })
-    this.increaseFunds(houseSalePrice)
-    this.setState = {
-      property: propertiesArray
-    }
-  }
+  // handleChanceCard () {
+  //   let propertiesArray = this.state.property
+  //   let houseSalePrice = 0
+  //   propertiesArray.forEach((property) => {
+  //     if (property.Position === propertyPosition && property.Houses > 0) {
+  //       houseSalePrice = property.PropertyObj.HOUSE_SALE_PRICE
+  //       property.Houses -= 1
+  //     }
+  //   })
+  //   this.increaseFunds(houseSalePrice)
+  //   this.setState = {
+  //     property: propertiesArray
+  //   }
+  // }
 
   render () {
     return (

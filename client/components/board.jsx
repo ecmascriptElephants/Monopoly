@@ -4,61 +4,58 @@ import DiceRoll from './dice_roll'
 import Player from './player'
 import userNames from './user_order'
 import rules from '../static/rules.js'
+import sock from '../helper/socket'
+import { connect } from 'react-redux'
 
 class Board extends Component {
   constructor (props) {
     super(props)
-    this.dice = this.dice.bind(this)
-
     this.state = {
-      user0: [97, 97],
-      user0_money: 1550,
-      user1: [97, 97],
-      user2: [97, 97],
-      user3: [97, 97],
-      user4: [97, 97],
-      user5: [97, 97],
-      user6: [97, 97],
-      user7: [97, 97]
-    } // [top, left]
+      players: []
+    }
+    sock.init({gameID: this.props.gameID})
+    this.dice = this.dice.bind(this)
+  }
+  componentWillReceiveProps (nextProps) {
+    this.dice(nextProps.userPosArray[nextProps.index], nextProps.index)
   }
 
-  dice (userPositionsArray, userMoney) {
-    console.log('pos array', userPositionsArray)
-    // console.log('user Money', userMoney)
+  dice (value, index) {
+
     const location = [
       [97, 97], [97, 83], [97, 75], [97, 66.5], [97, 58.5], [97, 50], [97, 42], [97, 34], [97, 25.5], [97, 17.5], [97, 2.5],
       [84.5, 2.5], [76.4, 2.5], [68.2, 2.5], [60, 2.5], [51.8, 2.5], [43.5, 2.5], [35.4, 2.5], [27.1, 2.5], [19, 2.5], [7, 2.5],
       [7, 17.5], [7, 25.5], [7, 34], [7, 42], [7, 50], [7, 58.5], [7, 66.5], [7, 75], [7, 83],
       [7, 97], [19, 97], [27.1, 97], [35.4, 97], [43.5, 97], [51.8, 97], [60, 97], [68.2, 97], [76.4, 97], [84.5, 97]
-    ] // [bottom, left, right, top]
-    const money = [3000]
-    this.setState({
-      user0: location[userPositionsArray[0]],
-      user0_money: money[0],
-      user1: location[userPositionsArray[1]],
-      user2: location[userPositionsArray[2]],
-      user3: location[userPositionsArray[3]],
-      user4: location[userPositionsArray[4]],
-      user5: location[userPositionsArray[5]],
-      user6: location[userPositionsArray[6]],
-      user7: location[userPositionsArray[7]]
+    ]
+    let players = [...this.state.players]
+    players[index].userPosition = location[value]
+    console.log('player updated', value)
+    this.setState({players})
+  }
+  componentDidMount () {
+    sock.socket.on('users', (data) => {
+      this.setState({players: data.players})
+    })
+    sock.socket.on('update position', (data) => {
+      this.dice(data.pos, data.index)
     })
   }
   render () {
     return (
       <div>
-        <DiceRoll dice={this.dice} userMoney={this.userMoney} userNames={this.userNames} />
-        <Player name='RJ' piece='Hat' />
+        <DiceRoll dice={this.dice} />
+        <Player name={this.props.username} piece='Hat' />
         <div className='board parent'>
-          <Symbol className='token0' left={`${this.state.user0[1]}%`} top={`${this.state.user0[0]}%`} userNumber={userNames[0][1]} money={`${this.state.user0_money}`} />
-          <Symbol className='token1' left={`${this.state.user1[1]}%`} top={`${this.state.user1[0] - 2}%`} userNumber={userNames[1][1]} />
-          <Symbol className='token2' left={`${this.state.user2[1]}%`} top={`${this.state.user2[0] - 4}%`} userNumber={userNames[2][1]} />
-          <Symbol className='token3' left={`${this.state.user3[1]}%`} top={`${this.state.user3[0] - 6}%`} userNumber={userNames[3][1]} />
-          <Symbol className='token4' left={`${this.state.user4[1] - 2}%`} top={`${this.state.user4[0]}%`} userNumber={userNames[4][1]} />
-          <Symbol className='token5' left={`${this.state.user5[1] - 2}%`} top={`${this.state.user5[0] - 2}%`} userNumber={userNames[5][1]} />
-          <Symbol className='token6' left={`${this.state.user6[1] - 2}%`} top={`${this.state.user6[0] - 4}%`} userNumber={userNames[6][1]} />
-          <Symbol className='token7' left={`${this.state.user7[1] - 2}%`} top={`${this.state.user7[0] - 6}%`} userNumber={userNames[7][1]} />
+          {
+            this.state.players.map((player, index) => {
+              if (index <= 3) {
+                return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0] - (index + index)}%`} userNumber={index} key={index} />
+              } else {
+                return <Symbol className={`token${index}`} left={`${player.userPosition[1] - 2}%`} top={`${player.userPosition[0] - (index + 4)}%`} userNumber={index} key={index} />
+              }
+            })
+          }
           <div className='wire'>
             <div className='flexcol'>
               <div className='flexrow'>
@@ -198,5 +195,22 @@ class Board extends Component {
     )
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    username: state.username,
+    gameID: state.gameID,
+    userID: state.userID,
+    userPosArray: state.userPosArray,
+    index: state.index
+  }
+}
 
-export default Board
+Board.propTypes = {
+  dispatch: React.PropTypes.func.isRequired,
+  username: React.PropTypes.string.isRequired,
+  gameID: React.PropTypes.number.isRequired,
+  userID: React.PropTypes.string.isRequired,
+  userPosArray: React.PropTypes.array.isRequired,
+  index: React.PropTypes.number.isRequired
+}
+export default connect(mapStateToProps)(Board)

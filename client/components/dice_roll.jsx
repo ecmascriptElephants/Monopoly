@@ -5,7 +5,7 @@ import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import { setUserPositions, setIndex } from './store/actionCreators'
 import { Button } from 'semantic-ui-react'
-import Card from './card'
+import Card from './Cards'
 class DiceRoll extends Component {
   constructor (props) {
     super(props)
@@ -24,7 +24,7 @@ class DiceRoll extends Component {
     this.buyHouse = this.buyHouse.bind(this)
     this.sellHouse = this.sellHouse.bind(this)
     this.changeButton = this.changeButton.bind(this)
-    
+
     this.state = {
       dice: [ ],
       diceSum: 0,
@@ -65,6 +65,7 @@ class DiceRoll extends Component {
   }
   componentDidMount () {
     sock.socket.on('yourTurn', (data) => {
+      console.log(data)
       this.setState({ diceRollButtonVisible: true, numOfPlayers: data.numOfPlayers })
       this.props.dispatch(setIndex(data.index))
     })

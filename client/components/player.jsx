@@ -9,7 +9,7 @@ class Player extends Component {
     this.state = {
       name: props.name,
       piece: props.piece,
-      money: 1500,
+      money: 0,
       property: ['house'],
       // todo: property: [{'PropertyObj': {PropertyObj}, 'Mortaged': false, 'Houses': 0,
       // 'Position': 0}],
@@ -30,7 +30,6 @@ class Player extends Component {
   }
   componentWillReceiveProps (prev) {
     this.setState({name: prev.name})
-    console.log('in componentDidUpdate in Player.jsx')
   }
 
   increaseFunds (value) {

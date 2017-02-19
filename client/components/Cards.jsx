@@ -23,8 +23,10 @@ const Cards = (props) => {
         } else {
           pos = 5
         }
+       // Todo make user roll dice and pay owner money
         props.dispatch(setUserPositions(pos, props.index))
       } else if (card.Special === 'PAY EVERYONE') {
+        console.log('Pay Everyone')
         props.dispatch(setCash(-50, props.index))
         for (let i = 0; i < props.number; i++) {
           if (i !== props.index) {
@@ -33,8 +35,10 @@ const Cards = (props) => {
         }
       } else if (card.Special === 'EVERYONE') {
         props.dispatch(setCash(50 * props.number, props.index))
+        console.log('in cards.jsx everyone')
       }
     }
+    props.button()
   }
   return (
     <Button secondary fluid onClick={handleClick}>  Pick a Chance Card! </Button>

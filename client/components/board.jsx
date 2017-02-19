@@ -27,9 +27,7 @@ class Board extends Component {
       [7, 97], [19, 97], [27.1, 97], [35.4, 97], [43.5, 97], [51.8, 97], [60, 97], [68.2, 97], [76.4, 97], [84.5, 97]
     ]
     let players = [...this.state.players]
-    console.log(index)
     players[index].userPosition = location[value]
-    console.log('player updated', value)
     this.setState({ players })
   }
   componentDidMount () {

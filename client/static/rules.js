@@ -14,7 +14,7 @@ const rules = {
     },
     {
       Description: 'COLLECT $50 FROM EVERY PLAYER',
-      'Special': 'Special'
+      'Special': 'EVERYONE'
     },
     {
       Description: 'DOCTOR"S FEE PAY $50',
@@ -81,7 +81,7 @@ const rules = {
     },
     {
       Description: 'ADVANCE TOKEN TO NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL TEN TIMES THE AMOUNT THROWN.',
-      Special: 'Special'
+      Special: 'UTILITY'
     },
     {
       Description: 'GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.',
@@ -98,7 +98,7 @@ const rules = {
     },
     {
       Description: 'YOU HAVE BEEN ELECTED CHAIRMAN OF THE BOARD. PAY EACH PLAYER $50.',
-      Special: 'Special'
+      Special: 'PAY EVERYONE'
     },
     { Description: 'ADVANCE TOKEN TO THE NEAREST RAILROAD AND PAY OWNER TWICE THE RENTAL TO WHICH HE IS OTHERWISE ENTITLED. IF RAILROAD IS UNOWNED, YOU MAY BUY IT FROM THE BANK.' },
     {

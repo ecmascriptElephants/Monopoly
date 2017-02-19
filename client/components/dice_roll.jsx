@@ -5,17 +5,15 @@ import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import { setUserPositions, setIndex } from './store/actionCreators'
 import { Button } from 'semantic-ui-react'
+import Card from './card'
 class DiceRoll extends Component {
   constructor (props) {
     super(props)
     this.handleDiceRollButtonClick = this.handleDiceRollButtonClick.bind(this)
     this.handleMoveTokenButtonClick = this.handleMoveTokenButtonClick.bind(this)
     this.handleEndTurnButtonClick = this.handleEndTurnButtonClick.bind(this)
-    this.handleChanceButtonClick = this.handleChanceButtonClick.bind(this)
-    this.handleCommunityButtonClick = this.handleCommunityButtonClick.bind(this)
     this.handleDoubles = this.handleDoubles.bind(this)
     this.handleLandOnOrPassGo = this.handleLandOnOrPassGo.bind(this)
-
     this.increaseFunds = this.increaseFunds.bind(this)
     this.reduceFunds = this.reduceFunds.bind(this)
     this.propertyIsOwned = this.propertyIsOwned.bind(this)
@@ -25,7 +23,8 @@ class DiceRoll extends Component {
     this.unMortgageProperty = this.unMortgageProperty.bind(this)
     this.buyHouse = this.buyHouse.bind(this)
     this.sellHouse = this.sellHouse.bind(this)
-
+    this.changeButton = this.changeButton.bind(this)
+    
     this.state = {
       dice: [ ],
       diceSum: 0,
@@ -35,8 +34,8 @@ class DiceRoll extends Component {
       currentUser: 0,
       moveTokenButtonVisible: false,
       // needs to be updated gamestate authentication
-      chanceButtonVisible: false,
-      communityButtonVisible: false,
+      cardButtonVisible: false,
+      card: true,
       userNames: [userNames[0][0], userNames[1][0], userNames[2][0], userNames[3][0], userNames[4][0], userNames[5][0], userNames[6][0], userNames[7][0]],
       // up to 8 players all starting on GO or position 1
       jailPositions: [0, 0, 0, 0, 0, 0, 0, 0],
@@ -56,7 +55,8 @@ class DiceRoll extends Component {
       rentOwed: 0,
       propertyOwner: '',
       payRentComment: '',
-      payRentButtonVisible: false
+      payRentButtonVisible: false,
+      numOfPlayers: 8
     }
   }
 
@@ -64,10 +64,9 @@ class DiceRoll extends Component {
     sock.updatePos({ gameID: nextProps.gameID, pos: nextProps.userPosArray[nextProps.index], index: nextProps.index })
   }
   componentDidMount () {
-    sock.socket.on('yourTurn', (index) => {
-      this.setState({ diceRollButtonVisible: true })
-      this.props.dispatch(setIndex(index))
-      console.log(this.props.index)
+    sock.socket.on('yourTurn', (data) => {
+      this.setState({ diceRollButtonVisible: true, numOfPlayers: data.numOfPlayers })
+      this.props.dispatch(setIndex(data.index))
     })
   }
   handleDiceRollButtonClick () {
@@ -180,12 +179,14 @@ class DiceRoll extends Component {
     // if the user lands on Chance space
     if (updatedCurrentUserPosition === 7 || updatedCurrentUserPosition === 22 || updatedCurrentUserPosition === 36) {
       this.setState({
-        chanceButtonVisible: true
+        cardButtonVisible: true,
+        card: false
       })
     } else if (updatedCurrentUserPosition === 2 || updatedCurrentUserPosition === 17 || updatedCurrentUserPosition === 33) {
       // if the user lands on a Community Chest space
       this.setState({
-        communityButtonVisible: true
+        cardButtonVisible: true,
+        card: true
       })
     } else if (updatedCurrentUserPosition === 30 || doubles === 3) {
       // if the user lands on Go-to-jail
@@ -248,231 +249,231 @@ class DiceRoll extends Component {
     this.handleLandOnOrPassGo(oldCurrentUserPosition, updatedCurrentUserPosition, jail)
   }
 
-  handleChanceButtonClick () {
-    let updatedUserPositions = this.state.userPositions
-    let userMoney = this.state.userMoney
-    let numCards = 16
-    let card = Math.floor((numCards * Math.random()))
-    console.log('card', card)
-    if (card === 0) {
-      this.setState({
-        chanceComment: 'ADVANCE TO GO COLLECT $200'
-      })
-      updatedUserPositions[this.state.currentUser] = 0
-      userMoney[this.state.currentUser] += 200
-    } else if (card === 1) {
-      this.setState({
-        chanceComment: 'BANK PAYS YOU DIVIDEND OF $50'
-      })
-      userMoney[this.state.currentUser] += 50
-    } else if (card === 2) {
-      this.setState({
-        chanceComment: 'GO BACK 3 SPACES'
-      })
-      updatedUserPositions[this.state.currentUser] -= 3
-    } else if (card === 3) {
-      this.setState({
-        chanceComment: 'ADVANCE TOKEN TO NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL TEN TIMES THE AMOUNT THROWN.'
-      })
-      // 12 & 28
-      let buldDis = Math.abs(updatedUserPositions[this.state.currentUser] - 12)
-      let waterDis = Math.abs(updatedUserPositions[this.state.currentUser] - 28)
-      updatedUserPositions[this.state.currentUser] = (buldDis > waterDis) ? 28 : 12
-      // state for properties,
-      // if unowned, buy and money enough? UserMoney -= 150; bankMoney += 150
-      // if owned, roll,again UserMoney -= diceNum*10; User[own].money += diceNum*10
-    } else if (card === 4) {
-      this.setState({
-        chanceComment: 'GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.'
-      })
-      updatedUserPositions[this.state.currentUser] = 10
-    } else if (card === 5) {
-      this.setState({
-        chanceComment: 'PAY POOR TAX OF $15'
-      })
-      userMoney[this.state.currentUser] -= 15
-    } else if (card === 6) {
-      this.setState({
-        chanceComment: 'ADVANCE TO ST. CHARLES PLACE. IF YOU PASS GO, COLLECT $200.'
-      })
-      if (updatedUserPositions[this.state.currentUser] > 11) {
-        userMoney[this.state.currentUser] += 200
-      }
-      updatedUserPositions[this.state.currentUser] = 11
-    } else if (card === 7) {
-      this.setState({
-        chanceComment: 'YOU HAVE BEEN ELECTED CHAIRMAN OF THE BOARD. PAY EACH PLAYER $50.'
-      })
-      // currentUser.money -= 50*num of player;
-      userMoney[this.state.currentUser] -= 50 * 7
-      userMoney.forEach((money, player, userMoney) => {
-        if (player !== this.state.currentUser) {
-          userMoney[player] += 50
-        }
-      })
-    } else if (card === 8) {
-      this.setState({
-        chanceComment: 'ADVANCE TOKEN TO THE NEAREST RAILROAD AND PAY OWNER TWICE THE RENTAL TO WHICH HE IS OTHERWISE ENTITLED. IF RAILROAD IS UNOWNED, YOU MAY BUY IT FROM THE BANK.'
-      })
-      if (updatedUserPositions[this.state.currentUser] === 7) {
-        updatedUserPositions[this.state.currentUser] = 15
-      } else if (updatedUserPositions[this.state.currentUser] === 22) {
-        updatedUserPositions[this.state.currentUser] = 25
-      } else {
-        updatedUserPositions[this.state.currentUser] = 5
-      }
-      //  PAY OWNER TWICE THE RENTAL, IF UNOWNED, BUY
-    } else if (card === 9) {
-      this.setState({
-        chanceComment: 'TAKE A RIDE ON THE READING. IF YOU PASS GO COLLECCT $200'
-      })
-      // TAKE A RIDE ON THE READING. IF YOU PASS GO COLLECCT $200
-      if (updatedUserPositions[this.state.currentUser] > 5) {
-        userMoney[this.state.currentUser] += 200
-      }
-      updatedUserPositions[this.state.currentUser] = 5
-    } else if (card === 10) {
-      this.setState({
-        chanceComment: 'ADVANCE TOKEN TO THE NEAREST RAILROAD AND PAY OWNER TWICE THE RENTAL TO WHICH HE IS OTHERWISE ENTITLED. IF RAILROAD IS UNOWNED, YOU MAY BUY IT FROM THE BANK.'
-      })
-      if (updatedUserPositions[this.state.currentUser] === 7) {
-        updatedUserPositions[this.state.currentUser] = 15
-      } else if (updatedUserPositions[this.state.currentUser] === 22) {
-        updatedUserPositions[this.state.currentUser] = 25
-      } else {
-        updatedUserPositions[this.state.currentUser] = 5
-      }
-      //  PAY OWNER TWICE THE RENTAL, IF UNOWNED, BUY
-    } else if (card === 11) {
-      this.setState({
-        chanceComment: 'TAKE A WALK ON THE BOARD WALK. ADVANCE TOKEN TO BOARD WALK'
-      })
-      updatedUserPositions[this.state.currentUser] = 39
-      // buy house or pay rent
-    } else if (card === 12) {
-      this.setState({
-        chanceComment: 'YOUR BUILDING AND LOAN MATURES. COLLECT $150'
-      })
-      userMoney[this.state.currentUser] += 150
-    } else if (card === 13) {
-      this.setState({
-        chanceComment: 'ADVANCE TO ILLINOIS AVE'
-      })
-      updatedUserPositions[this.state.currentUser] = 24
-    } else if (card === 14) {
-      this.setState({
-        chanceComment: 'MAKE GENERAL REPAIRS ON ALL YOUR PROPERTY. FOR EACH HOUSE PAY $25. FOR EACH HOTEL PAY $100.'
-      })
-    } else {
-      this.setState({
-        chanceComment: 'GET OUT OF JAIL FREE'
-      })
-      // current user jailCard = true
-      numCards = 15
-    }
-    this.setState({
-      chanceButtonVisible: false
-    })
-  }
+  // handleChanceButtonClick () {
+  //   let updatedUserPositions = this.state.userPositions
+  //   let userMoney = this.state.userMoney
+  //   let numCards = 16
+  //   let card = Math.floor((numCards * Math.random()))
+  //   console.log('card', card)
+  //   if (card === 0) {
+  //     this.setState({
+  //       chanceComment: 'ADVANCE TO GO COLLECT $200'
+  //     })
+  //     updatedUserPositions[this.state.currentUser] = 0
+  //     userMoney[this.state.currentUser] += 200
+  //   } else if (card === 1) {
+  //     this.setState({
+  //       chanceComment: 'BANK PAYS YOU DIVIDEND OF $50'
+  //     })
+  //     userMoney[this.state.currentUser] += 50
+  //   } else if (card === 2) {
+  //     this.setState({
+  //       chanceComment: 'GO BACK 3 SPACES'
+  //     })
+  //     updatedUserPositions[this.state.currentUser] -= 3
+  //   } else if (card === 3) {
+  //     this.setState({
+  //       chanceComment: 'ADVANCE TOKEN TO NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL TEN TIMES THE AMOUNT THROWN.'
+  //     })
+  //     // 12 & 28
+  //     let buldDis = Math.abs(updatedUserPositions[this.state.currentUser] - 12)
+  //     let waterDis = Math.abs(updatedUserPositions[this.state.currentUser] - 28)
+  //     updatedUserPositions[this.state.currentUser] = (buldDis > waterDis) ? 28 : 12
+  //     // state for properties,
+  //     // if unowned, buy and money enough? UserMoney -= 150; bankMoney += 150
+  //     // if owned, roll,again UserMoney -= diceNum*10; User[own].money += diceNum*10
+  //   } else if (card === 4) {
+  //     this.setState({
+  //       chanceComment: 'GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.'
+  //     })
+  //     updatedUserPositions[this.state.currentUser] = 10
+  //   } else if (card === 5) {
+  //     this.setState({
+  //       chanceComment: 'PAY POOR TAX OF $15'
+  //     })
+  //     userMoney[this.state.currentUser] -= 15
+  //   } else if (card === 6) {
+  //     this.setState({
+  //       chanceComment: 'ADVANCE TO ST. CHARLES PLACE. IF YOU PASS GO, COLLECT $200.'
+  //     })
+  //     if (updatedUserPositions[this.state.currentUser] > 11) {
+  //       userMoney[this.state.currentUser] += 200
+  //     }
+  //     updatedUserPositions[this.state.currentUser] = 11
+  //   } else if (card === 7) {
+  //     this.setState({
+  //       chanceComment: 'YOU HAVE BEEN ELECTED CHAIRMAN OF THE BOARD. PAY EACH PLAYER $50.'
+  //     })
+  //     // currentUser.money -= 50*num of player;
+  //     userMoney[this.state.currentUser] -= 50 * 7
+  //     userMoney.forEach((money, player, userMoney) => {
+  //       if (player !== this.state.currentUser) {
+  //         userMoney[player] += 50
+  //       }
+  //     })
+  //   } else if (card === 8) {
+  //     this.setState({
+  //       chanceComment: 'ADVANCE TOKEN TO THE NEAREST RAILROAD AND PAY OWNER TWICE THE RENTAL TO WHICH HE IS OTHERWISE ENTITLED. IF RAILROAD IS UNOWNED, YOU MAY BUY IT FROM THE BANK.'
+  //     })
+  //     if (updatedUserPositions[this.state.currentUser] === 7) {
+  //       updatedUserPositions[this.state.currentUser] = 15
+  //     } else if (updatedUserPositions[this.state.currentUser] === 22) {
+  //       updatedUserPositions[this.state.currentUser] = 25
+  //     } else {
+  //       updatedUserPositions[this.state.currentUser] = 5
+  //     }
+  //     //  PAY OWNER TWICE THE RENTAL, IF UNOWNED, BUY
+  //   } else if (card === 9) {
+  //     this.setState({
+  //       chanceComment: 'TAKE A RIDE ON THE READING. IF YOU PASS GO COLLECCT $200'
+  //     })
+  //     // TAKE A RIDE ON THE READING. IF YOU PASS GO COLLECCT $200
+  //     if (updatedUserPositions[this.state.currentUser] > 5) {
+  //       userMoney[this.state.currentUser] += 200
+  //     }
+  //     updatedUserPositions[this.state.currentUser] = 5
+  //   } else if (card === 10) {
+  //     this.setState({
+  //       chanceComment: 'ADVANCE TOKEN TO THE NEAREST RAILROAD AND PAY OWNER TWICE THE RENTAL TO WHICH HE IS OTHERWISE ENTITLED. IF RAILROAD IS UNOWNED, YOU MAY BUY IT FROM THE BANK.'
+  //     })
+  //     if (updatedUserPositions[this.state.currentUser] === 7) {
+  //       updatedUserPositions[this.state.currentUser] = 15
+  //     } else if (updatedUserPositions[this.state.currentUser] === 22) {
+  //       updatedUserPositions[this.state.currentUser] = 25
+  //     } else {
+  //       updatedUserPositions[this.state.currentUser] = 5
+  //     }
+  //     //  PAY OWNER TWICE THE RENTAL, IF UNOWNED, BUY
+  //   } else if (card === 11) {
+  //     this.setState({
+  //       chanceComment: 'TAKE A WALK ON THE BOARD WALK. ADVANCE TOKEN TO BOARD WALK'
+  //     })
+  //     updatedUserPositions[this.state.currentUser] = 39
+  //     // buy house or pay rent
+  //   } else if (card === 12) {
+  //     this.setState({
+  //       chanceComment: 'YOUR BUILDING AND LOAN MATURES. COLLECT $150'
+  //     })
+  //     userMoney[this.state.currentUser] += 150
+  //   } else if (card === 13) {
+  //     this.setState({
+  //       chanceComment: 'ADVANCE TO ILLINOIS AVE'
+  //     })
+  //     updatedUserPositions[this.state.currentUser] = 24
+  //   } else if (card === 14) {
+  //     this.setState({
+  //       chanceComment: 'MAKE GENERAL REPAIRS ON ALL YOUR PROPERTY. FOR EACH HOUSE PAY $25. FOR EACH HOTEL PAY $100.'
+  //     })
+  //   } else {
+  //     this.setState({
+  //       chanceComment: 'GET OUT OF JAIL FREE'
+  //     })
+  //     // current user jailCard = true
+  //     numCards = 15
+  //   }
+  //   this.setState({
+  //     chanceButtonVisible: false
+  //   })
+  // }
 
-  handleCommunityButtonClick () {
-    let updatedUserPositions = this.state.userPositions
-    let userMoney = this.state.userMoney
-    let numCards = 16
-    let card = Math.floor((numCards * Math.random()))
-    // const card = 3
-    if (card === 0) {
-      this.setState({
-        communityComment: 'BANK ERROR IN YOUR FAVOR COLLECT $200'
-      })
-      userMoney[this.state.currentUser] += 200
-    } else if (card === 1) {
-      this.setState({
-        communityComment: 'FROM SALE OF STOCK YOU GET $45'
-      })
-      userMoney[this.state.currentUser] += 45
-    } else if (card === 2) {
-      this.setState({
-        communityComment: 'PAY HOSPITAL $100'
-      })
-      userMoney[this.state.currentUser] -= 100
-    } else if (card === 3) {
-      this.setState({
-        communityComment: 'COLLECT $50 FROM EVERY PLAYER'
-      })
-      userMoney[this.state.currentUser] += 50 * 7
-      userMoney.forEach((money, player, userMoney) => {
-        if (player !== this.state.currentUser) {
-          userMoney[player] -= 50
-        }
-      })
-    } else if (card === 4) {
-      this.setState({
-        communityComment: 'DOCTOR"S FEE PAY $50'
-      })
-      userMoney[this.state.currentUser] -= 50
-    } else if (card === 5) {
-      this.setState({
-        communityComment: 'YOU INHERIT $100'
-      })
-      userMoney[this.state.currentUser] += 100
-    } else if (card === 6) {
-      this.setState({
-        communityComment: 'ADVANCE TO GO COLLECT $200'
-      })
-      updatedUserPositions[this.state.currentUser] = 0
-      userMoney[this.state.currentUser] += 200
-    } else if (card === 7) {
-      this.setState({
-        communityComment: 'PAY SCHOOL TAX OF $150'
-      })
-      userMoney[this.state.currentUser] -= 150
-    } else if (card === 8) {
-      this.setState({
-        communityComment: 'XMAS FUND MATURES COLLECT $100'
-      })
-      userMoney[this.state.currentUser] += 100
-    } else if (card === 9) {
-      this.setState({
-        communityComment: 'RECEIVE FOR SERVICES $25'
-      })
-      userMoney[this.state.currentUser] -= 25
-    } else if (card === 10) {
-      this.setState({
-        communityComment: 'INCOME TAX REFUND COLLECT $20'
-      })
-      userMoney[this.state.currentUser] += 20
-    } else if (card === 11) {
-      this.setState({
-        communityComment: 'LIFE INSURANCE MATURES COLLECT $100'
-      })
-      userMoney[this.state.currentUser] += 100
-    } else if (card === 12) {
-      this.setState({
-        communityComment: 'GO TO JAIL GO DIRECTLY TO JAIL DO NOT PASS GO DO NOT COLLECT $200'
-      })
-      updatedUserPositions[this.state.currentUser] = 10
-    } else if (card === 13) {
-      this.setState({
-        communityComment: 'YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST COLLECT $10'
-      })
-      userMoney[this.state.currentUser] += 10
-    } else if (card === 14) {
-      this.setState({
-        communityComment: 'YOU ARE ASSESSED FOR STREET REPAIRS $40 PER HOUSE $115 PER HOTEL'
-      })
-      // STREET REPAIRS $40 PER HOUSE $115 PER HOTEL'
-    } else {
-      this.setState({
-        communityComment: 'GET OUT OF JAIL FREE'
-      })
-      // current user jailCard = true
-      numCards = 15
-    }
-    this.setState({
-      communityButtonVisible: false
-    })
-  }
+  // handleCommunityButtonClick () {
+  //   let updatedUserPositions = this.state.userPositions
+  //   let userMoney = this.state.userMoney
+  //   let numCards = 16
+  //   let card = Math.floor((numCards * Math.random()))
+  //   // const card = 3
+  //   if (card === 0) {
+  //     this.setState({
+  //       communityComment: 'BANK ERROR IN YOUR FAVOR COLLECT $200'
+  //     })
+  //     userMoney[this.state.currentUser] += 200
+  //   } else if (card === 1) {
+  //     this.setState({
+  //       communityComment: 'FROM SALE OF STOCK YOU GET $45'
+  //     })
+  //     userMoney[this.state.currentUser] += 45
+  //   } else if (card === 2) {
+  //     this.setState({
+  //       communityComment: 'PAY HOSPITAL $100'
+  //     })
+  //     userMoney[this.state.currentUser] -= 100
+  //   } else if (card === 3) {
+  //     this.setState({
+  //       communityComment: 'COLLECT $50 FROM EVERY PLAYER'
+  //     })
+  //     userMoney[this.state.currentUser] += 50 * 7
+  //     userMoney.forEach((money, player, userMoney) => {
+  //       if (player !== this.state.currentUser) {
+  //         userMoney[player] -= 50
+  //       }
+  //     })
+  //   } else if (card === 4) {
+  //     this.setState({
+  //       communityComment: 'DOCTOR"S FEE PAY $50'
+  //     })
+  //     userMoney[this.state.currentUser] -= 50
+  //   } else if (card === 5) {
+  //     this.setState({
+  //       communityComment: 'YOU INHERIT $100'
+  //     })
+  //     userMoney[this.state.currentUser] += 100
+  //   } else if (card === 6) {
+  //     this.setState({
+  //       communityComment: 'ADVANCE TO GO COLLECT $200'
+  //     })
+  //     updatedUserPositions[this.state.currentUser] = 0
+  //     userMoney[this.state.currentUser] += 200
+  //   } else if (card === 7) {
+  //     this.setState({
+  //       communityComment: 'PAY SCHOOL TAX OF $150'
+  //     })
+  //     userMoney[this.state.currentUser] -= 150
+  //   } else if (card === 8) {
+  //     this.setState({
+  //       communityComment: 'XMAS FUND MATURES COLLECT $100'
+  //     })
+  //     userMoney[this.state.currentUser] += 100
+  //   } else if (card === 9) {
+  //     this.setState({
+  //       communityComment: 'RECEIVE FOR SERVICES $25'
+  //     })
+  //     userMoney[this.state.currentUser] -= 25
+  //   } else if (card === 10) {
+  //     this.setState({
+  //       communityComment: 'INCOME TAX REFUND COLLECT $20'
+  //     })
+  //     userMoney[this.state.currentUser] += 20
+  //   } else if (card === 11) {
+  //     this.setState({
+  //       communityComment: 'LIFE INSURANCE MATURES COLLECT $100'
+  //     })
+  //     userMoney[this.state.currentUser] += 100
+  //   } else if (card === 12) {
+  //     this.setState({
+  //       communityComment: 'GO TO JAIL GO DIRECTLY TO JAIL DO NOT PASS GO DO NOT COLLECT $200'
+  //     })
+  //     updatedUserPositions[this.state.currentUser] = 10
+  //   } else if (card === 13) {
+  //     this.setState({
+  //       communityComment: 'YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST COLLECT $10'
+  //     })
+  //     userMoney[this.state.currentUser] += 10
+  //   } else if (card === 14) {
+  //     this.setState({
+  //       communityComment: 'YOU ARE ASSESSED FOR STREET REPAIRS $40 PER HOUSE $115 PER HOTEL'
+  //     })
+  //     // STREET REPAIRS $40 PER HOUSE $115 PER HOTEL'
+  //   } else {
+  //     this.setState({
+  //       communityComment: 'GET OUT OF JAIL FREE'
+  //     })
+  //     // current user jailCard = true
+  //     numCards = 15
+  //   }
+  //   this.setState({
+  //     communityButtonVisible: false
+  //   })
+  // }
 
   handleAddDiceRollToUserPosition (die1, die2, doubles) {
     let updatedPosition = (this.props.userPosArray[this.props.index] + die1 + die2) % 40
@@ -492,6 +493,10 @@ class DiceRoll extends Component {
         })
       }
     }
+  }
+
+  changeButton () {
+    this.setState({cardButtonVisible: false})
   }
 
   increaseFunds (value) {
@@ -704,27 +709,9 @@ class DiceRoll extends Component {
                 </div> : null
               }
             </div>
-            <div className='pick-chance-btn_div'>
-              {this.state.chanceButtonVisible
-                ? <div>
-                  <div className='chance_div'>
-                    You landed on a chance space!
-                  </div>
-                  <div className='doubles-comment_div'>{this.state.doublesComment}</div>
-                  <Button secondary fluid onClick={() => { this.handleChanceButtonClick() }}>  Pick a Chance Card! </Button>
-                </div> : null
-              }
-            </div>
-            <div className='pick-community-btn_div'>
-              {this.state.communityButtonVisible
-                ? <div>
-                  <div className='community_div'>
-                    You landed on a community chest space!
-                  </div>
-                  <Button secondary fluid onClick={() => { this.handleCommunityButtonClick() }}>  Pick a Community Chest Card! </Button>
-                </div> : null
-              }
-            </div>
+            {
+              this.state.cardButtonVisible ? <Card button={() => { this.changeButton() }} card={this.state.card} number={this.state.numOfPlayers} /> : null
+            }
             <div className='buy-property-btn_div'>
               {this.state.buyPropertyButtonVisible
                 ? <div>
@@ -738,7 +725,7 @@ class DiceRoll extends Component {
                   <div className='rent-comment'>
                     {this.state.payRentComment}
                   </div>
-                    <Button secondary fluid onClick={() => { this.handlePayRentButtonClick() }}>  Pay Rent. </Button>
+                  <Button secondary fluid onClick={() => { this.handlePayRentButtonClick() }}>  Pay Rent. </Button>
                 </div> : null
               }
             </div>

@@ -24,7 +24,12 @@ module.exports = {
   updatePos: (data) => {
     socket.emit('dice rolled', data)
   },
+<<<<<<< HEAD
   sendChat: (data) => {
     socket.emit('send chat', data)
+=======
+  updateProps: (data) => {
+    socket.emit('property bought', data)
+>>>>>>> monopoliesBranch
   }
 }

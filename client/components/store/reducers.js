@@ -4,7 +4,8 @@ import {
   SET_USER_ID,
   SET_USERS_POSITIONS,
   SET_INDEX,
-  SET_MESSAGE_ID
+  SET_MESSAGE_ID,
+  SET_USERS_PROPERTIES
 } from './actions'
 const DEFAULT_STATE = {
   gameID: 0,
@@ -12,7 +13,8 @@ const DEFAULT_STATE = {
   userID: '',
   userPosArray: [0, 0, 0, 0, 0, 0, 0, 0],
   index: -1,
-  messageID: 0
+  messageID: 0,
+  userPropertyArray: [[], [], [], [], [], [], [], []]
 }
 
 const setGameID = (state, action) => {
@@ -51,7 +53,15 @@ const setUserPosition = (state, action) => {
 const setMessageID = (state, action) => {
   const newState = {}
   Object.assign(newState, state, {messageID: action.messageID})
+}
 
+const setUserProperties = (state, action) => {
+  let newArr = [...state.userPropertyArray.slice(0, action.index),
+    action.userProperties,
+    ...state.userPropertyArray.slice(action.index + 1)]
+  const newState = {}
+  Object.assign(newState, state, { userPropertyArray: newArr })
+  return newState
 }
 
 const rootReducer = (state = DEFAULT_STATE, action) => {
@@ -67,10 +77,16 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_USERS_POSITIONS:
       return setUserPosition(state, action)
+
     case SET_INDEX:
       return setIndex(state, action)
+
     case SET_MESSAGE_ID:
       return setMessageID(state, action)
+
+    case SET_USERS_PROPERTIES:
+      return setUserProperties(state, action)
+
     default:
       return state
   }

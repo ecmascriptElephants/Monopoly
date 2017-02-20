@@ -364,7 +364,6 @@ class DiceRoll extends Component {
             <div className='dice-roll-btn_div'>
               {this.state.diceRollButtonVisible
                 ? <div>
-                  <div>{`${this.state.userNames[this.props.index]} it is your turn. Roll the dice!`}</div>
                   <Button secondary fluid onClick={() => { this.handleDiceRollButtonClick() }}>Roll Dice</Button>
                 </div> : null
               }
@@ -372,19 +371,6 @@ class DiceRoll extends Component {
             <div className='move-token-btn_div'>
               {this.state.moveTokenButtonVisible
                 ? <div>
-                  <div className='dice'>
-                    <div className='die1'>
-                      {`die1: ${this.state.dice[0]}`}
-                    </div>
-                    <div className='die2'>
-                      {`die2: ${this.state.dice[1]}`}
-                    </div>
-                    {/* <div>{this.state.diceSum}</div> */}
-                    <div>
-                      {this.state.diceSumComment}
-                    </div>
-                  </div>
-                  <div className='doubles-comment_div'>{this.state.doublesComment}</div>
                   <Button secondary fluid onClick={() => { this.handleMoveTokenButtonClick() }}>  Move Your Token! </Button>
                 </div> : null
               }

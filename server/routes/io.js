@@ -12,17 +12,21 @@ module.exports = (io) => {
       socket.broadcast.emit('new game', { gameID, socketID: socket.id })
       data.socketID = socket.id
       data.userPosition = [97, 97]
-      game[gameID] = { i: 0, playerInfo: [data] }
+      game[gameID] = { players: 1, i: 0, playerInfo: [data] }
+      console.log(socket.id)
+      io.to(socket.id).emit('your index', game[gameID].players - 1)
       socket.join(gameID.toString())
     })
 
     socket.on('join', (data) => {
       let gameObj = game[data.gameID]
+      gameObj.players++
       data.socketID = socket.id
       data.userPosition = [97, 97]
       socket.join(data.gameID)
       gameObj.playerInfo.push(data)
-      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('player joined', data)
+      io.to(socket.id).emit('your index', gameObj.players - 1)
+      socket.broadcast.to(gameObj.playerInfo[0].socketID).emit('player joined', data)
     })
 
     socket.on('start', (data) => {
@@ -32,12 +36,8 @@ module.exports = (io) => {
 
     socket.on('load', (data) => {
       let gameObj = game[data.gameID]
-      // console.log(gameObj.playerInfo[gameObj.i].socketID)
       io.emit('users', { players: gameObj['playerInfo'] })
-      // console.log(gameObj.playerInfo[gameObj.])
-      // console.log(gameObj[data.gameID])
-      // console.log('how many times', gameObj.playerInfo[gameObj.i].socketID)
-      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn', {index: gameObj.i, numOfPlayers: gameObj.playerInfo.length})
+      socket.broadcast.to(gameObj.playerInfo[0].socketID).emit('yourTurn', {index: gameObj.i, numOfPlayers: gameObj.playerInfo.length})
     })
 
     socket.on('endTurn', (data) => {

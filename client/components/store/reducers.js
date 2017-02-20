@@ -6,14 +6,20 @@ import {
   SET_INDEX,
   SET_MESSAGE_ID,
   SET_USERS_PROPERTIES,
+<<<<<<< 8700e978f4ae872b3b5d3495531016809adbbf61
   SET_USERS_MONEY,
   SET_CASH
+=======
+  SET_CASH,
+  SET_MYINDEX
+>>>>>>> set up player money in player card
 } from './actions'
 const DEFAULT_STATE = {
   gameID: 0,
   username: '',
   userID: '',
   userPosArray: [0, 0, 0, 0, 0, 0, 0, 0],
+  playerIndex: -1,
   index: -1,
   messageID: 0,
   userPropertyArray: [[], [], [], [], [], [], [], []],
@@ -42,6 +48,13 @@ const setUserID = (state, action) => {
 const setIndex = (state, action) => {
   const newState = {}
   Object.assign(newState, state, { index: action.index })
+  return newState
+}
+
+const setPlayerIndex = (state, action) => {
+  console.log('setting up player index in redux')
+  const newState = {}
+  Object.assign(newState, state, { playerIndex: action.index })
   return newState
 }
 
@@ -115,6 +128,9 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_USERS_MONEY:
       return setUserMoney(state, action)
+
+    case SET_MYINDEX:
+      return setPlayerIndex(state, action)
 
     default:
       return state

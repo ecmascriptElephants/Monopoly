@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import { Header, Container, Segment, Icon, Divider, Message } from 'semantic-ui-react'
 import { rules } from '../static/rules'
 import DiceRoll from './dice_roll'
-
+import { connect } from 'react-redux'
 class Player extends Component {
   constructor (props) {
     super(props)
     this.state = {
       name: props.name,
       piece: props.piece,
-      money: 0,
+      index: this.props.playerIndex,
       property: ['house'],
       // todo: property: [{'PropertyObj': {PropertyObj}, 'Mortaged': false, 'Houses': 0,
       // 'Position': 0}],
@@ -28,7 +28,9 @@ class Player extends Component {
     this.buyHouse = this.buyHouse.bind(this)
     this.sellHouse = this.sellHouse.bind(this)
   }
+
   componentWillReceiveProps (prev) {
+    console.log(this.state.playerIndex)
     this.setState({name: prev.name})
   }
 
@@ -165,7 +167,7 @@ class Player extends Component {
           </Header>
           <Divider />
           <Message>
-            {this.state.money}
+            {this.props.userCashArray[this.props.playerIndex]}
           </Message>
           <DiceRoll dice={this.dice} />
         </Segment>
@@ -173,9 +175,16 @@ class Player extends Component {
     )
   }
 }
-
+const mapStateToProps = (state) => {
+  return {
+    userCashArray: state.userCashArray,
+    playerIndex: state.playerIndex
+  }
+}
 Player.propTypes = {
   name: React.PropTypes.string.isRequired,
-  piece: React.PropTypes.string.isRequired
+  piece: React.PropTypes.string.isRequired,
+  playerIndex: React.PropTypes.number.isRequired,
+  userCashArray: React.PropTypes.array.isRequired
 }
-export default Player
+export default connect(mapStateToProps)(Player)

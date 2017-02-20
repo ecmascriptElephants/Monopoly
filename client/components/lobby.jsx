@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import sock from '../helper/socket'
 import axios from 'axios'
 import { connect } from 'react-redux'
-import { setUsername, setGameID, setUserID } from './store/actionCreators'
+import { setUsername, setGameID, setUserID, setMyIndex } from './store/actionCreators'
 class Lobby extends Component {
   constructor (props) {
     super(props)
@@ -30,6 +30,9 @@ class Lobby extends Component {
     sock.socket.on('new game', (data) => {
       this.setState({ join: true })
       this.props.dispatch(setGameID(data.gameID))
+    })
+    sock.socket.on('your index', (data) => {
+      this.props.dispatch(setMyIndex(data))
     })
     sock.socket.on('player joined', (data) => {
       this.setState({ join: false, start: true })

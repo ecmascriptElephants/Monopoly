@@ -546,19 +546,6 @@ class DiceRoll extends Component {
             <div className='move-token-btn_div'>
               {this.state.moveTokenButtonVisible
                 ? <div>
-                  <div className='dice'>
-                    <div className='die1'>
-                      {`die1: ${this.state.dice[0]}`}
-                    </div>
-                    <div className='die2'>
-                      {`die2: ${this.state.dice[1]}`}
-                    </div>
-                    {/* <div>{this.state.diceSum}</div> */}
-                    <div>
-                      {this.state.diceSumComment}
-                    </div>
-                  </div>
-                  <div className='doubles-comment_div'>{this.state.doublesComment}</div>
                   <Button secondary fluid onClick={() => { this.handleMoveTokenButtonClick() }}>  Move Your Token! </Button>
                 </div> : null
               }

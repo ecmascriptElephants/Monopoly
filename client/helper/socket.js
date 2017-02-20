@@ -23,5 +23,8 @@ module.exports = {
   },
   updatePos: (data) => {
     socket.emit('dice rolled', data)
+  },
+  sendChat: (data) => {
+    socket.emit('send chat', data)
   }
 }

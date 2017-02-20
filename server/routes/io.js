@@ -53,5 +53,10 @@ module.exports = (io) => {
     socket.on('dice rolled', (data) => {
       socket.broadcast.to(data.gameID).emit('update position', { pos: data.pos, index: data.index })
     })
+
+    socket.on('new-message', (msg) => {
+      // console.log('msg', msg)
+      io.emit('receive-message', msg)
+    })
   })
 }

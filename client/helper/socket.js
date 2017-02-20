@@ -26,5 +26,8 @@ module.exports = {
   },
   sendChat: (data) => {
     socket.emit('send chat', data)
+  },
+  updateProps: (data) => {
+    socket.emit('property bought', data)
   }
 }

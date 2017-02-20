@@ -58,5 +58,9 @@ module.exports = (io) => {
       // console.log('msg', msg)
       io.emit('receive-message', msg)
     })
+    socket.on('property bought', (data) => {
+      socket.broadcast.to(data.gameID).emit('update properties', { properties: data.properties, index: data.index })
+    })
   })
 }
+

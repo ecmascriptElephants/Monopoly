@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Input, Icon, Divider, Form } from 'semantic-ui-react'
-import {Link} from 'react-router-dom'
 import axios from 'axios'
 
-class Land extends Component {
+class Signup extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -12,7 +11,7 @@ class Land extends Component {
     }
     this.onUsernameChange = this.onUsernameChange.bind(this)
     this.onPasswordChange = this.onPasswordChange.bind(this)
-    this.handleLogin = this.handleLogin.bind(this)
+    this.handleSignup = this.handleSignup.bind(this)
   }
 
   onUsernameChange (e) {
@@ -23,10 +22,10 @@ class Land extends Component {
     this.setState({password: e.target.value})
   }
 
-  handleLogin (e) {
+  handleSignup (e) {
     e.preventDefault()
-    console.log('log in info', this.state.username, this.state.password)
-    axios.post('/login', this.state)
+    console.log('post signup', this.state.username, this.state.password)
+    axios.post('/signup', this.state)
     .then((res) => console.log('make request'))
     .catch((err) => console.error(err))
   }
@@ -38,26 +37,21 @@ class Land extends Component {
           <Header as='h2' icon textAlign='center'>
             <Icon name='users' circular />
             <Header.Content>
-              Hackopoly
+              Signup!
             </Header.Content>
           </Header>
-          <Form onSubmit={this.handleLogin}>
+          <Form onSubmit={this.handleSignup}>
             <Input focus fluid name='username' placeholder='Username' onChange={this.onUsernameChange} />
             <Divider horizontal />
             <Input focus fluid name='password' placeholder='Password' type='password' onChange={this.onPasswordChange} />
             <Divider horizontal />
-            <Button secondary fluid type='submit'>Login</Button>
+            <Button secondary fluid type='submit'>Sign Up</Button>
           </Form>
-          <Divider horizontal>Or</Divider>
-          <Link to='/signup'> <Button secondary fluid>Sign Up</Button></Link>
           <Divider horizontal />
-          <Button fluid color='facebook' href='/auth/facebook'>
-            <Icon name='facebook' /> Facebook
-          </Button>
         </Segment>
       </Container>
     )
   }
 }
 
-export default Land
+export default Signup

@@ -67,7 +67,7 @@ class Lobby extends Component {
 
   render () {
     let messages = this.state.messages.map((msg) => {
-      return <li>{msg}</li>
+      return <li>{this.props.username}: {msg}</li>
     })
     return (
       <div>

@@ -29,6 +29,7 @@ export function setIndex (index) {
 
 export function setMessageID (id) {
   return {type: SET_MESSAGE_ID, id}
+}
 
 export function setUserProperties (userProperties, index) {
   return {type: SET_USERS_PROPERTIES, userProperties, index}

@@ -11,7 +11,7 @@ class Lobby extends Component {
       button: false,
       join: false,
       start: false,
-      message: ''
+      messages: []
     }
     axios.get('/user')
       .then((res) => {
@@ -24,7 +24,6 @@ class Lobby extends Component {
     this.newGame = this.newGame.bind(this)
     this.startGame = this.startGame.bind(this)
     this.sendChat = this.sendChat.bind(this)
-    this.onMessageChange = this.onMessageChange.bind(this)
   }
   componentDidMount () {
     sock.socket.on('new game', (data) => {
@@ -37,6 +36,12 @@ class Lobby extends Component {
     })
     sock.socket.on('send message', (data) => {
       this.setState({})
+    })
+    sock.socket.on('receive-message', (msg) => {
+      let messages = this.state.messages
+      messages.push(msg)
+      this.setState({messages: messages})
+      // console.log('messages', this.state.messages)
     })
   }
   newGame () {
@@ -52,21 +57,18 @@ class Lobby extends Component {
   }
 
   sendChat () {
-    sock.chat({senderId: this.props.senderId, msgID: this.props.msgID})
+    sock.sendChat({senderID: this.props.senderID, messageID: this.props.messageID})
   }
 
-  onMessageChange (e) {
-    this.setState({message: e.target.value})
-  }
-
-  handleChat (e) {
-    e.preventDefault()
-    axios.post('/chat', this.state.message)
-    .then((res) => console.log('message sent!'))
-    .catch((err) => console.error(err))
+  submitMessage () {
+    let message = document.getElementById('message').value
+    sock.socket.emit('new-message', message)
   }
 
   render () {
+    let messages = this.state.messages.map((msg) => {
+      return <li>{msg}</li>
+    })
     return (
       <div>
         <div>
@@ -77,13 +79,12 @@ class Lobby extends Component {
         </div>
 
         <div>
-          <br />
-          <p>Chatting with other players!</p>
-          <form onSubmit={this.handleChat}>
-            <input placeholder='enter your message' onChange={this.onMessageChange} />
-            <button type='submit'>Send Chat!</button>
-          </form>
+          <ul>
+            {messages}
+          </ul>
+          <input id='message' type='text' /><button onClick={this.submitMessage}>Send</button>
         </div>
+
       </div>
     )
   }
@@ -102,6 +103,7 @@ Lobby.propTypes = {
   username: React.PropTypes.string.isRequired,
   gameID: React.PropTypes.number.isRequired,
   userID: React.PropTypes.string.isRequired,
+  senderID: React.PropTypes.number.isRequired,
   messageID: React.PropTypes.number.isRequired
 }
 export default connect(mapStateToProps)(Lobby)

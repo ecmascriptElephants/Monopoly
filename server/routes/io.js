@@ -54,11 +54,9 @@ module.exports = (io) => {
       socket.broadcast.to(data.gameID).emit('update position', { pos: data.pos, index: data.index })
     })
 
-    socket.on('send chat', (data) => {
-      socket.broadcast.to(data.userID).emit()
+    socket.on('new-message', (msg) => {
+      // console.log('msg', msg)
+      io.emit('receive-message', msg)
     })
-
-    
-
   })
 }

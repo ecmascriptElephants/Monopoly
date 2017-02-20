@@ -55,7 +55,7 @@ module.exports = (io) => {
     })
 
     socket.on('new-message', (msg) => {
-      // console.log('msg', msg)
+      console.log('msg', msg)
       io.emit('receive-message', msg)
     })
     socket.on('property bought', (data) => {
@@ -63,4 +63,3 @@ module.exports = (io) => {
     })
   })
 }
-

@@ -526,15 +526,12 @@ class DiceRoll extends Component {
           {`Everyone's Money ${[this.state.userMoney]}`}
         </div>
         <div className='CurrentUser_div'>
-          <div className='CurrentUserMoney'>
-            {`You have: $${this.state.userMoney[this.props.index]}`}
+
+          <div>
+            Properties : {this.props.index === -1 ? null : this.state.userProperties[this.props.index].map(e => ' ' + e.PropertyObj.NAME)}
+            {this.props.index === -1 ? null : this.state.userProperties[this.props.index].forEach(propObj => console.log(propObj.PropertyObj.NAME))}
           </div>
-          <div className='CurrentUserProperties'>
-            <div>
-              Properties : {this.props.index === -1 ? null : this.state.userProperties[this.props.index].map(e => ' ' + e.PropertyObj.NAME)}
-              {this.props.index === -1 ? null : this.state.userProperties[this.props.index].forEach(propObj => console.log(propObj.PropertyObj.NAME))}
-            </div>
-          </div>
+
         </div>
         <div className='UserPositions'>
           <div className='CurrentUser' />

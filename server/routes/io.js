@@ -37,7 +37,7 @@ module.exports = (io) => {
       // console.log(gameObj.playerInfo[gameObj.])
       // console.log(gameObj[data.gameID])
       // console.log('how many times', gameObj.playerInfo[gameObj.i].socketID)
-      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn', gameObj.i)
+      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn', {index: gameObj.i, numOfPlayers: gameObj.playerInfo.length})
     })
 
     socket.on('endTurn', (data) => {
@@ -47,7 +47,7 @@ module.exports = (io) => {
         gameObj.i = 0
       }
       io.in(data.gameID).emit('update position', { pos: data.pos, index: data.index })
-      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn', gameObj.i)
+      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn', {index: gameObj.i, numOfPlayers: gameObj.playerInfo.length})
     })
 
     socket.on('dice rolled', (data) => {

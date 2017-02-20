@@ -3,7 +3,7 @@ import rules from '../static/rules'
 import userNames from './user_order'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
-import { setUserPositions, setIndex } from './store/actionCreators'
+import { setUserPositions, setIndex, setUserProperties } from './store/actionCreators'
 import { Button } from 'semantic-ui-react'
 class DiceRoll extends Component {
   constructor (props) {
@@ -32,7 +32,6 @@ class DiceRoll extends Component {
       diceSumComment: '',
       doubles: 0,
       doublesComment: '',
-      currentUser: 0,
       moveTokenButtonVisible: false,
       // needs to be updated gamestate authentication
       chanceButtonVisible: false,
@@ -52,7 +51,6 @@ class DiceRoll extends Component {
       endTurnButtonVisible: false,
       buyPropertyComment: '',
       buyPropertyButtonVisible: false,
-      currentUserPropertyNames: '',
       rentOwed: 0,
       propertyOwner: '',
       payRentComment: '',
@@ -68,6 +66,9 @@ class DiceRoll extends Component {
       this.setState({ diceRollButtonVisible: true })
       this.props.dispatch(setIndex(index))
       console.log(this.props.index)
+    })
+    sock.socket.on('update properties', (data) => {
+      // this.setState({ userProperties: data.userProperties})
     })
   }
   handleDiceRollButtonClick () {
@@ -117,6 +118,7 @@ class DiceRoll extends Component {
       moveTokenButtonVisible: false,
       diceRollButtonVisible: false,
       endTurnButtonVisible: false,
+      buyPropertyButtonVisible: false,
       buyPropertyComment: ''
     })
     sock.end({ gameID: this.props.gameID, pos: this.props.userPosArray[this.props.index], index: this.props.index })
@@ -177,17 +179,20 @@ class DiceRoll extends Component {
     updatedUserPositions[this.props.index] = updatedCurrentUserPosition
     this.props.dispatch(setUserPositions(updatedCurrentUserPosition, this.props.index))
 
+    let squareType = rules.PositionType[updatedCurrentUserPosition]
+    console.log('square type = ',squareType)
+
     // if the user lands on Chance space
-    if (updatedCurrentUserPosition === 7 || updatedCurrentUserPosition === 22 || updatedCurrentUserPosition === 36) {
+    if (squareType === 'CHANCE') {
       this.setState({
         chanceButtonVisible: true
       })
-    } else if (updatedCurrentUserPosition === 2 || updatedCurrentUserPosition === 17 || updatedCurrentUserPosition === 33) {
+    } else if (squareType === 'COMMUNITY_CHEST') {
       // if the user lands on a Community Chest space
       this.setState({
         communityButtonVisible: true
       })
-    } else if (updatedCurrentUserPosition === 30 || doubles === 3) {
+    } else if (squareType === 'GO_TO_JAIL' || doubles === 3) {
       // if the user lands on Go-to-jail
       updatedCurrentUserPosition = 10
       updatedUserPositions[this.props.index] = updatedCurrentUserPosition
@@ -204,12 +209,13 @@ class DiceRoll extends Component {
         moveTokenButtonVisible: false,
         endTurnButtonVisible: true
       })
-    } else if (updatedCurrentUserPosition === 1 || updatedCurrentUserPosition === 3 || updatedCurrentUserPosition === 5 || updatedCurrentUserPosition === 6 || updatedCurrentUserPosition === 8 || updatedCurrentUserPosition === 9 || updatedCurrentUserPosition === 11 || updatedCurrentUserPosition === 12 || updatedCurrentUserPosition === 13 || updatedCurrentUserPosition === 14 || updatedCurrentUserPosition === 15 || updatedCurrentUserPosition === 16 || updatedCurrentUserPosition === 18 || updatedCurrentUserPosition === 19 || updatedCurrentUserPosition === 21 || updatedCurrentUserPosition === 23 || updatedCurrentUserPosition === 24 || updatedCurrentUserPosition === 25 || updatedCurrentUserPosition === 26 || updatedCurrentUserPosition === 27 || updatedCurrentUserPosition === 28 || updatedCurrentUserPosition === 29 || updatedCurrentUserPosition === 31 || updatedCurrentUserPosition === 32 || updatedCurrentUserPosition === 34 || updatedCurrentUserPosition === 35 || updatedCurrentUserPosition === 37 || updatedCurrentUserPosition === 39) {
+    } else if (squareType === 'PROPERTY') {
       if (this.propertyIsOwned(updatedCurrentUserPosition) === false) {
         console.log('dice_roll.jsx line 177: The User landed on an unowned property')
         this.setState({
           buyPropertyButtonVisible: true,
-          moveTokenButtonVisible: false
+          moveTokenButtonVisible: false,
+          endTurnButtonVisible: true
         })
       } else {
         // propertyIsOwned returns the ownerNumber
@@ -258,26 +264,26 @@ class DiceRoll extends Component {
       this.setState({
         chanceComment: 'ADVANCE TO GO COLLECT $200'
       })
-      updatedUserPositions[this.state.currentUser] = 0
-      userMoney[this.state.currentUser] += 200
+      updatedUserPositions[this.props.index] = 0
+      userMoney[this.props.index] += 200
     } else if (card === 1) {
       this.setState({
         chanceComment: 'BANK PAYS YOU DIVIDEND OF $50'
       })
-      userMoney[this.state.currentUser] += 50
+      userMoney[this.props.index] += 50
     } else if (card === 2) {
       this.setState({
         chanceComment: 'GO BACK 3 SPACES'
       })
-      updatedUserPositions[this.state.currentUser] -= 3
+      updatedUserPositions[this.props.index] -= 3
     } else if (card === 3) {
       this.setState({
         chanceComment: 'ADVANCE TOKEN TO NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL TEN TIMES THE AMOUNT THROWN.'
       })
       // 12 & 28
-      let buldDis = Math.abs(updatedUserPositions[this.state.currentUser] - 12)
-      let waterDis = Math.abs(updatedUserPositions[this.state.currentUser] - 28)
-      updatedUserPositions[this.state.currentUser] = (buldDis > waterDis) ? 28 : 12
+      let buldDis = Math.abs(updatedUserPositions[this.props.index] - 12)
+      let waterDis = Math.abs(updatedUserPositions[this.props.index] - 28)
+      updatedUserPositions[this.props.index] = (buldDis > waterDis) ? 28 : 12
       // state for properties,
       // if unowned, buy and money enough? UserMoney -= 150; bankMoney += 150
       // if owned, roll,again UserMoney -= diceNum*10; User[own].money += diceNum*10
@@ -285,28 +291,28 @@ class DiceRoll extends Component {
       this.setState({
         chanceComment: 'GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.'
       })
-      updatedUserPositions[this.state.currentUser] = 10
+      updatedUserPositions[this.props.index] = 10
     } else if (card === 5) {
       this.setState({
         chanceComment: 'PAY POOR TAX OF $15'
       })
-      userMoney[this.state.currentUser] -= 15
+      userMoney[this.props.index] -= 15
     } else if (card === 6) {
       this.setState({
         chanceComment: 'ADVANCE TO ST. CHARLES PLACE. IF YOU PASS GO, COLLECT $200.'
       })
-      if (updatedUserPositions[this.state.currentUser] > 11) {
-        userMoney[this.state.currentUser] += 200
+      if (updatedUserPositions[this.props.index] > 11) {
+        userMoney[this.props.index] += 200
       }
-      updatedUserPositions[this.state.currentUser] = 11
+      updatedUserPositions[this.props.index] = 11
     } else if (card === 7) {
       this.setState({
         chanceComment: 'YOU HAVE BEEN ELECTED CHAIRMAN OF THE BOARD. PAY EACH PLAYER $50.'
       })
       // currentUser.money -= 50*num of player;
-      userMoney[this.state.currentUser] -= 50 * 7
+      userMoney[this.props.index] -= 50 * 7
       userMoney.forEach((money, player, userMoney) => {
-        if (player !== this.state.currentUser) {
+        if (player !== this.props.index) {
           userMoney[player] += 50
         }
       })
@@ -314,12 +320,12 @@ class DiceRoll extends Component {
       this.setState({
         chanceComment: 'ADVANCE TOKEN TO THE NEAREST RAILROAD AND PAY OWNER TWICE THE RENTAL TO WHICH HE IS OTHERWISE ENTITLED. IF RAILROAD IS UNOWNED, YOU MAY BUY IT FROM THE BANK.'
       })
-      if (updatedUserPositions[this.state.currentUser] === 7) {
-        updatedUserPositions[this.state.currentUser] = 15
-      } else if (updatedUserPositions[this.state.currentUser] === 22) {
-        updatedUserPositions[this.state.currentUser] = 25
+      if (updatedUserPositions[this.props.index] === 7) {
+        updatedUserPositions[this.props.index] = 15
+      } else if (updatedUserPositions[this.props.index] === 22) {
+        updatedUserPositions[this.props.index] = 25
       } else {
-        updatedUserPositions[this.state.currentUser] = 5
+        updatedUserPositions[this.props.index] = 5
       }
       //  PAY OWNER TWICE THE RENTAL, IF UNOWNED, BUY
     } else if (card === 9) {
@@ -327,38 +333,38 @@ class DiceRoll extends Component {
         chanceComment: 'TAKE A RIDE ON THE READING. IF YOU PASS GO COLLECCT $200'
       })
       // TAKE A RIDE ON THE READING. IF YOU PASS GO COLLECCT $200
-      if (updatedUserPositions[this.state.currentUser] > 5) {
-        userMoney[this.state.currentUser] += 200
+      if (updatedUserPositions[this.props.index] > 5) {
+        userMoney[this.props.index] += 200
       }
-      updatedUserPositions[this.state.currentUser] = 5
+      updatedUserPositions[this.props.index] = 5
     } else if (card === 10) {
       this.setState({
         chanceComment: 'ADVANCE TOKEN TO THE NEAREST RAILROAD AND PAY OWNER TWICE THE RENTAL TO WHICH HE IS OTHERWISE ENTITLED. IF RAILROAD IS UNOWNED, YOU MAY BUY IT FROM THE BANK.'
       })
-      if (updatedUserPositions[this.state.currentUser] === 7) {
-        updatedUserPositions[this.state.currentUser] = 15
-      } else if (updatedUserPositions[this.state.currentUser] === 22) {
-        updatedUserPositions[this.state.currentUser] = 25
+      if (updatedUserPositions[this.props.index] === 7) {
+        updatedUserPositions[this.props.index] = 15
+      } else if (updatedUserPositions[this.props.index] === 22) {
+        updatedUserPositions[this.props.index] = 25
       } else {
-        updatedUserPositions[this.state.currentUser] = 5
+        updatedUserPositions[this.props.index] = 5
       }
       //  PAY OWNER TWICE THE RENTAL, IF UNOWNED, BUY
     } else if (card === 11) {
       this.setState({
         chanceComment: 'TAKE A WALK ON THE BOARD WALK. ADVANCE TOKEN TO BOARD WALK'
       })
-      updatedUserPositions[this.state.currentUser] = 39
+      updatedUserPositions[this.props.index] = 39
       // buy house or pay rent
     } else if (card === 12) {
       this.setState({
         chanceComment: 'YOUR BUILDING AND LOAN MATURES. COLLECT $150'
       })
-      userMoney[this.state.currentUser] += 150
+      userMoney[this.props.index] += 150
     } else if (card === 13) {
       this.setState({
         chanceComment: 'ADVANCE TO ILLINOIS AVE'
       })
-      updatedUserPositions[this.state.currentUser] = 24
+      updatedUserPositions[this.props.index] = 24
     } else if (card === 14) {
       this.setState({
         chanceComment: 'MAKE GENERAL REPAIRS ON ALL YOUR PROPERTY. FOR EACH HOUSE PAY $25. FOR EACH HOTEL PAY $100.'
@@ -385,24 +391,24 @@ class DiceRoll extends Component {
       this.setState({
         communityComment: 'BANK ERROR IN YOUR FAVOR COLLECT $200'
       })
-      userMoney[this.state.currentUser] += 200
+      userMoney[this.props.index] += 200
     } else if (card === 1) {
       this.setState({
         communityComment: 'FROM SALE OF STOCK YOU GET $45'
       })
-      userMoney[this.state.currentUser] += 45
+      userMoney[this.props.index] += 45
     } else if (card === 2) {
       this.setState({
         communityComment: 'PAY HOSPITAL $100'
       })
-      userMoney[this.state.currentUser] -= 100
+      userMoney[this.props.index] -= 100
     } else if (card === 3) {
       this.setState({
         communityComment: 'COLLECT $50 FROM EVERY PLAYER'
       })
-      userMoney[this.state.currentUser] += 50 * 7
+      userMoney[this.props.index] += 50 * 7
       userMoney.forEach((money, player, userMoney) => {
-        if (player !== this.state.currentUser) {
+        if (player !== this.props.index) {
           userMoney[player] -= 50
         }
       })
@@ -410,53 +416,53 @@ class DiceRoll extends Component {
       this.setState({
         communityComment: 'DOCTOR"S FEE PAY $50'
       })
-      userMoney[this.state.currentUser] -= 50
+      userMoney[this.props.index] -= 50
     } else if (card === 5) {
       this.setState({
         communityComment: 'YOU INHERIT $100'
       })
-      userMoney[this.state.currentUser] += 100
+      userMoney[this.props.index] += 100
     } else if (card === 6) {
       this.setState({
         communityComment: 'ADVANCE TO GO COLLECT $200'
       })
-      updatedUserPositions[this.state.currentUser] = 0
-      userMoney[this.state.currentUser] += 200
+      updatedUserPositions[this.props.index] = 0
+      userMoney[this.props.index] += 200
     } else if (card === 7) {
       this.setState({
         communityComment: 'PAY SCHOOL TAX OF $150'
       })
-      userMoney[this.state.currentUser] -= 150
+      userMoney[this.props.index] -= 150
     } else if (card === 8) {
       this.setState({
         communityComment: 'XMAS FUND MATURES COLLECT $100'
       })
-      userMoney[this.state.currentUser] += 100
+      userMoney[this.props.index] += 100
     } else if (card === 9) {
       this.setState({
         communityComment: 'RECEIVE FOR SERVICES $25'
       })
-      userMoney[this.state.currentUser] -= 25
+      userMoney[this.props.index] -= 25
     } else if (card === 10) {
       this.setState({
         communityComment: 'INCOME TAX REFUND COLLECT $20'
       })
-      userMoney[this.state.currentUser] += 20
+      userMoney[this.props.index] += 20
     } else if (card === 11) {
       this.setState({
         communityComment: 'LIFE INSURANCE MATURES COLLECT $100'
       })
-      userMoney[this.state.currentUser] += 100
+      userMoney[this.props.index] += 100
     } else if (card === 12) {
       this.setState({
         communityComment: 'GO TO JAIL GO DIRECTLY TO JAIL DO NOT PASS GO DO NOT COLLECT $200'
       })
-      updatedUserPositions[this.state.currentUser] = 10
+      updatedUserPositions[this.props.index] = 10
     } else if (card === 13) {
       this.setState({
         communityComment: 'YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST COLLECT $10'
       })
-      userMoney[this.state.currentUser] += 10
+      userMoney[this.props.index] += 10
     } else if (card === 14) {
       this.setState({
         communityComment: 'YOU ARE ASSESSED FOR STREET REPAIRS $40 PER HOUSE $115 PER HOTEL'
@@ -483,8 +489,6 @@ class DiceRoll extends Component {
     console.log('handleLandOnOrPassGo')
     if (!jail) {
       if (updatedCurrentUserPosition < oldCurrentUserPosition) {
-        console.log('dice_roll.jsx line 278, handleLandOnOrPassGo function has been invoked.' +
-          ' Jail = ', jail)
         let updatedUserMoney = this.state.userMoney
         updatedUserMoney[this.props.index] += 200
         this.setState({
@@ -496,7 +500,7 @@ class DiceRoll extends Component {
 
   increaseFunds (value) {
     let updatedUserMoney = this.state.userMoney
-    updatedUserMoney[this.state.currentUser] += value
+    updatedUserMoney[this.props.index] += value
     this.setState({
       userMoney: updatedUserMoney
     })
@@ -504,7 +508,7 @@ class DiceRoll extends Component {
 
   reduceFunds (value) {
     let updatedUserMoney = this.state.userMoney
-    updatedUserMoney[this.state.currentUser] -= value
+    updatedUserMoney[this.props.index] -= value
     this.setState({
       userMoney: updatedUserMoney
     })
@@ -524,7 +528,7 @@ class DiceRoll extends Component {
   }
 
   handlePayRentButtonClick () {
-    let currentUser = this.state.currentUser
+    let currentUser = this.props.index
     let propertyOwner = this.state.propertyOwner
     let rentOwed = this.state.rentOwed
     let updatedUserMoney = this.state.userMoney
@@ -561,10 +565,9 @@ class DiceRoll extends Component {
   }
 
   handleBuyPropertyButtonClick () {
-    let propertyPosition = this.state.userPositions[this.state.currentUser]
-    let propertiesArray = this.state.userProperties[this.state.currentUser]
-    let updatedCurrentUserPropertyNames = ''
-    console.log('diceRoll.jsx line 382 handleBuyPropertyButtonClick propertiesArray = ', propertiesArray, Array.isArray(propertiesArray))
+    let propertyPosition = this.props.userPosArray[this.props.index]
+    let propertiesArray = this.state.userProperties[this.props.index]
+    // console.log('diceRoll.jsx line 382 handleBuyPropertyButtonClick propertiesArray = ', propertiesArray, Array.isArray(propertiesArray))
     let propertyPrice = 0
     let newProperty = { PropertyObj: {}, Mortgaged: false, Houses: 0, Position: propertyPosition }
     rules.Properties.forEach((property) => {
@@ -575,16 +578,15 @@ class DiceRoll extends Component {
         console.log('propertiesArray = ', propertiesArray, propertiesArray.length, Array.isArray(propertiesArray))
       }
     })
-    if (this.state.userMoney[this.state.currentUser] < propertyPrice) {
+    if (this.state.userMoney[this.props.index] < propertyPrice) {
       this.setState({
         buyPropertyComment: 'You cannot afford this property :(',
         endTurnButtonVisible: true
       })
     } else {
-      console.log('the button should disappear is it still there? wtf.')
       this.reduceFunds(propertyPrice)
       let updatedUserProperties = this.state.userProperties
-      updatedUserProperties[this.state.currentUser] = propertiesArray
+      updatedUserProperties[this.props.index] = propertiesArray
       this.setState({
         userProperties: updatedUserProperties,
         buyPropertyComment: `You bought ${newProperty.PropertyObj.NAME}!`,
@@ -769,8 +771,8 @@ class DiceRoll extends Component {
           </div>
           <div className='CurrentUserProperties'>
             <div>
-              Properties : {this.state.userProperties[this.state.currentUser].map(e => ' ' + e.PropertyObj.NAME)}
-              {this.state.userProperties[this.state.currentUser].forEach(propObj => console.log(propObj.PropertyObj.NAME))}
+              Properties : {this.props.index === -1 ? null : this.state.userProperties[this.props.index].map(e => ' ' + e.PropertyObj.NAME)}
+              {this.props.index === -1 ? null : this.state.userProperties[this.props.index].forEach(propObj => console.log(propObj.PropertyObj.NAME))}
             </div>
           </div>
         </div>
@@ -788,7 +790,8 @@ const mapStateToProps = (state) => {
     gameID: state.gameID,
     userID: state.userID,
     userPosArray: state.userPosArray,
-    index: state.index
+    index: state.index,
+    userPropertiesArray: state.userPropertiesArray
   }
 }
 DiceRoll.propTypes = {
@@ -799,7 +802,8 @@ DiceRoll.propTypes = {
   gameID: React.PropTypes.number.isRequired,
   userID: React.PropTypes.string.isRequired,
   userPosArray: React.PropTypes.array.isRequired,
-  index: React.PropTypes.number.isRequired
+  index: React.PropTypes.number.isRequired,
+  userPropertiesArray: React.PropTypes.array.isRequired
 }
 
 export default connect(mapStateToProps)(DiceRoll)

@@ -53,5 +53,10 @@ module.exports = (io) => {
     socket.on('dice rolled', (data) => {
       socket.broadcast.to(data.gameID).emit('update position', { pos: data.pos, index: data.index })
     })
+
+    socket.on('property bought', (data) => {
+      socket.broadcast.to(data.gameID).emit('update properties', { properties: data.properties, index: data.index })
+    })
   })
 }
+

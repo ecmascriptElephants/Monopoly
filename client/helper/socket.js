@@ -23,5 +23,8 @@ module.exports = {
   },
   updatePos: (data) => {
     socket.emit('dice rolled', data)
+  },
+  updateProps: (data) => {
+    socket.emit('property bought', data)
   }
 }

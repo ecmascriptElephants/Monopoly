@@ -28,6 +28,7 @@ module.exports = {
     socket.emit('send chat', data)
   },
   updateProps: (data) => {
-    socket.emit('property bought', data)
+    console.log('socket helper function updateProps has been invoked!')
+    socket.emit('property update', data)
   }
 }

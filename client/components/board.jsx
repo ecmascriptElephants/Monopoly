@@ -32,6 +32,7 @@ class Board extends Component {
   }
   componentDidMount () {
     sock.socket.on('users', (data) => {
+      console.log('board.jsx componentDidMount socket users')
       this.setState({ players: data.players })
     })
     sock.socket.on('update position', (data) => {
@@ -197,6 +198,7 @@ const mapStateToProps = (state) => {
     gameID: state.gameID,
     userID: state.userID,
     userPosArray: state.userPosArray,
+    // userPropertiesArray: state.userPropertiesArray,
     index: state.index
   }
 }
@@ -207,6 +209,8 @@ Board.propTypes = {
   gameID: React.PropTypes.number.isRequired,
   userID: React.PropTypes.string.isRequired,
   userPosArray: React.PropTypes.array.isRequired,
+  // userPropertiesArray: React.PropTypes.array.isRequired,
   index: React.PropTypes.number.isRequired
 }
+
 export default connect(mapStateToProps)(Board)

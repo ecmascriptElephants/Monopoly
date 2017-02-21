@@ -17,7 +17,7 @@ const app = express()
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 const ioRouter = require('./routes/io.js')
-const mongodb = require('./mongodb/config')
+// const mongodb = require('./mongodb/config')
 app.use(cors())
 
 const port = process.env.PORT || 8000
@@ -52,23 +52,29 @@ passport.use('local-signup', new LocalStrategy({
   passReqToCallback: true
 },
   (req, username, password, done) => {
-    console.log('here!! username and pass ', username, password)
+    console.log('here')
     process.nextTick(() => {
       // find a user in the db with given username
       User.findByUsername(username, (result) => {
-        console.log('result', result)
         if (result[0].length === 0) {
           console.log('can register')
           bcrypt.genSalt(5, (err, salt) => {
+            if (err) {
+              console.log('Salt error ', err)
+            }
             bcrypt.hash(password, salt, null, (err, hash) => {
+              if (err) {
+                console.log(err)
+                return
+              }
               User.addUser(username, hash)
-              .then(() => {
-                return done(null, username)
-              })
+                .then(() => {
+                  return done(null, username)
+                })
             })
           })
         } else {
-          console.log('user existed')
+          // console.log('user existed')
           // return done(null, false, req.flash('signupMessage', 'User exited.'));
         }
       })
@@ -82,7 +88,6 @@ passport.use('local-login', new LocalStrategy({
   passReqToCallback: true
 },
   (req, username, password, done) => {
-    // console.log('log in user', username, password)
     User.findByUsername(username, (result) => {
       if (result[0].length === 0) {
         console.log('User not found!')
@@ -113,7 +118,7 @@ passport.use('local-signup', new LocalStrategy({
     process.nextTick(() => {
       // find a user in the db with given username
       User.findByUsername(username, (result) => {
-        if (result.length === 0) {
+        if (result[0].length === 0) {
           User.addUser(username, password)
         } else {
           console.log('user exited')
@@ -130,10 +135,22 @@ passport.use('local-login', new LocalStrategy({
 },
   (req, username, password, done) => {
     User.findByUsername(username, (result) => {
-      if (result.length === 0) {
+      if (result[0].length === 0) {
         console.log('User not found!')
+        return done(null, false, req.flash('loginMessage', 'User not found.'))
       } else {
-
+        result = JSON.parse(JSON.stringify(result[0]))
+        bcrypt.compare(password, result[0].password, (err, resp) => {
+          if (err) console.error(err)
+          if (resp) {
+            console.log('user found, log in success')
+            console.log('user', result[0])
+            return done(null, result[0])
+          } else {
+            console.log('wrong password')
+            // return done(null, false, req.flash('loginMessage', 'Incorrect password.'))
+          }
+        })
       }
     })
   }

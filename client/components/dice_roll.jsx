@@ -335,10 +335,6 @@ class DiceRoll extends Component {
         })
       }
     } else if (squareType === 'LUXURY_TAX') {
-      if(!doubles) {
-        this.setState({
-          squareTypeComment: 'You landed on Luxury Tax. Pay $100.',
-    } else if (squareType === 'LUXURY_TAX') {
       let updatedUserMoneyArray = [...this.state.userMoneyArray]
       updatedUserMoneyArray[this.props.index] -= 100
       this.props.dispatch(setUserMoney(updatedUserMoneyArray[this.props.index], this.props.index))

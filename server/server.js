@@ -17,6 +17,7 @@ const app = express()
 const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 const ioRouter = require('./routes/io.js')
+const mongodb = require('./mongodb/config')
 app.use(cors())
 
 const port = process.env.PORT || 8000

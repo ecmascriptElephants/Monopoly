@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Symbol from './Symbol'
 import Player from './player'
+import Chat from './chat'
 // import userNames from './user_order'
 // import rules from '../static/rules.js'
 import sock from '../helper/socket'
@@ -10,7 +11,8 @@ class Board extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      players: []
+      players: [],
+      messages: []
     }
     sock.init({ gameID: this.props.gameID })
     this.dice = this.dice.bind(this)
@@ -187,6 +189,7 @@ class Board extends Component {
             </div>
           </div>
         </div>
+        <Chat name={this.props.username} />
       </div>
     )
   }

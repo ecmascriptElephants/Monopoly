@@ -1,4 +1,6 @@
 let game = {}
+let msgHistory = require('../controllers/msgHistoryController')
+
 module.exports = (io) => {
   let user = 0
   let userStorage = []
@@ -54,13 +56,15 @@ module.exports = (io) => {
       socket.broadcast.to(data.gameID).emit('update position', { pos: data.pos, index: data.index })
     })
 
-    socket.on('new-message', (msg) => {
-      // console.log('msg', msg)
-      io.emit('receive-message', msg)
+    socket.on('new-message', (msgInfo) => {
+      io.emit('receive-message', msgInfo.message)
+      let sender = msgInfo.sender
+      let message = msgInfo.message
+      console.log('sender', sender)
+      msgHistory.addMessage(sender, message)
     })
     socket.on('property bought', (data) => {
       socket.broadcast.to(data.gameID).emit('update properties', { properties: data.properties, index: data.index })
     })
   })
 }
-

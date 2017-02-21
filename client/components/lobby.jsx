@@ -24,6 +24,7 @@ class Lobby extends Component {
     this.newGame = this.newGame.bind(this)
     this.startGame = this.startGame.bind(this)
     this.sendChat = this.sendChat.bind(this)
+    this.submitMessage = this.submitMessage.bind(this)
   }
   componentDidMount () {
     sock.socket.on('new game', (data) => {
@@ -62,12 +63,16 @@ class Lobby extends Component {
 
   submitMessage () {
     let message = document.getElementById('message').value
-    sock.socket.emit('new-message', message)
+    document.getElementById('message').value = ''
+    let sender = this.props.username
+    let msgInfo = {sender: sender, message: message}
+    JSON.stringify(msgInfo)
+    sock.socket.emit('new-message', msgInfo)
   }
 
   render () {
     let messages = this.state.messages.map((msg) => {
-      return <li>{msg}</li>
+      return <li>{this.props.username}: {msg}</li>
     })
     return (
       <div>

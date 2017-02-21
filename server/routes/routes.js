@@ -1,5 +1,5 @@
-const userController = require('../controllers/userController')
-
+let userController = require('../controllers/userController')
+let msgHistory = require('../controllers/msgHistoryController')
 
 module.exports = (app, express, passport) => {
   app.post('/signup', passport.authenticate('local-signup', {
@@ -37,7 +37,6 @@ module.exports = (app, express, passport) => {
     res.redirect('/')
   })
 
-
   app.get('/', (req, res) => {
     res.redirect('/#/')
   })
@@ -53,4 +52,9 @@ module.exports = (app, express, passport) => {
   app.get('/user', (req, res) => {
     res.send(passport.user)
   })
+
+  app.get('/chats', (req, res) => {
+    msgHistory.allHistory(req, res)
+  })
+
 }

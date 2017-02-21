@@ -60,8 +60,9 @@ module.exports = (io) => {
       io.emit('receive-message', msgInfo.message)
       let sender = msgInfo.sender
       let message = msgInfo.message
-      console.log('sender', sender)
-      msgHistory.addMessage(sender, message)
+      let room = msgInfo.room
+      console.log('room', room)
+      msgHistory.addMessage(sender, message, room)
     })
     socket.on('property bought', (data) => {
       socket.broadcast.to(data.gameID).emit('update properties', { properties: data.properties, index: data.index })

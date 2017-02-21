@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Header, Container, Segment, Icon, Divider, Message, Input, Button } from 'semantic-ui-react'
+import {Header, Container, Segment, Icon, Divider} from 'semantic-ui-react'
 import sock from '../helper/socket'
 
 class Chat extends Component {
@@ -9,7 +9,7 @@ class Chat extends Component {
       name: props.name,
       messages: []
     }
-
+    this.submitMessage = this.submitMessage.bind(this)
   }
   componentDidMount () {
     sock.socket.on('receive-message', (msg) => {
@@ -22,11 +22,14 @@ class Chat extends Component {
   submitMessage () {
     let message = document.getElementById('chatBox').value
     document.getElementById('chatBox').value = ''
-    // console.log('in chat box', message)
-    sock.socket.emit('new-message', message)
+    let sender = this.state.name
+    let room = 'board'
+    let msgInfo = {sender: sender, message: message, room: room}
+    JSON.stringify(msgInfo)
+    sock.socket.emit('new-message', msgInfo)
   }
 
-  render() {
+  render () {
     let messages = this.state.messages.map((msg) => {
       return <li>{this.state.name}: {msg}</li>
     })
@@ -45,12 +48,16 @@ class Chat extends Component {
               {messages}
             </ul>
           </div>
-          <input id= 'chatBox' name='chatBox' type='text' />
-          <button onClick={this.submitMessage}>Send </button>
+          <input id='chatBox' name='chatBox' type='text' />
+          <button onClick={this.submitMessage}>Send</button>
         </Segment>
       </Container>
     )
   }
+}
+
+Chat.propTypes = {
+  name: React.PropTypes.string.isRequired
 }
 
 export default Chat

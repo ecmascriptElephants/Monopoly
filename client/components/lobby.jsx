@@ -11,7 +11,8 @@ class Lobby extends Component {
       button: false,
       join: false,
       start: false,
-      messages: []
+      messages: [],
+      queryResults: []
     }
     axios.get('/user')
       .then((res) => {
@@ -25,6 +26,7 @@ class Lobby extends Component {
     this.startGame = this.startGame.bind(this)
     this.sendChat = this.sendChat.bind(this)
     this.submitMessage = this.submitMessage.bind(this)
+    this.getChats = this.getChats.bind(this)
   }
   componentDidMount () {
     sock.socket.on('new game', (data) => {
@@ -65,14 +67,27 @@ class Lobby extends Component {
     let message = document.getElementById('message').value
     document.getElementById('message').value = ''
     let sender = this.props.username
-    let msgInfo = {sender: sender, message: message}
+    let room = 'lobby'
+    let msgInfo = {sender: sender, message: message, room: room}
     JSON.stringify(msgInfo)
     sock.socket.emit('new-message', msgInfo)
+  }
+
+  getChats () {
+    axios.get('/chats')
+      .then((res) => {
+        this.setState({queryResults: res.data})
+      })
+      .catch((err) => console.error(err))
   }
 
   render () {
     let messages = this.state.messages.map((msg) => {
       return <li>{this.props.username}: {msg}</li>
+    })
+    let queryResults = this.state.queryResults.map((result) => {
+      // console.log('result', result)
+      return <li>Sender: {result.Sender} Message: {result.Message}</li>
     })
     return (
       <div>
@@ -89,7 +104,13 @@ class Lobby extends Component {
           </ul>
           <input id='message' type='text' /><button onClick={this.submitMessage}>Send</button>
         </div>
-
+        <br />
+        <div>
+          <button onClick={this.getChats}>Show chats</button>
+          <ul>
+            {queryResults}
+          </ul>
+        </div>
       </div>
     )
   }

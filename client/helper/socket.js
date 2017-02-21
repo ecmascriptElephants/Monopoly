@@ -1,5 +1,7 @@
 import io from 'socket.io-client'
-const socket = io.connect('/')
+const socket = io.connect('/', [
+  true
+])
 
 module.exports = {
   socket,

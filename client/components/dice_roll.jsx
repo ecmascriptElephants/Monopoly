@@ -12,7 +12,6 @@ class DiceRoll extends Component {
     this.handleDiceRollButtonClick = this.handleDiceRollButtonClick.bind(this)
     this.handleMoveTokenButtonClick = this.handleMoveTokenButtonClick.bind(this)
     this.handleEndTurnButtonClick = this.handleEndTurnButtonClick.bind(this)
-    // this.handleDoubles = this.handleDoubles.bind(this)
     // this.handleLandOnOrPassGo = this.handleLandOnOrPassGo.bind(this)
     this.increaseFunds = this.increaseFunds.bind(this)
     this.reduceFunds = this.reduceFunds.bind(this)
@@ -42,8 +41,6 @@ class DiceRoll extends Component {
       // todo: property: [{'PropertyObj': {PropertyObj}, 'Mortaged': false, 'Houses': 0,
       // 'Position': X}],
       passGoComment: '',
-      chanceComment: '',
-      communityComment: '',
       diceRollButtonVisible: false,
       // needs to be updated gamestate authentication
       endTurnButtonVisible: false,
@@ -52,8 +49,7 @@ class DiceRoll extends Component {
       rentOwed: 0,
       propertyOwner: '',
       payRentComment: '',
-      payRentButtonVisible: false,
-      numOfPlayers: 8
+      payRentButtonVisible: false
     }
   }
   componentWillReceiveProps (nextProps) {
@@ -89,10 +85,7 @@ class DiceRoll extends Component {
 
   handleEndTurnButtonClick () {
     this.setState({
-      doublesComment: '',
       passGoComment: '',
-      chanceComment: '',
-      communityComment: '',
       moveTokenButtonVisible: false,
       diceRollButtonVisible: false,
       endTurnButtonVisible: false,

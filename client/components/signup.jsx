@@ -6,26 +6,32 @@ class Signup extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      username: '',
-      password: ''
+      email: '',
+      password: '',
+      displayName: ''
     }
-    this.onUsernameChange = this.onUsernameChange.bind(this)
+    this.onEmailChange = this.onEmailChange.bind(this)
     this.onPasswordChange = this.onPasswordChange.bind(this)
+    this.onDisplayChange = this.onDisplayChange.bind(this)
     this.handleSignup = this.handleSignup.bind(this)
   }
 
-  onUsernameChange (e) {
-    this.setState({username: e.target.value})
+  onEmailChange (e) {
+    this.setState({email: e.target.value})
   }
 
   onPasswordChange (e) {
     this.setState({password: e.target.value})
   }
 
+  onDisplayChange (e) {
+    this.setState({displayName: e.target.value})
+  }
+
   handleSignup (e) {
     e.preventDefault()
     axios.post('/signup', this.state)
-    .then((res) => console.log('make request'))
+    .then((res) => console.log(res.location))
     .catch((err) => console.error(err))
   }
 
@@ -40,7 +46,9 @@ class Signup extends Component {
             </Header.Content>
           </Header>
           <Form onSubmit={this.handleSignup}>
-            <Input focus fluid name='username' placeholder='Username' onChange={this.onUsernameChange} />
+            <Input focus fluid name='email' type='email' placeholder='Email' onChange={this.onEmailChange} />
+            <Divider horizontal />
+            <Input focus fluid name='displayName' placeholder='Display Name' onChange={this.onDisplayChange} />
             <Divider horizontal />
             <Input focus fluid name='password' placeholder='Password' type='password' onChange={this.onPasswordChange} />
             <Divider horizontal />

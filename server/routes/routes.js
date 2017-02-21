@@ -2,8 +2,10 @@ const userController = require('../controllers/userController')
 
 module.exports = (app, express, passport) => {
   app.post('/signup', passport.authenticate('local-signup', {
-    failureRedirect: '/signup'
-  }), (req, res) => res.redirect('/lobby'))
+    successRedirect: '/lobby',
+    failureRedirect: '/signup',
+    failureFlash: true
+  }))
 
   // app.post('/login', (req, res, next) => {
   //   console.log('log in a user',req.body)
@@ -14,7 +16,7 @@ module.exports = (app, express, passport) => {
       if (err) return done(err)
       if (!user) return res.redirect('/')
       req.login(user, () => {
-        return res.redirect('/lobby')
+        return res.redirect('/#/lobby')
       })
     })(req, res, done)
   })
@@ -37,6 +39,7 @@ module.exports = (app, express, passport) => {
   })
 
   app.get('/', (req, res) => {
+    console.log('here in /')
     res.redirect('/#/')
   })
 
@@ -46,15 +49,18 @@ module.exports = (app, express, passport) => {
   // }
 
   app.get('/lobby', (req, res) => {
+    console.log('here in lobby')
     res.redirect('/#/lobby')
   })
   app.get('/login', (req, res) => {
+    console.log('here in login')
     res.redirect('/#/')
   })
   app.get('/signup', (req, res) => {
     res.redirect('/#/signup')
   })
   app.get('/user', (req, res) => {
+    console.log(passport.user)
     res.send(passport.user)
   })
 }

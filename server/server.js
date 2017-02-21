@@ -47,18 +47,17 @@ passport.use(new FacebookStrategy({
 ))
 
 passport.use('local-signup', new LocalStrategy({
-  usernameField: 'username',
+  usernameField: 'email',
   passwordField: 'password',
   passReqToCallback: true
 },
   (req, username, password, done) => {
-    console.log('here')
     process.nextTick(() => {
       // find a user in the db with given username
       User.findByUsername(username, (result) => {
         if (result[0].length === 0) {
           console.log('can register')
-          bcrypt.genSalt(5, (err, salt) => {
+          bcrypt.genSalt(2, (err, salt) => {
             if (err) {
               console.log('Salt error ', err)
             }
@@ -67,8 +66,10 @@ passport.use('local-signup', new LocalStrategy({
                 console.log(err)
                 return
               }
-              User.addUser(username, hash)
-                .then(() => {
+              console.log(hash)
+              User.addUser(username, hash, req.body.displayName)
+                .then((data) => {
+                  passport.user = {id: data, displayName: req.body.displayName}
                   return done(null, username)
                 })
             })
@@ -82,51 +83,7 @@ passport.use('local-signup', new LocalStrategy({
   }
 ))
 
-passport.use('local-login', new LocalStrategy({
-  usernameField: 'username',
-  passwordField: 'password',
-  passReqToCallback: true
-},
-  (req, username, password, done) => {
-    User.findByUsername(username, (result) => {
-      if (result[0].length === 0) {
-        console.log('User not found!')
-        return done(null, false, req.flash('loginMessage', 'User not found.'))
-      } else {
-        result = JSON.parse(JSON.stringify(result[0]))
-        bcrypt.compare(password, result[0].password, (err, resp) => {
-          if (err) console.error(err)
-          if (resp) {
-            console.log('user found, log in success')
-            console.log('user', result[0])
-            return done(null, result[0])
-          } else {
-            console.log('wrong password')
-            // return done(null, false, req.flash('loginMessage', 'Incorrect password.'))
-          }
-        })
-      }
-    })
-  }
-))
-passport.use('local-signup', new LocalStrategy({
-  usernameField: 'username',
-  passwordField: 'password',
-  passReqToCallback: true
-},
-  (req, username, password, done) => {
-    process.nextTick(() => {
-      // find a user in the db with given username
-      User.findByUsername(username, (result) => {
-        if (result[0].length === 0) {
-          User.addUser(username, password)
-        } else {
-          console.log('user exited')
-        }
-      })
-    })
-  }
-))
+
 
 passport.use('local-login', new LocalStrategy({
   usernameField: 'username',
@@ -143,8 +100,7 @@ passport.use('local-login', new LocalStrategy({
         bcrypt.compare(password, result[0].password, (err, resp) => {
           if (err) console.error(err)
           if (resp) {
-            console.log('user found, log in success')
-            console.log('user', result[0])
+            passport.user = {id: result[0].id, displaname: result[0].displayName}
             return done(null, result[0])
           } else {
             console.log('wrong password')

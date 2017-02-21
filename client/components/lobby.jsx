@@ -43,6 +43,7 @@ class Lobby extends Component {
         showToast: true,
         comment: 'Player joined'
       })
+      localStorage.setItem('gameID', data.gameID)
       this.props.dispatch(setGameID(data.gameID))
     })
     sock.socket.on('send message', (data) => {

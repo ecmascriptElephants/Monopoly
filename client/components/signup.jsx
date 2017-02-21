@@ -24,7 +24,6 @@ class Signup extends Component {
 
   handleSignup (e) {
     e.preventDefault()
-    console.log('post signup', this.state.username, this.state.password)
     axios.post('/signup', this.state)
     .then((res) => console.log('make request'))
     .catch((err) => console.error(err))

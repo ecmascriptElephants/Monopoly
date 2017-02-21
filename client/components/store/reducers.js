@@ -6,6 +6,7 @@ import {
   SET_INDEX,
   SET_MESSAGE_ID,
   SET_USERS_PROPERTIES,
+  SET_USERS_MONEY,
   SET_CASH
 } from './actions'
 const DEFAULT_STATE = {
@@ -16,7 +17,8 @@ const DEFAULT_STATE = {
   index: -1,
   messageID: 0,
   userPropertyArray: [[], [], [], [], [], [], [], []],
-  userCashArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500]
+  userCashArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500],
+  userMoneyArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500]
 }
 
 const setGameID = (state, action) => {
@@ -63,6 +65,7 @@ const setUserProperties = (state, action) => {
     ...state.userPropertyArray.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { userPropertyArray: newArr })
+  return newState
 }
 
 const setUserCash = (state, action) => {
@@ -72,6 +75,15 @@ const setUserCash = (state, action) => {
     ...state.userCashArray.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { userCashArray: newArr })
+  return newState
+}
+
+const setUserMoney = (state, action) => {
+  let newArr = [...state.userMoneyArray.slice(0, action.index),
+    action.userMoney,
+    ...state.userMoneyArray.slice(action.index + 1)]
+  const newState = {}
+  Object.assign(newState, state, { userMoneyArray: newArr })
   return newState
 }
 
@@ -100,6 +112,9 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_CASH:
       return setUserCash(state, action)
+
+    case SET_USERS_MONEY:
+      return setUserMoney(state, action)
 
     default:
       return state

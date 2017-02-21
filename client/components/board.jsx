@@ -44,7 +44,6 @@ class Board extends Component {
     return (
       <div>
         <Player name={this.props.username} piece='Hat' />
-        <Chat name={this.props.username} />
         <div className='board parent'>
           {
             this.state.players.map((player, index) => {
@@ -190,6 +189,7 @@ class Board extends Component {
             </div>
           </div>
         </div>
+        <Chat name={this.props.username} />
       </div>
     )
   }

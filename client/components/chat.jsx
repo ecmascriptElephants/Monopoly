@@ -21,6 +21,7 @@ class Chat extends Component {
 
   submitMessage () {
     let message = document.getElementById('chatBox').value
+    document.getElementById('chatBox').value = ''
     // console.log('in chat box', message)
     sock.socket.emit('new-message', message)
   }

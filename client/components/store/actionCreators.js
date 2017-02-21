@@ -5,7 +5,8 @@ import { SET_GAME_ID,
   SET_INDEX,
   SET_MESSAGE_ID,
   SET_USERS_PROPERTIES,
-  SET_CASH
+  SET_CASH,
+  SET_MYINDEX
 } from './actions'
 
 export function setGameID (id) {
@@ -26,6 +27,10 @@ export function setUserPositions (userPos, index) {
 
 export function setIndex (index) {
   return {type: SET_INDEX, index}
+}
+
+export function setMyIndex (index) {
+  return {type: SET_MYINDEX, index}
 }
 
 export function setMessageID (id) {

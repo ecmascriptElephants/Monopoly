@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import sock from '../helper/socket'
 import axios from 'axios'
 import { connect } from 'react-redux'
-import { setUsername, setGameID, setUserID } from './store/actionCreators'
+import { setUsername, setGameID, setUserID, setMyIndex } from './store/actionCreators'
+import Toast from './toast'
 class Lobby extends Component {
   constructor (props) {
     super(props)
@@ -11,7 +12,9 @@ class Lobby extends Component {
       button: false,
       join: false,
       start: false,
-      messages: []
+      messages: [],
+      showToast: false,
+      comment: ''
     }
     axios.get('/user')
       .then((res) => {
@@ -31,8 +34,15 @@ class Lobby extends Component {
       this.setState({ join: true })
       this.props.dispatch(setGameID(data.gameID))
     })
+    sock.socket.on('your index', (data) => {
+      this.props.dispatch(setMyIndex(data))
+    })
     sock.socket.on('player joined', (data) => {
-      this.setState({ join: false, start: true })
+      this.setState({ join: false,
+        start: true,
+        showToast: true,
+        comment: 'Player joined'
+      })
       this.props.dispatch(setGameID(data.gameID))
     })
     sock.socket.on('send message', (data) => {
@@ -89,7 +99,7 @@ class Lobby extends Component {
           </ul>
           <input id='message' type='text' /><button onClick={this.submitMessage}>Send</button>
         </div>
-
+        <Toast message={this.state.comment} show={this.state.showToast} />
       </div>
     )
   }

@@ -35,6 +35,12 @@ module.exports = {
         test: /\.json$/,
         loader: 'json-loader',
         enforce: 'post'
+      },
+      {
+        test: /\.less$/,
+        use: [
+          'style-loader', 'css-loader', 'less-loader'
+        ]
       }
     ]
   }

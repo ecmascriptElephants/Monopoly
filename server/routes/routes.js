@@ -53,8 +53,13 @@ module.exports = (app, express, passport) => {
     res.send(passport.user)
   })
 
-  app.get('/chats', (req, res) => {
-    msgHistory.allHistory(req, res)
+  app.post('/chats', (req, res) => {
+    let room = req.body.room
+    let keyword = req.body.keyword
+    if (room === 'All Rooms') {
+      msgHistory.allHistory(keyword, res)
+    } else {
+      msgHistory.historyByQuery(room, keyword, res)
+    }
   })
-
 }

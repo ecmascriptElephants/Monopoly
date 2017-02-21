@@ -4,21 +4,24 @@ module.exports = {
 
   addMessage: (sender, message, room) => {
     msgHistory.create({
-      Sender: sender,
-      Message: message,
-      Room: room
+      sender: sender,
+      message: message,
+      room: room
     })
   },
 
-  allHistory: (req, res) => {
-    msgHistory.find((err, chats) => {
+  allHistory: (keyword, res) => {
+    msgHistory.find({message: {$regex: keyword}}, (err, chats) => {
       if (err) res.status(500).send(err)
       else res.send(chats)
     })
   },
 
-  historyByRoom: (room) => {
-
+  historyByQuery: (room, keyword, res) => {
+    msgHistory.find({room: room, message: {$regex: keyword}}, (err, chats) => {
+      if (err) res.status(500).send(err)
+      else res.send(chats)
+    })
   }
 
 }

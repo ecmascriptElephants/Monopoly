@@ -61,7 +61,7 @@ module.exports = (io) => {
       let sender = msgInfo.sender
       let message = msgInfo.message
       let room = msgInfo.room
-      console.log('room', room)
+      console.log('room', room, 'message', message)
       msgHistory.addMessage(sender, message, room)
     })
     socket.on('property bought', (data) => {

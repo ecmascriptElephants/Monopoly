@@ -73,8 +73,12 @@ class Lobby extends Component {
     sock.socket.emit('new-message', msgInfo)
   }
 
-  getChats () {
-    axios.get('/chats')
+  getChats (e) {
+    e.preventDefault()
+    let room = document.getElementById('room').value
+    let keyword = document.getElementById('keyword').value
+    document.getElementById('keyword').value = ''
+    axios.post('/chats', {room: room, keyword: keyword})
       .then((res) => {
         this.setState({queryResults: res.data})
       })
@@ -86,8 +90,7 @@ class Lobby extends Component {
       return <li>{this.props.username}: {msg}</li>
     })
     let queryResults = this.state.queryResults.map((result) => {
-      // console.log('result', result)
-      return <li>Sender: {result.Sender} Message: {result.Message}</li>
+      return <li>Sender: {result.sender} Message: {result.message} Room: {result.room}</li>
     })
     return (
       <div>
@@ -106,7 +109,16 @@ class Lobby extends Component {
         </div>
         <br />
         <div>
-          <button onClick={this.getChats}>Show chats</button>
+          <form onSubmit={this.getChats}>
+            <input type='text' placeholder='keyword' id='keyword' />
+            Room:
+            <select id='room' name='room'>
+              <option>All Rooms</option>
+              <option value='lobby'>Lobby</option>
+              <option value='board'>Board</option>
+            </select>
+            <button type='submit'>Show chats</button>
+          </form>
           <ul>
             {queryResults}
           </ul>

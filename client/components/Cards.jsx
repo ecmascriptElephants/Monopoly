@@ -41,7 +41,7 @@ const Cards = (props) => {
     props.button()
   }
   return (
-    <Button secondary fluid onClick={handleClick}>  Pick a Chance Card! </Button>
+    <Button secondary fluid onClick={handleClick}>  Pick a {props.card ? 'Community Chest' : 'Chance'} Card! </Button>
   )
 }
 

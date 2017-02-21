@@ -9,11 +9,9 @@ User.findByUsername = (username, cb) => {
     .catch((err) => { console.error(err) })
 }
 
-User.addUser = (username, password) => {
-  return db('users').insert({username: username, password: password})
-    .then(function (username) {
-      console.log('user ' + username + ' has added to the db!')
-    })
+User.addUser = (username, password, displayname) => {
+  console.log(username, password)
+  return db('users').insert({username: username, displayname, password: password})
     .catch(function (err) {
       console.error(err)
     })

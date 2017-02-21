@@ -9,13 +9,12 @@ class Chat extends Component {
       name: props.name,
       messages: []
     }
-
   }
   componentDidMount () {
     sock.socket.on('receive-message', (msg) => {
       let messages = this.state.messages
       messages.push(msg)
-      this.setState({messages: messages})
+      this.setState({ messages: messages })
     })
   }
 
@@ -26,7 +25,7 @@ class Chat extends Component {
     sock.socket.emit('new-message', message)
   }
 
-  render() {
+  render () {
     let messages = this.state.messages.map((msg) => {
       return <li>{this.state.name}: {msg}</li>
     })
@@ -45,7 +44,7 @@ class Chat extends Component {
               {messages}
             </ul>
           </div>
-          <input id= 'chatBox' name='chatBox' type='text' />
+          <input id='chatBox' name='chatBox' type='text' />
           <button onClick={this.submitMessage}>Send </button>
         </Segment>
       </Container>

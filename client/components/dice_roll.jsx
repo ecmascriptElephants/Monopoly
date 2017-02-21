@@ -3,8 +3,8 @@ import rules from '../static/rules'
 import userNames from './user_order'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
-import { setUserPositions, setIndex, setUserProperties } from './store/actionCreators'
-import { Button } from 'semantic-ui-react'
+import { setUserPositions, setIndex, setUserProperties, setUserMoney } from './store/actionCreators'
+import { Button, List } from 'semantic-ui-react'
 import Card from './Cards'
 class DiceRoll extends Component {
   constructor (props) {
@@ -58,7 +58,7 @@ class DiceRoll extends Component {
 
   componentWillReceiveProps (nextProps) {
     sock.updatePos({ gameID: nextProps.gameID, pos: nextProps.userPosArray[nextProps.index], index: nextProps.index })
-    sock.updateProps({ gameID: nextProps.gameID, pos: nextProps.userPropertiesArray[nextProps.index], index: nextProps.index })
+    // sock.updateProps({ gameID: nextProps.gameID, pos: nextProps.userPropertiesArray[nextProps.index], index: nextProps.index })
   }
 
   componentDidMount () {
@@ -68,9 +68,18 @@ class DiceRoll extends Component {
       this.props.dispatch(setIndex(data.index))
     })
     sock.socket.on('update properties', (data) => {
-      console.log('diceRoll js update properties! socket func!!!!')
-      this.setState({ userPropertiesArray: data.userProperties })
-      this.props.dispatch(setUserProperties(data.userProperties, data.index))
+      console.log('diceRoll js update properties! socket func! data = ', data)
+      let updatedUserPropertiesArray = [...this.state.userPropertiesArray]
+      updatedUserPropertiesArray[data.index] = data.properties
+      this.setState({ userPropertiesArray: updatedUserPropertiesArray })
+      // this.props.dispatch(setUserProperties(data.userProperties, data.index))
+    })
+    sock.socket.on('update money', (data) => {
+      console.log('diceRoll js update money! socket func! data = ', data)
+      let updatedUserMoneyArray = [...this.state.userMoneyArray]
+      updatedUserMoneyArray[data.index] = data.money
+      this.setState({ userMoneyArray: updatedUserMoneyArray })
+      // this.props.dispatch(setUserMoney(data.money, data.index))
     })
   }
 
@@ -230,7 +239,7 @@ class DiceRoll extends Component {
           squareTypeComment: 'You landed on an unowned property!',
           endTurnButtonVisible: true
         })
-        if(doubles) {
+        if (doubles) {
           this.setState({
             endTurnButtonVisible: false,
             diceRollButtonVisible: true
@@ -258,7 +267,8 @@ class DiceRoll extends Component {
       }
     } else if (squareType === 'GO') {
       this.setState({
-        squareTypeComment: 'You landed on GO. Collect $200!'
+        squareTypeComment: 'You landed on GO. Collect $200!',
+        moveTokenButtonVisible: false
       })
       if (!doubles) {
         this.setState({
@@ -301,10 +311,15 @@ class DiceRoll extends Component {
         })
       }
     } else if (squareType === 'INCOME_TAX') {
+      let updatedUserMoneyArray = [...this.state.userMoneyArray]
+      updatedUserMoneyArray[this.props.index] -= 200
+      this.props.dispatch(setUserMoney(updatedUserMoneyArray[this.props.index], this.props.index))
+      sock.updateMoney({ gameID: this.props.gameID, money: updatedUserMoneyArray[this.props.index], index: this.props.index })
       if (!doubles) {
         this.setState({
           squareTypeComment: 'You landed on Income Tax. Pay $200.',
           userPositions: updatedUserPositions,
+          userMoneyArray: updatedUserMoneyArray,
           moveTokenButtonVisible: false,
           endTurnButtonVisible: true
         })
@@ -313,31 +328,41 @@ class DiceRoll extends Component {
         this.setState({
           squareTypeComment: 'You landed on Income Tax. Pay $200.',
           userPositions: updatedUserPositions,
+          userMoneyArray: updatedUserMoneyArray,
           moveTokenButtonVisible: false,
           endTurnButtonVisible: false,
           diceRollButtonVisible: true
         })
       }
-      props.dispatch(setCash(-200, props.index))
     } else if (squareType === 'LUXURY_TAX') {
       if(!doubles) {
         this.setState({
           squareTypeComment: 'You landed on Luxury Tax. Pay $100.',
+    } else if (squareType === 'LUXURY_TAX') {
+      let updatedUserMoneyArray = [...this.state.userMoneyArray]
+      updatedUserMoneyArray[this.props.index] -= 100
+      this.props.dispatch(setUserMoney(updatedUserMoneyArray[this.props.index], this.props.index))
+      sock.updateMoney({ gameID: this.props.gameID, money: updatedUserMoneyArray[this.props.index], index: this.props.index })
+
+      if (!doubles) {
+        this.setState({
+          squareTypeComment: 'You landed on Luxury Tax. Pay $100.',
+          userMoneyArray: updatedUserMoneyArray,
           moveTokenButtonVisible: false,
           userPositions: updatedUserPositions,
           endTurnButtonVisible: true
         })
       }
-      if(doubles) {
+      if (doubles) {
         this.setState({
           squareTypeComment: 'You landed on Luxury Tax. Pay $100.',
           moveTokenButtonVisible: false,
+          userMoneyArray: updatedUserMoneyArray,
           endTurnButtonVisible: false,
           userPositions: updatedUserPositions,
           diceRollButtonVisible: true
         })
       }
-      props.dispatch(setCash(-100, props.index))
     }
     this.handleLandOnOrPassGo(oldCurrentUserPosition, updatedCurrentUserPosition, jail)
   }
@@ -351,8 +376,10 @@ class DiceRoll extends Component {
     console.log('handleLandOnOrPassGo')
     if (!jail) {
       if (updatedCurrentUserPosition < oldCurrentUserPosition) {
-        let updatedUserMoney = this.props.userMoneyArray
-        updatedUserMoney[this.props.index] += 200
+        let updatedUserMoneyArray = [...this.state.userMoneyArray]
+        updatedUserMoneyArray[this.props.index] += 200
+        this.props.dispatch(setUserMoney(updatedUserMoneyArray[this.props.index], this.props.index))
+        sock.updateMoney({ gameID: this.props.gameID, money: updatedUserMoneyArray[this.props.index], index: this.props.index })
         this.setState({
           userMoney: updatedUserMoney
         })
@@ -401,7 +428,7 @@ class DiceRoll extends Component {
     let currentUser = this.props.index
     let propertyOwner = this.state.propertyOwner
     let rentOwed = this.state.rentOwed
-    let updatedUserMoney = this.state.userMoneyArray
+    let updatedUserMoney = [...this.state.userMoneyArray]
     let doubles = this.state.doubles
 
     if (updatedUserMoney[currentUser] < rentOwed) {
@@ -411,9 +438,17 @@ class DiceRoll extends Component {
     } else {
       updatedUserMoney[currentUser] -= rentOwed
       updatedUserMoney[propertyOwner] += rentOwed
+
+      this.props.dispatch(setUserMoney(updatedUserMoney[currentUser], currentUser))
+      sock.updateMoney({ gameID: this.props.gameID, money: updatedUserMoney[currentUser], index: currentUser })
+
+      this.props.dispatch(setUserMoney(updatedUserMoney[propertyOwner], propertyOwner))
+      sock.updateMoney({ gameID: this.props.gameID, money: updatedUserMoney[propertyOwner], index: propertyOwner })
+
+
       if (!doubles) {
         this.setState({
-          userMoney: updatedUserMoney,
+          userMoneyArray: updatedUserMoney,
           payRentComment: '',
           propertyOwner: '',
           rentOwed: 0,
@@ -422,7 +457,7 @@ class DiceRoll extends Component {
         })
       } else if (doubles) {
         this.setState({
-          userMoney: updatedUserMoney,
+          userMoneyArray: updatedUserMoney,
           payRentComment: '',
           propertyOwner: '',
           rentOwed: 0,
@@ -456,7 +491,7 @@ class DiceRoll extends Component {
         squareTypeComment: '',
         moveTokenButtonVisible: false
       })
-      if(this.state.doubles) {
+      if (this.state.doubles) {
         this.setState({
           endTurnButtonVisible: false,
           squareTypeComment: '',
@@ -464,19 +499,24 @@ class DiceRoll extends Component {
         })
       }
     } else {
-      this.reduceFunds(propertyPrice)
-      let updatedUserProperties = this.state.userPropertiesArray
+      let updatedUserMoneyArray = [...this.state.userMoneyArray]
+      updatedUserMoneyArray[this.props.index] -= propertyPrice
+      this.props.dispatch(setUserMoney(updatedUserMoneyArray[this.props.index], this.props.index))
+      sock.updateMoney({ gameID: this.props.gameID, money: updatedUserMoneyArray[this.props.index], index: this.props.index })
+
+      let updatedUserProperties = [...this.state.userPropertiesArray]
 
       updatedUserProperties[this.props.index] = propertiesArray
       this.setState({
         buyPropertyComment: `You bought ${newProperty.PropertyObj.NAME}!`,
+        userMoneyArray: updatedUserMoneyArray,
         buyPropertyButtonVisible: false,
         endTurnButtonVisible: true,
         squareTypeComment: '',
         moveTokenButtonVisible: false,
         userPropertiesArray: updatedUserProperties
       })
-      if(this.state.doubles) {
+      if (this.state.doubles) {
         this.setState({
           endTurnButtonVisible: false,
           squareTypeComment: '',
@@ -484,7 +524,7 @@ class DiceRoll extends Component {
         })
       }
       this.props.dispatch(setUserProperties(updatedUserProperties, this.props.index))
-      sock.updateProps({ gameID: this.props.gameID, properties: this.state.userPropertiesArray[this.props.index], index: this.props.index })
+      sock.updateProps({ gameID: this.props.gameID, properties: updatedUserProperties[this.props.index], index: this.props.index })
     }
   }
 
@@ -650,8 +690,7 @@ class DiceRoll extends Component {
           </div>
           <div className='CurrentUserProperties'>
             <div>
-              Properties : {this.props.index === -1 ? null : this.state.userPropertiesArray[this.props.index].map(e => ' ' + e.PropertyObj.NAME)}
-              {this.props.index === -1 ? null : this.state.userPropertiesArray[this.props.index].forEach(propObj => console.log(propObj.PropertyObj.NAME))}
+              Properties : {this.props.index === -1 ? null : <List items={this.state.userPropertiesArray[this.props.index].map(e => ' ' + e.PropertyObj.NAME)} />}
             </div>
           </div>
         </div>

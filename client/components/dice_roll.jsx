@@ -290,7 +290,6 @@ class DiceRoll extends Component {
     // this.handleLandOnOrPassGo(oldCurrentUserPosition, updatedCurrentUserPosition, jail)
   }
 
-
   handleLandOnOrPassGo (oldCurrentUserPosition, updatedCurrentUserPosition, jail) {
     console.log('handleLandOnOrPassGo')
     if (!jail) {

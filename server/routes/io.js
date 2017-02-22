@@ -24,6 +24,7 @@ module.exports = (io) => {
       data.userPosition = [97, 97]
       socket.join(data.gameID)
       gameObj.playerInfo.push(data)
+      console.log('in io.js socket.on join, data = ', data)
       socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('player joined', data)
     })
 
@@ -63,8 +64,16 @@ module.exports = (io) => {
       console.log('sender', sender)
       msgHistory.addMessage(sender, message)
     })
-    socket.on('property bought', (data) => {
+
+    socket.on('property update', (data) => {
+      console.log('io.js property update has been invoked! data.properties = ', data.properties, 'data.gameID = ',data.gameID, 'data = ', data)
       socket.broadcast.to(data.gameID).emit('update properties', { properties: data.properties, index: data.index })
     })
+
+    socket.on('money update', (data) => {
+      console.log('io.js money update has been invoked! data.properties = ', data.money, 'data.gameID = ',data.gameID, 'data = ', data)
+      socket.broadcast.to(data.gameID).emit('update money', { money: data.money, index: data.index })
+    })
+
   })
 }

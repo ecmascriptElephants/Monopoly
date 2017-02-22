@@ -10,7 +10,7 @@ const rules = {
     },
     {
       Description: 'PAY HOSPITAL $100',
-      Cash: -45
+      Cash: -100
     },
     {
       Description: 'COLLECT $50 FROM EVERY PLAYER',
@@ -46,7 +46,7 @@ const rules = {
     },
     {
       Description: 'LIFE INSURANCE MATURES COLLECT $100',
-      Cash: 20
+      Cash: 100
     },
     {
       Description: 'GO TO JAIL GO DIRECTLY TO JAIL DO NOT PASS GO DO NOT COLLECT $200',
@@ -69,7 +69,7 @@ const rules = {
   Chance: [
     {
       Description: 'ADVANCE TO GO COLLECT $200',
-      Cash: +200
+      Position: 0
     },
     {
       Description: 'BANK PAYS YOU DIVIDEND OF $50',

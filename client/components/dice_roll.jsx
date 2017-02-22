@@ -194,6 +194,7 @@ class DiceRoll extends Component {
             rentOwed = prop.PropertyObj.RENT[prop.Houses]
           }
         })
+        console.log('!!!!!!!!!!!!! in diceRolljsx line 259 this.state = ', this.state)
         this.setState({
           payRentButtonVisible: true,
           payRentComment: `You landed on ${propName}. Pay ${rentOwed} to ${this.state.userNames[propertyOwner]}.`,
@@ -327,7 +328,7 @@ class DiceRoll extends Component {
         this.props.dispatch(setUserMoney(updatedUserMoneyArray[this.props.index], this.props.index))
         sock.updateMoney({ gameID: this.props.gameID, money: updatedUserMoneyArray[this.props.index], index: this.props.index })
         this.setState({
-          userMoney: updatedUserMoney
+          userMoneyArray: updatedUserMoneyArray
         })
       }
     }

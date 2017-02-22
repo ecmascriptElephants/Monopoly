@@ -64,12 +64,10 @@ module.exports = (io) => {
     })
 
     socket.on('property update', (data) => {
-      console.log('io.js property update has been invoked! data.properties = ', data.properties, 'data.gameID = ',data.gameID, 'data = ', data)
       socket.broadcast.to(data.gameID).emit('update properties', { properties: data.properties, index: data.index })
     })
 
     socket.on('money update', (data) => {
-      console.log('io.js money update has been invoked! data.properties = ', data.money, 'data.gameID = ',data.gameID, 'data = ', data)
       socket.broadcast.to(data.gameID).emit('update money', { money: data.money, index: data.index })
     })
 

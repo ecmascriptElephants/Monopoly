@@ -6,10 +6,7 @@ import { SET_GAME_ID,
   SET_MESSAGE_ID,
   SET_USERS_PROPERTIES,
   SET_CASH,
-<<<<<<< HEAD
   SET_USERS_MONEY,
-=======
->>>>>>> refactor
   SET_MYINDEX
 } from './actions'
 

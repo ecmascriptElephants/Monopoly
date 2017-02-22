@@ -96,11 +96,10 @@ class DiceRoll extends Component {
         endTurnButtonVisible: false
       })
     } else if (die1 === die2) {
-      this.handleDoubles(die1, die2)
       this.setState({
         diceRollButtonVisible: false
       })
-      this.handleMoveTokenButtonClick(doubleDice, die1, die2)
+      this.handleMoveTokenButtonClick(doubleDice++, die1, die2)
     } else {
       this.setState({
         dice: [die1, die2],
@@ -166,7 +165,7 @@ class DiceRoll extends Component {
           squareTypeComment: 'You landed on an unowned property!',
           endTurnButtonVisible: true
         })
-        if (doubles) {
+        if (doubles >  0 ) {
           this.setState({
             endTurnButtonVisible: false,
             diceRollButtonVisible: true
@@ -251,7 +250,7 @@ class DiceRoll extends Component {
           endTurnButtonVisible: true
         })
       }
-      if (doubles) {
+      if (doubles > 0) {
         this.setState({
           squareTypeComment: 'You landed on Income Tax. Pay $200.',
           userPositions: userPosition,
@@ -276,7 +275,7 @@ class DiceRoll extends Component {
           endTurnButtonVisible: true
         })
       }
-      if (doubles) {
+      if (doubles > 0) {
         this.setState({
           squareTypeComment: 'You landed on Luxury Tax. Pay $100.',
           moveTokenButtonVisible: false,

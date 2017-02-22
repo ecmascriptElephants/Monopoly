@@ -457,12 +457,23 @@ class DiceRoll extends Component {
         endTurnButtonVisible: false,
         squareTypeComment: ''
       })
+
+  handleLandOnOrPassGo (oldCurrentUserPosition, userPosition, jail) {
+    if (!jail) {
+      if (userPosition < oldCurrentUserPosition) {
+        let updatedUserMoneyArray = [...this.state.userMoneyArray]
+        updatedUserMoneyArray[this.props.index] += 200
+        this.props.dispatch(setUserMoney(updatedUserMoneyArray[this.props.index], this.props.index))
+        sock.updateMoney({ gameID: this.props.gameID, money: updatedUserMoneyArray[this.props.index], index: this.props.index })
+        this.setState({
+          userMoneyArray: updatedUserMoneyArray
+        })
+      }
     }
   }
 
   handleCardButtonClick () {
     let doubles = this.state.doubles
->>>>>>> feat: Implement jail function
     this.setState({
       cardButtonVisible: false,
       endTurnButtonVisible: !!!doubles,

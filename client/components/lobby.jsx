@@ -77,8 +77,9 @@ class Lobby extends Component {
     e.preventDefault()
     let room = document.getElementById('room').value
     let keyword = document.getElementById('keyword').value
+    let date = document.getElementById('date').value
     document.getElementById('keyword').value = ''
-    axios.post('/chats', {room: room, keyword: keyword})
+    axios.post('/chats', {room: room, keyword: keyword, date: date})
       .then((res) => {
         this.setState({queryResults: res.data})
       })
@@ -111,14 +112,21 @@ class Lobby extends Component {
         <div>
           <form onSubmit={this.getChats}>
             <input type='text' placeholder='keyword' id='keyword' />
-            Room:
             <select id='room' name='room'>
               <option>All Rooms</option>
               <option value='lobby'>Lobby</option>
               <option value='board'>Board</option>
             </select>
+
+            <select id='date'>
+              <option>This Week</option>
+              <option value='thisWeek'>This Month</option>
+              <option value='thisYear'>This Year</option>
+            </select>
+
             <button type='submit'>Show chats</button>
           </form>
+          <p> You have total of {this.state.queryResults.length} messages </p>
           <ul>
             {queryResults}
           </ul>

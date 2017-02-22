@@ -56,6 +56,8 @@ module.exports = (app, express, passport) => {
   app.post('/chats', (req, res) => {
     let room = req.body.room
     let keyword = req.body.keyword
+    let date = req.body.date
+    console.log('date',date)
     if (room === 'All Rooms') {
       msgHistory.allHistory(keyword, res)
     } else {

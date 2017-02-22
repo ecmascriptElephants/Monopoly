@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Input, Icon, Divider, Form } from 'semantic-ui-react'
 import axios from 'axios'
-
+import Authenticate from '../helper/authenticate'
 class Signup extends Component {
   constructor (props) {
     super(props)
     this.state = {
       email: '',
       password: '',
-      displayName: ''
+      displayName: '',
+      valid: false
     }
     this.onEmailChange = this.onEmailChange.bind(this)
     this.onPasswordChange = this.onPasswordChange.bind(this)
@@ -17,22 +18,26 @@ class Signup extends Component {
   }
 
   onEmailChange (e) {
-    this.setState({email: e.target.value})
+    this.setState({ email: e.target.value })
   }
 
   onPasswordChange (e) {
-    this.setState({password: e.target.value})
+    this.setState({ password: e.target.value })
   }
 
   onDisplayChange (e) {
-    this.setState({displayName: e.target.value})
+    this.setState({ displayName: e.target.value })
   }
 
   handleSignup (e) {
     e.preventDefault()
     axios.post('/signup', this.state)
-    .then((res) => console.log(res.location))
-    .catch((err) => console.error(err))
+      .then((res) => {
+        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('displayname', res.data.user.displayname)
+        localStorage.setItem('id', res.data.user.id)
+      })
+      .catch((err) => console.error(err))
   }
 
   render () {
@@ -56,6 +61,9 @@ class Signup extends Component {
           </Form>
           <Divider horizontal />
         </Segment>
+        {
+          this.state.valid ? Authenticate.isAuth() ? <Redirect to={{ pathname: '/lobby' }} /> : <Redirect to={{ pathname: '/' }} /> : null
+        }
       </Container>
     )
   }

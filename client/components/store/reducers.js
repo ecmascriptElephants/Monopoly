@@ -6,18 +6,9 @@ import {
   SET_INDEX,
   SET_MESSAGE_ID,
   SET_USERS_PROPERTIES,
-<<<<<<< HEAD
-<<<<<<< 8700e978f4ae872b3b5d3495531016809adbbf61
   SET_USERS_MONEY,
+  SET_MYINDEX,
   SET_CASH
-=======
-  SET_CASH,
-  SET_MYINDEX
->>>>>>> set up player money in player card
-=======
-  SET_CASH,
-  SET_MYINDEX
->>>>>>> refactor
 } from './actions'
 const DEFAULT_STATE = {
   gameID: 0,
@@ -131,12 +122,9 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
     case SET_CASH:
       return setUserCash(state, action)
 
-<<<<<<< HEAD
     case SET_USERS_MONEY:
       return setUserMoney(state, action)
 
-=======
->>>>>>> refactor
     case SET_MYINDEX:
       return setPlayerIndex(state, action)
 

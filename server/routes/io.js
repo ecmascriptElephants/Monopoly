@@ -59,8 +59,8 @@ module.exports = (io) => {
       io.emit('receive-message', msgInfo.message)
       let sender = msgInfo.sender
       let message = msgInfo.message
-      console.log('sender', sender)
-      msgHistory.addMessage(sender, message)
+      let room = msgInfo.room
+      msgHistory.addMessage(sender, message, room)
     })
 
     socket.on('property update', (data) => {

@@ -14,6 +14,7 @@ class Lobby extends Component {
       messages: [],
       showToast: false,
       comment: ''
+      queryResults: []
     }
     this.props.dispatch(setUsername(localStorage.displayname))
     this.props.dispatch(setUserID(localStorage.id))
@@ -24,6 +25,7 @@ class Lobby extends Component {
     this.startGame = this.startGame.bind(this)
     this.sendChat = this.sendChat.bind(this)
     this.submitMessage = this.submitMessage.bind(this)
+    this.getChats = this.getChats.bind(this)
   }
   componentDidMount () {
     sock.socket.on('new game', (data) => {
@@ -73,14 +75,31 @@ class Lobby extends Component {
     let message = document.getElementById('message').value
     document.getElementById('message').value = ''
     let sender = this.props.username
-    let msgInfo = { sender: sender, message: message }
+    let room = 'lobby'
+    let msgInfo = {sender: sender, message: message, room: room}
     JSON.stringify(msgInfo)
     sock.socket.emit('new-message', msgInfo)
+  }
+
+  getChats (e) {
+    e.preventDefault()
+    let room = document.getElementById('room').value
+    let keyword = document.getElementById('keyword').value
+    let date = document.getElementById('date').value
+    document.getElementById('keyword').value = ''
+    axios.post('/chats', {room: room, keyword: keyword, date: date})
+      .then((res) => {
+        this.setState({queryResults: res.data})
+      })
+      .catch((err) => console.error(err))
   }
 
   render () {
     let messages = this.state.messages.map((msg) => {
       return <li>{this.props.username}: {msg}</li>
+    })
+    let queryResults = this.state.queryResults.map((result) => {
+      return <li>Sender: {result.sender} Message: {result.message} Room: {result.room}</li>
     })
     return (
       <div>
@@ -98,6 +117,29 @@ class Lobby extends Component {
           <input id='message' type='text' /><button onClick={this.submitMessage}>Send</button>
         </div>
         <Toast message={this.state.comment} show={this.state.showToast} />
+        <br />
+        <div>
+          <form onSubmit={this.getChats}>
+            <input type='text' placeholder='keyword' id='keyword' />
+            <select id='room' name='room'>
+              <option>All Rooms</option>
+              <option value='lobby'>Lobby</option>
+              <option value='board'>Board</option>
+            </select>
+
+            <select id='date'>
+              <option>This Week</option>
+              <option value='thisWeek'>This Month</option>
+              <option value='thisYear'>This Year</option>
+            </select>
+
+            <button type='submit'>Show chats</button>
+          </form>
+          <p> You have total of {this.state.queryResults.length} messages </p>
+          <ul>
+            {queryResults}
+          </ul>
+        </div>
       </div>
     )
   }

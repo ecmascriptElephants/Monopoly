@@ -228,6 +228,7 @@ class DiceRoll extends Component {
             }
           }
         })
+        console.log('!!!!!!!!!!!!! in diceRolljsx line 259 this.state = ', this.state)
         this.setState({
           payRentButtonVisible: true,
           payRentComment: `You landed on ${propName}. Pay ${rentOwed} to ${this.state.userNames[propertyOwner]}.`,

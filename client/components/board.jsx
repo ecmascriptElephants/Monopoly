@@ -195,7 +195,7 @@ class Board extends Component {
             </div>
           </div>
         </div>
-        <Chat name={this.props.username} />
+        <Chat name={this.props.username}  />
       </div>
     )
   }

@@ -1,16 +1,19 @@
 const token = require('../jwt/jwt')
 module.exports = (app, express, passport) => {
   app.post('/signup', passport.authenticate('local-signup', {
-    successRedirect: '/lobby',
     failureRedirect: '/',
     failureFlash: true
-  }))
+  }),
+    (req, res) => {
+      res.send({ token: passport.token, user: passport.user })
+    })
 
-  // app.post('/login', (req, res, next) => {
-  //   console.log('log in a user',req.body)
-  // })
-
-  app.post('/login', passport.authenticate('local-login', { successRedirect: '/auth', failureRedirect: '#/' }))
+  app.post('/login', passport.authenticate('local-login', {
+    failureRedirect: '#/'
+  }),
+    (req, res) => {
+      res.send({ token: passport.token, user: passport.user })
+    })
 
   app.get('/auth/facebook', passport.authenticate('facebook'))
 
@@ -37,7 +40,7 @@ module.exports = (app, express, passport) => {
     res.redirect('/#/auth')
   })
   app.get('/get-info', (req, res) => {
-    res.send({token: passport.token, user: passport.user})
+    res.send({ token: passport.token, user: passport.user })
   })
 
   app.get('/lobby', (req, res) => {

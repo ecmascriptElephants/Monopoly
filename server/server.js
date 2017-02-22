@@ -54,7 +54,6 @@ passport.use('local-signup', new LocalStrategy({
 },
   (req, username, password, done) => {
     process.nextTick(() => {
-      // find a user in the db with given username
       User.findByUsername(username, (result) => {
         if (result[0].length === 0) {
           console.log('can register')
@@ -70,7 +69,7 @@ passport.use('local-signup', new LocalStrategy({
               console.log(hash)
               User.addUser(username, hash, req.body.displayName)
                 .then((data) => {
-                  passport.user = {id: data, displayName: req.body.displayName}
+                  passport.user = {id: data, displayname: req.body.displayName}
                   passport.token = token.tokenGenerator(data)
                   return done(null, username)
                 })

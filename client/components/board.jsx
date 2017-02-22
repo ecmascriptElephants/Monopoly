@@ -6,6 +6,7 @@ import Chat from './chat'
 // import rules from '../static/rules.js'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
+import { setUsername, setGameID, setUserID, setMyIndex } from './store/actionCreators'
 
 class Board extends Component {
   constructor (props) {
@@ -15,14 +16,25 @@ class Board extends Component {
       messages: [],
       playerIndex: -1
     }
-    if (localStorage.getItem('gameID')) {
-      sock.init({ gameID: localStorage.getItem('gameID') })
-    } else {
+    if (this.props.gameID > 0) {
       sock.init({ gameID: this.props.gameID })
+    } else {
+      this.props.dispatch(setUsername(localStorage.displayname))
+      this.props.dispatch(setUserID(localStorage.id))
+      this.props.dispatch(setMyIndex(localStorage.index))
+      this.props.dispatch(setGameID(localStorage.gameID))
+      console.log(this.props.index)
+      sock.refresh({ gameID: localStorage.getItem('gameID'), userID: localStorage.getItem('id') })
     }
+    sock.socket.on('refresh data', (data) => {
+      console.log('i am recieving the updated data')
+      this.setState({ players: data.players })
+    })
     this.dice = this.dice.bind(this)
   }
+
   componentWillReceiveProps (nextProps) {
+    console.log(nextProps)
     this.dice(nextProps.userPosArray[nextProps.index], nextProps.index)
   }
 
@@ -38,8 +50,12 @@ class Board extends Component {
     this.setState({ players })
   }
   componentDidMount () {
+    console.log(this.props.index)
+    sock.socket.on('refresh data', (data) => {
+      console.log('i am recieving the updated data')
+      this.setState({ players: data.players })
+    })
     sock.socket.on('users', (data) => {
-      console.log('board.jsx componentDidMount socket users')
       this.setState({ players: data.players })
     })
     sock.socket.on('update position', (data) => {

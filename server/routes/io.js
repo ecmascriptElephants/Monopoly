@@ -38,7 +38,24 @@ module.exports = (io) => {
     socket.on('load', (data) => {
       let gameObj = game[data.gameID]
       io.emit('users', { players: gameObj['playerInfo'] })
-      socket.broadcast.to(gameObj.playerInfo[0].socketID).emit('yourTurn', {index: gameObj.i, numOfPlayers: gameObj.playerInfo.length})
+      socket.broadcast.to(gameObj.playerInfo[0].socketID).emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.playerInfo.length })
+    })
+
+    socket.on('refresh', (data) => {
+      console.log('recieving refresh')
+      console.log(socket.id)
+      let gameObj = game[data.gameID]
+      let index = -1
+      for (let i = 0; i < gameObj.playerInfo.length; i++) {
+        if (gameObj['playerInfo'][i].userID === data.userID) {
+          index = i
+          gameObj.playerInfo[i].socketID = socket.id
+        }
+      }
+     socket.broadcast.to(socket.id).emit('refresh data', { players: gameObj['playerInfo'] })
+      if (index === gameObj.i) {
+        socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.playerInfo.length })
+      }
     })
 
     socket.on('endTurn', (data) => {
@@ -48,7 +65,7 @@ module.exports = (io) => {
         gameObj.i = 0
       }
       io.in(data.gameID).emit('update position', { pos: data.pos, index: data.index })
-      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn', {index: gameObj.i, numOfPlayers: gameObj.playerInfo.length})
+      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.playerInfo.length })
     })
 
     socket.on('dice rolled', (data) => {
@@ -70,6 +87,5 @@ module.exports = (io) => {
     socket.on('money update', (data) => {
       socket.broadcast.to(data.gameID).emit('update money', { money: data.money, index: data.index })
     })
-
   })
 }

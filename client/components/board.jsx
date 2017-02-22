@@ -12,9 +12,14 @@ class Board extends Component {
     super(props)
     this.state = {
       players: [],
-      messages: []
+      messages: [],
+      playerIndex: -1
     }
-    sock.init({ gameID: this.props.gameID })
+    if (localStorage.getItem('gameID')) {
+      sock.init({ gameID: localStorage.getItem('gameID') })
+    } else {
+      sock.init({ gameID: this.props.gameID })
+    }
     this.dice = this.dice.bind(this)
   }
   componentWillReceiveProps (nextProps) {
@@ -44,7 +49,7 @@ class Board extends Component {
   render () {
     return (
       <div>
-        <Player name={this.props.username} piece='Hat' />
+        <Player name={this.props.username} playerIndex={this.state.playerIndex} piece='Hat' />
         <div className='board parent'>
           {
             this.state.players.map((player, index) => {

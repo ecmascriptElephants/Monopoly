@@ -12,8 +12,7 @@ class DiceRoll extends Component {
     this.handleDiceRollButtonClick = this.handleDiceRollButtonClick.bind(this)
     this.handleMoveTokenButtonClick = this.handleMoveTokenButtonClick.bind(this)
     this.handleEndTurnButtonClick = this.handleEndTurnButtonClick.bind(this)
-    this.handleDoubles = this.handleDoubles.bind(this)
-    this.handleLandOnOrPassGo = this.handleLandOnOrPassGo.bind(this)
+    // this.handleLandOnOrPassGo = this.handleLandOnOrPassGo.bind(this)
     this.increaseFunds = this.increaseFunds.bind(this)
     this.reduceFunds = this.reduceFunds.bind(this)
     this.propertyIsOwned = this.propertyIsOwned.bind(this)
@@ -41,8 +40,6 @@ class DiceRoll extends Component {
       userPropertiesArray: [[], [], [], [], [], [], [], []],
       userMoneyArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500],
       passGoComment: '',
-      chanceComment: '',
-      communityComment: '',
       diceRollButtonVisible: false,
       // needs to be updated gamestate authentication
       endTurnButtonVisible: false,
@@ -51,12 +48,11 @@ class DiceRoll extends Component {
       rentOwed: 0,
       propertyOwner: '',
       payRentComment: '',
-      payRentButtonVisible: false,
-      numOfPlayers: 8
+      payRentButtonVisible: false
     }
   }
-
   componentWillReceiveProps (nextProps) {
+    console.log(nextProps.userPosArray, nextProps.index)
     sock.updatePos({ gameID: nextProps.gameID, pos: nextProps.userPosArray[nextProps.index], index: nextProps.index })
     // sock.updateProps({ gameID: nextProps.gameID, pos: nextProps.userPropertiesArray[nextProps.index], index: nextProps.index })
   }
@@ -86,7 +82,6 @@ class DiceRoll extends Component {
   handleDiceRollButtonClick (doubleDice = 0) {
     const die1 = 1 + Math.floor((6 * Math.random()))
     const die2 = 1 + Math.floor((6 * Math.random()))
-
     if (this.props.userPosArray[this.props.index] + die1 + die2 === 30) {
       this.setState({
         dice: [die1, die2],
@@ -103,9 +98,9 @@ class DiceRoll extends Component {
     } else if (die1 === die2) {
       this.handleDoubles(die1, die2)
       this.setState({
-        dice: [die1, die2],
-        buyPropertyComment: ''
+        diceRollButtonVisible: false
       })
+      this.handleMoveTokenButtonClick(doubleDice, die1, die2)
     } else {
       this.setState({
         dice: [die1, die2],
@@ -119,12 +114,12 @@ class DiceRoll extends Component {
         moveTokenButtonVisible: true,
         endTurnButtonVisible: false
       })
+      this.handleMoveTokenButtonClick(doubleDice, die1, die2)
     }
   }
 
   handleEndTurnButtonClick () {
     this.setState({
-      doublesComment: '',
       passGoComment: '',
       chanceComment: '',
       communityComment: '',
@@ -138,65 +133,10 @@ class DiceRoll extends Component {
     sock.end({ gameID: this.props.gameID, pos: this.props.userPosArray[this.props.index], index: this.props.index })
   }
 
-  handleDoubles (die1, die2) {
-    if (this.state.doubles === 0) {
-      this.setState({
-        dice: this.state.dice,
-        diceSum: die1 + die2,
-        diceSumComment: '',
-        doubles: this.state.doubles += 1,
-        doublesComment: `${this.state.userNames[this.props.index]} rolled doubles! Move ${die1 + die2} spaces on the board, and roll again!`,
-        diceRollButtonVisible: false,
-        moveTokenButtonVisible: true
-      })
-    } else if (this.state.doubles === 1) {
-      this.setState({
-        dice: this.state.dice,
-        diceSum: die1 + die2,
-        diceSumComment: '',
-        doubles: this.state.doubles += 1,
-        doublesComment: `${this.state.userNames[this.props.index]} rolled doubles! Move ${die1 + die2} spaces on the board, and roll again!`,
-        diceRollButtonVisible: false,
-        moveTokenButtonVisible: true
-      })
-    } else if (this.state.doubles === 2) {
-      // let updatedUserPositions = this.props.userPosArray
-      // updatedUserPositions[this.props.index] = 10
-      this.setState({
-        dice: this.state.dice,
-        diceSum: die1 + die2,
-        diceSumComment: '',
-        doubles: 3,
-        doublesComment: `${this.state.userNames[this.props.index]} rolled doubles three times in a row. Go to Jail. :(`,
-        diceRollButtonVisible: false,
-        moveTokenButtonVisible: true
-        // userPositions: updatedUserPositions
-      })
-    }
-  }
-
-  handleMoveTokenButtonClick () {
-    let die1 = this.state.dice[0]
-    let die2 = this.state.dice[1]
-    let doubles = this.state.doubles
-    console.log('diceroll.jsx line 121. Doubles = ', doubles)
-    // console.log('handleMoveTokenButtonClick has been invoked!', this.props.userPosArray[this.props.index], die1 + die2)
-    // store userPositions array
-    let updatedUserPositions = this.props.userPosArray
-    // current player's old position
-    let oldCurrentUserPosition = updatedUserPositions[this.props.index]
-    let jail = this.state.jailPositions[this.props.index]
-    // update current player's position based on diceroll
-    let updatedCurrentUserPosition = (oldCurrentUserPosition + die1 + die2) % 40
-    // let updatedCurrentUserPosition = 2
-    // update the userPositions array with the new current players position
-    updatedUserPositions[this.props.index] = updatedCurrentUserPosition
-    this.props.dispatch(setUserPositions(updatedCurrentUserPosition, this.props.index))
-
-    let squareType = rules.PositionType[updatedCurrentUserPosition]
-    console.log('square type = ', squareType)
-
-    // if the user lands on Chance space
+  handleMoveTokenButtonClick (doubles, die1, die2) {
+    let userPosition = (this.props.userPosArray[this.props.index] + die1 + die2) % 40
+    this.props.dispatch(setUserPositions(userPosition, this.props.index))
+    let squareType = rules.PositionType[userPosition]
     if (squareType === 'CHANCE') {
       this.setState({
         cardButtonVisible: true,
@@ -205,7 +145,6 @@ class DiceRoll extends Component {
         card: false
       })
     } else if (squareType === 'COMMUNITY_CHEST') {
-      // if the user lands on a Community Chest space
       this.setState({
         cardButtonVisible: true,
         moveTokenButtonVisible: false,
@@ -213,26 +152,14 @@ class DiceRoll extends Component {
         card: true
       })
     } else if (squareType === 'GO_TO_JAIL' || doubles === 3) {
-      // if the user lands on Go-to-jail
-      updatedCurrentUserPosition = 10
-      updatedUserPositions[this.props.index] = updatedCurrentUserPosition
-      let updatedJailPositions = this.state.jailPositions
-      jail = 1
-      updatedJailPositions[this.props.index] = 1
+      this.props.dispatch(setUserPositions(10, this.props.index))
       this.setState({
-        userPositions: updatedUserPositions,
-        jailPositions: updatedJailPositions,
-        doublesComment: this.state.doublesComment || 'You landed on Go-To-Jail. Go To Jail. Go' +
-        ' Directly To Jail. Do' +
-        ' Not Pass' +
-        ' Go. Do Not Collect $200.',
         moveTokenButtonVisible: false,
         endTurnButtonVisible: true
       })
-      this.props.dispatch(setUserPositions(updatedCurrentUserPosition, this.props.index))
+      this.props.dispatch(setUserPositions(userPosition, this.props.index))
     } else if (squareType === 'PROPERTY') {
-      if (this.propertyIsOwned(updatedCurrentUserPosition) === false) {
-        console.log('dice_roll.jsx line 177: The User landed on an unowned property')
+      if (this.propertyIsOwned(userPosition) === false) {
         this.setState({
           buyPropertyButtonVisible: true,
           moveTokenButtonVisible: false,
@@ -247,11 +174,11 @@ class DiceRoll extends Component {
         }
       } else {
         // propertyIsOwned returns the ownerNumber
-        let propertyOwner = this.propertyIsOwned(updatedCurrentUserPosition)
+        let propertyOwner = this.propertyIsOwned(userPosition)
         let rentOwed = 0
         let propName = ''
         this.state.userPropertiesArray[propertyOwner].forEach(prop => {
-          if (prop.Position === updatedCurrentUserPosition) {
+          if (prop.Position === userPosition) {
             propName = prop.PropertyObj.NAME
             rentOwed = prop.PropertyObj.RENT[prop.Houses]
           }
@@ -318,7 +245,7 @@ class DiceRoll extends Component {
       if (!doubles) {
         this.setState({
           squareTypeComment: 'You landed on Income Tax. Pay $200.',
-          userPositions: updatedUserPositions,
+          userPositions: userPosition,
           userMoneyArray: updatedUserMoneyArray,
           moveTokenButtonVisible: false,
           endTurnButtonVisible: true
@@ -327,7 +254,7 @@ class DiceRoll extends Component {
       if (doubles) {
         this.setState({
           squareTypeComment: 'You landed on Income Tax. Pay $200.',
-          userPositions: updatedUserPositions,
+          userPositions: userPosition,
           userMoneyArray: updatedUserMoneyArray,
           moveTokenButtonVisible: false,
           endTurnButtonVisible: false,
@@ -345,7 +272,7 @@ class DiceRoll extends Component {
           squareTypeComment: 'You landed on Luxury Tax. Pay $100.',
           userMoneyArray: updatedUserMoneyArray,
           moveTokenButtonVisible: false,
-          userPositions: updatedUserPositions,
+          userPositions: userPosition,
           endTurnButtonVisible: true
         })
       }
@@ -355,23 +282,18 @@ class DiceRoll extends Component {
           moveTokenButtonVisible: false,
           userMoneyArray: updatedUserMoneyArray,
           endTurnButtonVisible: false,
-          userPositions: updatedUserPositions,
+          userPositions: userPosition,
           diceRollButtonVisible: true
         })
       }
     }
-    this.handleLandOnOrPassGo(oldCurrentUserPosition, updatedCurrentUserPosition, jail)
+    // this.handleLandOnOrPassGo(oldCurrentUserPosition, userPosition, jail)
   }
 
-  handleAddDiceRollToUserPosition (die1, die2, doubles) {
-    let updatedPosition = (this.props.userPosArray[this.props.index] + die1 + die2) % 40
-    this.props.dispatch(setUserPositions(updatedPosition, this.props.index))
-  }
-
-  handleLandOnOrPassGo (oldCurrentUserPosition, updatedCurrentUserPosition, jail) {
+  handleLandOnOrPassGo (oldCurrentUserPosition, userPosition, jail) {
     console.log('handleLandOnOrPassGo')
     if (!jail) {
-      if (updatedCurrentUserPosition < oldCurrentUserPosition) {
+      if (userPosition < oldCurrentUserPosition) {
         let updatedUserMoneyArray = [...this.state.userMoneyArray]
         updatedUserMoneyArray[this.props.index] += 200
         this.props.dispatch(setUserMoney(updatedUserMoneyArray[this.props.index], this.props.index))
@@ -382,6 +304,7 @@ class DiceRoll extends Component {
       }
     }
   }
+
 
   changeButton () {
     this.setState({
@@ -440,7 +363,6 @@ class DiceRoll extends Component {
 
       this.props.dispatch(setUserMoney(updatedUserMoney[propertyOwner], propertyOwner))
       sock.updateMoney({ gameID: this.props.gameID, money: updatedUserMoney[propertyOwner], index: propertyOwner })
-
 
       if (!doubles) {
         this.setState({
@@ -617,19 +539,6 @@ class DiceRoll extends Component {
             <div className='move-token-btn_div'>
               {this.state.moveTokenButtonVisible
                 ? <div>
-                  <div className='dice'>
-                    <div className='die1'>
-                      {`die1: ${this.state.dice[0]}`}
-                    </div>
-                    <div className='die2'>
-                      {`die2: ${this.state.dice[1]}`}
-                    </div>
-                    {/* <div>{this.state.diceSum}</div> */}
-                    <div>
-                      {this.state.diceSumComment}
-                    </div>
-                  </div>
-                  <div className='doubles-comment_div'>{this.state.doublesComment}</div>
                   <Button secondary fluid onClick={() => { this.handleMoveTokenButtonClick() }}>  Move Your Token! </Button>
                 </div> : null
               }
@@ -706,7 +615,8 @@ const mapStateToProps = (state) => {
     userPosArray: state.userPosArray,
     userPropertiesArray: state.userPropertiesArray,
     userMoneyArray: state.userMoneyArray,
-    index: state.index
+    index: state.index,
+    userCashArray: state.userCashArray
   }
 }
 DiceRoll.propTypes = {
@@ -717,8 +627,9 @@ DiceRoll.propTypes = {
   userID: React.PropTypes.string.isRequired,
   userPosArray: React.PropTypes.array.isRequired,
   userMoneyArray: React.PropTypes.array.isRequired,
+  index: React.PropTypes.number.isRequired,
   userPropertiesArray: React.PropTypes.array.isRequired,
-  index: React.PropTypes.number.isRequired
+  userCashArray: React.PropTypes.array.isRequired
 }
 
 export default connect(mapStateToProps)(DiceRoll)

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import sock from '../helper/socket'
-import axios from 'axios'
 import { connect } from 'react-redux'
-import { setUsername, setGameID, setUserID } from './store/actionCreators'
+import { setUsername, setGameID, setUserID, setMyIndex } from './store/actionCreators'
+import Toast from './toast'
 class Lobby extends Component {
   constructor (props) {
     super(props)
@@ -11,14 +11,13 @@ class Lobby extends Component {
       button: false,
       join: false,
       start: false,
-      messages: []
+      messages: [],
+      showToast: false,
+      comment: ''
     }
-    axios.get('/user')
-      .then((res) => {
-        this.props.dispatch(setUsername(res.data.displayName))
-        this.props.dispatch(setUserID(res.data.id))
-        sock.userJoined(res.data)
-      })
+    this.props.dispatch(setUsername(localStorage.displayname))
+    this.props.dispatch(setUserID(localStorage.id))
+    sock.userJoined({ id: localStorage.id, displayName: localStorage.displayname })
 
     this.joinGame = this.joinGame.bind(this)
     this.newGame = this.newGame.bind(this)
@@ -31,8 +30,17 @@ class Lobby extends Component {
       this.setState({ join: true })
       this.props.dispatch(setGameID(data.gameID))
     })
+    sock.socket.on('your index', (data) => {
+      this.props.dispatch(setMyIndex(data))
+    })
     sock.socket.on('player joined', (data) => {
-      this.setState({ join: false, start: true })
+      this.setState({
+        join: false,
+        start: true,
+        showToast: true,
+        comment: 'Player joined'
+      })
+      localStorage.setItem('gameID', data.gameID)
       this.props.dispatch(setGameID(data.gameID))
     })
     sock.socket.on('send message', (data) => {
@@ -41,7 +49,7 @@ class Lobby extends Component {
     sock.socket.on('receive-message', (msg) => {
       let messages = this.state.messages
       messages.push(msg)
-      this.setState({messages: messages})
+      this.setState({ messages: messages })
       // console.log('messages', this.state.messages)
     })
   }
@@ -58,14 +66,14 @@ class Lobby extends Component {
   }
 
   sendChat () {
-    sock.sendChat({senderID: this.props.senderID, messageID: this.props.messageID})
+    sock.sendChat({ senderID: this.props.senderID, messageID: this.props.messageID })
   }
 
   submitMessage () {
     let message = document.getElementById('message').value
     document.getElementById('message').value = ''
     let sender = this.props.username
-    let msgInfo = {sender: sender, message: message}
+    let msgInfo = { sender: sender, message: message }
     JSON.stringify(msgInfo)
     sock.socket.emit('new-message', msgInfo)
   }
@@ -89,7 +97,7 @@ class Lobby extends Component {
           </ul>
           <input id='message' type='text' /><button onClick={this.submitMessage}>Send</button>
         </div>
-
+        <Toast message={this.state.comment} show={this.state.showToast} />
       </div>
     )
   }

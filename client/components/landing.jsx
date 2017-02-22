@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Input, Icon, Divider, Form } from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import axios from 'axios'
+import 'whatwg-fetch'
 class Land extends Component {
   constructor (props) {
     super(props)
@@ -24,6 +25,7 @@ class Land extends Component {
 
   handleLogin (e) {
     e.preventDefault()
+    console.log('here')
     axios.post('/login', this.state)
     .then((res) => console.log(res.data))
     .catch((err) => console.error(err))

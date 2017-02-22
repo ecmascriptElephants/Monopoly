@@ -1,9 +1,8 @@
-const userController = require('../controllers/userController')
-
+const token = require('../jwt/jwt')
 module.exports = (app, express, passport) => {
   app.post('/signup', passport.authenticate('local-signup', {
     successRedirect: '/lobby',
-    failureRedirect: '/signup',
+    failureRedirect: '/',
     failureFlash: true
   }))
 
@@ -11,26 +10,17 @@ module.exports = (app, express, passport) => {
   //   console.log('log in a user',req.body)
   // })
 
-  app.post('/login', (req, res, done) => {
-    passport.authenticate('local-login', (err, user, info) => {
-      if (err) return done(err)
-      if (!user) return res.redirect('/')
-      req.login(user, () => {
-        return res.redirect('/#/lobby')
-      })
-    })(req, res, done)
-  })
+  app.post('/login', passport.authenticate('local-login', { successRedirect: '/auth', failureRedirect: '#/' }))
 
-  app.get('/auth/facebook', passport.authenticate('facebook'), (req, res) => {
-    console.log('should be in here')
-  })
+  app.get('/auth/facebook', passport.authenticate('facebook'))
 
   app.get('/auth/facebook/callback', passport.authenticate('facebook', {
     authType: 'rerequest',
     failureRedirect: '/login'
   }), (req, res) => {
     passport.user = req.user
-    res.redirect('/lobby')
+    passport.token = token.tokenGenerator(req.user.id)
+    res.redirect('/#/auth')
   })
 
   app.get('/logout', (req, res) => {
@@ -39,28 +29,27 @@ module.exports = (app, express, passport) => {
   })
 
   app.get('/', (req, res) => {
-    console.log('here in /')
+    console.log('here')
     res.redirect('/#/')
   })
 
-  // const ensureAuthenticated = (req, res, next) => {
-  //   if (req.isAuthenticated()) return next()
-  //   res.redirect('/login')
-  // }
+  app.get('/auth', (req, res) => {
+    res.redirect('/#/auth')
+  })
+  app.get('/get-info', (req, res) => {
+    res.send({token: passport.token, user: passport.user})
+  })
 
   app.get('/lobby', (req, res) => {
-    console.log('here in lobby')
-    res.redirect('/#/lobby')
+    res.redirect('#/lobby')
   })
   app.get('/login', (req, res) => {
-    console.log('here in login')
     res.redirect('/#/')
   })
   app.get('/signup', (req, res) => {
     res.redirect('/#/signup')
   })
   app.get('/user', (req, res) => {
-    console.log(passport.user)
     res.send(passport.user)
   })
 }

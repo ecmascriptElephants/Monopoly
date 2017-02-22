@@ -39,6 +39,7 @@ module.exports = (app, express, passport) => {
   app.get('/auth', (req, res) => {
     res.redirect('/#/auth')
   })
+
   app.get('/get-info', (req, res) => {
     res.send({ token: passport.token, user: passport.user })
   })
@@ -46,12 +47,7 @@ module.exports = (app, express, passport) => {
   app.get('/lobby', (req, res) => {
     res.redirect('#/lobby')
   })
-  app.get('/login', (req, res) => {
-    res.redirect('/#/')
-  })
-  app.get('/signup', (req, res) => {
-    res.redirect('/#/signup')
-  })
+
   app.get('/user', (req, res) => {
     res.send(passport.user)
   })

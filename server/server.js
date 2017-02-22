@@ -71,6 +71,7 @@ passport.use('local-signup', new LocalStrategy({
               User.addUser(username, hash, req.body.displayName)
                 .then((data) => {
                   passport.user = {id: data, displayName: req.body.displayName}
+                  passport.token = token.tokenGenerator(data)
                   return done(null, username)
                 })
             })
@@ -101,8 +102,8 @@ passport.use('local-login', new LocalStrategy({
         bcrypt.compare(password, result[0].password, (err, resp) => {
           if (err) console.error(err)
           if (resp) {
-            passport.user = {id: result[0].id, displaname: result[0].displayName}
-            passport.token = token.tokenGenerator(req.user.id)
+            passport.user = {id: result[0].id, displayname: result[0].displayname}
+            passport.token = token.tokenGenerator(result[0].id)
             return done(null, result[0])
           } else {
             console.log('wrong password')

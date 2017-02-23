@@ -10,7 +10,8 @@ import {
   SET_MYINDEX,
   SET_CASH,
   SET_PLAYERS,
-  SET_PLAYER_PROPS
+  SET_PLAYER_PROPS,
+  SET_DEFAULT_STATE
 } from './actions'
 const DEFAULT_STATE = {
   gameID: 0,
@@ -118,6 +119,12 @@ const setPlayerProps = (state, action) => {
   return newState
 }
 
+const setDefault = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, DEFAULT_STATE)
+  return newState
+}
+
 const rootReducer = (state = DEFAULT_STATE, action) => {
   switch (action.type) {
     case SET_GAME_ID:
@@ -155,7 +162,8 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_PLAYER_PROPS:
       return setPlayerProps(state, action)
-
+    case SET_DEFAULT_STATE:
+      return setDefault(state, action)
     default:
       return state
   }

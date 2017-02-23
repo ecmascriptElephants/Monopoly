@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
-import { setUsername, setGameID, setUserID, setMyIndex } from './store/actionCreators'
+import { setUsername, setGameID, setUserID, setMyIndex, setDefaultState } from './store/actionCreators'
 import Toast from './toast'
 class Lobby extends Component {
   constructor (props) {
@@ -16,6 +16,7 @@ class Lobby extends Component {
       comment: '',
       queryResults: []
     }
+    this.props.dispatch(setDefaultState())
     this.props.dispatch(setUsername(localStorage.displayname))
     this.props.dispatch(setUserID(localStorage.id))
     sock.userJoined({ id: localStorage.id, displayName: localStorage.displayname })

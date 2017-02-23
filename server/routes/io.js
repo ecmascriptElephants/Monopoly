@@ -91,7 +91,10 @@ module.exports = (io) => {
     })
 
     socket.on('update database', (data) => {
-      console.log(data)
+      board.updateGame(data)
+      .then(() => {
+        console.log('data updated')
+      })
     })
     socket.on('property update', (data) => {
       socket.broadcast.to(data.gameID).emit('update properties', { properties: data.properties, index: data.index })

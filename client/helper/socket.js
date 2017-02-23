@@ -8,6 +8,9 @@ module.exports = {
   init: (data) => {
     socket.emit('load', data)
   },
+  refresh: (data) => {
+    socket.emit('refresh', data)
+  },
   userJoined: (userInfo) => {
     socket.emit('user joined', userInfo)
   },

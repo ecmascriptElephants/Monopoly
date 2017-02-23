@@ -58,7 +58,7 @@ module.exports = (io) => {
     })
 
     socket.on('load', (data) => {
-      console.log(data.gameID)
+      console.log('in routes/io.js socket.on "load"; data = ', data)
       let gameObj = game[data.gameID]
       let refresh = false
       if (gameObj.playerInfo[data.index].socketID !== socket.id) {

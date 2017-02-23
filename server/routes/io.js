@@ -42,22 +42,19 @@ module.exports = (io) => {
     })
 
     socket.on('load', (data) => {
-      console.log('in load now')
       let gameObj = game[data.gameID]
-      let index = -1
-      for (let i = 0; i < gameObj.playerInfo.length; i++) {
-        if (gameObj['playerInfo'][i].userID === data.userID) {
-          index = i
-          gameObj.playerInfo[i].socketID = socket.id
-        }
+      let refresh = false
+      if (gameObj.playerInfo[data.index].socketID !== socket.id) {
+        refresh = true
+        gameObj.playerInfo[data.index].socketID = socket.id
       }
-      if (index === -1) {
+      if (!refresh) {
         io.emit('users', { players: gameObj['playerInfo'] })
         socket.broadcast.to(gameObj.playerInfo[0].socketID).emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.playerInfo.length })
       } else {
-        if (index === gameObj.i) {
-          console.log('here', socket.id)
-          socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.playerInfo.length })
+
+        if (data.index === gameObj.i) {
+          socket.emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.playerInfo.length })
         }
       }
     })

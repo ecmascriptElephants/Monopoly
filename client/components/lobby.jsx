@@ -26,6 +26,7 @@ class Lobby extends Component {
     this.submitMessage = this.submitMessage.bind(this)
   }
   componentDidMount () {
+    localStorage.removeItem('state')
     sock.socket.on('new game', (data) => {
       this.setState({ join: true })
       localStorage.setItem('gameID', data.gameID)

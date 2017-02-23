@@ -16,7 +16,7 @@ class Board extends Component {
       playerIndex: -1,
       valid: false
     }
-    sock.init({ gameID: this.props.gameID })
+    sock.init({ gameID: this.props.gameID, index: this.props.playerIndex })
     this.dice = this.dice.bind(this)
   }
 
@@ -220,7 +220,8 @@ const mapStateToProps = (state) => {
     userPosArray: state.userPosArray,
     // userPropertiesArray: state.userPropertiesArray,
     index: state.index,
-    players: state.players
+    players: state.players,
+    playerIndex: state.playerIndex
   }
 }
 
@@ -232,7 +233,8 @@ Board.propTypes = {
   userPosArray: React.PropTypes.array.isRequired,
   // userPropertiesArray: React.PropTypes.array.isRequired,
   index: React.PropTypes.number.isRequired,
-  players: React.PropTypes.array.isRequired
+  players: React.PropTypes.array.isRequired,
+  playerIndex: React.PropTypes.number.isRequired
 }
 
 export default connect(mapStateToProps)(Board)

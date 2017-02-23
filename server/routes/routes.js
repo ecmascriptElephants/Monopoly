@@ -33,6 +33,7 @@ module.exports = (app, express, passport) => {
   })
 
   app.get('/', (req, res) => {
+    console.log('here')
     res.redirect('/#/')
   })
 
@@ -40,22 +41,21 @@ module.exports = (app, express, passport) => {
     res.redirect('/#/auth')
   })
 
+
   app.get('/get-info', (req, res) => {
     res.send({ token: passport.token, user: passport.user })
+
+
+  app.get('/get-info', (req, res) => {
+    res.send({ token: passport.token, user: passport.user })
+  })
+
+  app.get('/lobby', (req, res) => {
+    res.redirect('#/lobby')
   })
 
   app.get('/user', (req, res) => {
     res.send(passport.user)
   })
-
-  app.post('/chats', (req, res) => {
-    let room = req.body.room
-    let keyword = req.body.keyword
-    let date = req.body.date
-    if (room === 'All Rooms') {
-      msgHistory.allHistory(keyword, res)
-    } else {
-      msgHistory.historyByQuery(room, keyword, res)
-    }
-  })
 }
+

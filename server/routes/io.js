@@ -26,15 +26,16 @@ module.exports = (io) => {
       var state = { players: 1, i: 0, playerInfo: [data] }
       board.addGame(JSON.stringify(state))
       .then((result) => {
-        console.log(result)
-        game[result] = state
-        socket.broadcast.emit('new game', { result, socketID: socket.id })
-        io.to(socket.id).emit('your index', game[result].players - 1)
+        const gameID = result[0]
+        game[gameID] = state
+        socket.broadcast.emit('new game', { gameID, socketID: socket.id })
+        io.to(socket.id).emit('your index', game[gameID].players - 1)
         socket.join(result.toString())
       })
     })
 
     socket.on('join', (data) => {
+      console.log(data.gameID)
       let gameObj = game[data.gameID]
       gameObj.players++
       data.socketID = socket.id
@@ -64,6 +65,7 @@ module.exports = (io) => {
           socket.emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.playerInfo.length })
         }
       }
+      //TODO Randomize users
     })
 
     socket.on('endTurn', (data) => {
@@ -88,6 +90,9 @@ module.exports = (io) => {
       msgHistory.addMessage(sender, message, room)
     })
 
+    socket.on('update database', (data) => {
+      console.log(data)
+    })
     socket.on('property update', (data) => {
       socket.broadcast.to(data.gameID).emit('update properties', { properties: data.properties, index: data.index })
     })

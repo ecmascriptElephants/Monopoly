@@ -6,7 +6,7 @@ import Chat from './chat'
 // import rules from '../static/rules.js'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
-import { setUserPositions, setPlayers, setPlayerProps } from './store/actionCreators'
+import { setUserPositions, setPlayers, setPlayerProps, setIndex } from './store/actionCreators'
 
 class Board extends Component {
   constructor (props) {
@@ -50,12 +50,11 @@ class Board extends Component {
 
   componentDidMount () {
     sock.socket.on('users', (data) => {
-      console.log(data.players)
       this.props.dispatch(setPlayers(data.players))
-      console.log(this.props.players)
     })
     sock.socket.on('update position', (data) => {
       this.dice(data.pos, data.index, false)
+      this.props.dispatch(setIndex(data.index))
     })
   }
   render () {

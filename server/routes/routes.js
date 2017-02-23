@@ -40,6 +40,11 @@ module.exports = (app, express, passport) => {
     res.redirect('/#/auth')
   })
 
+
+  app.get('/get-info', (req, res) => {
+    res.send({ token: passport.token, user: passport.user })
+
+
   app.get('/get-info', (req, res) => {
     res.send({ token: passport.token, user: passport.user })
   })
@@ -59,3 +64,4 @@ module.exports = (app, express, passport) => {
     }
   })
 }
+

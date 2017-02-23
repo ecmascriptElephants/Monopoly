@@ -8,7 +8,8 @@ import { SET_GAME_ID,
   SET_CASH,
   SET_USERS_MONEY,
   SET_MYINDEX,
-  SET_STATE
+  SET_PLAYERS,
+  SET_PLAYER_PROPS
 } from './actions'
 
 export function setGameID (id) {
@@ -51,6 +52,10 @@ export function setUserMoney (userMoney, index) {
   return {type: SET_USERS_MONEY, userMoney, index}
 }
 
-export function setStoreState (localState) {
-  return {type: SET_STATE, localState}
+export function setPlayers (playersArray) {
+  return {type: SET_PLAYERS, playersArray}
+}
+
+export function setPlayerProps (playerProps, index) {
+  return {type: SET_PLAYER_PROPS, playerProps, index}
 }

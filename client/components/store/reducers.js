@@ -9,7 +9,8 @@ import {
   SET_USERS_MONEY,
   SET_MYINDEX,
   SET_CASH,
-  SET_STATE
+  SET_PLAYERS,
+  SET_PLAYER_PROPS
 } from './actions'
 const DEFAULT_STATE = {
   gameID: 0,
@@ -19,6 +20,7 @@ const DEFAULT_STATE = {
   playerIndex: -1,
   index: -1,
   messageID: 0,
+  players: [],
   userPropertyArray: [[], [], [], [], [], [], [], []],
   userCashArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500],
   userMoneyArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500]
@@ -98,9 +100,19 @@ const setUserMoney = (state, action) => {
   return newState
 }
 
-const setStore = (state, action) => {
+const setPlayersArray = (state, action) => {
   let newState = {}
-  Object.assign(newState, state, action.localState)
+  let newArray = [...action.playersArray]
+  Object.assign(newState, state, { players: newArray })
+  return newState
+}
+
+const setPlayerProps = (state, action) => {
+  let newArr = [...state.playersArray.slice(0, action.index),
+    action.userMoney,
+    ...state.playersArray.slice(action.index + 1)]
+  const newState = {}
+  Object.assign(newState, state, { playersArray: newArr })
   return newState
 }
 
@@ -136,8 +148,11 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
     case SET_MYINDEX:
       return setPlayerIndex(state, action)
 
-    case SET_STATE:
-      return setStore(state, action)
+    case SET_PLAYERS:
+      return setPlayersArray(state, action)
+
+    case SET_PLAYER_PROPS:
+      return setPlayerProps(state, action)
 
     default:
       return state

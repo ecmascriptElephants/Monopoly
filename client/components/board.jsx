@@ -6,18 +6,17 @@ import Chat from './chat'
 // import rules from '../static/rules.js'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
-import { setUserPositions } from './store/actionCreators'
+import { setUserPositions, setPlayers } from './store/actionCreators'
 
 class Board extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      players: [],
       messages: [],
       playerIndex: -1,
       valid: false
     }
-
+    sock.init({ gameID: this.props.gameID })
     this.dice = this.dice.bind(this)
   }
 
@@ -50,9 +49,10 @@ class Board extends Component {
   }
 
   componentDidMount () {
-    sock.init({ gameID: Number(localStorage.gameID) })
     sock.socket.on('users', (data) => {
-      this.setState({ players: data.players })
+      console.log(data.players)
+      this.props.dispatch(setPlayers(data.players))
+      console.log(this.props.players)
     })
     sock.socket.on('update position', (data) => {
       this.dice(data.pos, data.index, false)
@@ -64,7 +64,7 @@ class Board extends Component {
         <Player name={this.props.username} dice={this.dice} piece='Hat' />
         <div className='board parent'>
           {
-            this.state.players.map((player, index) => {
+            this.props.players.map((player, index) => {
               if (index <= 3) {
                 return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0] - (index + index)}%`} userNumber={index} key={index} />
               } else {
@@ -219,7 +219,8 @@ const mapStateToProps = (state) => {
     userID: state.userID,
     userPosArray: state.userPosArray,
     // userPropertiesArray: state.userPropertiesArray,
-    index: state.index
+    index: state.index,
+    players: state.players
   }
 }
 
@@ -230,7 +231,8 @@ Board.propTypes = {
   userID: React.PropTypes.string.isRequired,
   userPosArray: React.PropTypes.array.isRequired,
   // userPropertiesArray: React.PropTypes.array.isRequired,
-  index: React.PropTypes.number.isRequired
+  index: React.PropTypes.number.isRequired,
+  players: React.PropTypes.array.isRequired
 }
 
 export default connect(mapStateToProps)(Board)

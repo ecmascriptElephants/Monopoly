@@ -6,7 +6,7 @@ import Chat from './chat'
 // import rules from '../static/rules.js'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
-import { setUserPositions, setStoreState } from './store/actionCreators'
+import { setUserPositions } from './store/actionCreators'
 
 class Board extends Component {
   constructor (props) {
@@ -44,9 +44,9 @@ class Board extends Component {
     this.setState({ players })
   }
   componentWillMount () {
-    if (localStorage.gameState) {
-      this.props.dispatch(setStoreState(JSON.parse(localStorage.gameState)))
-    }
+    // if (localStorage.gameState) {
+    //   this.props.dispatch(setStoreState(JSON.parse(localStorage.gameState)))
+    // }
   }
 
   componentDidMount () {

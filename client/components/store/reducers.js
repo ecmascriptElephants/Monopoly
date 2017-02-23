@@ -27,32 +27,24 @@ const DEFAULT_STATE = {
 const setGameID = (state, action) => {
   const newState = {}
   Object.assign(newState, state, { gameID: action.id })
-  const gstate = JSON.stringify(newState)
-  localStorage.setItem('gameState', gstate)
   return newState
 }
 
 const setUsername = (state, action) => {
   const newState = {}
   Object.assign(newState, state, { username: action.username })
-  const gstate = JSON.stringify(newState)
-  localStorage.setItem('gameState', gstate)
   return newState
 }
 
 const setUserID = (state, action) => {
   const newState = {}
   Object.assign(newState, state, { userID: action.userID })
-  const gstate = JSON.stringify(newState)
-  localStorage.setItem('gameState', gstate)
   return newState
 }
 
 const setIndex = (state, action) => {
   const newState = {}
   Object.assign(newState, state, { index: action.index })
-  const gstate = JSON.stringify(newState)
-  localStorage.setItem('gameState', gstate)
   return newState
 }
 
@@ -60,8 +52,6 @@ const setPlayerIndex = (state, action) => {
   console.log('setting up player index in redux')
   const newState = {}
   Object.assign(newState, state, { playerIndex: action.index })
-  const gstate = JSON.stringify(newState)
-  localStorage.setItem('gameState', gstate)
   return newState
 }
 
@@ -71,16 +61,12 @@ const setUserPosition = (state, action) => {
     ...state.userPosArray.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { userPosArray: newArr })
-  const gstate = JSON.stringify(newState)
-  localStorage.setItem('gameState', gstate)
   return newState
 }
 
 const setMessageID = (state, action) => {
   const newState = {}
   Object.assign(newState, state, { messageID: action.messageID })
-  const gstate = JSON.stringify(newState)
-  localStorage.setItem('gameState', gstate)
   return newState
 }
 
@@ -90,8 +76,6 @@ const setUserProperties = (state, action) => {
     ...state.userPropertyArray.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { userPropertyArray: newArr })
-  const gstate = JSON.stringify(newState)
-  localStorage.setItem('gameState', gstate)
   return newState
 }
 
@@ -102,8 +86,6 @@ const setUserCash = (state, action) => {
     ...state.userCashArray.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { userCashArray: newArr })
-  const gstate = JSON.stringify(newState)
-  localStorage.setItem('gameState', gstate)
   return newState
 }
 
@@ -113,8 +95,6 @@ const setUserMoney = (state, action) => {
     ...state.userMoneyArray.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { userMoneyArray: newArr })
-  const gstate = JSON.stringify(newState)
-  localStorage.setItem('gameState', gstate)
   return newState
 }
 

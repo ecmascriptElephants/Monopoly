@@ -6,7 +6,7 @@ import Chat from './chat'
 // import rules from '../static/rules.js'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
-import { setUserPositions, setPlayers } from './store/actionCreators'
+import { setUserPositions, setPlayers, setPlayerProps } from './store/actionCreators'
 
 class Board extends Component {
   constructor (props) {
@@ -32,15 +32,15 @@ class Board extends Component {
       [7, 17.5], [7, 25.5], [7, 34], [7, 42], [7, 50], [7, 58.5], [7, 66.5], [7, 75], [7, 83],
       [7, 97], [19, 97], [27.1, 97], [35.4, 97], [43.5, 97], [51.8, 97], [60, 97], [68.2, 97], [76.4, 97], [84.5, 97]
     ]
-    let players = [...this.state.players]
-    players[index].userPosition = location[value]
+
+    let playerProps = location[value]
     if (index >= 0) {
       this.props.dispatch(setUserPositions(value, index))
     }
     if (insideJob) {
       sock.updatePos({ gameID: this.props.gameID, pos: value, index: index })
     }
-    this.setState({ players })
+    this.props.dispatch(setPlayerProps(playerProps, index))
   }
   componentWillMount () {
     // if (localStorage.gameState) {

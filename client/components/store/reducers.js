@@ -108,11 +108,13 @@ const setPlayersArray = (state, action) => {
 }
 
 const setPlayerProps = (state, action) => {
-  let newArr = [...state.playersArray.slice(0, action.index),
-    action.userMoney,
-    ...state.playersArray.slice(action.index + 1)]
+  let player = state.players[action.index]
+  player.userPosition = action.playerProps
+  let newArr = [...state.players.slice(0, action.index),
+    player,
+    ...state.players.slice(action.index + 1)]
   const newState = {}
-  Object.assign(newState, state, { playersArray: newArr })
+  Object.assign(newState, state, { players: newArr })
   return newState
 }
 

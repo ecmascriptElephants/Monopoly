@@ -9,7 +9,8 @@ import { SET_GAME_ID,
   SET_USERS_MONEY,
   SET_MYINDEX,
   SET_PLAYERS,
-  SET_PLAYER_PROPS
+  SET_PLAYER_PROPS,
+  SET_DEFAULT_STATE
 } from './actions'
 
 export function setGameID (id) {
@@ -58,4 +59,8 @@ export function setPlayers (playersArray) {
 
 export function setPlayerProps (playerProps, index) {
   return {type: SET_PLAYER_PROPS, playerProps, index}
+}
+
+export function setDefaultState () {
+  return {type: SET_DEFAULT_STATE}
 }

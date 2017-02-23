@@ -28,8 +28,10 @@ class Lobby extends Component {
     this.getChats = this.getChats.bind(this)
   }
   componentDidMount () {
+    localStorage.removeItem('state')
     sock.socket.on('new game', (data) => {
       this.setState({ join: true })
+      localStorage.setItem('gameID', data.gameID)
       this.props.dispatch(setGameID(data.gameID))
     })
     sock.socket.on('your index', (data) => {
@@ -42,7 +44,6 @@ class Lobby extends Component {
         showToast: true,
         comment: 'Player joined'
       })
-      localStorage.setItem('gameID', data.gameID)
       this.props.dispatch(setGameID(data.gameID))
     })
     sock.socket.on('send message', (data) => {

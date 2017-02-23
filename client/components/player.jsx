@@ -30,7 +30,6 @@ class Player extends Component {
   }
 
   componentWillReceiveProps (prev) {
-    console.log(this.state.playerIndex)
     this.setState({name: prev.name})
   }
 
@@ -154,7 +153,7 @@ class Player extends Component {
           <Message>
             {this.props.userCashArray[this.props.playerIndex]}
           </Message>
-          <DiceRoll dice={this.dice} />
+          <DiceRoll dice={this.props.dice} />
         </Segment>
       </Container>
     )
@@ -169,7 +168,7 @@ const mapStateToProps = (state) => {
 Player.propTypes = {
   name: React.PropTypes.string.isRequired,
   piece: React.PropTypes.string.isRequired,
-  playerIndex: React.PropTypes.number.isRequired,
+  dice: React.PropTypes.func.isRequired,
   userCashArray: React.PropTypes.array.isRequired
 }
 export default connect(mapStateToProps)(Player)

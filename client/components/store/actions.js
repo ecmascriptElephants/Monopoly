@@ -6,3 +6,8 @@ export const SET_INDEX = 'SET_INDEX'
 export const SET_MESSAGE_ID = 'SET_MESSAGE_ID'
 export const SET_USERS_PROPERTIES = 'SET_USERS_PROPERTIES'
 export const SET_CASH = 'SET_CASH'
+export const SET_USERS_MONEY = 'SET_USERS_MONEY'
+export const SET_MYINDEX = 'SET_MYINDEX'
+export const SET_PLAYERS = 'SET_PLAYERS'
+export const SET_PLAYER_PROPS = 'SET_PLAYER_PROPS'
+

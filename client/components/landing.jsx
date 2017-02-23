@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Input, Icon, Divider, Form } from 'semantic-ui-react'
-import {Link} from 'react-router-dom'
+import {Link, Redirect} from 'react-router-dom'
 import axios from 'axios'
+import Authenticate from '../helper/authenticate'
 
 class Land extends Component {
   constructor (props) {
     super(props)
     this.state = {
       username: '',
-      password: ''
+      password: '',
+      valid: false
     }
     this.onUsernameChange = this.onUsernameChange.bind(this)
     this.onPasswordChange = this.onPasswordChange.bind(this)
@@ -25,9 +27,14 @@ class Land extends Component {
 
   handleLogin (e) {
     e.preventDefault()
-    console.log('log in info', this.state.username, this.state.password)
     axios.post('/login', this.state)
-    .then((res) => console.log('make request'))
+    .then((res) => {
+      
+      localStorage.setItem('token', res.data.token)
+      localStorage.setItem('displayname', res.data.user.displayname)
+      localStorage.setItem('id', res.data.user.id)
+      this.setState({valid: true})
+    })
     .catch((err) => console.error(err))
   }
 
@@ -55,6 +62,9 @@ class Land extends Component {
             <Icon name='facebook' /> Facebook
           </Button>
         </Segment>
+        {
+           this.state.valid ? Authenticate.isAuth() ? <Redirect to={{ pathname: '/lobby' }} /> : <Redirect to={{ pathname: '/' }} /> : null
+        }
       </Container>
     )
   }

@@ -104,6 +104,11 @@
   width: 17%!important;
 }
 
+.chatBox {
+  float: right;
+  width: 17%!important;
+}
+
 .content {
   width: 100%!important;
 }

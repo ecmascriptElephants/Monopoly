@@ -1,5 +1,5 @@
-const userController = require('../controllers/userController')
-
+let userController = require('../controllers/userController')
+let msgHistory = require('../controllers/msgHistoryController')
 
 module.exports = (app, express, passport) => {
   app.post('/signup', passport.authenticate('local-signup', {
@@ -37,7 +37,6 @@ module.exports = (app, express, passport) => {
     res.redirect('/')
   })
 
-
   app.get('/', (req, res) => {
     res.redirect('/#/')
   })
@@ -52,5 +51,16 @@ module.exports = (app, express, passport) => {
   })
   app.get('/user', (req, res) => {
     res.send(passport.user)
+  })
+
+  app.post('/chats', (req, res) => {
+    let room = req.body.room
+    let keyword = req.body.keyword
+    let date = req.body.date
+    if (room === 'All Rooms') {
+      msgHistory.allHistory(keyword, res)
+    } else {
+      msgHistory.historyByQuery(room, keyword, res)
+    }
   })
 }

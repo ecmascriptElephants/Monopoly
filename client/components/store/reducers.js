@@ -6,17 +6,24 @@ import {
   SET_INDEX,
   SET_MESSAGE_ID,
   SET_USERS_PROPERTIES,
-  SET_CASH
+  SET_USERS_MONEY,
+  SET_MYINDEX,
+  SET_CASH,
+  SET_PLAYERS,
+  SET_PLAYER_PROPS
 } from './actions'
 const DEFAULT_STATE = {
   gameID: 0,
   username: '',
   userID: '',
   userPosArray: [0, 0, 0, 0, 0, 0, 0, 0],
+  playerIndex: -1,
   index: -1,
   messageID: 0,
+  players: [],
   userPropertyArray: [[], [], [], [], [], [], [], []],
-  userCashArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500]
+  userCashArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500],
+  userMoneyArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500]
 }
 
 const setGameID = (state, action) => {
@@ -43,6 +50,13 @@ const setIndex = (state, action) => {
   return newState
 }
 
+const setPlayerIndex = (state, action) => {
+  console.log('setting up player index in redux')
+  const newState = {}
+  Object.assign(newState, state, { playerIndex: action.index })
+  return newState
+}
+
 const setUserPosition = (state, action) => {
   let newArr = [...state.userPosArray.slice(0, action.index),
     action.userPos,
@@ -55,6 +69,7 @@ const setUserPosition = (state, action) => {
 const setMessageID = (state, action) => {
   const newState = {}
   Object.assign(newState, state, { messageID: action.messageID })
+  return newState
 }
 
 const setUserProperties = (state, action) => {
@@ -63,6 +78,7 @@ const setUserProperties = (state, action) => {
     ...state.userPropertyArray.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { userPropertyArray: newArr })
+  return newState
 }
 
 const setUserCash = (state, action) => {
@@ -72,6 +88,33 @@ const setUserCash = (state, action) => {
     ...state.userCashArray.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { userCashArray: newArr })
+  return newState
+}
+
+const setUserMoney = (state, action) => {
+  let newArr = [...state.userMoneyArray.slice(0, action.index),
+    action.userMoney,
+    ...state.userMoneyArray.slice(action.index + 1)]
+  const newState = {}
+  Object.assign(newState, state, { userMoneyArray: newArr })
+  return newState
+}
+
+const setPlayersArray = (state, action) => {
+  let newState = {}
+  let newArray = [...action.playersArray]
+  Object.assign(newState, state, { players: newArray })
+  return newState
+}
+
+const setPlayerProps = (state, action) => {
+  let player = state.players[action.index]
+  player.userPosition = action.playerProps
+  let newArr = [...state.players.slice(0, action.index),
+    player,
+    ...state.players.slice(action.index + 1)]
+  const newState = {}
+  Object.assign(newState, state, { players: newArr })
   return newState
 }
 
@@ -100,6 +143,18 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_CASH:
       return setUserCash(state, action)
+
+    case SET_USERS_MONEY:
+      return setUserMoney(state, action)
+
+    case SET_MYINDEX:
+      return setPlayerIndex(state, action)
+
+    case SET_PLAYERS:
+      return setPlayersArray(state, action)
+
+    case SET_PLAYER_PROPS:
+      return setPlayerProps(state, action)
 
     default:
       return state

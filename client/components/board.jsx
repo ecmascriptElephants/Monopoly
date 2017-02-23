@@ -65,6 +65,7 @@ class Board extends Component {
         <div className='board parent'>
           {
             this.props.players.map((player, index) => {
+              console.log('in board.jsx player = ', player,' index = ', index)
               if (index <= 3) {
                 return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0] - (index + index)}%`} userNumber={index} key={index} />
               } else {

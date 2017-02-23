@@ -9,10 +9,6 @@ class Player extends Component {
     this.state = {
       name: props.name,
       piece: props.piece,
-
-      property: ['house'],
-      // todo: property: [{'PropertyObj': {PropertyObj}, 'Mortaged': false, 'Houses': 0,
-      // 'Position': 0}],
       hasCommunityChestGetOutOfJailFree: false,
       hasChanceGetOutOfJailFree: false,
       userQueueNumber: 0,

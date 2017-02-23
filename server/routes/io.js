@@ -52,7 +52,6 @@ module.exports = (io) => {
         io.emit('users', { players: gameObj['playerInfo'] })
         socket.broadcast.to(gameObj.playerInfo[0].socketID).emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.playerInfo.length })
       } else {
-
         if (data.index === gameObj.i) {
           socket.emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.playerInfo.length })
         }

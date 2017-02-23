@@ -13,7 +13,7 @@ class Lobby extends Component {
       start: false,
       messages: [],
       showToast: false,
-      comment: ''
+      comment: '',
       queryResults: []
     }
     this.props.dispatch(setUsername(localStorage.displayname))

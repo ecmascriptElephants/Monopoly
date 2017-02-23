@@ -51,16 +51,14 @@ class DiceRoll extends Component {
       payRentButtonVisible: false
     }
   }
-  componentWillReceiveProps (nextProps) {
-    console.log(nextProps.userPosArray, nextProps.index)
-    sock.updatePos({ gameID: nextProps.gameID, pos: nextProps.userPosArray[nextProps.index], index: nextProps.index })
-    // sock.updateProps({ gameID: nextProps.gameID, pos: nextProps.userPropertiesArray[nextProps.index], index: nextProps.index })
-  }
+  // componentWillReceiveProps (nextProps) {
+  //   // sock.updateProps({ gameID: nextProps.gameID, pos: nextProps.userPropertiesArray[nextProps.index], index: nextProps.index })
+  // }
 
   componentDidMount () {
     sock.socket.on('yourTurn', (data) => {
-      console.log(data)
       this.setState({ diceRollButtonVisible: true, numOfPlayers: data.numOfPlayers })
+      localStorage.setItem('pIndex', data.index)
       this.props.dispatch(setIndex(data.index))
     })
     sock.socket.on('update properties', (data) => {
@@ -134,7 +132,9 @@ class DiceRoll extends Component {
 
   handleMoveTokenButtonClick (doubles, die1, die2) {
     let userPosition = (this.props.userPosArray[this.props.index] + die1 + die2) % 40
-    this.props.dispatch(setUserPositions(userPosition, this.props.index))
+    console.log('here')
+    this.props.dice(userPosition, this.props.index, true)
+    // this.props.dispatch(setUserPositions(userPosition, this.props.index))
     let squareType = rules.PositionType[userPosition]
     if (squareType === 'CHANCE') {
       this.setState({
@@ -290,7 +290,6 @@ class DiceRoll extends Component {
   }
 
   handleLandOnOrPassGo (oldCurrentUserPosition, userPosition, jail) {
-    console.log('handleLandOnOrPassGo')
     if (!jail) {
       if (userPosition < oldCurrentUserPosition) {
         let updatedUserMoneyArray = [...this.state.userMoneyArray]

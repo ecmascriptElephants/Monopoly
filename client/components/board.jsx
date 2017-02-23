@@ -6,7 +6,7 @@ import Chat from './chat'
 // import rules from '../static/rules.js'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
-import { setUsername, setGameID, setUserID, setMyIndex } from './store/actionCreators'
+import { setUserPositions, setStoreState } from './store/actionCreators'
 
 class Board extends Component {
   constructor (props) {
@@ -14,31 +14,19 @@ class Board extends Component {
     this.state = {
       players: [],
       messages: [],
-      playerIndex: -1
+      playerIndex: -1,
+      valid: false
     }
-    if (this.props.gameID > 0) {
-      sock.init({ gameID: this.props.gameID })
-    } else {
-      this.props.dispatch(setUsername(localStorage.displayname))
-      this.props.dispatch(setUserID(localStorage.id))
-      this.props.dispatch(setMyIndex(localStorage.index))
-      this.props.dispatch(setGameID(localStorage.gameID))
-      console.log(this.props.index)
-      sock.refresh({ gameID: localStorage.getItem('gameID'), userID: localStorage.getItem('id') })
-    }
-    sock.socket.on('refresh data', (data) => {
-      console.log('i am recieving the updated data')
-      this.setState({ players: data.players })
-    })
+
     this.dice = this.dice.bind(this)
   }
 
-  componentWillReceiveProps (nextProps) {
-    console.log(nextProps)
-    this.dice(nextProps.userPosArray[nextProps.index], nextProps.index)
-  }
+  // componentWillReceiveProps (nextProps) {
+  //   const index = nextProps.index
+  //   this.dice(nextProps.userPosArray[index], index)
+  // }
 
-  dice (value, index) {
+  dice (value, index, insideJob) {
     const location = [
       [97, 97], [97, 83], [97, 75], [97, 66.5], [97, 58.5], [97, 50], [97, 42], [97, 34], [97, 25.5], [97, 17.5], [97, 2.5],
       [84.5, 2.5], [76.4, 2.5], [68.2, 2.5], [60, 2.5], [51.8, 2.5], [43.5, 2.5], [35.4, 2.5], [27.1, 2.5], [19, 2.5], [7, 2.5],
@@ -47,25 +35,33 @@ class Board extends Component {
     ]
     let players = [...this.state.players]
     players[index].userPosition = location[value]
+    if (index >= 0) {
+      this.props.dispatch(setUserPositions(value, index))
+    }
+    if (insideJob) {
+      sock.updatePos({ gameID: this.props.gameID, pos: value, index: index })
+    }
     this.setState({ players })
   }
+  componentWillMount () {
+    if (localStorage.gameState) {
+      this.props.dispatch(setStoreState(JSON.parse(localStorage.gameState)))
+    }
+  }
+
   componentDidMount () {
-    console.log(this.props.index)
-    sock.socket.on('refresh data', (data) => {
-      console.log('i am recieving the updated data')
-      this.setState({ players: data.players })
-    })
+    sock.init({ gameID: Number(localStorage.gameID) })
     sock.socket.on('users', (data) => {
       this.setState({ players: data.players })
     })
     sock.socket.on('update position', (data) => {
-      this.dice(data.pos, data.index)
+      this.dice(data.pos, data.index, false)
     })
   }
   render () {
     return (
       <div>
-        <Player name={this.props.username} playerIndex={this.state.playerIndex} piece='Hat' />
+        <Player name={this.props.username} dice={this.dice} piece='Hat' />
         <div className='board parent'>
           {
             this.state.players.map((player, index) => {

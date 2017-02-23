@@ -15,14 +15,12 @@ module.exports = (io) => {
   let user = 0
   let userStorage = []
   io.on('connection', function (socket) {
-
     socket.on('user joined', (data) => {
       userStorage.push(data)
       user++
     })
 
     socket.on('new game', (data) => {
-      socket.broadcast.emit('new game', { gameID, socketID: socket.id })
       data.socketID = socket.id
       data.userPosition = [97, 97]
       var state = { players: 1, i: 0, playerInfo: [data] }
@@ -30,6 +28,7 @@ module.exports = (io) => {
       .then((result) => {
         console.log(result)
         game[result] = state
+        socket.broadcast.emit('new game', { result, socketID: socket.id })
         io.to(socket.id).emit('your index', game[result].players - 1)
         socket.join(result.toString())
       })

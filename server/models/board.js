@@ -13,4 +13,4 @@ const BoardGame = {
   }
 }
 
-module.expoerts = BoardGame
+module.exports = BoardGame

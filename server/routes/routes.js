@@ -1,4 +1,3 @@
-let userController = require('../controllers/userController')
 let msgHistory = require('../controllers/msgHistoryController')
 
 module.exports = (app, express, passport) => {

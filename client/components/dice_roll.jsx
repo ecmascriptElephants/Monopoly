@@ -424,7 +424,11 @@ class DiceRoll extends Component {
 
       updatedUserProperties[this.props.index] = propertiesArray
       this.setState({
+<<<<<<< a3f3377a6f5d4e160c7993ae64b06b4d8cf2e6a3
         buyPropertyComment: `You bought ${newProperty.PropertyObj.NAME}!`,
+=======
+        buyPropertyComment: `You bought ${newProperty.PropertyObj.NAME}, cost $${newProperty.PropertyObj.PRICE}`,
+>>>>>>> to rebase
         userMoneyArray: updatedUserMoneyArray,
         buyPropertyButtonVisible: false,
         endTurnButtonVisible: true,

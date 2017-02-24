@@ -50,7 +50,6 @@ module.exports = (io) => {
       obj[index] = data
       gameObj.playerInfo[index] = data
       io.to(socket.id).emit('your index', index)
-      console.log(gameObj.playerInfo)
       socket.broadcast.to(gameObj.playerInfo[0].socketID).emit('player joined', data)
     })
 
@@ -59,7 +58,6 @@ module.exports = (io) => {
     })
 
     socket.on('load', (data) => {
-      console.log(data)
       let gameObj = game[data.gameID]
       let refresh = false
       if (gameObj.playerInfo[data.index].socketID !== socket.id) {

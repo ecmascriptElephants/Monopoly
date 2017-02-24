@@ -3,14 +3,14 @@ import { Button } from 'semantic-ui-react'
 import sock from '../helper/socket'
 const LoadGame = (props) => {
   const loadGame = (gameID) => {
-    sock.loadGame(gameID)
+    sock.loadGame({gameID, id: localStorage.id})
   }
 
   return (
     <div>
       {
         props.pendingGames.map((game) => {
-          return <Button secondary  onClick={() => { loadGame(game.gameID) }}>  Load {game.gameID} </Button>
+          return <Button secondary onClick={() => { loadGame(game.gameID) }}>  Load {game.gameID} </Button>
         })
       }
     </div>

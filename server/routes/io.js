@@ -19,7 +19,6 @@ module.exports = (io) => {
       board.lookupGame(data.id)
         .then((results) => {
           if (results[0].length > 0) {
-            console.log('here')
             socket.emit('pending games', results[0])
           }
         })
@@ -112,8 +111,11 @@ module.exports = (io) => {
       socket.broadcast.to(data.gameID).emit('update money', { money: data.money, index: data.index })
     })
 
-    socket.on('load data', (gameID) => {
-      
+    socket.on('load game', (gameID) => {
+      board.getGame(gameID)
+      .then((data) => {
+        
+      })
     })
   })
 }

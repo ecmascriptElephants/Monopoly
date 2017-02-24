@@ -30,7 +30,7 @@ const BoardGame = {
   },
 
   getGame: (gameID) => {
-     return db.raw(`Select gstate from game where id=${gameID}`)
+    return db.raw(`Select gstate from game where id=${gameID}`)
     .catch((err) => {
       console.log(err)
     })

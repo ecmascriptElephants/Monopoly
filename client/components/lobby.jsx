@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { setUsername, setGameID, setUserID, setMyIndex, setDefaultState } from './store/actionCreators'
 import Toast from './toast'
 import axios from 'axios'
-import { Button } from 'semantic-ui-react'
+// import { Button } from 'semantic-ui-react'
 import LoadGame from './LoadGame'
 class Lobby extends Component {
   constructor (props) {
@@ -57,7 +57,12 @@ class Lobby extends Component {
       })
       this.props.dispatch(setGameID(data.gameID))
     })
-
+    sock.socket.on('player started', (data) => {
+      this.setState({
+        join: false,
+        start: true
+      })
+    })
     sock.socket.on('send message', (data) => {
       this.setState({})
     })
@@ -171,7 +176,7 @@ Lobby.propTypes = {
   username: React.PropTypes.string.isRequired,
   gameID: React.PropTypes.number.isRequired,
   userID: React.PropTypes.string.isRequired,
-  senderID: React.PropTypes.number.isRequired,
+  // senderID: React.PropTypes.number.isRequired,
   messageID: React.PropTypes.number.isRequired
 }
 export default connect(mapStateToProps)(Lobby)

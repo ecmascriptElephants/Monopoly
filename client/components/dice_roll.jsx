@@ -607,11 +607,11 @@ class DiceRoll extends Component {
 }
 const mapStateToProps = (state) => {
   return {
-    // username: state.username,
+    username: state.username,
     gameID: state.gameID,
     userID: state.userID,
     userPosArray: state.userPosArray,
-    userPropertiesArray: state.userPropertiesArray,
+    userPropertyArray: state.userPropertyArray,
     userMoneyArray: state.userMoneyArray,
     index: state.index,
     userCashArray: state.userCashArray
@@ -626,7 +626,7 @@ DiceRoll.propTypes = {
   userPosArray: React.PropTypes.array.isRequired,
   userMoneyArray: React.PropTypes.array.isRequired,
   index: React.PropTypes.number.isRequired,
-  userPropertiesArray: React.PropTypes.array.isRequired,
+  userPropertyArray: React.PropTypes.array.isRequired,
   userCashArray: React.PropTypes.array.isRequired
 }
 

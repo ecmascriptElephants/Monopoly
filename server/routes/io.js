@@ -25,10 +25,9 @@ module.exports = (io) => {
     })
 
     socket.on('new game', (data) => {
-      console.log(data)
       data.socketID = socket.id
       data.userPosition = [97, 97]
-      var state = { players: 1, i: 0, playerInfo: [data] }
+      var state = { players: 1, i: 0, playerInfo: {0: data} }
       board.addGame(JSON.stringify(state))
         .then((result) => {
           const gameID = result[0]
@@ -41,23 +40,26 @@ module.exports = (io) => {
     })
 
     socket.on('join', (data) => {
-      console.log(data.gameID)
       let gameObj = game[data.gameID]
-      gameObj.players++
+      var index = gameObj.players++
       data.socketID = socket.id
       board.addPlayer(data.gameID, data.userID)
       data.userPosition = [97, 97]
       socket.join(data.gameID)
-      gameObj.playerInfo.push(data)
-      io.to(socket.id).emit('your index', gameObj.players - 1)
+      var obj = {}
+      obj[index] = data
+      gameObj.playerInfo[index] = data
+      io.to(socket.id).emit('your index', index)
+      console.log(gameObj.playerInfo)
       socket.broadcast.to(gameObj.playerInfo[0].socketID).emit('player joined', data)
     })
 
     socket.on('start', (data) => {
-      io.in(data.gameID).emit('player joined', data)
+      socket.broadcast.to(data.gameID).emit('player started')
     })
 
     socket.on('load', (data) => {
+      console.log(data)
       let gameObj = game[data.gameID]
       let refresh = false
       if (gameObj.playerInfo[data.index].socketID !== socket.id) {
@@ -69,6 +71,7 @@ module.exports = (io) => {
         socket.broadcast.to(gameObj.playerInfo[0].socketID).emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.playerInfo.length })
       } else {
         if (data.index === gameObj.i) {
+          socket.join(data.gameID)
           socket.emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.playerInfo.length })
         }
       }
@@ -78,7 +81,7 @@ module.exports = (io) => {
     socket.on('endTurn', (data) => {
       let gameObj = game[data.gameID]
       gameObj.i++
-      if (gameObj.i >= gameObj.playerInfo.length) {
+      if (gameObj.i >= gameObj.players) {
         gameObj.i = 0
       }
       gameObj['playerInfo'][data.index].userPosition = location[data.pos]
@@ -99,9 +102,6 @@ module.exports = (io) => {
 
     socket.on('update database', (data) => {
       board.updateGame(data)
-        .then(() => {
-          console.log('data updated')
-        })
     })
     socket.on('property update', (data) => {
       socket.broadcast.to(data.gameID).emit('update properties', { properties: data.properties, index: data.index })
@@ -111,10 +111,12 @@ module.exports = (io) => {
       socket.broadcast.to(data.gameID).emit('update money', { money: data.money, index: data.index })
     })
 
-    socket.on('load game', (gameID) => {
-      board.getGame(gameID)
+    socket.on('load game', (data) => {
+      data.socketID = socket.id
+      data.userPosition = [97, 97]
+      board.getGame(data.gameID)
       .then((data) => {
-        
+        let state = JSON.parse(data[0])
       })
     })
   })

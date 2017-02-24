@@ -42,7 +42,7 @@ module.exports = (app, express, passport) => {
 
   app.get('/get-info', (req, res) => {
     res.send({ token: passport.token, user: passport.user })
-
+  })
   app.get('/user', (req, res) => {
     res.send(passport.user)
   })
@@ -58,4 +58,3 @@ module.exports = (app, express, passport) => {
     }
   })
 }
-

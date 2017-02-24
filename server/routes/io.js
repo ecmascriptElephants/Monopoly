@@ -87,5 +87,10 @@ module.exports = (io) => {
     socket.on('money update', (data) => {
       socket.broadcast.to(data.gameID).emit('update money', { money: data.money, index: data.index })
     })
+
+    socket.on('comment', (comment) => {
+      io.emit('receive-comment', comment)
+    })
+
   })
 }

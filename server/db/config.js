@@ -23,6 +23,7 @@
 
 // CREATE TABLE `monopoly`.`players` (
 //   `id` INT NOT NULL AUTO_INCREMENT,
-//   `playerID` INT NOT NULL,
+//   `playerID` TEXT NOT NULL,
 //   `gameID` INT NOT NULL,
 //   PRIMARY KEY (`id`));
+

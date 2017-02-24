@@ -21,12 +21,14 @@ module.exports = (io) => {
     })
 
     socket.on('new game', (data) => {
+      console.log(data)
       data.socketID = socket.id
       data.userPosition = [97, 97]
       var state = { players: 1, i: 0, playerInfo: [data] }
       board.addGame(JSON.stringify(state))
       .then((result) => {
         const gameID = result[0]
+        board.addPlayer(gameID, data.userID)
         game[gameID] = state
         socket.broadcast.emit('new game', { gameID, socketID: socket.id })
         io.to(socket.id).emit('your index', game[gameID].players - 1)
@@ -39,6 +41,7 @@ module.exports = (io) => {
       let gameObj = game[data.gameID]
       gameObj.players++
       data.socketID = socket.id
+      board.addPlayer(data.gameID, data.userID)
       data.userPosition = [97, 97]
       socket.join(data.gameID)
       gameObj.playerInfo.push(data)

@@ -22,7 +22,6 @@ export default class Auth extends Component {
   }
 
   render () {
-    console.log(this.state.promise)
     return (
       <div>
         {

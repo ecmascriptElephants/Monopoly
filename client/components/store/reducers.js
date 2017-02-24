@@ -11,7 +11,8 @@ import {
   SET_CASH,
   SET_PLAYERS,
   SET_PLAYER_PROPS,
-  SET_DEFAULT_STATE
+  SET_DEFAULT_STATE,
+  SET_STATE
 } from './actions'
 const DEFAULT_STATE = {
   gameID: 0,
@@ -125,6 +126,12 @@ const setDefault = (state, action) => {
   return newState
 }
 
+const setState = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, action.state)
+  return newState
+}
+
 const rootReducer = (state = DEFAULT_STATE, action) => {
   switch (action.type) {
     case SET_GAME_ID:
@@ -162,8 +169,13 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_PLAYER_PROPS:
       return setPlayerProps(state, action)
+
     case SET_DEFAULT_STATE:
       return setDefault(state, action)
+
+    case SET_STATE:
+      return setState(state, action)
+
     default:
       return state
   }

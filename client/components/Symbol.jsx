@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Symbol = function (props) {
+const Symbol = (props) => {
   // console.log('in symbol.js left = ', props.left, 'top = ', props.top)
   // console.log('money for user0', props.money)
 

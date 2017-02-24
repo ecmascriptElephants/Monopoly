@@ -6,7 +6,8 @@ import Chat from './chat'
 // import rules from '../static/rules.js'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
-import { setUserPositions, setPlayers, setPlayerProps } from './store/actionCreators'
+import { setUserPositions, setPlayers, setPlayerProps, setIndex } from './store/actionCreators'
+
 
 class Board extends Component {
   constructor (props) {
@@ -16,6 +17,7 @@ class Board extends Component {
       playerIndex: -1,
       valid: false
     }
+    // console.log(this.props.playerIndex)
     sock.init({ gameID: this.props.gameID, index: this.props.playerIndex })
     this.dice = this.dice.bind(this)
   }
@@ -32,7 +34,7 @@ class Board extends Component {
       [7, 17.5], [7, 25.5], [7, 34], [7, 42], [7, 50], [7, 58.5], [7, 66.5], [7, 75], [7, 83],
       [7, 97], [19, 97], [27.1, 97], [35.4, 97], [43.5, 97], [51.8, 97], [60, 97], [68.2, 97], [76.4, 97], [84.5, 97]
     ]
-
+    console.log(index, value)
     let playerProps = location[value]
     if (index >= 0) {
       this.props.dispatch(setUserPositions(value, index))
@@ -50,15 +52,18 @@ class Board extends Component {
 
   componentDidMount () {
     sock.socket.on('users', (data) => {
-      console.log(data.players)
-      this.props.dispatch(setPlayers(data.players))
-      console.log(this.props.players)
+      let players = Object.keys(data.players).map((key) => {
+        return data.players[key]
+      })
+      this.props.dispatch(setPlayers(players))
     })
     sock.socket.on('update position', (data) => {
       this.dice(data.pos, data.index, false)
+      this.props.dispatch(setIndex(data.index))
     })
   }
   render () {
+    console.log(this.props.players)
     return (
       <div>
         <Player name={this.props.username} dice={this.dice} piece='Hat' />

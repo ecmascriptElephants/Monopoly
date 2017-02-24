@@ -8,6 +8,7 @@ import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import { setUserPositions, setPlayers, setPlayerProps, setIndex } from './store/actionCreators'
 
+
 class Board extends Component {
   constructor (props) {
     super(props)

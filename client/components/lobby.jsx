@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 import { setUsername, setGameID, setUserID, setMyIndex, setDefaultState } from './store/actionCreators'
 import Toast from './toast'
 import axios from 'axios'
+import { Button } from 'semantic-ui-react'
+import LoadGame from './LoadGame'
 class Lobby extends Component {
   constructor (props) {
     super(props)
@@ -106,7 +108,6 @@ class Lobby extends Component {
   }
 
   render () {
-    console.log(this.state.pendingGames)
     let messages = this.state.messages.map((msg) => {
       return <li>{this.props.username}: {msg}</li>
     })
@@ -150,10 +151,7 @@ class Lobby extends Component {
           <ul>
             {queryResults}
           </ul>
-          {
-            this.state.pendingGames.map((game) => {
-              return <div>{game.gameID}</div>
-            })}
+          <LoadGame pendingGames={this.state.pendingGames} />
         </div>
       </div>
     )

@@ -1,7 +1,6 @@
 const msgHistory = require('../controllers/msgHistoryController')
 const board = require('../models/board')
 
-
 let game = {}
 const location = [
   [97, 97], [97, 83], [97, 75], [97, 66.5], [97, 58.5], [97, 50], [97, 42], [97, 34], [97, 25.5], [97, 17.5], [97, 2.5],
@@ -9,7 +8,6 @@ const location = [
   [7, 17.5], [7, 25.5], [7, 34], [7, 42], [7, 50], [7, 58.5], [7, 66.5], [7, 75], [7, 83],
   [7, 97], [19, 97], [27.1, 97], [35.4, 97], [43.5, 97], [51.8, 97], [60, 97], [68.2, 97], [76.4, 97], [84.5, 97]
 ]
-
 
 module.exports = (io) => {
   // let user = 0
@@ -75,7 +73,7 @@ module.exports = (io) => {
           socket.emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.playerInfo.length })
         }
       }
-      //TODO Randomize users
+      // TODO Randomize users
     })
 
     socket.on('endTurn', (data) => {
@@ -112,6 +110,10 @@ module.exports = (io) => {
 
     socket.on('money update', (data) => {
       socket.broadcast.to(data.gameID).emit('update money', { money: data.money, index: data.index })
+    })
+
+    socket.on('load data', (gameID) => {
+      
     })
   })
 }

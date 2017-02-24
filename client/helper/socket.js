@@ -33,13 +33,13 @@ module.exports = {
     socket.emit('send chat', data)
   },
   updateProps: (data) => {
-    console.log('socket helper function updateProps has been invoked! data = ', data, '  :' +
-      '  data.properties =  ', data.properties)
     socket.emit('property update', data)
   },
   updateMoney: (data) => {
-    console.log('socket helper function updateMoney has been invoked! data = ', data, '  :' +
-      '  data.money =  ', data.money)
     socket.emit('money update', data)
+  },
+
+  loadGame: (gameID) => {
+    socket.emit('load game', gameID)
   }
 }

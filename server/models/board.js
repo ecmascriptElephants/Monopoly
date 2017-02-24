@@ -9,7 +9,6 @@ const BoardGame = {
   },
 
   addPlayer: (gameID, playerID) => {
-    playerID = playerID.toString()
     return db.raw(`INSERT INTO players VALUES (null, ${playerID}, ${gameID})`)
     .catch((err) => {
       console.log(err)
@@ -21,6 +20,20 @@ const BoardGame = {
     return db('game')
     .where('id', '=', state.gameID)
     .update({'gstate': obj})
+  },
+
+  lookupGame: (userID) => {
+    return db.raw(`Select gameID from players where playerID=${userID}`)
+    .catch((err) => {
+      console.log(err)
+    })
+  },
+
+  getGame: (gameID) => {
+     return db.raw(`Select gstate from game where id=${gameID}`)
+    .catch((err) => {
+      console.log(err)
+    })
   }
 }
 

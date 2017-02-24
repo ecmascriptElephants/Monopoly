@@ -12,12 +12,19 @@ const location = [
 
 
 module.exports = (io) => {
-  let user = 0
+  // let user = 0
   let userStorage = []
   io.on('connection', function (socket) {
     socket.on('user joined', (data) => {
       userStorage.push(data)
-      user++
+      // user++
+      board.lookupGame(data.id)
+        .then((results) => {
+          if (results[0].length > 0) {
+            console.log('here')
+            socket.emit('pending games', results[0])
+          }
+        })
     })
 
     socket.on('new game', (data) => {
@@ -26,14 +33,14 @@ module.exports = (io) => {
       data.userPosition = [97, 97]
       var state = { players: 1, i: 0, playerInfo: [data] }
       board.addGame(JSON.stringify(state))
-      .then((result) => {
-        const gameID = result[0]
-        board.addPlayer(gameID, data.userID)
-        game[gameID] = state
-        socket.broadcast.emit('new game', { gameID, socketID: socket.id })
-        io.to(socket.id).emit('your index', game[gameID].players - 1)
-        socket.join(result.toString())
-      })
+        .then((result) => {
+          const gameID = result[0]
+          board.addPlayer(gameID, data.userID)
+          game[gameID] = state
+          socket.broadcast.emit('new game', { gameID, socketID: socket.id })
+          io.to(socket.id).emit('your index', game[gameID].players - 1)
+          socket.join(result.toString())
+        })
     })
 
     socket.on('join', (data) => {
@@ -95,9 +102,9 @@ module.exports = (io) => {
 
     socket.on('update database', (data) => {
       board.updateGame(data)
-      .then(() => {
-        console.log('data updated')
-      })
+        .then(() => {
+          console.log('data updated')
+        })
     })
     socket.on('property update', (data) => {
       socket.broadcast.to(data.gameID).emit('update properties', { properties: data.properties, index: data.index })

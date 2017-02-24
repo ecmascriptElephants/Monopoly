@@ -9,6 +9,7 @@ const BoardGame = {
   },
 
   addPlayer: (gameID, playerID) => {
+    playerID = playerID.toString()
     return db.raw(`INSERT INTO players VALUES (null, ${playerID}, ${gameID})`)
     .catch((err) => {
       console.log(err)

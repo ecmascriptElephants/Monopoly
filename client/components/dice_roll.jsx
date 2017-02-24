@@ -73,7 +73,7 @@ class DiceRoll extends Component {
       let updatedUserMoneyArray = [...this.state.userMoneyArray]
       updatedUserMoneyArray[data.index] = data.money
       this.setState({ userMoneyArray: updatedUserMoneyArray })
-      // this.props.dispatch(setUserMoney(data.money, data.index))
+      this.props.dispatch(setUserMoney(data.money, data.index))
     })
   }
 

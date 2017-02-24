@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
-import { setUsername, setGameID, setUserID, setMyIndex, setDefaultState } from './store/actionCreators'
+import { setUsername, setGameID, setUserID, setMyIndex, setDefaultState, setState } from './store/actionCreators'
 import Toast from './toast'
 import axios from 'axios'
 // import { Button } from 'semantic-ui-react'
@@ -18,7 +18,8 @@ class Lobby extends Component {
       showToast: false,
       comment: '',
       queryResults: [],
-      pendingGames: []
+      pendingGames: [],
+      resume: true
     }
     this.props.dispatch(setDefaultState())
     this.props.dispatch(setUsername(localStorage.displayname))
@@ -70,7 +71,10 @@ class Lobby extends Component {
       let messages = this.state.messages
       messages.push(msg)
       this.setState({ messages: messages })
-      // console.log('messages', this.state.messages)
+    })
+    sock.socket.on('load state', (state) => {
+      this.props.dispatch(setState(state))
+      this.setState({resume: false})
     })
   }
   newGame () {
@@ -156,7 +160,7 @@ class Lobby extends Component {
           <ul>
             {queryResults}
           </ul>
-          <LoadGame pendingGames={this.state.pendingGames} />
+          <LoadGame pendingGames={this.state.pendingGames} load={this.state.resume} />
         </div>
       </div>
     )

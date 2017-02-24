@@ -133,6 +133,6 @@ app.use(express.static(path.join(__dirname, '../src')))
 routes(app, express, passport)
 ioRouter(io)
 // app.listen(port)
-server.listen(port, '0.0.0.0')
+server.listen(port)
 
 module.exports = app

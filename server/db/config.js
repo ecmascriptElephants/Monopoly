@@ -17,9 +17,10 @@
 
 // CREATE TABLE `monopoly`.`game` (
 //   `id` INT NOT NULL AUTO_INCREMENT,
-//   `game-state` JSON NOT NULL,
-//   PRIMARY KEY (`id`),
-//   UNIQUE INDEX `id_UNIQUE` (`id` ASC));
+//   `gstate` JSON NOT NULL,
+//   `info` JSON NOT NULL,
+//   PRIMARY KEY (`id`));
+
 
 // CREATE TABLE `monopoly`.`players` (
 //   `id` INT NOT NULL AUTO_INCREMENT,

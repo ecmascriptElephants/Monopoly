@@ -3,7 +3,7 @@ import { Button } from 'semantic-ui-react'
 import sock from '../helper/socket'
 const LoadGame = (props) => {
   const loadGame = (gameID) => {
-    sock.loadGame({gameID, id: localStorage.id, username: localstorage.displayname})
+    sock.loadGame({gameID, id: localStorage.id, username: localStorage.displayname})
   }
 
   return (

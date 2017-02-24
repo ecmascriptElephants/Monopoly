@@ -1,8 +1,10 @@
 const db = require('./db')
 
 const BoardGame = {
-  addGame: (state) => {
-    return db('game').insert({ 'gstate': state })
+  addGame: (state, info) => {
+    state = JSON.stringify(state)
+    info = JSON.stringify(info)
+    return db('game').insert({ 'gstate': state, 'info': info })
     .catch((err) => {
       console.log(err)
     })
@@ -15,11 +17,17 @@ const BoardGame = {
     })
   },
 
-  updateGame: (state) => {
+  updateState: (state) => {
     const obj = JSON.stringify(state.state)
     return db('game')
     .where('id', '=', state.gameID)
     .update({'gstate': obj})
+  },
+
+  updateInfo: (info, id) => {
+    return db('game')
+    .where('id', '=', id)
+    .update({'info': info})
   },
 
   lookupGame: (userID) => {
@@ -30,7 +38,7 @@ const BoardGame = {
   },
 
   getGame: (gameID) => {
-    return db.raw(`Select gstate from game where id=${gameID}`)
+    return db.raw(`Select gstate, info from game where id=${gameID}`)
     .catch((err) => {
       console.log(err)
     })

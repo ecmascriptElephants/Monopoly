@@ -2,8 +2,11 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
-import { setUsername, setGameID, setUserID, setMyIndex, setDefaultState } from './store/actionCreators'
+import { setUsername, setGameID, setUserID, setMyIndex, setDefaultState, setState } from './store/actionCreators'
 import Toast from './toast'
+import axios from 'axios'
+// import { Button } from 'semantic-ui-react'
+import LoadGame from './LoadGame'
 class Lobby extends Component {
   constructor (props) {
     super(props)
@@ -14,7 +17,9 @@ class Lobby extends Component {
       messages: [],
       showToast: false,
       comment: '',
-      queryResults: []
+      queryResults: [],
+      pendingGames: [],
+      resume: true
     }
     this.props.dispatch(setDefaultState())
     this.props.dispatch(setUsername(localStorage.displayname))
@@ -29,15 +34,21 @@ class Lobby extends Component {
     this.getChats = this.getChats.bind(this)
   }
   componentDidMount () {
-    localStorage.removeItem('state')
+    // localStorage.removeItem('state')
     sock.socket.on('new game', (data) => {
       this.setState({ join: true })
       localStorage.setItem('gameID', data.gameID)
       this.props.dispatch(setGameID(data.gameID))
     })
+
+    sock.socket.on('pending games', (pendingGames) => {
+      this.setState({ pendingGames })
+    })
+
     sock.socket.on('your index', (data) => {
       this.props.dispatch(setMyIndex(data))
     })
+
     sock.socket.on('player joined', (data) => {
       this.setState({
         join: false,
@@ -47,6 +58,12 @@ class Lobby extends Component {
       })
       this.props.dispatch(setGameID(data.gameID))
     })
+    sock.socket.on('player started', (data) => {
+      this.setState({
+        join: false,
+        start: true
+      })
+    })
     sock.socket.on('send message', (data) => {
       this.setState({})
     })
@@ -54,7 +71,10 @@ class Lobby extends Component {
       let messages = this.state.messages
       messages.push(msg)
       this.setState({ messages: messages })
-      // console.log('messages', this.state.messages)
+    })
+    sock.socket.on('load state', (state) => {
+      this.props.dispatch(setState(state))
+      this.setState({resume: false})
     })
   }
   newGame () {
@@ -78,7 +98,7 @@ class Lobby extends Component {
     document.getElementById('message').value = ''
     let sender = this.props.username
     let room = 'lobby'
-    let msgInfo = {sender: sender, message: message, room: room}
+    let msgInfo = { sender: sender, message: message, room: room }
     JSON.stringify(msgInfo)
     sock.socket.emit('new-message', msgInfo)
   }
@@ -89,9 +109,9 @@ class Lobby extends Component {
     let keyword = document.getElementById('keyword').value
     let date = document.getElementById('date').value
     document.getElementById('keyword').value = ''
-    axios.post('/chats', {room: room, keyword: keyword, date: date})
+    axios.post('/chats', { room: room, keyword: keyword, date: date })
       .then((res) => {
-        this.setState({queryResults: res.data})
+        this.setState({ queryResults: res.data })
       })
       .catch((err) => console.error(err))
   }
@@ -134,13 +154,13 @@ class Lobby extends Component {
               <option value='thisWeek'>This Month</option>
               <option value='thisYear'>This Year</option>
             </select>
-
             <button type='submit'>Show chats</button>
           </form>
           <p> You have total of {this.state.queryResults.length} messages </p>
           <ul>
             {queryResults}
           </ul>
+          <LoadGame pendingGames={this.state.pendingGames} load={this.state.resume} />
         </div>
       </div>
     )
@@ -160,7 +180,7 @@ Lobby.propTypes = {
   username: React.PropTypes.string.isRequired,
   gameID: React.PropTypes.number.isRequired,
   userID: React.PropTypes.string.isRequired,
-  senderID: React.PropTypes.number.isRequired,
+  // senderID: React.PropTypes.number.isRequired,
   messageID: React.PropTypes.number.isRequired
 }
 export default connect(mapStateToProps)(Lobby)

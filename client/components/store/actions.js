@@ -11,4 +11,4 @@ export const SET_MYINDEX = 'SET_MYINDEX'
 export const SET_PLAYERS = 'SET_PLAYERS'
 export const SET_PLAYER_PROPS = 'SET_PLAYER_PROPS'
 export const SET_DEFAULT_STATE = 'SET_DEFAULT_STATE'
-
+export const SET_STATE = 'SET_STATE'

@@ -171,6 +171,7 @@ class DiceRoll extends Component {
       moveTokenButtonVisible: false,
       diceRollButtonVisible: false,
       endTurnButtonVisible: false,
+      goButtonVisible: false,
       buyPropertyButtonVisible: false,
       buyPropertyComment: '',
       jailRollDoublesComment: '',
@@ -412,7 +413,8 @@ class DiceRoll extends Component {
   }
 
   handleLandOnOrPassGo (oldUserPosition, userPosition, jail) {
-    if (!jail) {
+    if (!jail && userPosition < oldUserPosition) {
+      console.log('in handleLandOnOrPassGo userPosition, oldUserPosition = ', userPosition, oldUserPosition)
       let goComment = 'You passed GO. Collect $200.'
       if(this.state.squareTypeComment === 'You landed on GO. Collect $200!') {
         goComment = ''
@@ -870,10 +872,6 @@ class DiceRoll extends Component {
             <div className='move-token-btn_div'>
               {this.state.moveTokenButtonVisible
                 ? <div>
-                  <div className='dice_div'>
-                    <div>die1: {this.state.dice[0]}</div>
-                    <div>die2: {this.state.dice[1]}</div>
-                  </div>
                   <Button secondary fluid onClick={() => { this.handleMoveTokenButtonClick() }}>  Move Your Token! </Button>
                 </div> : null
               }

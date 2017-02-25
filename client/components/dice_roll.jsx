@@ -157,7 +157,6 @@ class DiceRoll extends Component {
         endTurnButtonVisible: false
       })
       sock.socket.emit('comment', `${this.state.userNames[this.props.index]} rolled ${die1 + die2}. Move ${die1 + die2} spaces on the board.`)
-      this.handleMoveTokenButtonClick(doubleDice, die1, die2)
     }
   }
 
@@ -172,6 +171,7 @@ class DiceRoll extends Component {
       moveTokenButtonVisible: false,
       diceRollButtonVisible: false,
       endTurnButtonVisible: false,
+      goButtonVisible: false,
       buyPropertyButtonVisible: false,
       buyPropertyComment: '',
       jailRollDoublesComment: '',
@@ -391,6 +391,7 @@ class DiceRoll extends Component {
         })
       }
     } else if (squareType === 'INCOME_TAX') {
+      sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on Income Tax. Pay $200.`)
       this.setState({
         moveTokenButtonVisible: false,
         endTurnButtonVisible: false,
@@ -408,24 +409,24 @@ class DiceRoll extends Component {
         squareTypeComment: 'You landed on Luxury Tax. Pay $100.',
         userPositions: userPosition
       })
+      sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on Luxury Tax. Pay $100.`)
     }
     this.handleLandOnOrPassGo(oldUserPosition, userPosition, jail)
   }
 
   handleLandOnOrPassGo (oldUserPosition, userPosition, jail) {
-    if (!jail) {
-      if (userPosition < oldUserPosition) {
-        let goComment = 'You passed GO. Collect $200.'
-        if(this.state.squareTypeComment === 'You landed on GO. Collect $200!') {
-          goComment = ''
-        }
-        this.setState({
-          passGoComment: goComment,
-          endTurnButtonVisible: false,
-          moveTokenButtonVisible: false,
-          goButtonVisible: true
-        })
+    if (!jail && userPosition < oldUserPosition) {
+      console.log('in handleLandOnOrPassGo userPosition, oldUserPosition = ', userPosition, oldUserPosition)
+      let goComment = 'You passed GO. Collect $200.'
+      if(this.state.squareTypeComment === 'You landed on GO. Collect $200!') {
+        goComment = ''
       }
+      this.setState({
+        passGoComment: goComment,
+        endTurnButtonVisible: false,
+        moveTokenButtonVisible: false,
+        goButtonVisible: true
+      })
     }
   }
 
@@ -995,6 +996,9 @@ class DiceRoll extends Component {
           </div>
           <div className='doubles-comment_div'>
             {this.state.doublesComment}
+          </div>
+          <div className='pass-go-comment_div'>
+            {this.state.passGoComment}
           </div>
           <div className='chance-comment_div'>
             {this.state.chanceComment}

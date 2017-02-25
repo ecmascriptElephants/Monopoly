@@ -78,15 +78,23 @@ class DiceRoll extends Component {
 
   componentDidMount () {
     sock.socket.on('yourTurn', (data) => {
-      this.setState({
-        diceRollButtonVisible: true,
-        numOfPlayers: data.numOfPlayers,
-        jailPayFineButtonVisible: true,
-        jailRollDoublesButtonVisible: true,
-        jailFreeCardButtonVisible: true
-      })
-      localStorage.setItem('pIndex', data.index)
-      this.props.dispatch(setIndex(data.index))
+      console.log('bankruptcyButtonVisible', this.state.bankruptcyButtonVisible)
+      if (this.state.bankruptcyButtonVisible === false) {
+        this.setState({
+          diceRollButtonVisible: true,
+          numOfPlayers: data.numOfPlayers,
+          jailPayFineButtonVisible: true,
+          jailRollDoublesButtonVisible: true,
+          jailFreeCardButtonVisible: true
+        })
+        localStorage.setItem('pIndex', data.index)
+        this.props.dispatch(setIndex(data.index))
+      } else {
+        this.setState({
+          endTurnButtonVisible: true,
+          comment: 'You bankrupted... Please hit the end button to pass to other players'
+        })
+      }
     })
     sock.socket.on('update properties', (data) => {
       console.log('diceRoll js update properties! socket func! data = ', data)
@@ -554,6 +562,7 @@ class DiceRoll extends Component {
         endTurnButtonVisible: false,
         moveTokenButtonVisible: false
       })
+      checkBankruptcy()
     } else {
       updatedUserMoneyArray[this.props.index] -= 200
       this.props.dispatch(setUserMoney(updatedUserMoneyArray[this.props.index], this.props.index))
@@ -593,6 +602,7 @@ class DiceRoll extends Component {
         endTurnButtonVisible: false,
         moveTokenButtonVisible: false
       })
+      checkBankruptcy()
     } else {
       updatedUserMoneyArray[this.props.index] -= 100
       this.props.dispatch(setUserMoney(updatedUserMoneyArray[this.props.index], this.props.index))
@@ -646,7 +656,7 @@ class DiceRoll extends Component {
       this.setState({
         buyPropertyComment: 'You cannot afford this property :(',
         endTurnButtonVisible: true,
-        buyPropertyButtonVisible: false,
+        buyPropertyButtonVisible: true,
         squareTypeComment: '',
         moveTokenButtonVisible: false
       })
@@ -666,6 +676,9 @@ class DiceRoll extends Component {
       let updatedUserProperties = [...this.state.userPropertiesArray]
 
       updatedUserProperties[this.props.index] = propertiesArray
+      if (updatedUserMoneyArray[this.props.index] < 1000) {
+        this.setState({bankruptcyButtonVisible:true})
+      }
       this.setState({
         buyPropertyComment: `You bought ${newProperty.PropertyObj.NAME}, cost $${newProperty.PropertyObj.PRICE}`,
         userMoneyArray: updatedUserMoneyArray,
@@ -708,6 +721,7 @@ class DiceRoll extends Component {
       this.setState({
         jailPayFineComment: 'You cannot afford the $50 fine.'
       })
+      checkBankruptcy()
     } else {
       let updatedUserMoneyArray = [...this.state.userMoneyArray]
       updatedUserMoneyArray[this.props.index] -= 50
@@ -839,13 +853,26 @@ class DiceRoll extends Component {
   }
 
   checkBankruptcy () {
-
+    console.log('check bankruptcy invoked')
+    let usersProperties = [...this.state.userPropertiesArray]
+    if (userProperties[this.props.index].length === 0) {
+      console.log('bankruptcy!')
+      this.setState({bankruptcyButtonVisible: true})
+    }
   }
 
   handleBankruptcyButtonClick () {
-    this.state.userMoneyArray[this.props.index] = 0
-    this.state.userPropertiesArray[this.props.index] = []
-    this.state.isBankruptArray[this.props.index] = true
+    console.log('bankrupt button click')
+    let currentUser = this.props.index
+    let updatedUserMoney = [...this.state.userMoneyArray]
+    let updatedUserProperties = [...this.state.userPropertiesArray]
+    updatedUserMoney[currentUser] = 0
+    updatedUserProperties[currentUser] = []
+    this.setState({
+      userMoneyArray: updatedUserMoney,
+      userPropertiesArray: updatedUserProperties,
+      diceRollButtonVisible: false
+    })
   }
 
   handleMortgageButtonClick (propertyName) {
@@ -1072,5 +1099,4 @@ DiceRoll.propTypes = {
   userPropertiesArray: React.PropTypes.array.isRequired,
   userCashArray: React.PropTypes.array.isRequired
 }
-
 export default connect(mapStateToProps)(DiceRoll)

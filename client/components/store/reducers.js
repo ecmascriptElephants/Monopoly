@@ -7,6 +7,7 @@ import {
   SET_MESSAGE_ID,
   SET_USERS_PROPERTIES,
   SET_USERS_MONEY,
+  SET_USERS_JAIL,
   SET_MYINDEX,
   SET_CASH,
   SET_PLAYERS,
@@ -23,6 +24,7 @@ const DEFAULT_STATE = {
   messageID: 0,
   players: [],
   userPropertyArray: [[], [], [], [], [], [], [], []],
+  jailPositions: [0, 0, 0, 0, 0, 0, 0, 0],
   userCashArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500],
   userMoneyArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500]
 }
@@ -101,6 +103,15 @@ const setUserMoney = (state, action) => {
   return newState
 }
 
+const setUserJail = (state, action) => {
+  let newArr = [...state.jailPositions.slice(0, action.index),
+    action.jailPositions,
+    ...state.jailPositions.slice(action.index + 1)]
+  const newState = {}
+  Object.assign(newState, state, { jailPositions: newArr })
+  return newState
+}
+
 const setPlayersArray = (state, action) => {
   let newState = {}
   let newArray = [...action.playersArray]
@@ -153,6 +164,9 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_USERS_MONEY:
       return setUserMoney(state, action)
+
+    case SET_USERS_JAIL:
+      return setUserJail(state, action)
 
     case SET_MYINDEX:
       return setPlayerIndex(state, action)

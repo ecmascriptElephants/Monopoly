@@ -14,14 +14,14 @@
 //   PRIMARY KEY (`id`),
 //   UNIQUE INDEX `username_UNIQUE` (`username` ASC),
 //   UNIQUE INDEX `displayname_UNIQUE` (`displayname` ASC));
-
+//
 // CREATE TABLE `monopoly`.`game` (
 //   `id` INT NOT NULL AUTO_INCREMENT,
 //   `gstate` JSON NOT NULL,
 //   `info` JSON NOT NULL,
 //   PRIMARY KEY (`id`));
-
-
+//
+//
 // CREATE TABLE `monopoly`.`players` (
 //   `id` INT NOT NULL AUTO_INCREMENT,
 //   `playerID` TEXT NOT NULL,

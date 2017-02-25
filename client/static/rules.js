@@ -14,10 +14,10 @@ const rules = {
     },
     {
       Description: 'COLLECT $50 FROM EVERY PLAYER',
-      'Special': 'EVERYONE'
+      Special: 'COLLECT_50_EVERYONE'
     },
     {
-      Description: 'DOCTOR"S FEE PAY $50',
+      Description: 'DOCTOR\'S FEE PAY $50',
       Cash: -50
     },
     {
@@ -50,7 +50,7 @@ const rules = {
     },
     {
       Description: 'GO TO JAIL GO DIRECTLY TO JAIL DO NOT PASS GO DO NOT COLLECT $200',
-      Position: 'JAIL'
+      Special: 'JAIL'
     },
     {
       Description: 'YOU HAVE WON SECOND PRIZE IN A BEAUTY CONTEST COLLECT $10',
@@ -63,7 +63,7 @@ const rules = {
     },
     {
       Description: 'GET OUT OF JAIL FREE',
-      Code: 'Jail-Free'
+      Special: 'JAIL_FREE'
     }
   ],
   Chance: [
@@ -77,7 +77,7 @@ const rules = {
     },
     {
       Description: 'GO BACK 3 SPACES',
-      Position: -3
+      Special: 'POSITION_3'
     },
     {
       Description: 'ADVANCE TOKEN TO NEAREST UTILITY. IF UNOWNED YOU MAY BUY IT FROM BANK. IF OWNED, THROW DICE AND PAY OWNER A TOTAL TEN TIMES THE AMOUNT THROWN.',
@@ -85,7 +85,7 @@ const rules = {
     },
     {
       Description: 'GO DIRECTLY TO JAIL. DO NOT PASS GO. DO NOT COLLECT $200.',
-      Position: 'JAIL'
+      Special: 'JAIL'
     },
     {
       Description: 'PAY POOR TAX OF $15',
@@ -93,29 +93,36 @@ const rules = {
     },
     {
       Description: 'ADVANCE TO ST. CHARLES PLACE. IF YOU PASS GO, COLLECT $200.',
-      Position: 11,
-      Pay: true
+      Position: 11
     },
     {
       Description: 'YOU HAVE BEEN ELECTED CHAIRMAN OF THE BOARD. PAY EACH PLAYER $50.',
-      Special: 'PAY EVERYONE'
+      Special: 'PAY_50_EVERYONE'
     },
-    { Description: 'ADVANCE TOKEN TO THE NEAREST RAILROAD AND PAY OWNER TWICE THE RENTAL TO WHICH HE IS OTHERWISE ENTITLED. IF RAILROAD IS UNOWNED, YOU MAY BUY IT FROM THE BANK.' },
     {
-      Description: 'TAKE A RIDE ON THE READING. IF YOU PASS GO COLLECCT $200',
-      Position: 5,
-      Pay: true
+      Description: 'ADVANCE TOKEN TO THE NEAREST RAILROAD AND PAY OWNER TWICE THE RENTAL TO WHICH HE IS OTHERWISE ENTITLED. IF RAILROAD IS UNOWNED, YOU MAY BUY IT FROM THE BANK.',
+      Special: 'RAILROAD'
     },
-    { Description: 'ADVANCE TOKEN TO THE NEAREST RAILROAD AND PAY OWNER TWICE THE RENTAL TO WHICH HE IS OTHERWISE ENTITLED. IF RAILROAD IS UNOWNED, YOU MAY BUY IT FROM THE BANK.' },
+    {
+      Description: 'TAKE A RIDE ON THE READING. IF YOU PASS GO COLLECT $200',
+      Position: 5
+    },
+    {
+      Description: 'ADVANCE TOKEN TO THE NEAREST RAILROAD AND PAY OWNER TWICE THE RENTAL TO WHICH HE IS OTHERWISE ENTITLED. IF RAILROAD IS UNOWNED, YOU MAY BUY IT FROM THE BANK.',
+      Special: 'RAILROAD'
+    },
     {
       Description: 'TAKE A WALK ON THE BOARD WALK. ADVANCE TOKEN TO BOARD WALK',
-      Postion: 39
+      Position: 39
     },
     {
       Description: 'YOUR BUILDING AND LOAN MATURES. COLLECT $150',
       Cash: 150
     },
-    { Description: 'ADVANCE TO ILLINOIS AVE' },
+    {
+      Description: 'ADVANCE TO ILLINOIS AVE',
+      Position: 24
+    },
     {
       Description: 'MAKE GENERAL REPAIRS ON ALL YOUR PROPERTY. FOR EACH HOUSE PAY $25. FOR EACH HOTEL PAY $100.',
       House: -25,
@@ -123,7 +130,7 @@ const rules = {
     },
     {
       Description: 'GET OUT OF JAIL FREE',
-      Code: 'Jail-Free'
+      Special: 'JAIL_FREE'
     }
   ],
   Properties: [
@@ -195,10 +202,10 @@ const rules = {
     {
       NAME: 'Electric Company',
       PROPERTY_GROUP: 'Utilities',
-      ALLOWS_HOUSE: false,
+      ALLOWS_HOUSES: false,
       BOARD_POSITION: 12,
       PRICE: 150,
-      RENT: false,
+      RENT: [4, 10],
       HOUSE_PRICE: 0,
       MORTGAGE_PRICE: 75,
       HOUSE_SALE_PRICE: 0,
@@ -484,7 +491,7 @@ const rules = {
       ALLOWS_HOUSES: false,
       BOARD_POSITION: 28,
       PRICE: 150,
-      RENT: false,
+      RENT: [4, 10],
       HOUSE_PRICE: 0,
       MORTGAGE_PRICE: 75,
       HOUSE_SALE_PRICE: 0,

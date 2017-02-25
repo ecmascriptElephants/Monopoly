@@ -27,7 +27,7 @@ class Board extends Component {
   //   this.dice(nextProps.userPosArray[index], index)
   // }
 
-  dice (value, index, insideJob) {
+  dice (value, index, flag) {
     const location = [
       [97, 97], [97, 83], [97, 75], [97, 66.5], [97, 58.5], [97, 50], [97, 42], [97, 34], [97, 25.5], [97, 17.5], [97, 2.5],
       [84.5, 2.5], [76.4, 2.5], [68.2, 2.5], [60, 2.5], [51.8, 2.5], [43.5, 2.5], [35.4, 2.5], [27.1, 2.5], [19, 2.5], [7, 2.5],
@@ -39,7 +39,7 @@ class Board extends Component {
     if (index >= 0) {
       this.props.dispatch(setUserPositions(value, index))
     }
-    if (insideJob) {
+    if (flag) {
       sock.updatePos({ gameID: this.props.gameID, pos: value, index: index })
     }
     this.props.dispatch(setPlayerProps(playerProps, index))
@@ -70,6 +70,7 @@ class Board extends Component {
         <div className='board parent'>
           {
             this.props.players.map((player, index) => {
+              console.log('in board.jsx player = ', player,' index = ', index)
               if (index <= 3) {
                 return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0] - (index + index)}%`} userNumber={index} key={index} />
               } else {

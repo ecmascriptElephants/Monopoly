@@ -44,6 +44,8 @@ class DiceRoll extends Component {
       userNames: [userNames[0][0], userNames[1][0], userNames[2][0], userNames[3][0], userNames[4][0], userNames[5][0], userNames[6][0], userNames[7][0]],
       jailPositions: [0, 0, 0, 0, 0, 0, 0, 0],
       userPropertiesArray: [[], [], [], [], [], [], [], []],
+      userProertiesObj: [{properties:[], mortgage: []}, {properties:[], mortgage: []}, {properties:[], mortgage: []}, {properties:[], mortgage: []}, {properties:[], mortgage: []},
+      {properties:[], mortgage: []}, {properties:[], mortgage: []}, {properties:[], mortgage: []}],
       userJailFreeCardArray: [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]],
       userMoneyArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500],
       passGoComment: '',
@@ -69,7 +71,7 @@ class DiceRoll extends Component {
       bankruptcyButtonVisible: false,
       jailPayFineButtonVisible: false,
       jailRollDoublesButtonVisible: false,
-      jailFreeCardButtonVisible: false
+      jailFreeCardButtonVisible: false,
     }
   }
   // componentWillReceiveProps (nextProps) {
@@ -99,6 +101,7 @@ class DiceRoll extends Component {
     sock.socket.on('update properties', (data) => {
       console.log('diceRoll js update properties! socket func! data = ', data)
       let updatedUserPropertiesArray = [...this.state.userPropertiesArray]
+      let updatedUserPropertiesObj = [...this.state.updatedUserPropertiesObj]
       updatedUserPropertiesArray[data.index] = data.properties
       this.setState({ userPropertiesArray: updatedUserPropertiesArray })
       // this.props.dispatch(setUserProperties(data.userProperties, data.index))
@@ -676,9 +679,9 @@ class DiceRoll extends Component {
       let updatedUserProperties = [...this.state.userPropertiesArray]
 
       updatedUserProperties[this.props.index] = propertiesArray
-      if (updatedUserMoneyArray[this.props.index] < 1000) {
-        this.setState({bankruptcyButtonVisible:true})
-      }
+      // if (updatedUserMoneyArray[this.props.index] < 1000) {
+      //   this.setState({bankruptcyButtonVisible:true})
+      // }
       this.setState({
         buyPropertyComment: `You bought ${newProperty.PropertyObj.NAME}, cost $${newProperty.PropertyObj.PRICE}`,
         userMoneyArray: updatedUserMoneyArray,
@@ -876,14 +879,12 @@ class DiceRoll extends Component {
   }
 
   handleMortgageButtonClick (propertyName) {
-    console.log('click mortgage button!')
     console.log(this.state.userPropertiesArray[this.props.index])
     // console.log('proerty name', propertyName)
     let usersProperties = [...this.state.userPropertiesArray]
     let updatedUserMoneyArray = [...this.state.userMoneyArray]
     // console.log('before', updatedUserMoneyArray[this.props.index])
     let updatedUserProperties = [...this.state.userPropertiesArray]
-    console.log('before', updatedUserProperties )
     updatedUserProperties[this.props.index].forEach((property, i, arr) => {
       if (property.PropertyObj.NAME === propertyName) {
         updatedUserMoneyArray[this.props.index] += property.PropertyObj.MORTGAGE_PRICE
@@ -892,10 +893,8 @@ class DiceRoll extends Component {
     })
     this.setState({
       userMoneyArray: updatedUserMoneyArray,
-      // buyPropertyButtonVisible: false,
       userPropertiesArray: updatedUserProperties
     })
-    // console.log('after', updatedUserProperties)
   }
 
   render () {

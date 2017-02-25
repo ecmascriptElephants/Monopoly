@@ -4,7 +4,7 @@ import sock from '../helper/socket'
 import { Link } from 'react-router-dom'
 const LoadGame = (props) => {
   const loadGame = (gameID) => {
-    sock.loadGame({gameID, id: localStorage.id, userID: localStorage.id})
+    sock.loadGame({gameID, id: window.localStorage.id, userID: window.localStorage.id})
   }
   console.log(props.load)
   return (

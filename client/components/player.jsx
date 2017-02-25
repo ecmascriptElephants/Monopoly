@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Header, Container, Segment, Icon, Divider, Message, Button } from 'semantic-ui-react'
 import { rules } from '../static/rules'
-import DiceRoll from './dice_roll'
+import DiceRoll from './dice_roll2'
 import { connect } from 'react-redux'
 class Player extends Component {
   constructor (props) {

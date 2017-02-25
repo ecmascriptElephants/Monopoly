@@ -41,5 +41,8 @@ module.exports = {
 
   loadGame: (gameID) => {
     socket.emit('load game', gameID)
+  },
+  comment: (string) => {
+    socket.emit('comment', string)
   }
 }

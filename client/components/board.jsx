@@ -8,7 +8,6 @@ import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import { setUserPositions, setPlayers, setPlayerProps, setIndex } from './store/actionCreators'
 
-
 class Board extends Component {
   constructor (props) {
     super(props)
@@ -45,8 +44,8 @@ class Board extends Component {
     this.props.dispatch(setPlayerProps(playerProps, index))
   }
   componentWillMount () {
-    // if (localStorage.gameState) {
-    //   this.props.dispatch(setStoreState(JSON.parse(localStorage.gameState)))
+    // if (window.localStorage.gameState) {
+    //   this.props.dispatch(setStoreState(JSON.parse(window.localStorage.gameState)))
     // }
   }
 
@@ -70,7 +69,7 @@ class Board extends Component {
         <div className='board parent'>
           {
             this.props.players.map((player, index) => {
-              console.log('in board.jsx player = ', player,' index = ', index)
+              console.log('in board.jsx player = ', player, ' index = ', index)
               if (index <= 3) {
                 return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0] - (index + index)}%`} userNumber={index} key={index} />
               } else {
@@ -213,7 +212,7 @@ class Board extends Component {
             </div>
           </div>
         </div>
-        <Chat name={this.props.username}  />
+        <Chat name={this.props.username} />
       </div>
     )
   }

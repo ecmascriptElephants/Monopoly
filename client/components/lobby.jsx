@@ -22,9 +22,9 @@ class Lobby extends Component {
       resume: true
     }
     this.props.dispatch(setDefaultState())
-    this.props.dispatch(setUsername(localStorage.displayname))
-    this.props.dispatch(setUserID(localStorage.id))
-    sock.userJoined({ id: localStorage.id, displayName: localStorage.displayname })
+    this.props.dispatch(setUsername(window.localStorage.displayname))
+    this.props.dispatch(setUserID(window.localStorage.id))
+    sock.userJoined({ id: window.localStorage.id, displayName: window.localStorage.displayname })
 
     this.joinGame = this.joinGame.bind(this)
     this.newGame = this.newGame.bind(this)
@@ -34,10 +34,10 @@ class Lobby extends Component {
     this.getChats = this.getChats.bind(this)
   }
   componentDidMount () {
-    // localStorage.removeItem('state')
+    // window.localStorage.removeItem('state')
     sock.socket.on('new game', (data) => {
       this.setState({ join: true })
-      localStorage.setItem('gameID', data.gameID)
+      window.localStorage.setItem('gameID', data.gameID)
       this.props.dispatch(setGameID(data.gameID))
     })
 

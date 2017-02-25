@@ -59,4 +59,3 @@ module.exports = (app, express, passport) => {
     }
   })
 }
-

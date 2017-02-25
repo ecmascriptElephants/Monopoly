@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Header, Container, Segment, Icon, Divider, Message } from 'semantic-ui-react'
+import { Header, Container, Segment, Icon, Divider, Message, Button } from 'semantic-ui-react'
 import { rules } from '../static/rules'
 import DiceRoll from './dice_roll'
 import { connect } from 'react-redux'
@@ -150,6 +150,7 @@ class Player extends Component {
             </Header.Content>
           </Header>
           <Divider />
+          <Button>Leave Game</Button>
           <Message>
             {this.props.userCashArray[this.props.playerIndex]}
           </Message>

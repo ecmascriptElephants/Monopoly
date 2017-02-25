@@ -136,5 +136,9 @@ module.exports = (io) => {
           socket.emit('load state', state)
         })
     })
+    
+    socket.on('comment', (comment) => {
+      io.emit('receive-comment', comment)
+    })
   })
 }

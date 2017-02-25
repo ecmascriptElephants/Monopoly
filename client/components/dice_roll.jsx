@@ -297,7 +297,6 @@ class DiceRoll extends Component {
           propertyOwner: propertyOwner
         })
         sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on ${propName}. Pay $${rentOwed} to ${this.state.userNames[propertyOwner]}.`)
-        if (mortgagedFlag) {
         if (propertyOwner === this.props.index) {
           this.setState({
             payRentButtonVisible: false,
@@ -434,7 +433,11 @@ class DiceRoll extends Component {
     let updatedUserMoneyArray = [...this.state.userMoneyArray]
     updatedUserMoneyArray[this.props.index] += 200
     this.props.dispatch(setUserMoney(updatedUserMoneyArray[this.props.index], this.props.index))
-    sock.updateMoney({ gameID: this.props.gameID, money: updatedUserMoneyArray[this.props.index], index: this.props.index })
+    sock.updateMoney({
+      gameID: this.props.gameID,
+      money: updatedUserMoneyArray[this.props.index],
+      index: this.props.index
+    })
 
     let doubles = this.state.doubles
     if (!doubles) {
@@ -458,6 +461,8 @@ class DiceRoll extends Component {
         endTurnButtonVisible: false,
         squareTypeComment: ''
       })
+    }
+  }
 
   handleLandOnOrPassGo (oldCurrentUserPosition, userPosition, jail) {
     if (!jail) {

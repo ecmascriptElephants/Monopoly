@@ -43,7 +43,6 @@ const Cards = (props) => {
         //   pos = 25
         // } else {
         //   pos = 5
-<<<<<<< HEAD
         // }
         // props.dispatch(setUserPositions(pos, props.index))
       } else if (card.Special === 'POSITION_3') {
@@ -67,18 +66,7 @@ const Cards = (props) => {
         }
        // Todo make user roll dice and pay owner money
         props.dispatch(setUserPositions(pos, props.index))
-=======
         }
-        // props.dispatch(setUserPositions(pos, props.index))
-      } else if (card.Special === 'POSITION_3') {
-        // let pos = 0
-        // if (props.userPosArray(props.index) === 7) {
-        //   pos = 15
-        // } else if (props.userPosArray(props.index) === 22) {
-        //   pos = 25
-        // } else {
-        //   pos = 5
-        // }
         // props.dispatch(setUserPositions(pos, props.index))
       } else if (card.Special === 'PAY_50_EVERYONE') {
         // let pos = 0
@@ -90,17 +78,6 @@ const Cards = (props) => {
         //   pos = 5
         // }
         // props.dispatch(setUserPositions(pos, props.index))
-      } else if (card.Special === 'UTILITY') {
-      //   let pos = 0
-      //   if (props.userPosArray(props.index) === 7) {
-      //     pos = 15
-      //   } else if (props.userPosArray(props.index) === 22) {
-      //     pos = 25
-      //   } else {
-      //     pos = 5
-      //   }
-      //  // Todo make user roll dice and pay owner money
->>>>>>> bugFixBranch3
       } else if (card.Special === 'RAILROAD') {
        //  let pos = 0
        //  if (props.userPosArray(props.index) === 7) {
@@ -109,30 +86,10 @@ const Cards = (props) => {
        //    pos = 25
        //  } else {
        //    pos = 5
-<<<<<<< HEAD
        //  }
        // Todo make user roll dice and pay owner money
        //  props.dispatch(setUserPositions(pos, props.index))
       }
-=======
-        }
-       // Todo make user roll dice and pay owner money
-       //  props.dispatch(setUserPositions(pos, props.index))
-      // }
->>>>>>> bugFixBranch3
-        // else if (card.Special === 'PAY EVERYONE') {
-      //   console.log('Pay Everyone')
-      //   props.dispatch(setCash(-50, props.index))
-      //   for (let i = 0; i < props.number; i++) {
-      //     if (i !== props.index) {
-      //       props.dispatch(setCash(50, i))
-      //     }
-      //   }
-      // } else if (card.Special === 'EVERYONE') {
-      //   props.dispatch(setCash(50 * props.number, props.index))
-      //   console.log('in cards.jsx everyone')
-      // }
-    // }
     props.button()
   }
   return (

@@ -166,6 +166,7 @@ Player.propTypes = {
   name: React.PropTypes.string.isRequired,
   piece: React.PropTypes.string.isRequired,
   dice: React.PropTypes.func.isRequired,
-  userCashArray: React.PropTypes.array.isRequired
+  userCashArray: React.PropTypes.array.isRequired,
+  playerIndex: React.PropTypes.number.isRequired
 }
 export default connect(mapStateToProps)(Player)

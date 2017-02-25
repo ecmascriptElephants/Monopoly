@@ -6,7 +6,6 @@ const LoadGame = (props) => {
   const loadGame = (gameID) => {
     sock.loadGame({gameID, id: window.localStorage.id, userID: window.localStorage.id})
   }
-  console.log(props.load)
   return (
     <div>
       {
@@ -25,6 +24,7 @@ const LoadGame = (props) => {
 }
 
 LoadGame.propTypes = {
-  pendingGames: React.PropTypes.array.isRequired
+  pendingGames: React.PropTypes.array.isRequired,
+  load: React.PropTypes.bool.isRequired
 }
 export default LoadGame

@@ -61,9 +61,6 @@ class DiceRoll extends Component {
       jailFreeCardButtonVisible: false
     }
   }
-  // componentWillReceiveProps (nextProps) {
-  //   // sock.updateProps({ gameID: nextProps.gameID, pos: nextProps.userPropertiesArray[nextProps.index], index: nextProps.index })
-  // }
 
   componentDidMount () {
     sock.socket.on('yourTurn', (data) => {
@@ -432,20 +429,6 @@ class DiceRoll extends Component {
     }
   }
 
-  handleLandOnOrPassGo (oldCurrentUserPosition, userPosition, jail) {
-    if (!jail) {
-      if (userPosition < oldCurrentUserPosition) {
-        let updatedUserMoneyArray = [...this.state.userMoneyArray]
-        updatedUserMoneyArray[this.props.index] += 200
-        this.props.dispatch(setUserMoney(updatedUserMoneyArray[this.props.index], this.props.index))
-        sock.updateMoney({ gameID: this.props.gameID, money: updatedUserMoneyArray[this.props.index], index: this.props.index })
-        this.setState({
-          userMoneyArray: updatedUserMoneyArray
-        })
-      }
-    }
-  }
-
   handleCardButtonClick () {
     let doubles = this.state.doubles
     this.setState({
@@ -493,13 +476,11 @@ class DiceRoll extends Component {
       this.setState({
         comment: `You owe ${rentOwed}, but only have ${updatedUserMoney[currentUser]}`
       })
-      checkBankruptcy()
     } else {
       updatedUserMoney[currentUser] -= rentOwed
       updatedUserMoney[propertyOwner] += rentOwed
       this.setState({
         userMoneyArray: updatedUserMoney,
-
         propertyOwner: '',
         rentOwed: 0,
         payRentButtonVisible: false,
@@ -817,7 +798,6 @@ class DiceRoll extends Component {
     console.log('click mortgage button!')
     console.log(this.state.userPropertiesArray[this.props.index])
     // console.log('proerty name', propertyName)
-    let usersProperties = [...this.state.userPropertiesArray]
     let updatedUserMoneyArray = [...this.state.userMoneyArray]
     // console.log('before', updatedUserMoneyArray[this.props.index])
     let updatedUserProperties = [...this.state.userPropertiesArray]
@@ -924,7 +904,7 @@ class DiceRoll extends Component {
               ? <div>
                 <div> {this.state.jailPayFineButtonVisible ? 'You are in jail. Pay' +
                   ' $50 to get out immediately, try to roll doubles, or use' +
-                  ' a Get Out of Jail Free card' : 'You are in jail :( '}    </div>
+                  ' a Get Out of Jail Free card' : 'You are in jail :( '} </div>
                 <div className='jail-pay-fine-btn_div'>
                   {(this.state.jailPayFineButtonVisible && !this.state.endTurnButtonVisible)
                     ? <div>

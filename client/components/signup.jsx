@@ -37,7 +37,7 @@ class Signup extends Component {
         window.localStorage.setItem('token', res.data.token)
         window.localStorage.setItem('displayname', res.data.user.displayname)
         window.localStorage.setItem('id', res.data.user.id)
-        this.setState({valid : true})
+        this.setState({valid: true})
       })
       .catch((err) => console.error(err))
   }

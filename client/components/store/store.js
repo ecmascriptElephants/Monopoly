@@ -1,6 +1,6 @@
 import { createStore } from 'redux'
 import rootReducer from './reducers'
-import { saveState, loadState } from './window.localStorage'
+import { saveState, loadState } from './localStorage'
 import { saveRemoteState } from './remoteStorage'
 
 const presistedState = loadState()

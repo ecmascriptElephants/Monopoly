@@ -29,7 +29,6 @@ class Land extends Component {
     e.preventDefault()
     axios.post('/login', this.state)
     .then((res) => {
-      
       window.localStorage.setItem('token', res.data.token)
       window.localStorage.setItem('displayname', res.data.user.displayname)
       window.localStorage.setItem('id', res.data.user.id)

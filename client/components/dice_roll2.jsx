@@ -12,11 +12,12 @@ import {
 } from './store/actionCreators'
 import { Button, List } from 'semantic-ui-react'
 import Card from './Cards'
+import Move from './moveToken'
 class DiceRoll extends Component {
   constructor (props) {
     super(props)
     this.handleDiceRollButtonClick = this.handleDiceRollButtonClick.bind(this)
-    this.handleMoveTokenButtonClick = this.handleMoveTokenButtonClick.bind(this)
+    // this.handleMoveTokenButtonClick = this.handleMoveTokenButtonClick.bind(this)
     this.handleEndTurnButtonClick = this.handleEndTurnButtonClick.bind(this)
     this.handleLandOnOrPassGo = this.handleLandOnOrPassGo.bind(this)
     this.handleGoButtonClick = this.handleGoButtonClick.bind(this)
@@ -35,7 +36,8 @@ class DiceRoll extends Component {
     this.handleJailPayFineButtonClick = this.handleJailPayFineButtonClick.bind(this)
     this.handleJailRollDoublesButtonClick = this.handleJailRollDoublesButtonClick.bind(this)
     this.handleJailFreeCardButtonClick = this.handleJailFreeCardButtonClick.bind(this)
-
+    this.handleStateChange = this.handleStateChange.bind(this)
+    
     this.state = {
       dice: [0, 0],
       diceSum: 0,
@@ -94,6 +96,9 @@ class DiceRoll extends Component {
     })
   }
 
+  handleStateChange (obj) {
+    this.setState(obj)
+  }
   handleDiceRollButtonClick () {
     const die1 = 1 + Math.floor((6 * Math.random()))
     const die2 = 1 + Math.floor((6 * Math.random()))
@@ -118,231 +123,231 @@ class DiceRoll extends Component {
     sock.end({ gameID: this.props.gameID, pos: this.props.userPosArray[this.props.index], index: this.props.index })
   }
 
-  handleMoveTokenButtonClick () {
-    let jail = false
-    const doubles = this.state.doubles
-    const diceSum = this.state.diceSum
-    let oldUserPosition = this.props.userPosArray[this.props.index]
-    let userPosition = (this.props.userPosArray[this.props.index] + diceSum) % 40
-    console.log('in handleMoveTokenButtonClick userPosArray = ', this.props.userPosArray)
-    console.log('in handleMoveTokenButtonClick userPosition = ', userPosition)
-    this.props.dispatch(setUserPositions(userPosition, this.props.index))
-    this.props.dice(userPosition, this.props.index, true)
-    let squareType = rules.PositionType[userPosition]
-    if (squareType === 'GO_TO_JAIL' || doubles === 3) {
-      jail = true
-      this.props.dispatch(setUserPositions(10, this.props.index))
-      this.props.dice(10, this.props.index, true)
-      let updatedJailPositions = [...this.state.jailPositions]
-      updatedJailPositions[this.props.index] = 1
-      this.setState({
-        moveTokenButtonVisible: false,
-        jailPositions: updatedJailPositions,
-        endTurnButtonVisible: true
-      })
-    } else if (squareType === 'CHANCE') {
-      this.setState({
-        cardButtonVisible: true,
-        moveTokenButtonVisible: false,
-        comment: 'You landed on a chance space. Pick a card!',
-        card: false
-      })
-      sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on a chance space.`)
-    } else if (squareType === 'COMMUNITY_CHEST') {
-      this.setState({
-        cardButtonVisible: true,
-        moveTokenButtonVisible: false,
-        comment: 'You landed on a community chest space. Pick a card!',
-        card: true
-      })
-      sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on a community chest space.`)
-    } else if (squareType === 'GO_TO_JAIL' || doubles === 3) {
-      jail = true
-      this.props.dispatch(setUserPositions(10, this.props.index))
-      this.setState({
-        moveTokenButtonVisible: false,
-        endTurnButtonVisible: true
-      })
-    } else if (squareType === 'PROPERTY') {
-      if (this.propertyIsOwned(userPosition) === false) {
-        let cost = 0
-        let propertyName = ''
-        rules.Properties.forEach(prop => {
-          if (prop.BOARD_POSITION === userPosition) {
-            cost = prop.PRICE
-            propertyName = prop.NAME
-          }
-        })
-        this.setState({
-          buyPropertyButtonVisible: true,
-          moveTokenButtonVisible: false,
-          comment: `You landed on ${propertyName}, and can buy it for $${cost}.`,
-          endTurnButtonVisible: true
-        })
-        sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on an unowned property!`)
-        if (doubles) {
-          this.setState({
-            endTurnButtonVisible: false,
+  // handleMoveTokenButtonClick () {
+  //   let jail = false
+  //   const doubles = this.state.doubles
+  //   const diceSum = this.state.diceSum
+  //   let oldUserPosition = this.props.userPosArray[this.props.index]
+  //   let userPosition = (this.props.userPosArray[this.props.index] + diceSum) % 40
+  //   console.log('in handleMoveTokenButtonClick userPosArray = ', this.props.userPosArray)
+  //   console.log('in handleMoveTokenButtonClick userPosition = ', userPosition)
+  //   this.props.dispatch(setUserPositions(userPosition, this.props.index))
+  //   this.props.dice(userPosition, this.props.index, true)
+  //   let squareType = rules.PositionType[userPosition]
+  //   if (squareType === 'GO_TO_JAIL' || doubles === 3) {
+  //     jail = true
+  //     this.props.dispatch(setUserPositions(10, this.props.index))
+  //     this.props.dice(10, this.props.index, true)
+  //     let updatedJailPositions = [...this.state.jailPositions]
+  //     updatedJailPositions[this.props.index] = 1
+  //     this.setState({
+  //       moveTokenButtonVisible: false,
+  //       jailPositions: updatedJailPositions,
+  //       endTurnButtonVisible: true
+  //     })
+  //   } else if (squareType === 'CHANCE') {
+  //     this.setState({
+  //       cardButtonVisible: true,
+  //       moveTokenButtonVisible: false,
+  //       comment: 'You landed on a chance space. Pick a card!',
+  //       card: false
+  //     })
+  //     sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on a chance space.`)
+  //   } else if (squareType === 'COMMUNITY_CHEST') {
+  //     this.setState({
+  //       cardButtonVisible: true,
+  //       moveTokenButtonVisible: false,
+  //       comment: 'You landed on a community chest space. Pick a card!',
+  //       card: true
+  //     })
+  //     sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on a community chest space.`)
+  //   } else if (squareType === 'GO_TO_JAIL' || doubles === 3) {
+  //     jail = true
+  //     this.props.dispatch(setUserPositions(10, this.props.index))
+  //     this.setState({
+  //       moveTokenButtonVisible: false,
+  //       endTurnButtonVisible: true
+  //     })
+  //   } else if (squareType === 'PROPERTY') {
+  //     if (this.propertyIsOwned(userPosition) === false) {
+  //       let cost = 0
+  //       let propertyName = ''
+  //       rules.Properties.forEach(prop => {
+  //         if (prop.BOARD_POSITION === userPosition) {
+  //           cost = prop.PRICE
+  //           propertyName = prop.NAME
+  //         }
+  //       })
+  //       this.setState({
+  //         buyPropertyButtonVisible: true,
+  //         moveTokenButtonVisible: false,
+  //         comment: `You landed on ${propertyName}, and can buy it for $${cost}.`,
+  //         endTurnButtonVisible: true
+  //       })
+  //       sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on an unowned property!`)
+  //       if (doubles) {
+  //         this.setState({
+  //           endTurnButtonVisible: false,
 
-            diceRollButtonVisible: true
-          })
-        }
-      } else {
-        let propertyOwner = this.propertyIsOwned(userPosition)
-        let rentOwed = 0
-        let propName = ''
-        let mortgagedFlag = false
-        this.state.userPropertiesArray[propertyOwner].forEach(prop => {
-          if (prop.Position === userPosition) {
-            propName = prop.PropertyObj.NAME
-            if (prop.Mortgaged) {
-              mortgagedFlag = true
-            } else if (prop.PropertyObj.PROPERTY_GROUP === 'Utilities') {
-              let utilityCount = -1
-              this.state.userPropertiesArray[propertyOwner].forEach(prop => {
-                if (prop.PropertyObj.PROPERTY_GROUP === 'Utilities') {
-                  utilityCount += 1
-                }
-              })
-              rentOwed = (diceSum) * (prop.PropertyObj.RENT[utilityCount])
-            } else if (prop.PropertyObj.PROPERTY_GROUP === 'Stations') {
-              let stationCount = -1
-              this.state.userPropertiesArray[propertyOwner].forEach(prop => {
-                if (prop.PropertyObj.PROPERTY_GROUP === 'Stations') {
-                  stationCount += 1
-                }
-              })
-              rentOwed = prop.PropertyObj.RENT[stationCount]
-            } else {
-              rentOwed = prop.PropertyObj.RENT[prop.Houses]
-            }
-          }
-        })
-        console.log('!!!!!!!!!!!!! in diceRolljsx line 259 this.state = ', this.state)
-        this.setState({
-          payRentButtonVisible: true,
-          comment: `You landed on ${propName}. Pay ${rentOwed} to ${this.state.userNames[propertyOwner]}.`,
-          endTurnButtonVisible: false,
-          moveTokenButtonVisible: false,
-          rentOwed: rentOwed,
-          propertyOwner: propertyOwner
-        })
-        sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on ${propName}. Pay $${rentOwed} to ${this.state.userNames[propertyOwner]}.`)
-        if (propertyOwner === this.props.index) {
-          this.setState({
-            payRentButtonVisible: false,
-            comment: `You landed on ${propName}, but you already own it.`,
-            endTurnButtonVisible: !doubles,
-            diceRollButtonVisible: !!doubles,
-            moveTokenButtonVisible: false,
-            rentOwed: rentOwed,
+  //           diceRollButtonVisible: true
+  //         })
+  //       }
+  //     } else {
+  //       let propertyOwner = this.propertyIsOwned(userPosition)
+  //       let rentOwed = 0
+  //       let propName = ''
+  //       let mortgagedFlag = false
+  //       this.state.userPropertiesArray[propertyOwner].forEach(prop => {
+  //         if (prop.Position === userPosition) {
+  //           propName = prop.PropertyObj.NAME
+  //           if (prop.Mortgaged) {
+  //             mortgagedFlag = true
+  //           } else if (prop.PropertyObj.PROPERTY_GROUP === 'Utilities') {
+  //             let utilityCount = -1
+  //             this.state.userPropertiesArray[propertyOwner].forEach(prop => {
+  //               if (prop.PropertyObj.PROPERTY_GROUP === 'Utilities') {
+  //                 utilityCount += 1
+  //               }
+  //             })
+  //             rentOwed = (diceSum) * (prop.PropertyObj.RENT[utilityCount])
+  //           } else if (prop.PropertyObj.PROPERTY_GROUP === 'Stations') {
+  //             let stationCount = -1
+  //             this.state.userPropertiesArray[propertyOwner].forEach(prop => {
+  //               if (prop.PropertyObj.PROPERTY_GROUP === 'Stations') {
+  //                 stationCount += 1
+  //               }
+  //             })
+  //             rentOwed = prop.PropertyObj.RENT[stationCount]
+  //           } else {
+  //             rentOwed = prop.PropertyObj.RENT[prop.Houses]
+  //           }
+  //         }
+  //       })
+  //       console.log('!!!!!!!!!!!!! in diceRolljsx line 259 this.state = ', this.state)
+  //       this.setState({
+  //         payRentButtonVisible: true,
+  //         comment: `You landed on ${propName}. Pay ${rentOwed} to ${this.state.userNames[propertyOwner]}.`,
+  //         endTurnButtonVisible: false,
+  //         moveTokenButtonVisible: false,
+  //         rentOwed: rentOwed,
+  //         propertyOwner: propertyOwner
+  //       })
+  //       sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on ${propName}. Pay $${rentOwed} to ${this.state.userNames[propertyOwner]}.`)
+  //       if (propertyOwner === this.props.index) {
+  //         this.setState({
+  //           payRentButtonVisible: false,
+  //           comment: `You landed on ${propName}, but you already own it.`,
+  //           endTurnButtonVisible: !doubles,
+  //           diceRollButtonVisible: !!doubles,
+  //           moveTokenButtonVisible: false,
+  //           rentOwed: rentOwed,
 
-            propertyOwner: propertyOwner
-          })
-        } else if (mortgagedFlag) {
-          this.setState({
-            payRentButtonVisible: false,
-            comment: `You landed on ${propName}, but it is mortgaged.`,
-            endTurnButtonVisible: !doubles,
-            diceRollButtonVisible: !!doubles,
-            moveTokenButtonVisible: false,
-            rentOwed: rentOwed,
+  //           propertyOwner: propertyOwner
+  //         })
+  //       } else if (mortgagedFlag) {
+  //         this.setState({
+  //           payRentButtonVisible: false,
+  //           comment: `You landed on ${propName}, but it is mortgaged.`,
+  //           endTurnButtonVisible: !doubles,
+  //           diceRollButtonVisible: !!doubles,
+  //           moveTokenButtonVisible: false,
+  //           rentOwed: rentOwed,
 
-            propertyOwner: propertyOwner
-          })
-        } else {
-          this.setState({
-            payRentButtonVisible: true,
-            comment: `You landed on ${propName}. Pay ${rentOwed} to ${this.state.userNames[propertyOwner]}.`,
-            endTurnButtonVisible: false,
-            moveTokenButtonVisible: false,
+  //           propertyOwner: propertyOwner
+  //         })
+  //       } else {
+  //         this.setState({
+  //           payRentButtonVisible: true,
+  //           comment: `You landed on ${propName}. Pay ${rentOwed} to ${this.state.userNames[propertyOwner]}.`,
+  //           endTurnButtonVisible: false,
+  //           moveTokenButtonVisible: false,
 
-            rentOwed: rentOwed,
-            propertyOwner: propertyOwner
-          })
-        }
-      }
-    } else if (squareType === 'GO') {
-      this.setState({
-        comment: 'You landed on GO. Collect $200!',
+  //           rentOwed: rentOwed,
+  //           propertyOwner: propertyOwner
+  //         })
+  //       }
+  //     }
+  //   } else if (squareType === 'GO') {
+  //     this.setState({
+  //       comment: 'You landed on GO. Collect $200!',
 
-        goButtonVisible: true,
-        moveTokenButtonVisible: false
-      })
-      sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on GO. Collect $200!`)
-      if (!doubles) {
-        this.setState({
-          endTurnButtonVisible: true,
-          diceRollButtonVisible: false
-        })
-      }
-      if (doubles) {
-        this.setState({
-          diceRollButtonVisible: true,
-          endTurnButtonVisible: false
-        })
-      }
-    } else if (squareType === 'FREE_PARKING') {
-      this.setState({
-        comment: 'You landed on Free Parking. Nothing happens.',
+  //       goButtonVisible: true,
+  //       moveTokenButtonVisible: false
+  //     })
+  //     sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on GO. Collect $200!`)
+  //     if (!doubles) {
+  //       this.setState({
+  //         endTurnButtonVisible: true,
+  //         diceRollButtonVisible: false
+  //       })
+  //     }
+  //     if (doubles) {
+  //       this.setState({
+  //         diceRollButtonVisible: true,
+  //         endTurnButtonVisible: false
+  //       })
+  //     }
+  //   } else if (squareType === 'FREE_PARKING') {
+  //     this.setState({
+  //       comment: 'You landed on Free Parking. Nothing happens.',
 
-        moveTokenButtonVisible: false
-      })
-      sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on Free Parking. Nothing happens.`)
-      if (!doubles) {
-        this.setState({
-          endTurnButtonVisible: true,
-          comment: ''
-        })
-      }
-      if (doubles) {
-        this.setState({
+  //       moveTokenButtonVisible: false
+  //     })
+  //     sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on Free Parking. Nothing happens.`)
+  //     if (!doubles) {
+  //       this.setState({
+  //         endTurnButtonVisible: true,
+  //         comment: ''
+  //       })
+  //     }
+  //     if (doubles) {
+  //       this.setState({
 
-          diceRollButtonVisible: true
-        })
-      }
-    } else if (squareType === 'JAIL') {
-      this.setState({
-        comment: 'You landed on Jail, but you are just visiting.',
+  //         diceRollButtonVisible: true
+  //       })
+  //     }
+  //   } else if (squareType === 'JAIL') {
+  //     this.setState({
+  //       comment: 'You landed on Jail, but you are just visiting.',
 
-        moveTokenButtonVisible: false
-      })
-      sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on Jail. But ${this.state.userNames[this.props.index]} is just visiting.`)
-      if (!doubles) {
-        this.setState({
+  //       moveTokenButtonVisible: false
+  //     })
+  //     sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on Jail. But ${this.state.userNames[this.props.index]} is just visiting.`)
+  //     if (!doubles) {
+  //       this.setState({
 
-          endTurnButtonVisible: true
-        })
-      }
-      if (doubles) {
-        this.setState({
+  //         endTurnButtonVisible: true
+  //       })
+  //     }
+  //     if (doubles) {
+  //       this.setState({
 
-          diceRollButtonVisible: true
-        })
-      }
-    } else if (squareType === 'INCOME_TAX') {
-      sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on Income Tax. Pay $200.`)
-      this.setState({
-        moveTokenButtonVisible: false,
-        endTurnButtonVisible: false,
+  //         diceRollButtonVisible: true
+  //       })
+  //     }
+  //   } else if (squareType === 'INCOME_TAX') {
+  //     sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on Income Tax. Pay $200.`)
+  //     this.setState({
+  //       moveTokenButtonVisible: false,
+  //       endTurnButtonVisible: false,
 
-        incomeTaxButtonVisible: true,
-        comment: 'You landed on Income Tax. Pay $200.',
-        userPositions: userPosition
-      })
-    } else if (squareType === 'LUXURY_TAX') {
-      this.setState({
-        moveTokenButtonVisible: false,
-        endTurnButtonVisible: false,
+  //       incomeTaxButtonVisible: true,
+  //       comment: 'You landed on Income Tax. Pay $200.',
+  //       userPositions: userPosition
+  //     })
+  //   } else if (squareType === 'LUXURY_TAX') {
+  //     this.setState({
+  //       moveTokenButtonVisible: false,
+  //       endTurnButtonVisible: false,
 
-        luxuryTaxButtonVisible: true,
-        comment: 'You landed on Luxury Tax. Pay $100.',
-        userPositions: userPosition
-      })
-      sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on Luxury Tax. Pay $100.`)
-    }
-    this.handleLandOnOrPassGo(oldUserPosition, userPosition, jail)
-  }
+  //       luxuryTaxButtonVisible: true,
+  //       comment: 'You landed on Luxury Tax. Pay $100.',
+  //       userPositions: userPosition
+  //     })
+  //     sock.socket.emit('comment', `${this.state.userNames[this.props.index]} landed on Luxury Tax. Pay $100.`)
+  //   }
+  //   this.handleLandOnOrPassGo(oldUserPosition, userPosition, jail)
+  // }
 
   handleLandOnOrPassGo (oldUserPosition, userPosition, jail) {
     if (!jail && userPosition < oldUserPosition) {
@@ -756,12 +761,19 @@ class DiceRoll extends Component {
             <div className='move-token-btn_div'>
               {this.state.moveTokenButtonVisible
                 ? <div>
-                  <Button secondary fluid onClick={() => { this.handleMoveTokenButtonClick() }}>  Move Your Token! </Button>
+                  <Move setState={this.handleStateChange}
+                    doubles={this.state.doubles}
+                    diceSum={this.state.diceSum}
+                    dice={this.props.dice}
+                    userName={this.state.userNames} />
                 </div> : null
               }
             </div>
             {
-              this.state.cardButtonVisible ? <Card button={() => { this.handleCardButtonClick() }} card={this.state.card} number={this.state.numOfPlayers} /> : null
+              this.state.cardButtonVisible ? <Card button={() => { this.handleCardButtonClick() }}
+                card={this.state.card}
+                number={this.state.numOfPlayers}
+                /> : null
             }
             <div className='buy-property-btn_div'>
               {(this.state.buyPropertyButtonVisible && !this.state.goButtonVisible)

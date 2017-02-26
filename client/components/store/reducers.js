@@ -13,6 +13,18 @@ import {
   SET_PLAYERS,
   SET_PLAYER_PROPS,
   SET_DEFAULT_STATE,
+  SET_MOVE_TOKEN,
+  SET_DICE_ROLL,
+  SET_BANKRUPTCY,
+  SET_CARD_BUTTON,
+  SET_END_TURN,
+  SET_FREE_CARD,
+  SET_GO_BUTTON,
+  SET_INCOME_TAX,
+  SET_JAIL_ROLL,
+  SET_LUXURY_BUTTON,
+  SET_PAY_FINE,
+  SET_PAY_RENT,
   SET_STATE
 } from './actions'
 const DEFAULT_STATE = {
@@ -27,7 +39,19 @@ const DEFAULT_STATE = {
   userPropertyArray: [[], [], [], [], [], [], [], []],
   jailPositions: [0, 0, 0, 0, 0, 0, 0, 0],
   userCashArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500],
-  userMoneyArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500]
+  userMoneyArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500],
+  diceRollButton: false,
+  moveTokenButton: false,
+  cardButton: false,
+  setGoButton: false,
+  endTurnButton: false,
+  incomeTaxButton: false,
+  luxuryButton: false,
+  payRent: false,
+  bankruptcyButton: false,
+  payFineButton: false,
+  jailRollDiceButton: false,
+  freeCardButton: false
 }
 
 const setGameID = (state, action) => {
@@ -143,6 +167,67 @@ const setState = (state, action) => {
   return newState
 }
 
+const setMove = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, { moveTokenButton: action.bool })
+  return newState
+}
+const setDiceRoll = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, { diceRollButton: action.bool })
+  return newState
+}
+const setBankruptcy = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, { bankruptcyButton: action.bool })
+  return newState
+}
+const setCardButton = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, { cardButton: action.bool })
+  return newState
+}
+const setEndTurn = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, { endTurnButton: action.bool })
+  return newState
+}
+const setFreeCard = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, { freeCardButton: action.bool })
+  return newState
+}
+const setGoButton = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, { setGoButton: action.bool })
+  return newState
+}
+const setIncomeTax = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, { incomeTaxButton: action.bool })
+  return newState
+}
+const setJailRoll = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, { jailRollDiceButton: action.bool })
+  return newState
+}
+const setLuxuryButton = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, { luxuryButton: action.bool })
+  return newState
+}
+const setPayFine = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, { payFineButton: action.bool })
+  return newState
+}
+const setPayRent = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, { payRent: action.bool })
+  return newState
+}
+
 const rootReducer = (state = DEFAULT_STATE, action) => {
   switch (action.type) {
     case SET_GAME_ID:
@@ -189,6 +274,42 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_STATE:
       return setState(state, action)
+
+    case SET_MOVE_TOKEN:
+      return setMove(action, state)
+
+    case SET_DICE_ROLL:
+      return setDiceRoll(action, state)
+
+    case SET_BANKRUPTCY:
+      return setBankruptcy(action, state)
+
+    case SET_CARD_BUTTON:
+      return setCardButton(action, state)
+
+    case SET_END_TURN:
+      return setEndTurn(action, state)
+
+    case SET_FREE_CARD:
+      return setFreeCard(action, state)
+
+    case SET_GO_BUTTON:
+      return setGoButton(action, state)
+
+    case SET_INCOME_TAX:
+      return setIncomeTax(action, state)
+
+    case SET_JAIL_ROLL:
+      return setJailRoll(action, state)
+
+    case SET_LUXURY_BUTTON:
+      return setLuxuryButton(action, state)
+
+    case SET_PAY_FINE:
+      return setPayFine(action, state)
+
+    case SET_PAY_RENT:
+      return setPayRent(action, state)
 
     default:
       return state

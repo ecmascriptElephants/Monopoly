@@ -33,7 +33,7 @@ const MoveToken = (props) => {
       let goComment = 'You passed GO. Collect $200.'
       const doubles = this.state.doubles
       this.props.dispatch(setEndTurn(!doubles))
-      this.props.dispatch(setGoButton(false))
+      this.props.dispatch(setGoButton(true))
       this.props.dispatch(setDiceRoll(!!doubles))
     }
   }

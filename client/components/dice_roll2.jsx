@@ -27,6 +27,8 @@ import {
 import { Button, List } from 'semantic-ui-react'
 import Card from './Cards'
 import Move from './moveToken'
+import BuyProperty from './BuyProperty'
+
 class DiceRoll extends Component {
   constructor (props) {
     super(props)
@@ -436,7 +438,7 @@ class DiceRoll extends Component {
             <div className='buy-property-btn_div'>
               {(this.props.buyPropertyButton && !this.props.setGoButton)
                 ? <div>
-                  <Button secondary fluid onClick={() => { this.handleBuyPropertyButtonClick() }}>  Buy This Property. </Button>
+                  <BuyProperty doubles={this.state.doubles} setState={this.setStates} userName={this.state.userNames} />
                 </div> : null
               }
             </div>

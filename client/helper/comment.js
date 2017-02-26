@@ -26,4 +26,8 @@ module.exports = {
   CantPayFine: () => {
     return 'You cannot afford the $50 fine.'
   }
+
+  buyProperty: (propertyName, cost) {
+    return `You landed on ${propertyName}, and can buy it for $${cost}.`
+  }
 }

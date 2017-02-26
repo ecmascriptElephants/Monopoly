@@ -88,55 +88,55 @@ export function setState (state) {
   return {type: SET_STATE, state}
 }
 
-export function setMoveToken (bool) {
-  return {type: SET_MOVE_TOKEN, bool}
+export function setMoveToken (flag) {
+  return {type: SET_MOVE_TOKEN, flag}
 }
 
-export function setDiceRoll (bool) {
-  return {type: SET_DICE_ROLL, bool}
+export function setDiceRoll (flag) {
+  return {type: SET_DICE_ROLL, flag}
 }
 
-export function setBankruptcy (bool) {
-  return {type: SET_BANKRUPTCY, bool}
+export function setBankruptcy (flag) {
+  return {type: SET_BANKRUPTCY, flag}
 }
 
-export function setCardButton (bool) {
-  return {type: SET_CARD_BUTTON, bool}
+export function setCardButton (flag) {
+  return {type: SET_CARD_BUTTON, flag}
 }
 
-export function setEndTurn (bool) {
-  return {type: SET_END_TURN, bool}
+export function setEndTurn (flag) {
+  return {type: SET_END_TURN, flag}
 }
 
-export function setFreeCard (bool) {
-  return {type: SET_FREE_CARD, bool}
+export function setFreeCard (flag) {
+  return {type: SET_FREE_CARD, flag}
 }
 
-export function setGoButton (bool) {
-  return {type: SET_GO_BUTTON, bool}
+export function setGoButton (flag) {
+  return {type: SET_GO_BUTTON, flag}
 }
 
-export function setIncomeTax (bool) {
-  return {type: SET_INCOME_TAX, bool}
+export function setIncomeTax (flag) {
+  return {type: SET_INCOME_TAX, flag}
 }
 
-export function setJailRoll (bool) {
-  return {type: SET_JAIL_ROLL, bool}
+export function setJailRoll (flag) {
+  return {type: SET_JAIL_ROLL, flag}
 }
 
-export function setLuxury (bool) {
-  return {type: SET_LUXURY_BUTTON, bool}
+export function setLuxury (flag) {
+  return {type: SET_LUXURY_BUTTON, flag}
 }
 
-export function setPayFine (bool) {
-  return {type: SET_PAY_FINE, bool}
+export function setPayFine (flag) {
+  return {type: SET_PAY_FINE, flag}
 }
 
-export function setPayRent (bool) {
-  return {type: SET_PAY_RENT, bool}
+export function setPayRent (flag) {
+  return {type: SET_PAY_RENT, flag}
 }
 
-export function setBuyProperty (bool) {
-  return {type: SET_BUY_PROPERTY, bool}
+export function setBuyProperty (flag) {
+  return {type: SET_BUY_PROPERTY, flag}
 }
 

@@ -33,7 +33,6 @@ class Board extends Component {
       [7, 17.5], [7, 25.5], [7, 34], [7, 42], [7, 50], [7, 58.5], [7, 66.5], [7, 75], [7, 83],
       [7, 97], [19, 97], [27.1, 97], [35.4, 97], [43.5, 97], [51.8, 97], [60, 97], [68.2, 97], [76.4, 97], [84.5, 97]
     ]
-    console.log(index, value)
     let playerProps = location[value]
     if (index >= 0) {
       this.props.dispatch(setUserPositions(value, index))
@@ -42,11 +41,6 @@ class Board extends Component {
       sock.updatePos({ gameID: this.props.gameID, pos: value, index: index })
     }
     this.props.dispatch(setPlayerProps(playerProps, index))
-  }
-  componentWillMount () {
-    // if (window.localStorage.gameState) {
-    //   this.props.dispatch(setStoreState(JSON.parse(window.localStorage.gameState)))
-    // }
   }
 
   componentDidMount () {
@@ -62,14 +56,12 @@ class Board extends Component {
     })
   }
   render () {
-    console.log(this.props.players)
     return (
       <div>
         <Player name={this.props.username} dice={this.dice} piece='Hat' />
         <div className='board parent'>
           {
             this.props.players.map((player, index) => {
-              console.log('in board.jsx player = ', player, ' index = ', index)
               if (index <= 3) {
                 return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0] - (index + index)}%`} userNumber={index} key={index} />
               } else {

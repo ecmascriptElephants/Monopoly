@@ -34,10 +34,10 @@ const DEFAULT_STATE = {
   userID: '',
   userPosArray: [0, 0, 0, 0, 0, 0, 0, 0],
   playerIndex: -1,
-  index: -1,
+  index: 0,
   messageID: 0,
   players: [],
-  userPropertyArray: [[], [], [], [], [], [], [], []],
+  userPropertiesArray: [[], [], [], [], [], [], [], []],
   jailPositions: [0, 0, 0, 0, 0, 0, 0, 0],
   userCashArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500],
   userMoneyArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500],
@@ -107,7 +107,7 @@ const setUserProperties = (state, action) => {
     action.userProperties,
     ...state.userPropertyArray.slice(action.index + 1)]
   const newState = {}
-  Object.assign(newState, state, { userPropertyArray: newArr })
+  Object.assign(newState, state, { userPropertiesArray: newArr })
   return newState
 }
 
@@ -171,68 +171,68 @@ const setState = (state, action) => {
 
 const setMove = (state, action) => {
   const newState = {}
-  Object.assign(newState, state, { moveTokenButton: action.bool })
+  Object.assign(newState, state, { moveTokenButton: action.flag })
   return newState
 }
 const setDiceRoll = (state, action) => {
   const newState = {}
-  Object.assign(newState, state, { diceRollButton: action.bool })
+  Object.assign(newState, state, { diceRollButton: action.flag })
   return newState
 }
 const setBankruptcy = (state, action) => {
   const newState = {}
-  Object.assign(newState, state, { bankruptcyButton: action.bool })
+  Object.assign(newState, state, { bankruptcyButton: action.flag })
   return newState
 }
 const setCardButton = (state, action) => {
   const newState = {}
-  Object.assign(newState, state, { cardButton: action.bool })
+  Object.assign(newState, state, { cardButton: action.flag })
   return newState
 }
 const setEndTurn = (state, action) => {
   const newState = {}
-  Object.assign(newState, state, { endTurnButton: action.bool })
+  Object.assign(newState, state, { endTurnButton: action.flag })
   return newState
 }
 const setFreeCard = (state, action) => {
   const newState = {}
-  Object.assign(newState, state, { freeCardButton: action.bool })
+  Object.assign(newState, state, { freeCardButton: action.flag })
   return newState
 }
 const setGoButton = (state, action) => {
   const newState = {}
-  Object.assign(newState, state, { setGoButton: action.bool })
+  Object.assign(newState, state, { setGoButton: action.flag })
   return newState
 }
 const setIncomeTax = (state, action) => {
   const newState = {}
-  Object.assign(newState, state, { incomeTaxButton: action.bool })
+  Object.assign(newState, state, { incomeTaxButton: action.flag })
   return newState
 }
 const setJailRoll = (state, action) => {
   const newState = {}
-  Object.assign(newState, state, { jailRollDiceButton: action.bool })
+  Object.assign(newState, state, { jailRollDiceButton: action.flag })
   return newState
 }
 const setLuxuryButton = (state, action) => {
   const newState = {}
-  Object.assign(newState, state, { luxuryButton: action.bool })
+  Object.assign(newState, state, { luxuryButton: action.flag })
   return newState
 }
 const setPayFine = (state, action) => {
   const newState = {}
-  Object.assign(newState, state, { payFineButton: action.bool })
+  Object.assign(newState, state, { payFineButton: action.flag })
   return newState
 }
 const setPayRent = (state, action) => {
   const newState = {}
-  Object.assign(newState, state, { payRent: action.bool })
+  Object.assign(newState, state, { payRent: action.flag })
   return newState
 }
 
 const setBuyProperty = (state, action) => {
   const newState = {}
-  Object.assign(newState, state, { buyPropertyButton: action.bool })
+  Object.assign(newState, state, { buyPropertyButton: action.flag })
   return newState
 }
 
@@ -284,43 +284,43 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
       return setState(state, action)
 
     case SET_MOVE_TOKEN:
-      return setMove(action, state)
+      return setMove(state, action)
 
     case SET_DICE_ROLL:
-      return setDiceRoll(action, state)
+      return setDiceRoll(state, action)
 
     case SET_BANKRUPTCY:
-      return setBankruptcy(action, state)
+      return setBankruptcy(state, action)
 
     case SET_CARD_BUTTON:
-      return setCardButton(action, state)
+      return setCardButton(state, action)
 
     case SET_END_TURN:
-      return setEndTurn(action, state)
+      return setEndTurn(state, action)
 
     case SET_FREE_CARD:
-      return setFreeCard(action, state)
+      return setFreeCard(state, action)
 
     case SET_GO_BUTTON:
-      return setGoButton(action, state)
+      return setGoButton(state, action)
 
     case SET_INCOME_TAX:
-      return setIncomeTax(action, state)
+      return setIncomeTax(state, action)
 
     case SET_JAIL_ROLL:
-      return setJailRoll(action, state)
+      return setJailRoll(state, action)
 
     case SET_LUXURY_BUTTON:
-      return setLuxuryButton(action, state)
+      return setLuxuryButton(state, action)
 
     case SET_PAY_FINE:
-      return setPayFine(action, state)
+      return setPayFine(state, action)
 
     case SET_PAY_RENT:
-      return setPayRent(action, state)
+      return setPayRent(state, action)
 
     case SET_BUY_PROPERTY:
-      return setBuyProperty(action, state)
+      return setBuyProperty(state, action)
 
     default:
       return state

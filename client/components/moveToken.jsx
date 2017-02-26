@@ -11,7 +11,9 @@ import {
   setLuxury,
   setGoButton,
   setJailPostions,
-  setBuyProperty
+  setBuyProperty,
+  setPayRent,
+  setIncomeTax
 } from '../components/store/actionCreators'
 import { Button } from 'semantic-ui-react'
 const MoveToken = (props) => {
@@ -34,12 +36,12 @@ const MoveToken = (props) => {
     } else if (squareType === 'CHANCE') {
       props.dispatch(setMoveToken(false))
       props.dispatch(setCardButton(true))
-        // card: false setup so,ething for chance card
+      props.setState({card: false})
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on a chance space.`)
     } else if (squareType === 'COMMUNITY_CHEST') {
       props.dispatch(setMoveToken(false))
       props.dispatch(setCardButton(true))
-       // card: false setup so,ething for chance card
+      props.setState({card: true})
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on a community chest space.`)
     } else if (squareType === 'GO_TO_JAIL' || doubles === 3) {
       // jail = true
@@ -47,7 +49,7 @@ const MoveToken = (props) => {
       props.dispatch(setMoveToken(false))
       props.dispatch(setEndTurn(true))
     } else if (squareType === 'PROPERTY') {
-      if (this.propertyIsOwned(userPosition) === false) {
+      if (props.propertyIsOwned(userPosition) === false) {
         let cost = 0
         let propertyName = ''
         rules.Properties.forEach(prop => {
@@ -58,22 +60,11 @@ const MoveToken = (props) => {
         })
         props.dispatch(setMoveToken(false))
         props.dispatch(setBuyProperty(true))
-        props.setState({
-          buyPropertyButtonVisible: true,
-          moveTokenButtonVisible: false,
-          comment: `You landed on ${propertyName}, and can buy it for $${cost}.`,
-          endTurnButtonVisible: true
-        })
+        props.dispatch(setEndTurn(!!doubles))
+        props.dispatch(setDiceRoll(!!doubles))
         sock.socket.emit('comment', `${props.userNames[props.index]} landed on an unowned property!`)
-        if (doubles) {
-          props.setState({
-            endTurnButtonVisible: false,
-
-            diceRollButtonVisible: true
-          })
-        }
       } else {
-        let propertyOwner = this.propertyIsOwned(userPosition)
+        let propertyOwner = props.propertyIsOwned(userPosition)
         let rentOwed = 0
         let propName = ''
         let mortgagedFlag = false
@@ -103,125 +94,60 @@ const MoveToken = (props) => {
             }
           }
         })
-        props.setState({
-          payRentButtonVisible: true,
-          comment: `You landed on ${propName}. Pay ${rentOwed} to ${props.userNames[propertyOwner]}.`,
-          endTurnButtonVisible: false,
-          moveTokenButtonVisible: false,
-          rentOwed: rentOwed,
-          propertyOwner: propertyOwner
-        })
         sock.socket.emit('comment', `${props.userNames[props.index]} landed on ${propName}. Pay $${rentOwed} to ${props.userNames[propertyOwner]}.`)
-        if (propertyOwner === props.index) {
-          props.setState({
-            payRentButtonVisible: false,
-            comment: `You landed on ${propName}, but you already own it.`,
-            endTurnButtonVisible: !doubles,
-            diceRollButtonVisible: !!doubles,
-            moveTokenButtonVisible: false,
-            rentOwed: rentOwed,
-
-            propertyOwner: propertyOwner
-          })
-        } else if (mortgagedFlag) {
-          props.setState({
-            payRentButtonVisible: false,
-            comment: `You landed on ${propName}, but it is mortgaged.`,
-            endTurnButtonVisible: !doubles,
-            diceRollButtonVisible: !!doubles,
-            moveTokenButtonVisible: false,
-            rentOwed: rentOwed,
-
-            propertyOwner: propertyOwner
-          })
+        if (propertyOwner === props.index || mortgagedFlag) {
+          props.dispatch(setMoveToken(false))
+          props.dispatch(setEndTurn(!!doubles))
+          props.dispatch(setDiceRoll(!!doubles))
+          props.dispatch(setPayRent(false))
         } else {
+          props.dispatch(setMoveToken(false))
+          props.dispatch(setPayRent(true))
           props.setState({
-            payRentButtonVisible: true,
             comment: `You landed on ${propName}. Pay ${rentOwed} to ${props.userNames[propertyOwner]}.`,
-            endTurnButtonVisible: false,
-            moveTokenButtonVisible: false,
-
             rentOwed: rentOwed,
             propertyOwner: propertyOwner
           })
         }
       }
     } else if (squareType === 'GO') {
+      props.dispatch(setMoveToken(false))
+      props.dispatch(setGoButton(true))
       props.setState({
-        comment: 'You landed on GO. Collect $200!',
-
-        goButtonVisible: true,
-        moveTokenButtonVisible: false
+        comment: 'You landed on GO. Collect $200!'
       })
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on GO. Collect $200!`)
-      if (!doubles) {
-        props.setState({
-          endTurnButtonVisible: true,
-          diceRollButtonVisible: false
-        })
-      }
-      if (doubles) {
-        props.setState({
-          diceRollButtonVisible: true,
-          endTurnButtonVisible: false
-        })
-      }
+      props.dispatch(setEndTurn(!!doubles))
+      props.dispatch(setDiceRoll(!!doubles))
     } else if (squareType === 'FREE_PARKING') {
+      props.dispatch(setMoveToken(false))
       props.setState({
-        comment: 'You landed on Free Parking. Nothing happens.',
-
-        moveTokenButtonVisible: false
+        comment: 'You landed on Free Parking. Nothing happens.'
       })
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on Free Parking. Nothing happens.`)
-      if (!doubles) {
-        props.setState({
-          endTurnButtonVisible: true,
-          comment: ''
-        })
-      }
-      if (doubles) {
-        props.setState({
-
-          diceRollButtonVisible: true
-        })
-      }
+      props.dispatch(setEndTurn(!!doubles))
+      props.dispatch(setDiceRoll(!!doubles))
     } else if (squareType === 'JAIL') {
+      props.dispatch(setMoveToken(false))
       props.setState({
-        comment: 'You landed on Jail, but you are just visiting.',
-
-        moveTokenButtonVisible: false
+        comment: 'You landed on Jail, but you are just visiting.'
       })
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on Jail. But ${props.userNames[props.index]} is just visiting.`)
-      if (!doubles) {
-        props.setState({
-
-          endTurnButtonVisible: true
-        })
-      }
-      if (doubles) {
-        props.setState({
-
-          diceRollButtonVisible: true
-        })
-      }
+      props.dispatch(setEndTurn(!!doubles))
+      props.dispatch(setDiceRoll(!!doubles))
     } else if (squareType === 'INCOME_TAX') {
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on Income Tax. Pay $200.`)
+      props.dispatch(setMoveToken(false))
+      props.dispatch(setIncomeTax(true))
       props.setState({
-        moveTokenButtonVisible: false,
-        endTurnButtonVisible: false,
-
-        incomeTaxButtonVisible: true,
-        comment: 'You landed on Income Tax. Pay $200.',
-        userPositions: userPosition
+        comment: 'You landed on Income Tax. Pay $200.'
       })
     } else if (squareType === 'LUXURY_TAX') {
-      props.setState({
-        moveTokenButtonVisible: false,
-        endTurnButtonVisible: false,
+      props.dispatch(setMoveToken(false))
+      props.dispatch(setLuxury(true))
 
-        luxuryTaxButtonVisible: true,
-        comment: 'You landed on Luxury Tax. Pay $100.',
-        userPositions: userPosition
+      props.setState({
+        comment: 'You landed on Luxury Tax. Pay $100.'
       })
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on Luxury Tax. Pay $100.`)
     }

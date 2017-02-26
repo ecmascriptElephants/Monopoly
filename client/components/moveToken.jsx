@@ -17,17 +17,41 @@ import {
 } from '../components/store/actionCreators'
 import { Button } from 'semantic-ui-react'
 const MoveToken = (props) => {
-  // let jail = false
+
+  const propertyIsOwned = (propertyPosition) => {
+    let ownerNumber = false
+    props.userPropertiesArray.forEach((propertyArray, index) => {
+      propertyArray.forEach((propertyObj) => {
+        if (propertyObj.Position === propertyPosition) ownerNumber = index
+      })
+    })
+    return ownerNumber
+  }
+
+  const handleLandOnOrPassGo = (oldUserPosition, userPosition, jail) => {
+    if (!jail && userPosition < oldUserPosition) {
+      let goComment = 'You passed GO. Collect $200.'
+      if (this.state.comment === 'You landed on GO. Collect $200!') {
+        goComment = ''
+      }
+      const doubles = this.state.doubles
+      this.props.dispatch(setEndTurn(!doubles))
+      this.props.dispatch(setGoButton(false))
+      this.props.dispatch(setDiceRoll(!!doubles))
+    }
+  }
+
   const handleMoveToken = () => {
     const doubles = props.doubles
     const diceSum = props.diceSum
-    // let oldUserPosition = props.userPosArray[props.index]
+    let jail = false
+    let oldUserPosition = props.userPosArray[props.index]
     let userPosition = (props.userPosArray[props.index] + diceSum) % 40
     props.dispatch(setUserPositions(userPosition, props.index))
     props.dice(userPosition, props.index, true)
     let squareType = rules.PositionType[userPosition]
     if (squareType === 'GO_TO_JAIL' || doubles === 3) {
-      // jail = true
+      jail = true
       props.dispatch(setUserPositions(10, props.index))
       props.dice(10, props.index, true)
       props.dispatch(setMoveToken(false))
@@ -43,13 +67,8 @@ const MoveToken = (props) => {
       props.dispatch(setCardButton(true))
       props.setState({card: true})
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on a community chest space.`)
-    } else if (squareType === 'GO_TO_JAIL' || doubles === 3) {
-      // jail = true
-      props.dispatch(setUserPositions(10, props.index))
-      props.dispatch(setMoveToken(false))
-      props.dispatch(setEndTurn(true))
     } else if (squareType === 'PROPERTY') {
-      if (props.propertyIsOwned(userPosition) === false) {
+      if (propertyIsOwned(userPosition) === false) {
         let cost = 0
         let propertyName = ''
         rules.Properties.forEach(prop => {
@@ -64,7 +83,7 @@ const MoveToken = (props) => {
         props.dispatch(setDiceRoll(!!doubles))
         sock.socket.emit('comment', `${props.userNames[props.index]} landed on an unowned property!`)
       } else {
-        let propertyOwner = props.propertyIsOwned(userPosition)
+        let propertyOwner = propertyIsOwned(userPosition)
         let rentOwed = 0
         let propName = ''
         let mortgagedFlag = false
@@ -151,7 +170,7 @@ const MoveToken = (props) => {
       })
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on Luxury Tax. Pay $100.`)
     }
-    // this.handleLandOnOrPassGo(oldUserPosition, userPosition, jail)
+    handleLandOnOrPassGo(oldUserPosition, userPosition, jail)
   }
 
   return (
@@ -162,33 +181,19 @@ const mapStateToProps = (state) => {
   return {
     username: state.username,
     gameID: state.gameID,
-    userID: state.userID,
     userPosArray: state.userPosArray,
     userPropertiesArray: state.userPropertiesArray,
     jailPositions: state.jailPositions,
     index: state.index,
-    userCashArray: state.userCashArray,
-    diceRollButton: state.diceRollButton,
-    moveTokenButton: state.moveTokenButton,
-    cardButton: state.cardButton,
-    setGoButton: state.setGoButton,
-    endTurnButton: state.endTurnButton,
-    incomeTaxButton: state.incomeTaxButton,
-    luxuryButton: state.luxuryButton,
-    payRent: state.payRent,
-    bankruptcyButton: state.bankruptcyButton,
-    payFineButton: state.payFineButton,
-    jailRollDiceButton: state.jailRollDiceButton,
-    buyPropertyButton: state.buyPropertyButton,
-    freeCardButton: state.freeCardButton
+    userCashArray: state.userCashArray
   }
 }
+
 MoveToken.propTypes = {
   dice: React.PropTypes.func.isRequired,
   dispatch: React.PropTypes.func.isRequired,
   username: React.PropTypes.string.isRequired,
   gameID: React.PropTypes.number.isRequired,
-  userID: React.PropTypes.string.isRequired,
   userPosArray: React.PropTypes.array.isRequired,
   jailPositions: React.PropTypes.array.isRequired,
   index: React.PropTypes.number.isRequired,
@@ -197,20 +202,7 @@ MoveToken.propTypes = {
   setState: React.PropTypes.func.isRequired,
   doubles: React.PropTypes.number.isRequired,
   userNames: React.PropTypes.array.isRequired,
-  diceSum: React.PropTypes.number.isRequired,
-  diceRollButton: React.PropTypes.bool.isRequired,
-  moveTokenButton: React.PropTypes.bool.isRequired,
-  cardButton: React.PropTypes.bool.isRequired,
-  setGoButton: React.PropTypes.bool.isRequired,
-  endTurnButton: React.PropTypes.bool.isRequired,
-  incomeTaxButton: React.PropTypes.bool.isRequired,
-  luxuryButton: React.PropTypes.bool.isRequired,
-  payRent: React.PropTypes.bool.isRequired,
-  bankruptcyButton: React.PropTypes.bool.isRequired,
-  payFineButton: React.PropTypes.bool.isRequired,
-  jailRollDiceButton: React.PropTypes.bool.isRequired,
-  freeCardButton: React.PropTypes.bool.isRequired,
-  buyPropertyButton: React.PropTypes.bool.isRequired
+  diceSum: React.PropTypes.number.isRequired
 }
 
 export default connect(mapStateToProps)(MoveToken)

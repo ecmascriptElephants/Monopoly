@@ -236,15 +236,6 @@ const setBuyProperty = (state, action) => {
   return newState
 }
 
-const setJailPosition = (state, action) => {
-  let newArr = [...state.userMoneyArray.slice(0, action.index),
-    action.value,
-    ...state.userMoneyArray.slice(action.index + 1)]
-  const newState = {}
-  Object.assign(newState, state, { jailPositions: newArr })
-  return newState
-}
-
 const rootReducer = (state = DEFAULT_STATE, action) => {
   switch (action.type) {
     case SET_GAME_ID:

@@ -103,9 +103,9 @@ const setMessageID = (state, action) => {
 }
 
 const setUserProperties = (state, action) => {
-  let newArr = [...state.userPropertyArray.slice(0, action.index),
+  let newArr = [...state.userPropertiesArray.slice(0, action.index),
     action.userProperties,
-    ...state.userPropertyArray.slice(action.index + 1)]
+    ...state.userPropertiesArray.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { userPropertiesArray: newArr })
   return newState

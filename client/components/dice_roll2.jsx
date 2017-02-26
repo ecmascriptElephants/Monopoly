@@ -118,6 +118,7 @@ class DiceRoll extends Component {
     let doubles = 0
     if (die1 === die2) {
       doubles = this.state.doubles + 1
+      this.setState({comment: 'You rolled Doubles!'})
     }
     this.props.dispatch(setDiceRoll(false))
     this.props.dispatch(setMoveToken(true))
@@ -221,7 +222,7 @@ class DiceRoll extends Component {
       sock.updateMoney({ gameID: this.props.gameID, money: -rentOwed, index: currentUser })
       sock.updateMoney({ gameID: this.props.gameID, money: rentOwed, index: propertyOwner })
       this.props.dispatch(setPayRent(false))
-      this.props.dispatch(setEndTurn(!!doubles))
+      this.props.dispatch(setEndTurn(!doubles))
       this.props.dispatch(setDiceRoll(!!doubles))
     }
   }
@@ -243,7 +244,7 @@ class DiceRoll extends Component {
         index: this.props.index
       })
       this.props.dispatch(setIncomeTax(false))
-      this.props.dispatch(setEndTurn(!!doubles))
+      this.props.dispatch(setEndTurn(!doubles))
       this.props.dispatch(setDiceRoll(!!doubles))
     }
   }
@@ -265,7 +266,7 @@ class DiceRoll extends Component {
         index: this.props.index
       })
       this.props.dispatch(setLuxury(false))
-      this.props.dispatch(setEndTurn(!!doubles))
+      this.props.dispatch(setEndTurn(!doubles))
       this.props.dispatch(setDiceRoll(!!doubles))
     }
   }
@@ -285,7 +286,7 @@ class DiceRoll extends Component {
     })
 
     if (this.props.userCashArray[this.props.index] < propertyPrice) {
-      this.props.dispatch(setEndTurn(!!this.state.doubles))
+      this.props.dispatch(setEndTurn(!this.state.doubles))
       this.props.dispatch(setBuyProperty(false))
       this.props.dispatch(setDiceRoll(!!this.state.doubles))
       this.setState({
@@ -295,7 +296,7 @@ class DiceRoll extends Component {
       this.props.dispatch(setCash(-propertyPrice, this.props.index))
       sock.updateMoney({ gameID: this.props.gameID, money: -propertyPrice, index: this.props.index })
       this.props.dispatch(setUserProperties(propertiesArray, this.props.index))
-      this.props.dispatch(setEndTurn(!!this.state.doubles))
+      this.props.dispatch(setEndTurn(!this.state.doubles))
       this.props.dispatch(setBuyProperty(false))
       this.props.dispatch(setDiceRoll(!!this.state.doubles))
       this.setState({
@@ -620,7 +621,7 @@ class DiceRoll extends Component {
           </div>
           <div className='CurrentUserProperties'>
             <div>
-              Properties : {this.props.index === -1 ? null : <List items={this.state.userPropertiesArray[this.props.index].map(e => {
+              Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map(e => {
                 return <div>{e.PropertyObj.NAME} <button onClick={() => { this.handleMortgageButtonClick(e.PropertyObj.NAME) }}>Mortgage</button></div>
               })} />}
             </div>

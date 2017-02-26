@@ -60,7 +60,7 @@ const MoveToken = (props) => {
         })
         props.dispatch(setMoveToken(false))
         props.dispatch(setBuyProperty(true))
-        props.dispatch(setEndTurn(!!doubles))
+        props.dispatch(setEndTurn(!doubles))
         props.dispatch(setDiceRoll(!!doubles))
         sock.socket.emit('comment', `${props.userNames[props.index]} landed on an unowned property!`)
       } else {
@@ -97,7 +97,7 @@ const MoveToken = (props) => {
         sock.socket.emit('comment', `${props.userNames[props.index]} landed on ${propName}. Pay $${rentOwed} to ${props.userNames[propertyOwner]}.`)
         if (propertyOwner === props.index || mortgagedFlag) {
           props.dispatch(setMoveToken(false))
-          props.dispatch(setEndTurn(!!doubles))
+          props.dispatch(setEndTurn(!doubles))
           props.dispatch(setDiceRoll(!!doubles))
           props.dispatch(setPayRent(false))
         } else {
@@ -117,7 +117,7 @@ const MoveToken = (props) => {
         comment: 'You landed on GO. Collect $200!'
       })
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on GO. Collect $200!`)
-      props.dispatch(setEndTurn(!!doubles))
+      props.dispatch(setEndTurn(!doubles))
       props.dispatch(setDiceRoll(!!doubles))
     } else if (squareType === 'FREE_PARKING') {
       props.dispatch(setMoveToken(false))
@@ -125,7 +125,7 @@ const MoveToken = (props) => {
         comment: 'You landed on Free Parking. Nothing happens.'
       })
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on Free Parking. Nothing happens.`)
-      props.dispatch(setEndTurn(!!doubles))
+      props.dispatch(setEndTurn(!doubles))
       props.dispatch(setDiceRoll(!!doubles))
     } else if (squareType === 'JAIL') {
       props.dispatch(setMoveToken(false))
@@ -133,7 +133,7 @@ const MoveToken = (props) => {
         comment: 'You landed on Jail, but you are just visiting.'
       })
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on Jail. But ${props.userNames[props.index]} is just visiting.`)
-      props.dispatch(setEndTurn(!!doubles))
+      props.dispatch(setEndTurn(!doubles))
       props.dispatch(setDiceRoll(!!doubles))
     } else if (squareType === 'INCOME_TAX') {
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on Income Tax. Pay $200.`)

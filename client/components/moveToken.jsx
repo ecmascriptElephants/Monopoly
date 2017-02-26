@@ -9,7 +9,8 @@ import {
   setCardButton,
   setEndTurn,
   setLuxury,
-  setGoButton
+  setGoButton,
+  setJailPostions
 } from '../components/store/actionCreators'
 import { Button } from 'semantic-ui-react'
 const MoveToken = (props) => {
@@ -26,30 +27,18 @@ const MoveToken = (props) => {
       // jail = true
       props.dispatch(setUserPositions(10, props.index))
       props.dice(10, props.index, true)
-      let updatedJailPositions = [...props.jailPositions]
-      updatedJailPositions[props.index] = 1
       props.dispatch(setMoveToken(false))
-      props.dispatch(setEndTurn(true)) 
-      props.setState({
-        moveTokenButtonVisible: false,
-        jailPositions: updatedJailPositions,
-        endTurnButtonVisible: true
-      })
+      props.dispatch(setEndTurn(true))
+      props.dispatch(setJailPostions(this.props.index, 1))
     } else if (squareType === 'CHANCE') {
-      props.setState({
-        cardButtonVisible: true,
-        moveTokenButtonVisible: false,
-        comment: 'You landed on a chance space. Pick a card!',
-        card: false
-      })
+      props.dispatch(setMoveToken(false))
+      props.dispatch(setCardButton(true))
+        //card: false setup so,ething for chance card
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on a chance space.`)
     } else if (squareType === 'COMMUNITY_CHEST') {
-      props.setState({
-        cardButtonVisible: true,
-        moveTokenButtonVisible: false,
-        comment: 'You landed on a community chest space. Pick a card!',
-        card: true
-      })
+      props.dispatch(setMoveToken(false))
+      props.dispatch(setCardButton(true))
+       //card: false setup so,ething for chance card
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on a community chest space.`)
     } else if (squareType === 'GO_TO_JAIL' || doubles === 3) {
       // jail = true
@@ -113,7 +102,6 @@ const MoveToken = (props) => {
             }
           }
         })
-        console.log('!!!!!!!!!!!!! in diceRolljsx line 259 props = ', props)
         props.setState({
           payRentButtonVisible: true,
           comment: `You landed on ${propName}. Pay ${rentOwed} to ${props.userNames[propertyOwner]}.`,

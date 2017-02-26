@@ -25,7 +25,8 @@ import {
   SET_LUXURY_BUTTON,
   SET_PAY_FINE,
   SET_PAY_RENT,
-  SET_STATE
+  SET_STATE,
+  SET_JAIL_POSITION
 } from './actions'
 const DEFAULT_STATE = {
   gameID: 0,
@@ -228,6 +229,15 @@ const setPayRent = (state, action) => {
   return newState
 }
 
+const setJailPosition = (state, action) => {
+  let newArr = [...state.userMoneyArray.slice(0, action.index),
+    action.value,
+    ...state.userMoneyArray.slice(action.index + 1)]
+  const newState = {}
+  Object.assign(newState, state, { jailPositions: newArr })
+  return newState
+}
+
 const rootReducer = (state = DEFAULT_STATE, action) => {
   switch (action.type) {
     case SET_GAME_ID:
@@ -310,6 +320,9 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_PAY_RENT:
       return setPayRent(action, state)
+
+    case SET_JAIL_POSITION:
+      return setJailPosition(action, state)
 
     default:
       return state

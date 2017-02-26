@@ -132,11 +132,11 @@ class DiceRoll extends Component {
   }
 
   handleDiceRollButtonClick () {
-    // const die1 = 1 + Math.floor((6 * Math.random()))
-    // const die2 = 1 + Math.floor((6 * Math.random()))
+    const die1 = 1 + Math.floor((6 * Math.random()))
+    const die2 = 1 + Math.floor((6 * Math.random()))
 
-    const die1 = 5
-    const die2 = 5
+    // const die1 = 5
+    // const die2 = 5
     if (this.props.userPosArray[this.props.index] + die1 + die2 === 30) {
       this.setState({
         dice: [die1, die2],

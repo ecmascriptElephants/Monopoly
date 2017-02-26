@@ -38,7 +38,6 @@ module.exports = {
   updateMoney: (data) => {
     socket.emit('money update', data)
   },
-
   loadGame: (gameID) => {
     socket.emit('load game', gameID)
   },

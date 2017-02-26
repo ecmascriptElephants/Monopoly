@@ -220,13 +220,9 @@ class DiceRoll extends Component {
       this.props.dispatch(setCash(rentOwed, propertyOwner))
       sock.updateMoney({ gameID: this.props.gameID, money: -rentOwed, index: currentUser })
       sock.updateMoney({ gameID: this.props.gameID, money: rentOwed, index: propertyOwner })
-      this.setState({
-        propertyOwner: '',
-        rentOwed: 0,
-        payRentButtonVisible: false,
-        endTurnButtonVisible: !doubles,
-        diceRollButtonVisible: !!doubles
-      })
+      this.props.dispatch(setPayRent(false))
+      this.props.dispatch(setEndTurn(!!doubles))
+      this.props.dispatch(setDiceRoll(!!doubles))
     }
   }
 
@@ -234,10 +230,10 @@ class DiceRoll extends Component {
     let doubles = this.state.doubles
     let updatedUserMoneyArray = this.props.userCashArray
     if (updatedUserMoneyArray[this.props.index] < 200) {
+      this.props.dispatch(setEndTurn(false))
+      this.props.dispatch(setMoveToken(false))
       this.setState({
-        comment: 'You do not have enough money to pay the $200 income tax.',
-        endTurnButtonVisible: false,
-        moveTokenButtonVisible: false
+        comment: 'You do not have enough money to pay the $200 income tax.'
       })
     } else {
       this.props.dispatch(setCash(-200, this.props.index))
@@ -246,23 +242,9 @@ class DiceRoll extends Component {
         money: updatedUserMoneyArray[this.props.index],
         index: this.props.index
       })
-      if (!doubles) {
-        this.setState({
-          moveTokenButtonVisible: false,
-          incomeTaxButtonVisible: false,
-          endTurnButtonVisible: true,
-          comment: ''
-        })
-      }
-      if (doubles > 0) {
-        this.setState({
-          moveTokenButtonVisible: false,
-          endTurnButtonVisible: false,
-          incomeTaxButtonVisible: false,
-          diceRollButtonVisible: true,
-          comment: ''
-        })
-      }
+      this.props.dispatch(setIncomeTax(false))
+      this.props.dispatch(setEndTurn(!!doubles))
+      this.props.dispatch(setDiceRoll(!!doubles))
     }
   }
 
@@ -270,9 +252,10 @@ class DiceRoll extends Component {
     let doubles = this.state.doubles
     let updatedUserMoneyArray = this.props.userCashArray
     if (updatedUserMoneyArray[this.props.index] < 100) {
+      this.props.dispatch(setEndTurn(false))
+      this.props.dispatch(setMoveToken(false))
       this.setState({
-        endTurnButtonVisible: false,
-        moveTokenButtonVisible: false
+        squareTypeComment: 'You do not have enough money to pay the $100 luxury tax.'
       })
     } else {
       this.props.dispatch(setCash(-100, this.props.index))
@@ -281,21 +264,9 @@ class DiceRoll extends Component {
         money: updatedUserMoneyArray[this.props.index],
         index: this.props.index
       })
-      if (!doubles) {
-        this.setState({
-          moveTokenButtonVisible: false,
-          endTurnButtonVisible: true,
-          luxuryTaxButtonVisible: false
-        })
-      }
-      if (doubles > 0) {
-        this.setState({
-          moveTokenButtonVisible: false,
-          endTurnButtonVisible: false,
-          luxuryTaxButtonVisible: false,
-          diceRollButtonVisible: true
-        })
-      }
+      this.props.dispatch(setLuxury(false))
+      this.props.dispatch(setEndTurn(!!doubles))
+      this.props.dispatch(setDiceRoll(!!doubles))
     }
   }
 
@@ -361,13 +332,10 @@ class DiceRoll extends Component {
       let updatedJailPositions = [...this.props.jailPositions]
       updatedJailPositions[this.props.index] = 0
       this.props.dispatch(setUserJail(updatedJailPositions[this.props.index], this.props.index))
-      
-      this.setState({
-        diceRollButtonVisible: true,
-        jailPayFineButtonVisible: false,
-        jailRollDoublesButtonVisible: false,
-        jailFreeCardButtonVisible: false
-      })
+      this.props.dispatch(setDiceRoll(true))
+      this.props.dispatch(setPayFine(false))
+      this.props.dispatch(setJailRoll(false))
+      this.props.dispatch(setFreeCard(false))
     }
   }
 

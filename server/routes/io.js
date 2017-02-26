@@ -137,8 +137,8 @@ module.exports = (io) => {
         })
     })
     
-    socket.on('comment', (comment) => {
-      io.emit('receive-comment', comment)
+    socket.on('comment', (data) => {
+      socket.broadcast.to(data.gameID).emit('receive-comment', data.comment);
     })
   })
 }

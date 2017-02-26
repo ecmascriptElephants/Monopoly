@@ -31,9 +31,6 @@ const MoveToken = (props) => {
   const handleLandOnOrPassGo = (oldUserPosition, userPosition, jail) => {
     if (!jail && userPosition < oldUserPosition) {
       let goComment = 'You passed GO. Collect $200.'
-      if (this.state.comment === 'You landed on GO. Collect $200!') {
-        goComment = ''
-      }
       const doubles = this.state.doubles
       this.props.dispatch(setEndTurn(!doubles))
       this.props.dispatch(setGoButton(false))

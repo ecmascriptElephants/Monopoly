@@ -26,8 +26,7 @@ import {
   SET_PAY_FINE,
   SET_PAY_RENT,
   SET_STATE,
-  SET_BUY_PROPERTY,
-  SET_JAIL_POSITION
+  SET_BUY_PROPERTY
 } from './actions'
 const DEFAULT_STATE = {
   gameID: 0,
@@ -133,7 +132,7 @@ const setUserMoney = (state, action) => {
 
 const setUserJail = (state, action) => {
   let newArr = [...state.jailPositions.slice(0, action.index),
-    action.jailPositions,
+    action.userJail,
     ...state.jailPositions.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { jailPositions: newArr })
@@ -331,9 +330,6 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_BUY_PROPERTY:
       return setBuyProperty(action, state)
-
-    case SET_JAIL_POSITION:
-      return setJailPosition(action, state)
 
     default:
       return state

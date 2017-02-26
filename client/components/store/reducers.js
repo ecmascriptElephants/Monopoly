@@ -26,6 +26,7 @@ import {
   SET_PAY_FINE,
   SET_PAY_RENT,
   SET_STATE,
+  SET_BUY_PROPERTY,
   SET_JAIL_POSITION
 } from './actions'
 const DEFAULT_STATE = {
@@ -52,6 +53,7 @@ const DEFAULT_STATE = {
   bankruptcyButton: false,
   payFineButton: false,
   jailRollDiceButton: false,
+  buyPropertyButton: false,
   freeCardButton: false
 }
 
@@ -229,6 +231,12 @@ const setPayRent = (state, action) => {
   return newState
 }
 
+const setBuyProperty = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, { buyPropertyButton: action.bool })
+  return newState
+}
+
 const setJailPosition = (state, action) => {
   let newArr = [...state.userMoneyArray.slice(0, action.index),
     action.value,
@@ -320,6 +328,9 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_PAY_RENT:
       return setPayRent(action, state)
+
+    case SET_BUY_PROPERTY:
+      return setBuyProperty(action, state)
 
     case SET_JAIL_POSITION:
       return setJailPosition(action, state)

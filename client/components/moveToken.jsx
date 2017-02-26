@@ -10,7 +10,8 @@ import {
   setEndTurn,
   setLuxury,
   setGoButton,
-  setJailPostions
+  setJailPostions,
+  setBuyProperty
 } from '../components/store/actionCreators'
 import { Button } from 'semantic-ui-react'
 const MoveToken = (props) => {
@@ -33,20 +34,18 @@ const MoveToken = (props) => {
     } else if (squareType === 'CHANCE') {
       props.dispatch(setMoveToken(false))
       props.dispatch(setCardButton(true))
-        //card: false setup so,ething for chance card
+        // card: false setup so,ething for chance card
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on a chance space.`)
     } else if (squareType === 'COMMUNITY_CHEST') {
       props.dispatch(setMoveToken(false))
       props.dispatch(setCardButton(true))
-       //card: false setup so,ething for chance card
+       // card: false setup so,ething for chance card
       sock.socket.emit('comment', `${props.userNames[props.index]} landed on a community chest space.`)
     } else if (squareType === 'GO_TO_JAIL' || doubles === 3) {
       // jail = true
       props.dispatch(setUserPositions(10, props.index))
-      props.setState({
-        moveTokenButtonVisible: false,
-        endTurnButtonVisible: true
-      })
+      props.dispatch(setMoveToken(false))
+      props.dispatch(setEndTurn(true))
     } else if (squareType === 'PROPERTY') {
       if (this.propertyIsOwned(userPosition) === false) {
         let cost = 0
@@ -57,6 +56,8 @@ const MoveToken = (props) => {
             propertyName = prop.NAME
           }
         })
+        props.dispatch(setMoveToken(false))
+        props.dispatch(setBuyProperty(true))
         props.setState({
           buyPropertyButtonVisible: true,
           moveTokenButtonVisible: false,
@@ -240,7 +241,20 @@ const mapStateToProps = (state) => {
     userPropertiesArray: state.userPropertiesArray,
     jailPositions: state.jailPositions,
     index: state.index,
-    userCashArray: state.userCashArray
+    userCashArray: state.userCashArray,
+    diceRollButton: state.diceRollButton,
+    moveTokenButton: state.moveTokenButton,
+    cardButton: state.cardButton,
+    setGoButton: state.setGoButton,
+    endTurnButton: state.endTurnButton,
+    incomeTaxButton: state.incomeTaxButton,
+    luxuryButton: state.luxuryButton,
+    payRent: state.payRent,
+    bankruptcyButton: state.bankruptcyButton,
+    payFineButton: state.payFineButton,
+    jailRollDiceButton: state.jailRollDiceButton,
+    buyPropertyButton: state.buyPropertyButton,
+    freeCardButton: state.freeCardButton
   }
 }
 MoveToken.propTypes = {
@@ -269,7 +283,8 @@ MoveToken.propTypes = {
   bankruptcyButton: React.PropTypes.bool.isRequired,
   payFineButton: React.PropTypes.bool.isRequired,
   jailRollDiceButton: React.PropTypes.bool.isRequired,
-  freeCardButton: React.PropTypes.bool.isRequired
+  freeCardButton: React.PropTypes.bool.isRequired,
+  buyPropertyButton: React.PropTypes.bool.isRequired
 }
 
 export default connect(mapStateToProps)(MoveToken)

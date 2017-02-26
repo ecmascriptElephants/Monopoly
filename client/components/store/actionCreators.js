@@ -25,7 +25,8 @@ import { SET_GAME_ID,
   SET_LUXURY_BUTTON,
   SET_PAY_FINE,
   SET_PAY_RENT,
-  SET_JAIL_POSITION
+  SET_JAIL_POSITION,
+  SET_BUY_PROPERTY
 } from './actions'
 
 export function setGameID (id) {
@@ -134,6 +135,10 @@ export function setPayFine (bool) {
 
 export function setPayRent (bool) {
   return {type: SET_PAY_RENT, bool}
+}
+
+export function setBuyProperty (bool) {
+  return {type: SET_BUY_PROPERTY, bool}
 }
 
 export function setJailPostions (index, value) {

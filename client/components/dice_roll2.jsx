@@ -72,10 +72,7 @@ class DiceRoll extends Component {
         })
       }
     })
-    sock.socket.on('update properties', (data) => {
-      this.props.dispatch(setUserProperties(data.userProperties, data.index))
-    })
-
+    
     sock.socket.on('update money', (data) => {
       this.props.dispatch(setCash(data.money, data.index))
     })
@@ -204,42 +201,6 @@ class DiceRoll extends Component {
     }
   }
 
-  handleBuyPropertyButtonClick () {
-    let propertyPosition = this.props.userPosArray[this.props.index]
-    let propertiesArray = [...this.props.userPropertiesArray[this.props.index]]
-    // console.log('diceRoll.jsx line 382 handleBuyPropertyButtonClick propertiesArray = ', propertiesArray, Array.isArray(propertiesArray))
-    let propertyPrice = 0
-    let newProperty = { PropertyObj: {}, Mortgaged: false, Houses: 0, Position: propertyPosition }
-    rules.Properties.forEach((property) => {
-      if (property.BOARD_POSITION === propertyPosition) {
-        propertyPrice = property.PRICE
-        newProperty.PropertyObj = property
-        propertiesArray.push(newProperty)
-      }
-    })
-
-    if (this.props.userCashArray[this.props.index] < propertyPrice) {
-      this.props.dispatch(setEndTurn(!this.state.doubles))
-      this.props.dispatch(setBuyProperty(false))
-      this.props.dispatch(setDiceRoll(!!this.state.doubles))
-      this.setState({
-        comment: 'You cannot afford this property :('
-      })
-    } else {
-      this.props.dispatch(setCash(-propertyPrice, this.props.index))
-      sock.updateMoney({ gameID: this.props.gameID, money: -propertyPrice, index: this.props.index })
-      this.props.dispatch(setUserProperties(propertiesArray, this.props.index))
-      this.props.dispatch(setEndTurn(!this.state.doubles))
-      this.props.dispatch(setBuyProperty(false))
-      this.props.dispatch(setDiceRoll(!!this.state.doubles))
-      this.setState({
-        comment: `You bought ${newProperty.PropertyObj.NAME}, cost $${newProperty.PropertyObj.PRICE}`
-      })
-      sock.updateProps({ gameID: this.props.gameID, properties: this.props.userPropertiesArray[this.props.index], index: this.props.index })
-      sock.socket.emit('comment', `${this.state.userNames[this.props.index]} bought ${newProperty.PropertyObj.NAME}!`)
-    }
-  }
-
   mortgageProperty (propertyPosition) {
     let tempProperty = this.state.property
     let mortgageAmount = 0
@@ -283,11 +244,11 @@ class DiceRoll extends Component {
     if (die1 === die2) {
       let updatedJailPositionsArray = [...this.props.jailPositions]
       updatedJailPositionsArray[this.props.index] = 0
+      this.props.dispatch(setMoveToken(true))
+      this.props.dispatch(setJailRoll(false))
       this.setState({
-        moveTokenButtonVisible: true,
         comment: `You rolled doubles and left jail. Move ${die1 + die2} spaces.`,
-        jailPositions: updatedJailPositionsArray,
-        jailRollDoublesButtonVisible: false
+        jailPositions: updatedJailPositionsArray
       })
     } else {
       let updatedJailPositionsArray = [...this.props.jailPositions]
@@ -295,7 +256,7 @@ class DiceRoll extends Component {
       this.dispatch(setEndTurn(true))
       this.dispatch(setJailRoll(false))
       this.setState({
-        comment: 'You did not roll doubles :(.',
+        comment: 'You did not roll doubles :(.'
       })
     }
   }
@@ -438,7 +399,7 @@ class DiceRoll extends Component {
             <div className='buy-property-btn_div'>
               {(this.props.buyPropertyButton && !this.props.setGoButton)
                 ? <div>
-                  <BuyProperty doubles={this.state.doubles} setState={this.setStates} userName={this.state.userNames} />
+                  <BuyProperty doubles={this.state.doubles} setState={this.setStates} userNames={this.state.userNames} diceSum={this.state.diceSum} />
                 </div> : null
               }
             </div>

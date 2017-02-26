@@ -33,6 +33,7 @@ module.exports = {
     socket.emit('send chat', data)
   },
   updateProps: (data) => {
+    console.log(data.properties)
     socket.emit('property update', data)
   },
   updateMoney: (data) => {

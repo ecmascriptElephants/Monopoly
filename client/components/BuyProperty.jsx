@@ -15,6 +15,7 @@ const BuyProperty = (props) => {
   const handleBuyPropertyButtonClick = () => {
     let propertyPosition = props.userPosArray[props.index]
     let propertiesArray = [...props.userPropertiesArray[props.index]]
+    console.log(propertiesArray)
     let propertyPrice = 0
     let newProperty = { PropertyObj: {}, Mortgaged: false, Houses: 0, Position: propertyPosition }
     rules.Properties.forEach((property) => {
@@ -24,7 +25,7 @@ const BuyProperty = (props) => {
         propertiesArray.push(newProperty)
       }
     })
-
+    console.log(propertiesArray, 'after rules')
     if (props.userCashArray[props.index] < propertyPrice) {
       props.dispatch(setEndTurn(!props.doubles))
       props.dispatch(setBuyProperty(false))
@@ -36,13 +37,14 @@ const BuyProperty = (props) => {
       props.dispatch(setCash(-propertyPrice, props.index))
       sock.updateMoney({ gameID: props.gameID, money: -propertyPrice, index: props.index })
       props.dispatch(setUserProperties(propertiesArray, props.index))
+      console.log(props.userPropertiesArray)
       props.dispatch(setEndTurn(!props.doubles))
       props.dispatch(setBuyProperty(false))
       props.dispatch(setDiceRoll(!!props.doubles))
       props.setState({
         comment: `You bought ${newProperty.PropertyObj.NAME}, cost $${newProperty.PropertyObj.PRICE}`
       })
-      sock.updateProps({ gameID: props.gameID, properties: props.userPropertiesArray[props.index], index: props.index })
+      sock.updateProps({ gameID: props.gameID, properties: propertiesArray, index: props.index })
       sock.socket.emit('comment', `${props.userNames[props.index]} bought ${newProperty.PropertyObj.NAME}!`)
     }
   }
@@ -64,12 +66,10 @@ const mapStateToProps = (state) => {
 }
 
 BuyProperty.propTypes = {
-  dice: React.PropTypes.func.isRequired,
   dispatch: React.PropTypes.func.isRequired,
   username: React.PropTypes.string.isRequired,
   gameID: React.PropTypes.number.isRequired,
   userPosArray: React.PropTypes.array.isRequired,
-  jailPositions: React.PropTypes.array.isRequired,
   index: React.PropTypes.number.isRequired,
   userPropertiesArray: React.PropTypes.array.isRequired,
   userCashArray: React.PropTypes.array.isRequired,

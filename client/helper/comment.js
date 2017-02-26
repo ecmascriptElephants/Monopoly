@@ -25,9 +25,37 @@ module.exports = {
   },
   CantPayFine: () => {
     return 'You cannot afford the $50 fine.'
-  }
+  },
 
-  buyProperty: (propertyName, cost) {
+  buyProperty: (propertyName, cost) => {
     return `You landed on ${propertyName}, and can buy it for $${cost}.`
+  },
+
+  leftJail: (diceSum) => {
+    return `You rolled doubles and left jail. Move ${diceSum} spaces.`
+  },
+
+  noDoubles: () => {
+    return `You did not roll doubles :(.`
+  },
+
+  cant50: () => {
+    return `You cannot afford the $50 fine.`
+  },
+
+  cantIncome: () => {
+    return 'You do not have enough money to pay the $200 income tax.'
+  },
+
+  rolledDoubles: () => {
+    return 'You rolled Doubles!'
+  },
+
+  propertyBought: (name, price) => {
+    `You bought ${name}, cost $${price}`
+  },
+
+  boughtBySomeone: (name, propname) => {
+    return `${name} bought ${propname}!`
   }
 }

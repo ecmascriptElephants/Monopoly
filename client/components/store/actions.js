@@ -26,4 +26,4 @@ export const SET_PAY_FINE = 'SET_PAY_FINE'
 export const SET_JAIL_ROLL = 'SET_JAIL_ROLL'
 export const SET_FREE_CARD = 'SET_FREE_CARD'
 export const SET_BUY_PROPERTY = 'SET_BUY_PROPERTY'
-
+export const SET_BUTTONS = 'SET_BUTTONS'

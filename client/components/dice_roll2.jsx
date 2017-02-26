@@ -21,7 +21,8 @@ import {
   setFreeCard,
   setBuyProperty,
   setPayRent,
-  setIncomeTax
+  setIncomeTax,
+  setButtons
 } from './store/actionCreators'
 import { Button, List } from 'semantic-ui-react'
 import Card from './Cards'
@@ -113,6 +114,7 @@ class DiceRoll extends Component {
   }
 
   handleDiceRollButtonClick () {
+    this.props.dispatch(setButtons())
     const die1 = 1 + Math.floor((6 * Math.random()))
     const die2 = 1 + Math.floor((6 * Math.random()))
     let doubles = 0

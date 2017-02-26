@@ -26,7 +26,8 @@ import {
   SET_PAY_FINE,
   SET_PAY_RENT,
   SET_STATE,
-  SET_BUY_PROPERTY
+  SET_BUY_PROPERTY,
+  SET_BUTTONS
 } from './actions'
 const DEFAULT_STATE = {
   gameID: 0,
@@ -236,6 +237,25 @@ const setBuyProperty = (state, action) => {
   return newState
 }
 
+const setButtons = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, {
+    moveTokenButton: false,
+    cardButton: false,
+    setGoButton: false,
+    endTurnButton: false,
+    incomeTaxButton: false,
+    luxuryButton: false,
+    payRent: false,
+    bankruptcyButton: false,
+    payFineButton: false,
+    jailRollDiceButton: false,
+    buyPropertyButton: false,
+    freeCardButton: false
+  })
+  return newState
+}
+
 const rootReducer = (state = DEFAULT_STATE, action) => {
   switch (action.type) {
     case SET_GAME_ID:
@@ -321,6 +341,9 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_BUY_PROPERTY:
       return setBuyProperty(state, action)
+
+    case SET_BUTTONS:
+      return setButtons(state, action)
 
     default:
       return state

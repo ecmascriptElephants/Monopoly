@@ -25,7 +25,8 @@ import { SET_GAME_ID,
   SET_LUXURY_BUTTON,
   SET_PAY_FINE,
   SET_PAY_RENT,
-  SET_BUY_PROPERTY
+  SET_BUY_PROPERTY,
+  SET_BUTTONS
 } from './actions'
 
 export function setGameID (id) {
@@ -140,3 +141,6 @@ export function setBuyProperty (flag) {
   return {type: SET_BUY_PROPERTY, flag}
 }
 
+export function setButtons () {
+  return {type: SET_BUTTONS}
+}

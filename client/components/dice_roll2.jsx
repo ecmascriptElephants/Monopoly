@@ -317,28 +317,20 @@ class DiceRoll extends Component {
       this.props.dispatch(setEndTurn(!!this.state.doubles))
       this.props.dispatch(setBuyProperty(false))
       this.props.dispatch(setDiceRoll(!!this.state.doubles))
+      this.setState({
+        comment: 'You cannot afford this property :('
+      })
     } else {
       this.props.dispatch(setCash(-propertyPrice, this.props.index))
       sock.updateMoney({ gameID: this.props.gameID, money: -propertyPrice, index: this.props.index })
-
-      let updatedUserProperties = [...this.props.userPropertiesArray]
-
-      updatedUserProperties[this.props.index] = propertiesArray
+      this.props.dispatch(setUserProperties(propertiesArray, this.props.index))
+      this.props.dispatch(setEndTurn(!!this.state.doubles))
+      this.props.dispatch(setBuyProperty(false))
+      this.props.dispatch(setDiceRoll(!!this.state.doubles))
       this.setState({
-        comment: `You bought ${newProperty.PropertyObj.NAME}, cost $${newProperty.PropertyObj.PRICE}`,
-        buyPropertyButtonVisible: false,
-        endTurnButtonVisible: true,
-        moveTokenButtonVisible: false,
-        userPropertiesArray: updatedUserProperties
+        comment: `You bought ${newProperty.PropertyObj.NAME}, cost $${newProperty.PropertyObj.PRICE}`
       })
-      if (this.state.doubles) {
-        this.setState({
-          endTurnButtonVisible: false,
-          diceRollButtonVisible: true
-        })
-      }
-      this.props.dispatch(setUserProperties(updatedUserProperties, this.props.index))
-      sock.updateProps({ gameID: this.props.gameID, properties: updatedUserProperties[this.props.index], index: this.props.index })
+      sock.updateProps({ gameID: this.props.gameID, properties: this.props.userPropertiesArray[this.props.index], index: this.props.index })
       sock.socket.emit('comment', `${this.state.userNames[this.props.index]} bought ${newProperty.PropertyObj.NAME}!`)
     }
   }
@@ -360,18 +352,18 @@ class DiceRoll extends Component {
 
   handleJailPayFineButtonClick () {
     if (this.props.userCashArray[this.props.index] < 50) {
+      this.setState({
+        comment: 'You cannot afford the $50 fine.'
+      })
     } else {
       this.props.dispatch(setCash(-50, this.props.index))
       sock.updateMoney({ gameID: this.props.gameID, money: -50, index: this.props.index })
-
       let updatedJailPositions = [...this.props.jailPositions]
       updatedJailPositions[this.props.index] = 0
       this.props.dispatch(setUserJail(updatedJailPositions[this.props.index], this.props.index))
-
-      console.log('in diceRoll js line 649 handleJailPayFineButtonClick has been invoked')
+      
       this.setState({
         diceRollButtonVisible: true,
-        jailPositions: updatedJailPositions,
         jailPayFineButtonVisible: false,
         jailRollDoublesButtonVisible: false,
         jailFreeCardButtonVisible: false

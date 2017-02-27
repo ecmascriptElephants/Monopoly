@@ -223,6 +223,7 @@ class DiceRoll extends Component {
     this.props.dispatch(setUserPositions(userPosition, this.props.index))
     this.props.dice(userPosition, this.props.index, true)
     let squareType = rules.PositionType[userPosition]
+
     if (squareType === 'GO_TO_JAIL' || doubles === 3) {
       jail = true
       this.props.dispatch(setUserPositions(10, this.props.index))
@@ -252,13 +253,6 @@ class DiceRoll extends Component {
         card: true
       })
       sock.socket.emit('comment', {gameID: this.props.gameID, comment: `${this.props.username} landed on a community chest space.`})
-    } else if (squareType === 'GO_TO_JAIL' || doubles === 3) {
-      jail = true
-      this.props.dispatch(setUserPositions(10, this.props.index))
-      this.setState({
-        moveTokenButtonVisible: false,
-        endTurnButtonVisible: true
-      })
     } else if (squareType === 'PROPERTY') {
       if (this.propertyIsOwned(userPosition) === false) {
         let cost = 0

@@ -2,7 +2,7 @@ const path = require('path')
 
 module.exports = {
   context: __dirname,
-  entry: './client/app.jsx',
+  entry: ['whatwg-fetch', './client/app.jsx'],
   output: {
     path: path.join(__dirname, '/src'),
     publicPath: '/src/',
@@ -35,6 +35,12 @@ module.exports = {
         test: /\.json$/,
         loader: 'json-loader',
         enforce: 'post'
+      },
+      {
+        test: /\.less$/,
+        use: [
+          'style-loader', 'css-loader', 'less-loader'
+        ]
       }
     ]
   }

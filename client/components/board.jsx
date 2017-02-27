@@ -1,50 +1,80 @@
 import React, { Component } from 'react'
 import Symbol from './Symbol'
 import Player from './player'
+import Chat from './chat'
 // import userNames from './user_order'
 // import rules from '../static/rules.js'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
+import { setUserPositions, setPlayers, setPlayerProps, setIndex, setUserProperties } from './store/actionCreators'
+import Toast from './toast'
 
 class Board extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      players: []
+      messages: [],
+      playerIndex: -1,
+      valid: false,
+      comment: '',
+      showToast: false
     }
-    sock.init({ gameID: this.props.gameID })
+    // console.log(this.props.playerIndex)
+    sock.init({ gameID: this.props.gameID, index: this.props.playerIndex })
     this.dice = this.dice.bind(this)
   }
-  componentWillReceiveProps (nextProps) {
-    this.dice(nextProps.userPosArray[nextProps.index], nextProps.index)
-  }
 
-  dice (value, index) {
+  // componentWillReceiveProps (nextProps) {
+  //   const index = nextProps.index
+  //   this.dice(nextProps.userPosArray[index], index)
+  // }
+
+  dice (value, index, flag) {
     const location = [
       [97, 97], [97, 83], [97, 75], [97, 66.5], [97, 58.5], [97, 50], [97, 42], [97, 34], [97, 25.5], [97, 17.5], [97, 2.5],
       [84.5, 2.5], [76.4, 2.5], [68.2, 2.5], [60, 2.5], [51.8, 2.5], [43.5, 2.5], [35.4, 2.5], [27.1, 2.5], [19, 2.5], [7, 2.5],
       [7, 17.5], [7, 25.5], [7, 34], [7, 42], [7, 50], [7, 58.5], [7, 66.5], [7, 75], [7, 83],
       [7, 97], [19, 97], [27.1, 97], [35.4, 97], [43.5, 97], [51.8, 97], [60, 97], [68.2, 97], [76.4, 97], [84.5, 97]
     ]
-    let players = [...this.state.players]
-    players[index].userPosition = location[value]
-    this.setState({ players })
+    let playerProps = location[value]
+    if (index >= 0) {
+      this.props.dispatch(setUserPositions(value, index))
+    }
+    if (flag) {
+      sock.updatePos({ gameID: this.props.gameID, pos: value, index: index })
+    }
+    this.props.dispatch(setPlayerProps(playerProps, index))
   }
+
   componentDidMount () {
     sock.socket.on('users', (data) => {
-      this.setState({ players: data.players })
+      let players = Object.keys(data.players).map((key) => {
+        return data.players[key]
+      })
+      this.props.dispatch(setPlayers(players))
     })
+
+    // sock.socket.on('receive-comment', (comment) => {
+    //   this.setState({ comment, showToast: true })
+    // })
+
     sock.socket.on('update position', (data) => {
-      this.dice(data.pos, data.index)
+      this.dice(data.pos, data.index, false)
+      this.props.dispatch(setIndex(data.index))
+    })
+
+    sock.socket.on('update properties', (data) => {
+      this.props.dispatch(setUserProperties(data.properties, data.index))
     })
   }
   render () {
     return (
       <div>
-        <Player name={this.props.username} piece='Hat' />
+        <Player name={this.props.username} dice={this.dice} piece='Hat' />
+        
         <div className='board parent'>
           {
-            this.state.players.map((player, index) => {
+            this.props.players.map((player, index) => {
               if (index <= 3) {
                 return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0] - (index + index)}%`} userNumber={index} key={index} />
               } else {
@@ -187,6 +217,7 @@ class Board extends Component {
             </div>
           </div>
         </div>
+        <Chat name={this.props.username} />
       </div>
     )
   }
@@ -197,7 +228,10 @@ const mapStateToProps = (state) => {
     gameID: state.gameID,
     userID: state.userID,
     userPosArray: state.userPosArray,
-    index: state.index
+    // userPropertiesArray: state.userPropertiesArray,
+    index: state.index,
+    players: state.players,
+    playerIndex: state.playerIndex
   }
 }
 
@@ -207,6 +241,10 @@ Board.propTypes = {
   gameID: React.PropTypes.number.isRequired,
   userID: React.PropTypes.string.isRequired,
   userPosArray: React.PropTypes.array.isRequired,
-  index: React.PropTypes.number.isRequired
+  // userPropertiesArray: React.PropTypes.array.isRequired,
+  index: React.PropTypes.number.isRequired,
+  players: React.PropTypes.array.isRequired,
+  playerIndex: React.PropTypes.number.isRequired
 }
+
 export default connect(mapStateToProps)(Board)

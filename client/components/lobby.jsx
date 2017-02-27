@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import sock from '../helper/socket'
-import axios from 'axios'
 import { connect } from 'react-redux'
-import { setUsername, setGameID, setUserID } from './store/actionCreators'
+import { setUsername, setGameID, setUserID, setMyIndex, setDefaultState, setState } from './store/actionCreators'
+import Toast from './toast'
+import axios from 'axios'
+// import { Button } from 'semantic-ui-react'
+import LoadGame from './LoadGame'
 class Lobby extends Component {
   constructor (props) {
     super(props)
@@ -11,28 +14,57 @@ class Lobby extends Component {
       button: false,
       join: false,
       start: false,
-      messages: []
+      messages: [],
+      showToast: false,
+      comment: '',
+      queryResults: [],
+      pendingGames: [],
+      resume: true
     }
-    axios.get('/user')
-      .then((res) => {
-        this.props.dispatch(setUsername(res.data.displayName))
-        this.props.dispatch(setUserID(res.data.id))
-        sock.userJoined(res.data)
-      })
+    this.props.dispatch(setDefaultState())
+    this.props.dispatch(setUsername(window.localStorage.displayname))
+    this.props.dispatch(setUserID(window.localStorage.id))
+    sock.userJoined({ id: window.localStorage.id, displayName: window.localStorage.displayname })
 
     this.joinGame = this.joinGame.bind(this)
     this.newGame = this.newGame.bind(this)
     this.startGame = this.startGame.bind(this)
     this.sendChat = this.sendChat.bind(this)
+    this.submitMessage = this.submitMessage.bind(this)
+    this.getChats = this.getChats.bind(this)
   }
   componentDidMount () {
+    // window.localStorage.removeItem('state')
     sock.socket.on('new game', (data) => {
       this.setState({ join: true })
+      window.localStorage.setItem('gameID', data.gameID)
       this.props.dispatch(setGameID(data.gameID))
     })
+
+    sock.socket.on('pending games', (pendingGames) => {
+      this.setState({ pendingGames })
+    })
+
+    sock.socket.on('your index', (data) => {
+      this.props.dispatch(setMyIndex(data))
+    })
+
     sock.socket.on('player joined', (data) => {
-      this.setState({ join: false, start: true })
+      this.setState({
+        join: false,
+        start: true,
+        showToast: true,
+        comment: 'Player joined'
+      })
+      this.setState({
+      })
       this.props.dispatch(setGameID(data.gameID))
+    })
+    sock.socket.on('player started', (data) => {
+      this.setState({
+        join: false,
+        start: true
+      })
     })
     sock.socket.on('send message', (data) => {
       this.setState({})
@@ -40,8 +72,11 @@ class Lobby extends Component {
     sock.socket.on('receive-message', (msg) => {
       let messages = this.state.messages
       messages.push(msg)
-      this.setState({messages: messages})
-      // console.log('messages', this.state.messages)
+      this.setState({ messages: messages })
+    })
+    sock.socket.on('load state', (state) => {
+      this.props.dispatch(setState(state))
+      this.setState({resume: false})
     })
   }
   newGame () {
@@ -57,17 +92,38 @@ class Lobby extends Component {
   }
 
   sendChat () {
-    sock.sendChat({senderID: this.props.senderID, messageID: this.props.messageID})
+    sock.sendChat({ senderID: this.props.senderID, messageID: this.props.messageID })
   }
 
   submitMessage () {
     let message = document.getElementById('message').value
-    sock.socket.emit('new-message', message)
+    document.getElementById('message').value = ''
+    let sender = this.props.username
+    let room = 'lobby'
+    let msgInfo = { sender: sender, message: message, room: room }
+    JSON.stringify(msgInfo)
+    sock.socket.emit('new-message', msgInfo)
+  }
+
+  getChats (e) {
+    e.preventDefault()
+    let room = document.getElementById('room').value
+    let keyword = document.getElementById('keyword').value
+    let date = document.getElementById('date').value
+    document.getElementById('keyword').value = ''
+    axios.post('/chats', { room: room, keyword: keyword, date: date })
+      .then((res) => {
+        this.setState({ queryResults: res.data })
+      })
+      .catch((err) => console.error(err))
   }
 
   render () {
     let messages = this.state.messages.map((msg) => {
-      return <li>{msg}</li>
+      return <li>{this.props.username}: {msg}</li>
+    })
+    let queryResults = this.state.queryResults.map((result) => {
+      return <li>Sender: {result.sender} Message: {result.message} Room: {result.room}</li>
     })
     return (
       <div>
@@ -84,7 +140,30 @@ class Lobby extends Component {
           </ul>
           <input id='message' type='text' /><button onClick={this.submitMessage}>Send</button>
         </div>
+        <Toast message={this.state.comment} show={this.state.showToast} />
+        <br />
+        <div>
+          <form onSubmit={this.getChats}>
+            <input type='text' placeholder='keyword' id='keyword' />
+            <select id='room' name='room'>
+              <option>All Rooms</option>
+              <option value='lobby'>Lobby</option>
+              <option value='board'>Board</option>
+            </select>
 
+            <select id='date'>
+              <option>This Week</option>
+              <option value='thisWeek'>This Month</option>
+              <option value='thisYear'>This Year</option>
+            </select>
+            <button type='submit'>Show chats</button>
+          </form>
+          <p> You have total of {this.state.queryResults.length} messages </p>
+          <ul>
+            {queryResults}
+          </ul>
+          <LoadGame pendingGames={this.state.pendingGames} load={this.state.resume} />
+        </div>
       </div>
     )
   }

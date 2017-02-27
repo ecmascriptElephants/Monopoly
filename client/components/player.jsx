@@ -1,18 +1,14 @@
 import React, { Component } from 'react'
-import { Header, Container, Segment, Icon, Divider, Message } from 'semantic-ui-react'
+import { Header, Container, Segment, Icon, Divider, Message, Button } from 'semantic-ui-react'
 import { rules } from '../static/rules'
-import DiceRoll from './dice_roll'
-
+import DiceRoll from './dice_roll2'
+import { connect } from 'react-redux'
 class Player extends Component {
   constructor (props) {
     super(props)
     this.state = {
       name: props.name,
       piece: props.piece,
-      money: 0,
-      property: ['house'],
-      // todo: property: [{'PropertyObj': {PropertyObj}, 'Mortaged': false, 'Houses': 0,
-      // 'Position': 0}],
       hasCommunityChestGetOutOfJailFree: false,
       hasChanceGetOutOfJailFree: false,
       userQueueNumber: 0,
@@ -28,6 +24,7 @@ class Player extends Component {
     this.buyHouse = this.buyHouse.bind(this)
     this.sellHouse = this.sellHouse.bind(this)
   }
+
   componentWillReceiveProps (prev) {
     this.setState({name: prev.name})
   }
@@ -138,21 +135,6 @@ class Player extends Component {
     }
   }
 
-  // handleChanceCard () {
-  //   let propertiesArray = this.state.property
-  //   let houseSalePrice = 0
-  //   propertiesArray.forEach((property) => {
-  //     if (property.Position === propertyPosition && property.Houses > 0) {
-  //       houseSalePrice = property.PropertyObj.HOUSE_SALE_PRICE
-  //       property.Houses -= 1
-  //     }
-  //   })
-  //   this.increaseFunds(houseSalePrice)
-  //   this.setState = {
-  //     property: propertiesArray
-  //   }
-  // }
-
   render () {
     return (
       <Container className='pcard'>
@@ -164,18 +146,27 @@ class Player extends Component {
             </Header.Content>
           </Header>
           <Divider />
+          <Button>Leave Game</Button>
           <Message>
-            {this.state.money}
+            {this.props.userCashArray[this.props.playerIndex]}
           </Message>
-          <DiceRoll dice={this.dice} />
+          <DiceRoll dice={this.props.dice} />
         </Segment>
       </Container>
     )
   }
 }
-
+const mapStateToProps = (state) => {
+  return {
+    userCashArray: state.userCashArray,
+    playerIndex: state.playerIndex
+  }
+}
 Player.propTypes = {
   name: React.PropTypes.string.isRequired,
-  piece: React.PropTypes.string.isRequired
+  piece: React.PropTypes.string.isRequired,
+  dice: React.PropTypes.func.isRequired,
+  userCashArray: React.PropTypes.array.isRequired,
+  playerIndex: React.PropTypes.number.isRequired
 }
-export default Player
+export default connect(mapStateToProps)(Player)

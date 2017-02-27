@@ -52,11 +52,9 @@ const BuyProperty = (props) => {
       props.dispatch(setEndTurn(!props.doubles))
       props.dispatch(setBuyProperty(false))
       props.dispatch(setDiceRoll(!!props.doubles))
-      const comment = comments.LowCash()
-      props.setState({
-        comment,
-        showToast: true
-      })
+      let newComment = comments.propertyInsufficientFunds(props.username)
+      props.setState({ comment: newComment, showToast: true })
+      sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
     } else {
       let indexes = []
       console.log(propertyGroup)
@@ -81,14 +79,10 @@ const BuyProperty = (props) => {
       props.dispatch(setEndTurn(!props.doubles))
       props.dispatch(setBuyProperty(false))
       props.dispatch(setDiceRoll(!!props.doubles))
-      const comment = comments.propertyBought(newProperty.PropertyObj.NAME, newProperty.PropertyObj.PRICE)
-      props.setState({
-        comment,
-        showToast: true
-      })
+      let newComment = comments.propertyBought(props.username, newProperty.PropertyObj.NAME)
+      props.setState({ comment: newComment, showToast: true })
+      sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
       sock.updateProps({ gameID: props.gameID, properties: propertiesArray, index: props.index })
-      const send = comments.boughtBySomeone(props.username, newProperty.PropertyObj.NAME)
-      sock.comment(props.gameID, send)
     }
   }
 

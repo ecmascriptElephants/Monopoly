@@ -1,112 +1,116 @@
 module.exports = {
-  DoublesJail: (name, dice) => {
-    return `${name} rolled ${dice}, landing on Go-To-Jail. 
+  squareTypeGoToJail: (name, diceSum) => {
+    return `${name} rolled ${diceSum}, landing on Go-To-Jail. 
     Go To Jail. Go Directly To Jail. 
     Do Not Pass Go. Do Not Collect $200.`
   },
-  LandJail: (name) => {
+
+  tripleDoubles: (name) => {
     return `${name} rolled doubles three times in a row. Go To Jail.
      Go Directly To Jail. Do not Pass Go. Do Not Collect $200.`
   },
-  RollDoubles: (name, dice) => {
-    return `${name} rolled doubles. Move ${dice} spaces on the board, and roll again.`
-  },
-  DiceRoll: (name, dice) => {
-    return `${name} rolled ${dice}. Move ${dice} spaces on the board.`
-  },
-  LowOnRent: (rentOwed, cash) => {
-    return `You owe ${rentOwed}, but only have ${cash}`
+
+  rollDoubles: (name, diceSum) => {
+    return `${name} rolled doubles. Move ${diceSum} spaces on the board, and roll again.`
   },
 
-  cantLux: () => {
-    return 'You do not have enough money to pay the $100 luxury tax.'
+  diceRoll: (name, diceSum) => {
+    return `${name} rolled ${diceSum}. Move ${diceSum} spaces on the board.`
   },
 
-  LowCash: () => {
-    return 'You cannot afford this property :('
+  rentInsufficientFunds: (name, rentOwed, cash) => {
+    return `${name} owes $${rentOwed}, but only has $${cash}`
   },
 
-  CantPayFine: () => {
-    return 'You cannot afford the $50 fine.'
+  rentPaid: (name, propertyOwner, rent) => {
+    return `${name} paid ${propertyOwner} $${rent} in rent.`
   },
 
-  buyProperty: (propertyName, cost) => {
-    return `You landed on ${propertyName}, and can buy it for $${cost}.`
+  luxuryTaxInsufficientFunds: (name) => {
+    return `${name} do not have enough money to pay the $100 luxury tax.`
   },
 
-  leftJail: (diceSum) => {
-    return `You rolled doubles and left jail. Move ${diceSum} spaces.`
+  luxuryTaxPaid: (name) => {
+    return `${name} paid $100 in luxury tax.`
   },
 
-  noDoubles: () => {
-    return `You did not roll doubles :(.`
+  propertyInsufficientFunds: (name) => {
+    return `${name} cannot afford this property :(`
   },
 
-  cant50: () => {
-    return `You cannot afford the $50 fine.`
+  squareTypeUnownedProperty: (name, propertyName, cost) => {
+    return `${name} landed on ${propertyName}, and can buy it for $${cost}.`
   },
 
-  cantIncome: () => {
-    return 'You do not have enough money to pay the $200 income tax.'
+  jailDoubles: (name, diceSum) => {
+    return `${name} rolled doubles and left jail. Move ${diceSum} spaces.`
   },
 
-  rolledDoubles: () => {
-    return 'You rolled Doubles!'
+  jailNotDoubles: (name) => {
+    return `${name} did not roll doubles :(.`
   },
 
-  propertyBought: (name, price) => {
-    return `You bought ${name}, cost $${price}`
+  jailFineInsufficientFunds: (name) => {
+    return `${name} cannot afford the $50 fine.`
   },
 
-  boughtBySomeone: (name, propname) => {
-    return `${name} bought ${propname}!`
+  incomeTaxInsufficientFunds: (name) => {
+    return `${name} does not have enough money to pay the $200 income tax.`
   },
 
-  goComment: () => {
-    return 'You passed Gp. Collect $200'
+  incomeTaxPaid: (name) => {
+    return `${name} paid $200 in income tax.`
   },
 
-  chance: (name) => {
+  propertyBought: (name, property) => {
+    return `${name} bought ${property}!`
+  },
+
+  passGo: (name) => {
+    return `${name} passed Go. Collect $200!`
+  },
+
+  squareTypeChance: (name) => {
     return `${name} landed on a chance space.`
   },
 
-  community: (name) => {
-    return `${name} landed on a community space.`
+  squareTypeCommunityChest: (name) => {
+    return `${name} landed on a community chest space.`
   },
 
-  unowned: (name) => {
-    return `${name} landed on an unowned property!`
+  squareTypeUnownedProperty: (name, property, price) => {
+    return `${name} landed on ${property}, and can buy it for $${price}!`
   },
 
-  owned: (user, property, rent, owner) => {
-    return `${user} landed on ${property}. Pay $${rent} to ${owner}.`
+  propertyAlreadyOwned: (name, property) => {
+    return `${name} landed on ${property}, but already owns it.`
   },
 
-  rentOwned: (property, rent, owner) => {
-    return `You landed on ${property}. Pay ${rent} to ${owner}.`
+  propertyIsMortgaged: (name, property) => {
+    return `${name} landed on ${property}, but it is mortgaged.`
   },
 
-  landOnGo: () => {
-    return 'You landed on Go. Collect $200'
+  rentOwed: (name, property, rent, owner) => {
+    return `${name} landed on ${property}. Pay $${rent} to ${owner}.`
   },
 
-  letItGo: (name) => {
+  squareTypeGo: (name) => {
     return `${name} landed on GO. Collect $200!`
   },
 
-  freeParking: () => {
-    return 'You landed on Free Parking. Nothing happens.'
+  squareTypeFreeParking: (name) => {
+    return `${name} landed on Free Parking. Nothing happens.`
   },
 
-  jailLand: () => {
-    return 'You landed on Jail, But you are just visiting.'
+  squareTypeJail: (name) => {
+    return `${name} landed on Jail, but is just visiting.`
   },
 
-  incomeTax: () => {
-    return 'You landed on Income Tax. Pay $200'
+  squareTypeIncomeTax: (name) => {
+    return `${name} landed on Income Tax. Pay $200`
   },
 
-  LuxuryTab: () => {
-    return 'You landed on Luxury Tax, Pay $100.'
+  squareTypeLuxuryTax: (name) => {
+    return `${name} landed on Luxury Tax, Pay $100.`
   }
 }

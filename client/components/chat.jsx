@@ -12,9 +12,9 @@ class Chat extends Component {
     this.submitMessage = this.submitMessage.bind(this)
   }
   componentDidMount () {
-    sock.socket.on('receive-message', (msg) => {
+    sock.socket.on('receive-message', (msgInfo) => {
       let messages = this.state.messages
-      messages.push(msg)
+      messages.push(msgInfo)
       this.setState({ messages: messages })
     })
   }
@@ -30,8 +30,8 @@ class Chat extends Component {
   }
 
   render () {
-    let messages = this.state.messages.map((msg) => {
-      return <li>{this.state.name}: {msg}</li>
+    let messages = this.state.messages.map((msg, i) => {
+      return <li key={i}>{msg.sender}: {msg.message}</li>
     })
     return (
       <Container className='chatBox'>

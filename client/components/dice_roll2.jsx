@@ -312,7 +312,12 @@ class DiceRoll extends Component {
   }
 
   checkBankruptcy () {
-
+    let usersProperties = [...this.props.userPropertiesArray]
+    if (userProperties[this.props.index].length === 0) {
+      console.log('bankruptcy!')
+      this.setState({bankruptcyButtonVisible: true})
+      this.props.dispatch(setBankruptcy(true))
+    }
   }
 
   handleBankruptcyButtonClick () {

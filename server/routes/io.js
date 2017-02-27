@@ -97,10 +97,11 @@ module.exports = (io) => {
     })
 
     socket.on('new-message', (msgInfo) => {
-      io.emit('receive-message', msgInfo.message)
+      io.emit('receive-message', msgInfo)
       let sender = msgInfo.sender
       let message = msgInfo.message
       let room = msgInfo.room
+      console.log('sender', sender)
       msgHistory.addMessage(sender, message, room)
     })
 

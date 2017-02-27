@@ -17,6 +17,7 @@ import {
   setUserJail
 } from '../components/store/actionCreators'
 import { Button } from 'semantic-ui-react'
+
 const MoveToken = (props) => {
   const propertyIsOwned = (propertyPosition) => {
     let ownerNumber = false

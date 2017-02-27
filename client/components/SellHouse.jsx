@@ -4,7 +4,7 @@ import { setUserProperties } from './store/actionCreators'
 
 const SellHouse = (props) => {
   const sellHouse = (propertyPosition) => {
-    let propertiesArray = this.state.property
+    let propertiesArray = [...props.userPropertiesArray[props.playerIndex]]
     let houseSalePrice = 0
     propertiesArray.forEach((property) => {
       if (property.Position === propertyPosition && property.Houses > 0) {
@@ -12,7 +12,7 @@ const SellHouse = (props) => {
         property.Houses -= 1
       }
     })
-    this.increaseFunds(houseSalePrice)
+    props.increaseFunds(houseSalePrice)
     props.dispatch(setUserProperties(propertiesArray, props.playIndex))
   }
 
@@ -24,7 +24,8 @@ const SellHouse = (props) => {
 const mapStateToProps = (state) => {
   return {
     userPropertiesArray: state.userPropertiesArray,
-    playerIndex: state.playerIndex
+    playerIndex: state,
+    userCashArray: state.userCashArray
   }
 }
 

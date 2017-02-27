@@ -136,9 +136,9 @@ module.exports = (io) => {
           socket.emit('load state', state)
         })
     })
-    
+
     socket.on('comment', (data) => {
-      socket.broadcast.to(data.gameID).emit('receive-comment', data.comment);
+      socket.broadcast.to(data.gameID).emit('receive-comment', data.comment)
     })
   })
 }

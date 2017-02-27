@@ -6,8 +6,8 @@ import Chat from './chat'
 // import rules from '../static/rules.js'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
-import { setUserPositions, setPlayers, setPlayerProps, setIndex } from './store/actionCreators'
-
+import { setUserPositions, setPlayers, setPlayerProps, setIndex, setUserProperties } from './store/actionCreators'
+import Toast from './toast'
 
 class Board extends Component {
   constructor (props) {
@@ -15,7 +15,9 @@ class Board extends Component {
     this.state = {
       messages: [],
       playerIndex: -1,
-      valid: false
+      valid: false,
+      comment: '',
+      showToast: false
     }
     // console.log(this.props.playerIndex)
     sock.init({ gameID: this.props.gameID, index: this.props.playerIndex })
@@ -34,7 +36,6 @@ class Board extends Component {
       [7, 17.5], [7, 25.5], [7, 34], [7, 42], [7, 50], [7, 58.5], [7, 66.5], [7, 75], [7, 83],
       [7, 97], [19, 97], [27.1, 97], [35.4, 97], [43.5, 97], [51.8, 97], [60, 97], [68.2, 97], [76.4, 97], [84.5, 97]
     ]
-    console.log(index, value)
     let playerProps = location[value]
     if (index >= 0) {
       this.props.dispatch(setUserPositions(value, index))
@@ -44,11 +45,6 @@ class Board extends Component {
     }
     this.props.dispatch(setPlayerProps(playerProps, index))
   }
-  componentWillMount () {
-    // if (localStorage.gameState) {
-    //   this.props.dispatch(setStoreState(JSON.parse(localStorage.gameState)))
-    // }
-  }
 
   componentDidMount () {
     sock.socket.on('users', (data) => {
@@ -57,20 +53,28 @@ class Board extends Component {
       })
       this.props.dispatch(setPlayers(players))
     })
+
+    // sock.socket.on('receive-comment', (comment) => {
+    //   this.setState({ comment, showToast: true })
+    // })
+
     sock.socket.on('update position', (data) => {
       this.dice(data.pos, data.index, false)
       this.props.dispatch(setIndex(data.index))
     })
+
+    sock.socket.on('update properties', (data) => {
+      this.props.dispatch(setUserProperties(data.properties, data.index))
+    })
   }
   render () {
-    console.log(this.props.players)
     return (
       <div>
         <Player name={this.props.username} dice={this.dice} piece='Hat' />
+        
         <div className='board parent'>
           {
             this.props.players.map((player, index) => {
-              console.log('in board.jsx player = ', player,' index = ', index)
               if (index <= 3) {
                 return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0] - (index + index)}%`} userNumber={index} key={index} />
               } else {
@@ -213,7 +217,7 @@ class Board extends Component {
             </div>
           </div>
         </div>
-        <Chat name={this.props.username}  />
+        <Chat name={this.props.username} />
       </div>
     )
   }

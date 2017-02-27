@@ -1,6 +1,6 @@
 module.exports = {
   isAuth: () => {
-    if (localStorage.token) {
+    if (window.localStorage.token) {
       return true
     } else {
       return false

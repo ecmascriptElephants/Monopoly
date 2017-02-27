@@ -64,32 +64,32 @@ const Cards = (props) => {
         } else {
           pos = 5
         }
-       // Todo make user roll dice and pay owner money
+        // Todo make user roll dice and pay owner money
         props.dispatch(setUserPositions(pos, props.index))
-        }
-        // props.dispatch(setUserPositions(pos, props.index))
-      } else if (card.Special === 'PAY_50_EVERYONE') {
-        // let pos = 0
-        // if (props.userPosArray(props.index) === 7) {
-        //   pos = 15
-        // } else if (props.userPosArray(props.index) === 22) {
-        //   pos = 25
-        // } else {
-        //   pos = 5
-        // }
-        // props.dispatch(setUserPositions(pos, props.index))
-      } else if (card.Special === 'RAILROAD') {
-       //  let pos = 0
-       //  if (props.userPosArray(props.index) === 7) {
-       //    pos = 15
-       //  } else if (props.userPosArray(props.index) === 22) {
-       //    pos = 25
-       //  } else {
-       //    pos = 5
-       //  }
-       // Todo make user roll dice and pay owner money
-       //  props.dispatch(setUserPositions(pos, props.index))
       }
+      // props.dispatch(setUserPositions(pos, props.index))
+    } else if (card.Special === 'PAY_50_EVERYONE') {
+      // let pos = 0
+      // if (props.userPosArray(props.index) === 7) {
+      //   pos = 15
+      // } else if (props.userPosArray(props.index) === 22) {
+      //   pos = 25
+      // } else {
+      //   pos = 5
+      // }
+      // props.dispatch(setUserPositions(pos, props.index))
+    } else if (card.Special === 'RAILROAD') {
+      //  let pos = 0
+      //  if (props.userPosArray(props.index) === 7) {
+      //    pos = 15
+      //  } else if (props.userPosArray(props.index) === 22) {
+      //    pos = 25
+      //  } else {
+      //    pos = 5
+      //  }
+      // Todo make user roll dice and pay owner money
+      //  props.dispatch(setUserPositions(pos, props.index))
+    }
     props.button()
   }
   return (

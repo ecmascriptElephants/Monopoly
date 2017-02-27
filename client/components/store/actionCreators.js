@@ -12,7 +12,21 @@ import { SET_GAME_ID,
   SET_PLAYERS,
   SET_PLAYER_PROPS,
   SET_DEFAULT_STATE,
-  SET_STATE
+  SET_STATE,
+  SET_MOVE_TOKEN,
+  SET_DICE_ROLL,
+  SET_BANKRUPTCY,
+  SET_CARD_BUTTON,
+  SET_END_TURN,
+  SET_FREE_CARD,
+  SET_GO_BUTTON,
+  SET_INCOME_TAX,
+  SET_JAIL_ROLL,
+  SET_LUXURY_BUTTON,
+  SET_PAY_FINE,
+  SET_PAY_RENT,
+  SET_BUY_PROPERTY,
+  SET_BUTTONS
 } from './actions'
 
 export function setGameID (id) {
@@ -73,4 +87,60 @@ export function setDefaultState () {
 
 export function setState (state) {
   return {type: SET_STATE, state}
+}
+
+export function setMoveToken (flag) {
+  return {type: SET_MOVE_TOKEN, flag}
+}
+
+export function setDiceRoll (flag) {
+  return {type: SET_DICE_ROLL, flag}
+}
+
+export function setBankruptcy (flag) {
+  return {type: SET_BANKRUPTCY, flag}
+}
+
+export function setCardButton (flag) {
+  return {type: SET_CARD_BUTTON, flag}
+}
+
+export function setEndTurn (flag) {
+  return {type: SET_END_TURN, flag}
+}
+
+export function setFreeCard (flag) {
+  return {type: SET_FREE_CARD, flag}
+}
+
+export function setGoButton (flag) {
+  return {type: SET_GO_BUTTON, flag}
+}
+
+export function setIncomeTax (flag) {
+  return {type: SET_INCOME_TAX, flag}
+}
+
+export function setJailRoll (flag) {
+  return {type: SET_JAIL_ROLL, flag}
+}
+
+export function setLuxury (flag) {
+  return {type: SET_LUXURY_BUTTON, flag}
+}
+
+export function setPayFine (flag) {
+  return {type: SET_PAY_FINE, flag}
+}
+
+export function setPayRent (flag) {
+  return {type: SET_PAY_RENT, flag}
+}
+
+export function setBuyProperty (flag) {
+  return {type: SET_BUY_PROPERTY, flag}
+}
+
+export function setButtons () {
+  return {type: SET_BUTTONS}
 }

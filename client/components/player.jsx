@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Header, Container, Segment, Icon, Divider, Message, Button } from 'semantic-ui-react'
 import { rules } from '../static/rules'
-import DiceRoll from './dice_roll'
+import DiceRoll from './dice_roll2'
 import { connect } from 'react-redux'
 class Player extends Component {
   constructor (props) {
@@ -166,6 +166,7 @@ Player.propTypes = {
   name: React.PropTypes.string.isRequired,
   piece: React.PropTypes.string.isRequired,
   dice: React.PropTypes.func.isRequired,
-  userCashArray: React.PropTypes.array.isRequired
+  userCashArray: React.PropTypes.array.isRequired,
+  playerIndex: React.PropTypes.number.isRequired
 }
 export default connect(mapStateToProps)(Player)

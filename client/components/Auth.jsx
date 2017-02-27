@@ -13,9 +13,9 @@ export default class Auth extends Component {
   componentWillMount () {
     axios.get('/get-info')
       .then((req) => {
-        localStorage.setItem('token', req.data.token)
-        localStorage.setItem('displayname', req.data.user.displayName)
-        localStorage.setItem('id', req.data.user.id)
+        window.localStorage.setItem('token', req.data.token)
+        window.localStorage.setItem('displayname', req.data.user.displayName)
+        window.localStorage.setItem('id', req.data.user.id)
         this.setState({promise: true})
       })
       .catch((err) => console.log(err))

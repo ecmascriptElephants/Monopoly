@@ -11,12 +11,16 @@ const UnMortgage = (props) => {
     let mortgageAmount = 0
     tempProperties.forEach((property) => {
       if (property.PropertyObj.NAME === props.propertyName) {
-        property.Mortgaged = true
         mortgageAmount = property.PropertyObj.MORTGAGE_PRICE
+        if (props.cash > mortgageAmount) {
+          property.Mortgaged = true
+          props.dispatch(setUserProperties(tempProperties, props.playerIndex))
+          props.reduceFunds(mortgageAmount)
+        } else {
+          console.log('not Enough money')
+        }
       }
     })
-    props.dispatch(setUserProperties(tempProperties, props.playerIndex))
-    props.reduceFunds(mortgageAmount)
   }
   return (
     <button onClick={() => { unmortgageProperty() }}>UnMortgage</button>
@@ -34,6 +38,7 @@ UnMortgage.propTypes = {
   userPropertiesArray: React.PropTypes.array.isRequired,
   propertyName: React.PropTypes.string.isRequired,
   playerIndex: React.PropTypes.number.isRequired,
-  reduceFunds: React.PropTypes.func.isRequired
+  reduceFunds: React.PropTypes.func.isRequired,
+  cash: React.PropTypes.number.isRequired
 }
 export default connect(mapStateToProps)(UnMortgage)

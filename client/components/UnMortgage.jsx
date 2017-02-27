@@ -4,8 +4,8 @@ import {
   setUserProperties
 } from './store/actionCreators'
 
-const Mortgage = (props) => {
-  const mortgageProperty = (propertyName) => {
+const UnMortgage = (props) => {
+  const unmortgageProperty = (propertyName) => {
     let tempProperties = [...props.userPropertiesArray[props.playerIndex]]
     console.log(tempProperties)
     let mortgageAmount = 0
@@ -16,10 +16,10 @@ const Mortgage = (props) => {
       }
     })
     props.dispatch(setUserProperties(tempProperties, props.playerIndex))
-    props.increaseFunds(mortgageAmount)
+    props.reduceFunds(mortgageAmount)
   }
   return (
-    <button onClick={() => { mortgageProperty() }}>Mortgage</button>
+    <button onClick={() => { unmortgageProperty() }}>UnMortgage</button>
   )
 }
 
@@ -30,10 +30,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-Mortgage.propTypes = {
+UnMortgage.propTypes = {
   userPropertiesArray: React.PropTypes.array.isRequired,
   propertyName: React.PropTypes.string.isRequired,
   playerIndex: React.PropTypes.number.isRequired,
-  increaseFunds: React.PropTypes.func.isRequired
+  reduceFunds: React.PropTypes.func.isRequired
 }
-export default connect(mapStateToProps)(Mortgage)
+export default connect(mapStateToProps)(UnMortgage)

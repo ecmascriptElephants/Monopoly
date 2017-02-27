@@ -31,6 +31,7 @@ import BuyProperty from './BuyProperty'
 import Toast from './toast'
 import comments from '../helper/comment'
 import Mortgage from './MortgageProperty'
+import UnMortgage from './UnMortgage'
 
 class DiceRoll extends Component {
   constructor (props) {
@@ -53,6 +54,7 @@ class DiceRoll extends Component {
     this.props.dispatch(setButtons())
     this.setStates = this.setStates.bind(this)
     this.increaseFunds = this.increaseFunds.bind(this)
+    this.reduceFunds = this.reduceFunds.bind(this)
   }
 
   componentDidMount () {
@@ -262,21 +264,6 @@ class DiceRoll extends Component {
     // make jail free card button disappear
   }
 
-  unMortgageProperty (propertyPosition) {
-    let tempProperty = this.state.property
-    let unMortgageAmount = 0
-    tempProperty.forEach((property) => {
-      if (property.Position === propertyPosition && property.Mortgaged) {
-        property.Mortgaged = false
-        unMortgageAmount = property.PropertyObj.UNMORTGAGE_PRICE
-      }
-    })
-    this.reduceFunds(unMortgageAmount)
-    this.setState({
-      property: tempProperty
-    })
-  }
-
   buyHouse (propertyPosition) {
     let propertiesArray = this.state.property
     let housePrice = 0
@@ -477,7 +464,9 @@ class DiceRoll extends Component {
           <div className='CurrentUserProperties'>
             <div>
               Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {
-                return <div key={index}>{e.PropertyObj.NAME} {e.Mortgaged ? null : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} /> } {console.log(e)}</div>
+                return <div key={index}>{e.PropertyObj.NAME}
+                  {e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} />
+                  : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} /> } </div>
               })} />}
             </div>
           </div>
@@ -526,6 +515,7 @@ DiceRoll.propTypes = {
   userPosArray: React.PropTypes.array.isRequired,
   jailPositions: React.PropTypes.array.isRequired,
   index: React.PropTypes.number.isRequired,
+  playerIndex: React.PropTypes.number.isRequired,
   userPropertiesArray: React.PropTypes.array.isRequired,
   userCashArray: React.PropTypes.array.isRequired,
   diceRollButton: React.PropTypes.bool.isRequired,

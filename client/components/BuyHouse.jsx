@@ -1,18 +1,18 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {
-  setUserProperties
-} from './store/actionCreators'
+import { setUserProperties } from './store/actionCreators'
 
 const BuyHouse = (props) => {
   const buyHouse = (propertyPosition) => {
-    if (props.houses < 5) {
+    if (props.houses <= 5) {
+      console.log('here')
+      console.log(props)
       let propertiesArray = [...props.userPropertiesArray[props.index]]
       let housePrice = 0
       let numberOfPropsNeededForMonopoly = 0
-      let propertyGroup = ''
       let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property) => {
-        if (property.PropertyObj.PROPERTY_GROUP === propertyGroup) {
+          console.log('here')
+        if (property.PropertyObj.PROPERTY_GROUP === props.propertyGroup) {
           numberOfPropertiesInGroup += 1
           return numberOfPropertiesInGroup
         }
@@ -25,6 +25,7 @@ const BuyHouse = (props) => {
             if (props.userCashArray[props.playerIndex >= housePrice]) {
               property.Houses += 1
               props.reduceFunds(housePrice)
+              console.log('here')
               props.dispatch(setUserProperties(propertiesArray, props.index))
             }
           }

@@ -11,10 +11,10 @@ import {
   setEndTurn,
   setLuxury,
   setGoButton,
-  setJailPostions,
   setBuyProperty,
   setPayRent,
-  setIncomeTax
+  setIncomeTax,
+  setUserJail
 } from '../components/store/actionCreators'
 import { Button } from 'semantic-ui-react'
 const MoveToken = (props) => {
@@ -52,7 +52,7 @@ const MoveToken = (props) => {
       props.dice(10, props.index, true)
       props.dispatch(setMoveToken(false))
       props.dispatch(setEndTurn(true))
-      props.dispatch(setJailPostions(props.index, 1))
+      props.dispatch(setUserJail(props.index, 1))
     } else if (squareType === 'CHANCE') {
       props.dispatch(setMoveToken(false))
       props.dispatch(setCardButton(true))

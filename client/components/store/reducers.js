@@ -115,6 +115,7 @@ const setUserProperties = (state, action) => {
 }
 
 const setUserCash = (state, action) => {
+  console.log(action)
   let cash = state.userCashArray[action.index] + action.cash
   let newArr = [...state.userCashArray.slice(0, action.index),
     cash,

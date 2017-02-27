@@ -39,7 +39,59 @@ const DEFAULT_STATE = {
   index: 0,
   messageID: 0,
   players: [],
-  userPropertiesArray: [[], [], [], [], [], [], [], []],
+  userPropertiesArray: [[{
+    Houses: 0,
+    Mortgaged: false,
+    Position: 8,
+    PropertyObj: {
+      NAME: 'North Carolina Avenue',
+      PROPERTY_GROUP: 'Green',
+      ALLOWS_HOUSES: true,
+      BOARD_POSITION: 32,
+      PRICE: 300,
+      RENT: [26, 130, 390, 900, 1100, 1275],
+      HOUSE_PRICE: 200,
+      MORTGAGE_PRICE: 150,
+      HOUSE_SALE_PRICE: 100,
+      UNMORTGAGE_PRICE: 165,
+      NUMBER_OF_PROPERTIES_IN_GROUP: 3
+    }
+  },{
+    Houses: 0,
+    Mortgaged: false,
+    Position: 10,
+    PropertyObj: {
+      NAME: 'North Carolina Avenue',
+      PROPERTY_GROUP: 'Green',
+      ALLOWS_HOUSES: true,
+      BOARD_POSITION: 32,
+      PRICE: 300,
+      RENT: [26, 130, 390, 900, 1100, 1275],
+      HOUSE_PRICE: 200,
+      MORTGAGE_PRICE: 150,
+      HOUSE_SALE_PRICE: 100,
+      UNMORTGAGE_PRICE: 165,
+      NUMBER_OF_PROPERTIES_IN_GROUP: 3
+    }
+  },
+  {
+    Houses: 0,
+    Mortgaged: false,
+    Position: 9,
+    PropertyObj: {
+      NAME: 'North Carolina Avenue',
+      PROPERTY_GROUP: 'Green',
+      ALLOWS_HOUSES: true,
+      BOARD_POSITION: 32,
+      PRICE: 300,
+      RENT: [26, 130, 390, 900, 1100, 1275],
+      HOUSE_PRICE: 200,
+      MORTGAGE_PRICE: 150,
+      HOUSE_SALE_PRICE: 100,
+      UNMORTGAGE_PRICE: 165,
+      NUMBER_OF_PROPERTIES_IN_GROUP: 3
+    }
+  }], [], [], [], [], [], [], []],
   jailPositions: [0, 0, 0, 0, 0, 0, 0, 0],
   userCashArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500],
   userMoneyArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500],
@@ -92,8 +144,8 @@ const setPlayerIndex = (state, action) => {
 
 const setUserPosition = (state, action) => {
   let newArr = [...state.userPosArray.slice(0, action.index),
-    action.userPos,
-    ...state.userPosArray.slice(action.index + 1)]
+  action.userPos,
+  ...state.userPosArray.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { userPosArray: newArr })
   return newState
@@ -107,8 +159,8 @@ const setMessageID = (state, action) => {
 
 const setUserProperties = (state, action) => {
   let newArr = [...state.userPropertiesArray.slice(0, action.index),
-    action.userProperties,
-    ...state.userPropertiesArray.slice(action.index + 1)]
+  action.userProperties,
+  ...state.userPropertiesArray.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { userPropertiesArray: newArr })
   return newState
@@ -119,7 +171,7 @@ const setUserCash = (state, action) => {
   let cash = state.userCashArray[action.index] + action.cash
   let newArr = [...state.userCashArray.slice(0, action.index),
     cash,
-    ...state.userCashArray.slice(action.index + 1)]
+  ...state.userCashArray.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { userCashArray: newArr })
   return newState
@@ -127,8 +179,8 @@ const setUserCash = (state, action) => {
 
 const setUserMoney = (state, action) => {
   let newArr = [...state.userMoneyArray.slice(0, action.index),
-    action.userMoney,
-    ...state.userMoneyArray.slice(action.index + 1)]
+  action.userMoney,
+  ...state.userMoneyArray.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { userMoneyArray: newArr })
   return newState
@@ -136,8 +188,8 @@ const setUserMoney = (state, action) => {
 
 const setUserJail = (state, action) => {
   let newArr = [...state.jailPositions.slice(0, action.index),
-    action.userJail,
-    ...state.jailPositions.slice(action.index + 1)]
+  action.userJail,
+  ...state.jailPositions.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { jailPositions: newArr })
   return newState
@@ -155,7 +207,7 @@ const setPlayerProps = (state, action) => {
   player.userPosition = action.playerProps
   let newArr = [...state.players.slice(0, action.index),
     player,
-    ...state.players.slice(action.index + 1)]
+  ...state.players.slice(action.index + 1)]
   const newState = {}
   Object.assign(newState, state, { players: newArr })
   return newState

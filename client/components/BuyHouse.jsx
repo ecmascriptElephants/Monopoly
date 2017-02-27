@@ -4,28 +4,24 @@ import { setUserProperties } from './store/actionCreators'
 
 const BuyHouse = (props) => {
   const buyHouse = (propertyPosition) => {
-    if (props.houses <= 5) {
-      console.log('here')
-      console.log(props)
-      let propertiesArray = [...props.userPropertiesArray[props.index]]
+    if (props.houses < 5) {
+      let propertiesArray = [...props.userPropertiesArray[props.playerIndex]]
       let housePrice = 0
-      let numberOfPropsNeededForMonopoly = 0
       let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property) => {
-          console.log('here')
         if (property.PropertyObj.PROPERTY_GROUP === props.propertyGroup) {
           numberOfPropertiesInGroup += 1
           return numberOfPropertiesInGroup
         }
       }, 0)
 
-      if (props.numberNedded === propertiesInGroupCount) {
+      if (props.numberNeeded === propertiesInGroupCount) {
         propertiesArray.forEach((property) => {
           if (property.Position === propertyPosition && property.PropertyObj.ALLOWS_HOUSES) {
             housePrice = property.PropertyObj.HOUSE_PRICE
-            if (props.userCashArray[props.playerIndex >= housePrice]) {
+            if (props.userCashArray[props.playerIndex] >= housePrice) {
               property.Houses += 1
               props.reduceFunds(housePrice)
-              console.log('here')
+              console.log(propertiesArray)
               props.dispatch(setUserProperties(propertiesArray, props.index))
             }
           }
@@ -34,7 +30,7 @@ const BuyHouse = (props) => {
           console.log('You do not have sufficient funds to purchase additional houses')
         }
       } else {
-        console.log(`You need ${numberOfPropsNeededForMonopoly} properties in order to have a monopoly, but you only have ${propertiesInGroupCount}.`)
+        console.log(`You need ${props.numberNeeded} properties in order to have a monopoly, but you only have ${propertiesInGroupCount}.`)
       }
     } else {
       console.log('You can not buy any more houses')
@@ -48,7 +44,8 @@ const BuyHouse = (props) => {
 const mapStateToProps = (state) => {
   return {
     userPropertiesArray: state.userPropertiesArray,
-    playerIndex: state.playerIndex
+    playerIndex: state.playerIndex,
+    userCashArray: state.userCashArray
   }
 }
 

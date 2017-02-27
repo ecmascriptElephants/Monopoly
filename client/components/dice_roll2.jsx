@@ -489,6 +489,7 @@ const mapStateToProps = (state) => {
     userPropertiesArray: state.userPropertiesArray,
     jailPositions: state.jailPositions,
     index: state.index,
+    playerIndex: state.playerIndex,
     userCashArray: state.userCashArray,
     diceRollButton: state.diceRollButton,
     moveTokenButton: state.moveTokenButton,

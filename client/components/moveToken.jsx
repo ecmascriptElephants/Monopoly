@@ -30,7 +30,6 @@ const MoveToken = (props) => {
 
   const handleLandOnOrPassGo = (oldUserPosition, userPosition, jail) => {
     if (!jail && userPosition < oldUserPosition) {
-      let goComment = 'You passed GO. Collect $200.'
       const doubles = props.doubles
       this.props.dispatch(setEndTurn(!doubles))
       this.props.dispatch(setGoButton(true))
@@ -53,7 +52,7 @@ const MoveToken = (props) => {
       props.dice(10, props.index, true)
       props.dispatch(setMoveToken(false))
       props.dispatch(setEndTurn(true))
-      props.dispatch(setJailPostions(this.props.index, 1))
+      props.dispatch(setJailPostions(props.index, 1))
     } else if (squareType === 'CHANCE') {
       props.dispatch(setMoveToken(false))
       props.dispatch(setCardButton(true))
@@ -113,7 +112,7 @@ const MoveToken = (props) => {
             }
           }
         })
-        const send = comments.owned(props.username, propName, rentOwed, props.userNames[propertyOwner])
+        const send = comments.owned(props.username, propName, rentOwed, props.username)
         sock.comment(props.gameID, send)
         if (propertyOwner === props.index || mortgagedFlag) {
           props.dispatch(setMoveToken(false))
@@ -213,7 +212,6 @@ MoveToken.propTypes = {
   userCashArray: React.PropTypes.array.isRequired,
   setState: React.PropTypes.func.isRequired,
   doubles: React.PropTypes.number.isRequired,
-  userNames: React.PropTypes.array.isRequired,
   diceSum: React.PropTypes.number.isRequired
 }
 

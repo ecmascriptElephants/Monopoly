@@ -11,9 +11,9 @@ const UnMortgage = (props) => {
     let mortgageAmount = 0
     tempProperties.forEach((property) => {
       if (property.PropertyObj.NAME === props.propertyName) {
-        mortgageAmount = property.PropertyObj.MORTGAGE_PRICE
+        mortgageAmount = property.PropertyObj.UNMORTGAGE_PRICE
         if (props.cash > mortgageAmount) {
-          property.Mortgaged = true
+          property.Mortgaged = false
           props.dispatch(setUserProperties(tempProperties, props.playerIndex))
           props.reduceFunds(mortgageAmount)
         } else {

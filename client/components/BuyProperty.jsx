@@ -14,7 +14,7 @@ import comments from '../helper/comment'
 const BuyProperty = (props) => {
   const handleBuyPropertyButtonClick = () => {
     let propertyPosition = props.userPosArray[props.index]
-    let propertiesArray = [...props.userPropertiesArray[props.index]]
+    let propertiesArray = [...props.userPropertiesArray[props.playerIndex]]
     let propertyPrice = 0
     let newProperty = { PropertyObj: {}, Mortgaged: false, Houses: 0, Position: propertyPosition }
     rules.Properties.forEach((property) => {
@@ -64,7 +64,8 @@ const mapStateToProps = (state) => {
     userPosArray: state.userPosArray,
     userPropertiesArray: state.userPropertiesArray,
     index: state.index,
-    userCashArray: state.userCashArray
+    userCashArray: state.userCashArray,
+    playerIndex: state.playerIndex
   }
 }
 

@@ -160,7 +160,7 @@ const MoveToken = (props) => {
         comment,
         showToast: true
       })
-      sock.comment(props.gameID, `${props.username} landed on Jail. But ${props.userNames[props.index]} is just visiting.`)
+      sock.comment(props.gameID, `${props.username} landed on Jail. But ${props.username} is just visiting.`)
       props.dispatch(setEndTurn(!doubles))
       props.dispatch(setDiceRoll(!!doubles))
     } else if (squareType === 'INCOME_TAX') {

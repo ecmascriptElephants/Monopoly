@@ -1,4 +1,5 @@
-import React from 'react'
+ 
+  \]\ import React from 'react'
 import Toast from 'essence-toast'
 const Toaster = (props) => {
   return (

@@ -10,12 +10,11 @@ import {
   setCash
 } from '../components/store/actionCreators'
 import { Button } from 'semantic-ui-react'
-
+import comments from '../helper/comment'
 const BuyProperty = (props) => {
   const handleBuyPropertyButtonClick = () => {
     let propertyPosition = props.userPosArray[props.index]
     let propertiesArray = [...props.userPropertiesArray[props.index]]
-    console.log(propertiesArray)
     let propertyPrice = 0
     let newProperty = { PropertyObj: {}, Mortgaged: false, Houses: 0, Position: propertyPosition }
     rules.Properties.forEach((property) => {
@@ -25,13 +24,14 @@ const BuyProperty = (props) => {
         propertiesArray.push(newProperty)
       }
     })
-    console.log(propertiesArray, 'after rules')
     if (props.userCashArray[props.index] < propertyPrice) {
       props.dispatch(setEndTurn(!props.doubles))
       props.dispatch(setBuyProperty(false))
       props.dispatch(setDiceRoll(!!props.doubles))
+      const comment = comments.LowCash()
       props.setState({
-        comment: 'You cannot afford this property :('
+        comment,
+        showToast: true
       })
     } else {
       props.dispatch(setCash(-propertyPrice, props.index))
@@ -41,11 +41,14 @@ const BuyProperty = (props) => {
       props.dispatch(setEndTurn(!props.doubles))
       props.dispatch(setBuyProperty(false))
       props.dispatch(setDiceRoll(!!props.doubles))
+      const comment = comments.propertyBought(newProperty.PropertyObj.NAME, newProperty.PropertyObj.PRICE)
       props.setState({
-        comment: `You bought ${newProperty.PropertyObj.NAME}, cost $${newProperty.PropertyObj.PRICE}`
+        comment,
+        showToast: true
       })
       sock.updateProps({ gameID: props.gameID, properties: propertiesArray, index: props.index })
-      sock.socket.emit('comment', `${props.userNames[props.index]} bought ${newProperty.PropertyObj.NAME}!`)
+      const send = comments.boughtBySomeone(props.username, newProperty.PropertyObj.NAME)
+      sock.comment(props.gameID, send)
     }
   }
 

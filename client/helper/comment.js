@@ -17,12 +17,15 @@ module.exports = {
   LowOnRent: (rentOwed, cash) => {
     return `You owe ${rentOwed}, but only have ${cash}`
   },
-  LuxuryTab: () => {
+
+  cantLux: () => {
     return 'You do not have enough money to pay the $100 luxury tax.'
   },
+
   LowCash: () => {
     return 'You cannot afford this property :('
   },
+
   CantPayFine: () => {
     return 'You cannot afford the $50 fine.'
   },
@@ -52,10 +55,58 @@ module.exports = {
   },
 
   propertyBought: (name, price) => {
-    `You bought ${name}, cost $${price}`
+    return `You bought ${name}, cost $${price}`
   },
 
   boughtBySomeone: (name, propname) => {
     return `${name} bought ${propname}!`
+  },
+
+  goComment: () => {
+    return 'You passed Gp. Collect $200'
+  },
+
+  chance: (name) => {
+    return `${name} landed on a chance space.`
+  },
+
+  community: (name) => {
+    return `${name} landed on a community space.`
+  },
+
+  unowned: (name) => {
+    return `${name} landed on an unowned property!`
+  },
+
+  owned: (user, property, rent, owner) => {
+    return `${user} landed on ${property}. Pay $${rent} to ${owner}.`
+  },
+
+  rentOwned: (property, rent, owner) => {
+    return `You landed on ${property}. Pay ${rent} to ${owner}.`
+  },
+
+  landOnGo: () => {
+    return 'You landed on Go. Collect $200'
+  },
+
+  letItGo: (name) => {
+    return `${name} landed on GO. Collect $200!`
+  },
+
+  freeParking: () => {
+    return 'You landed on Free Parking. Nothing happens.'
+  },
+
+  jailLand: () => {
+    return 'You landed on Jail, But you are just visiting.'
+  },
+
+  incomeTax: () => {
+    return 'You landed on Income Tax. Pay $200'
+  },
+
+  LuxuryTab: () => {
+    return 'You landed on Luxury Tax, Pay $100.'
   }
 }

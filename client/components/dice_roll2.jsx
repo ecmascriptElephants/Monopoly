@@ -28,6 +28,8 @@ import { Button, List } from 'semantic-ui-react'
 import Card from './Cards'
 import Move from './moveToken'
 import BuyProperty from './BuyProperty'
+import Toast from './toast'
+import comments from '../helper/comment'
 
 class DiceRoll extends Component {
   constructor (props) {
@@ -46,7 +48,8 @@ class DiceRoll extends Component {
       rentOwed: 0,
       propertyOwner: -1,
       isBankruptArray: [false, false, false, false, false, false, false, false],
-      jailRollDoublesButtonVisible: false
+      jailRollDoublesButtonVisible: false,
+      showToast: false
     }
     this.props.dispatch(setButtons())
     this.setStates = this.setStates.bind(this)
@@ -68,17 +71,18 @@ class DiceRoll extends Component {
       } else {
         this.props.dispatch(setEndTurn(true))
         this.setState({
-          comment: 'You bankrupted... Please hit the end button to pass to other players'
+          comment: 'You bankrupted... Please hit the end button to pass to other players',
+          showToast: true
         })
       }
     })
-    
+
     sock.socket.on('update money', (data) => {
       this.props.dispatch(setCash(data.money, data.index))
     })
 
     sock.socket.on('receive-comment', (comment) => {
-      this.setState({ comment: comment })
+      this.setState({ comment, showToast: true })
     })
   }
 
@@ -89,7 +93,7 @@ class DiceRoll extends Component {
     let doubles = 0
     if (die1 === die2) {
       doubles = this.state.doubles + 1
-      this.setState({comment: 'You rolled Doubles!'})
+      this.setState({comment: comments.rolledDoubles(), showToast: true})
     }
     this.props.dispatch(setDiceRoll(false))
     this.props.dispatch(setMoveToken(true))
@@ -143,8 +147,10 @@ class DiceRoll extends Component {
     let updatedUserMoney = this.props.userCashArray[currentUser]
     let doubles = this.state.doubles
     if (updatedUserMoney < rentOwed) {
+      const comment = comments.LowOnRent(rentOwed, updatedUserMoney[currentUser])
       this.setState({
-        comment: `You owe ${rentOwed}, but only have ${updatedUserMoney[currentUser]}`
+        comment,
+        showToast: true
       })
     } else {
       this.props.dispatch(setCash(-rentOwed, currentUser))
@@ -163,8 +169,10 @@ class DiceRoll extends Component {
     if (updatedUserMoneyArray[this.props.index] < 200) {
       this.props.dispatch(setEndTurn(false))
       this.props.dispatch(setMoveToken(false))
+      const comment = comments.cantIncome()
       this.setState({
-        comment: 'You do not have enough money to pay the $200 income tax.'
+        comment,
+        showToast: true
       })
     } else {
       this.props.dispatch(setCash(-200, this.props.index))
@@ -406,7 +414,6 @@ class DiceRoll extends Component {
             <div className='pass-go-btn_div'>
               {this.props.setGoButton
                 ? <div>
-                  <div>{this.state.comment}</div>
                   <Button secondary fluid onClick={() => { this.handleGoButtonClick() }}>  Collect $200. </Button>
                 </div> : null
               }
@@ -414,7 +421,6 @@ class DiceRoll extends Component {
             <div className='income-tax-btn_div'>
               {this.props.incomeTaxButton
                 ? <div>
-                  <div>{this.state.comment}</div>
                   <Button secondary fluid onClick={() => { this.handlePayIncomeTaxButtonClick() }}>  Pay $200 in income tax. </Button>
                 </div> : null
               }
@@ -422,7 +428,6 @@ class DiceRoll extends Component {
             <div className='luxury-tax-btn_div'>
               {this.props.luxuryButton
                 ? <div>
-                  <div>{this.state.comment}</div>
                   <Button secondary fluid onClick={() => { this.handlePayLuxuryTaxButtonClick() }}>  Pay $100 in luxury tax. </Button>
                 </div> : null
               }
@@ -461,7 +466,7 @@ class DiceRoll extends Component {
                 <div className='jail-pay-fine-btn_div'>
                   {(this.props.payFineButton && !this.props.endTurnButton)
                     ? <div>
-                      <div>{this.state.comment}</div>
+
                       <Button secondary fluid onClick={() => {
                         this.handleJailPayFineButtonClick()
                       }}> Pay $50. </Button>
@@ -517,6 +522,7 @@ class DiceRoll extends Component {
         <div className='comment'>
           {this.state.comment}
         </div>
+        <Toast message={this.state.comment} show={this.state.showToast} />
       </div>
     )
   }

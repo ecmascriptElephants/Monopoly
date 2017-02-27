@@ -27,7 +27,8 @@ import {
   SET_PAY_RENT,
   SET_STATE,
   SET_BUY_PROPERTY,
-  SET_BUTTONS
+  SET_BUTTONS,
+  SET_MORTGAGE_BUTTON
 } from './actions'
 const DEFAULT_STATE = {
   gameID: 0,
@@ -54,7 +55,8 @@ const DEFAULT_STATE = {
   payFineButton: false,
   jailRollDiceButton: false,
   buyPropertyButton: false,
-  freeCardButton: false
+  freeCardButton: false,
+  mortgageButton: false
 }
 
 const setGameID = (state, action) => {
@@ -230,6 +232,11 @@ const setPayRent = (state, action) => {
   Object.assign(newState, state, { payRent: action.flag })
   return newState
 }
+const setMortgage = (state, action) => {
+  const newState = {}
+  Object.assign(newState, state, { mortgageButton: action.flag })
+  return newState
+}
 
 const setBuyProperty = (state, action) => {
   const newState = {}
@@ -344,6 +351,8 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_BUTTONS:
       return setButtons(state, action)
+    case SET_MORTGAGE_BUTTON:
+      return setMortgage(state, action)
 
     default:
       return state

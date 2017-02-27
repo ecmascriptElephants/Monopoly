@@ -30,6 +30,8 @@ import Move from './moveToken'
 import BuyProperty from './BuyProperty'
 import Toast from './toast'
 import comments from '../helper/comment'
+import Mortgage from './MortgageProperty'
+import UnMortgage from './UnMortgage'
 
 class DiceRoll extends Component {
   constructor (props) {
@@ -40,8 +42,6 @@ class DiceRoll extends Component {
       comment: '',
       doubles: 0,
       card: true,
-      userNames: [userNames[0][0], userNames[1][0], userNames[2][0], userNames[3][0], userNames[4][0], userNames[5][0], userNames[6][0], userNames[7][0]],
-      jailPositions: [0, 0, 0, 0, 0, 0, 0, 0],
       userPropertiesArray: [[], [], [], [], [], [], [], []],
       userJailFreeCardArray: [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]],
       endTurnButtonVisible: false,
@@ -53,6 +53,8 @@ class DiceRoll extends Component {
     }
     this.props.dispatch(setButtons())
     this.setStates = this.setStates.bind(this)
+    this.increaseFunds = this.increaseFunds.bind(this)
+    this.reduceFunds = this.reduceFunds.bind(this)
   }
 
   componentDidMount () {
@@ -89,17 +91,38 @@ class DiceRoll extends Component {
     this.props.dispatch(setButtons())
     const die1 = 1 + Math.floor((6 * Math.random()))
     const die2 = 1 + Math.floor((6 * Math.random()))
-    let doubles = 0
-    if (die1 === die2) {
-      doubles = this.state.doubles + 1
-      this.setState({comment: comments.rolledDoubles(), showToast: true})
+    if (this.props.jailPositions[this.props.index]) {
+      if (die1 === die2) {
+        let updatedJailPositionsArray = [...this.props.jailPositions]
+        updatedJailPositionsArray[this.props.index] = 0
+        this.props.dispatch(setMoveToken(true))
+        this.props.dispatch(setJailRoll(false))
+        this.setState({
+          comment: `You rolled doubles and left jail. Move ${die1 + die2} spaces.`,
+          showToast: true
+        })
+      } else {
+        let updatedJailPositionsArray = [...this.props.jailPositions]
+        updatedJailPositionsArray[this.props.index] += 1
+        this.dispatch(setEndTurn(true))
+        this.dispatch(setJailRoll(false))
+        this.setState({
+          comment: 'You did not roll doubles :(.'
+        })
+      }
+    } else {
+      let doubles = 0
+      if (die1 === die2) {
+        doubles = this.state.doubles + 1
+        this.setState({ comment: comments.rolledDoubles(), showToast: true })
+      }
+      this.props.dispatch(setDiceRoll(false))
+      this.props.dispatch(setMoveToken(true))
+      this.setState({
+        diceSum: die1 + die2,
+        doubles: doubles
+      })
     }
-    this.props.dispatch(setDiceRoll(false))
-    this.props.dispatch(setMoveToken(true))
-    this.setState({
-      diceSum: die1 + die2,
-      doubles: doubles
-    })
   }
 
   handleEndTurnButtonClick () {
@@ -208,21 +231,6 @@ class DiceRoll extends Component {
     }
   }
 
-  mortgageProperty (propertyPosition) {
-    let tempProperty = this.state.property
-    let mortgageAmount = 0
-    tempProperty.forEach((property) => {
-      if (property.Position === propertyPosition) {
-        property.Mortgaged = true
-        mortgageAmount = property.PropertyObj.MORTGAGE_PRICE
-      }
-    })
-    this.increaseFunds(mortgageAmount)
-    this.setState({
-      property: tempProperty
-    })
-  }
-
   handleJailPayFineButtonClick () {
     if (this.props.userCashArray[this.props.index] < 50) {
       this.setState({
@@ -241,33 +249,6 @@ class DiceRoll extends Component {
     }
   }
 
-  handleJailRollDoublesButtonClick () {
-    const die1 = 1 + Math.floor((6 * Math.random()))
-    const die2 = 1 + Math.floor((6 * Math.random()))
-    // show dice
-    this.setState({
-      dice: [die1, die2]
-    })
-    if (die1 === die2) {
-      let updatedJailPositionsArray = [...this.props.jailPositions]
-      updatedJailPositionsArray[this.props.index] = 0
-      this.props.dispatch(setMoveToken(true))
-      this.props.dispatch(setJailRoll(false))
-      this.setState({
-        comment: `You rolled doubles and left jail. Move ${die1 + die2} spaces.`,
-        jailPositions: updatedJailPositionsArray
-      })
-    } else {
-      let updatedJailPositionsArray = [...this.props.jailPositions]
-      updatedJailPositionsArray[this.props.index] += 1
-      this.dispatch(setEndTurn(true))
-      this.dispatch(setJailRoll(false))
-      this.setState({
-        comment: 'You did not roll doubles :(.'
-      })
-    }
-  }
-
   handleJailFreeCardButtonClick () {
     if (this.state.userJailFreeCardArray[this.props.index][0] === 0 && this.state.userJailFreeCardArray[this.props.index][1] === 0) {
 
@@ -281,21 +262,6 @@ class DiceRoll extends Component {
     // if not,
     // say, you do not own a jail free card
     // make jail free card button disappear
-  }
-
-  unMortgageProperty (propertyPosition) {
-    let tempProperty = this.state.property
-    let unMortgageAmount = 0
-    tempProperty.forEach((property) => {
-      if (property.Position === propertyPosition && property.Mortgaged) {
-        property.Mortgaged = false
-        unMortgageAmount = property.PropertyObj.UNMORTGAGE_PRICE
-      }
-    })
-    this.reduceFunds(unMortgageAmount)
-    this.setState({
-      property: tempProperty
-    })
   }
 
   buyHouse (propertyPosition) {
@@ -355,17 +321,6 @@ class DiceRoll extends Component {
     this.state.isBankruptArray[this.props.index] = true
   }
 
-  handleMortgageButtonClick (propertyName) {
-    let updatedUserProperties = [...this.props.userPropertiesArray[this.props.index]]
-    updatedUserProperties.forEach((property, i, arr) => {
-      if (property.PropertyObj.NAME === propertyName) {
-        this.props.dispatch(setCash(property.PropertyObj.MORTGAGE_PRICE, this.props.index))
-        arr.splice(i, 1)
-      }
-    })
-    this.props.dispatch(setUserPositions(updatedUserProperties, this.props.index))
-  }
-
   render () {
     return (
       <div className='user-positions_dice-roll_div'>
@@ -378,7 +333,7 @@ class DiceRoll extends Component {
             <div className='dice-roll-btn_div'>
               {(this.props.diceRollButton && !this.props.payRent && !this.props.jailPositions[this.props.index])
                 ? <div>
-                  <div>{this.props.index === -1 ? null : `${this.state.userNames[this.props.index]} it is your turn. Roll the dice!`}</div>
+                  <div>{this.props.index === -1 ? null : `${this.props.username} it is your turn. Roll the dice!`}</div>
                   <Button secondary fluid onClick={() => { this.handleDiceRollButtonClick() }}>Roll Dice</Button>
                 </div> : null
               }
@@ -393,7 +348,7 @@ class DiceRoll extends Component {
                     dice={this.props.dice}
                     userNames={this.state.userNames}
                     propertyIsOwned={this.propertyIsOwned}
-                     />
+                  />
                 </div> : null
               }
             </div>
@@ -508,15 +463,13 @@ class DiceRoll extends Component {
           </div>
           <div className='CurrentUserProperties'>
             <div>
-              Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map(e => {
-                return <div>{e.PropertyObj.NAME} <button onClick={() => { this.handleMortgageButtonClick(e.PropertyObj.NAME) }}>Mortgage</button></div>
+              Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {
+                return <div key={index}>{e.PropertyObj.NAME}
+                  {e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} />
+                  : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} /> } </div>
               })} />}
             </div>
           </div>
-        </div>
-        <div className='UserPositions'>
-          <div className='CurrentUser' />
-          <div className='UserPositionsArray' />
         </div>
         <div className='comment'>
           {this.state.comment}
@@ -536,6 +489,7 @@ const mapStateToProps = (state) => {
     userPropertiesArray: state.userPropertiesArray,
     jailPositions: state.jailPositions,
     index: state.index,
+    playerIndex: state.playerIndex,
     userCashArray: state.userCashArray,
     diceRollButton: state.diceRollButton,
     moveTokenButton: state.moveTokenButton,
@@ -562,6 +516,7 @@ DiceRoll.propTypes = {
   userPosArray: React.PropTypes.array.isRequired,
   jailPositions: React.PropTypes.array.isRequired,
   index: React.PropTypes.number.isRequired,
+  playerIndex: React.PropTypes.number.isRequired,
   userPropertiesArray: React.PropTypes.array.isRequired,
   userCashArray: React.PropTypes.array.isRequired,
   diceRollButton: React.PropTypes.bool.isRequired,

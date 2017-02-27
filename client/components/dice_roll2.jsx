@@ -164,8 +164,9 @@ class DiceRoll extends Component {
   }
 
   handlePayRentButtonClick () {
-    let currentUser = this.props.index
+    let currentUser = this.props.playerIndex
     let propertyOwner = this.state.propertyOwner
+    console.log('rent', this.state.rentOwed)
     let rentOwed = this.state.rentOwed
     let updatedUserMoney = this.props.userCashArray[currentUser]
     let doubles = this.state.doubles
@@ -436,8 +437,8 @@ class DiceRoll extends Component {
                 return <div key={index}>{e.PropertyObj.NAME}
                   {e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} />
                   : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} /> }
-                  {e.houses ? <BuyHouse propertyPosition={e.position}
-                    propertyGroup={e.PropertyObj.PROPERTY_GROUP} 
+                  {e.houses < 5 ? <BuyHouse propertyPosition={e.position}
+                    propertyGroup={e.PropertyObj.PROPERTY_GROUP}
                     reduceFunds={this.reduceFunds} houses={e.houses}
                     numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} /> : null} </div>
               })} />}

@@ -32,6 +32,7 @@ import Toast from './toast'
 import comments from '../helper/comment'
 import Mortgage from './MortgageProperty'
 import UnMortgage from './UnMortgage'
+import BuyHouse from './BuyHouse'
 
 class DiceRoll extends Component {
   constructor (props) {
@@ -264,38 +265,6 @@ class DiceRoll extends Component {
     // make jail free card button disappear
   }
 
-  buyHouse (propertyPosition) {
-    let propertiesArray = this.state.property
-    let housePrice = 0
-    let numberOfPropsNeededForMonopoly = 0
-    let propertyGroup = ''
-    propertiesArray.forEach((property) => {
-      if (property.Position === propertyPosition && property.PropertyObj.ALLOWS_HOUSES && property.Houses < 5) {
-        housePrice = property.PropertyObj.HOUSE_PRICE
-        numberOfPropsNeededForMonopoly = property.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP
-        propertyGroup = property.PropertyObj.PROPERTY_GROUP
-        property.Houses += 1
-      }
-    })
-    let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property) => {
-      if (property.PropertyObj.PROPERTY_GROUP === propertyGroup) {
-        numberOfPropertiesInGroup += 1
-      }
-    }, 0)
-    if (numberOfPropsNeededForMonopoly === propertiesInGroupCount && this.props.userCashArray[this.props.index] >= housePrice) {
-      this.reduceFunds(housePrice)
-      this.setState({
-        property: propertiesArray
-      })
-    } else {
-      if (this.state.money < housePrice) {
-        console.log('You do not have sufficient funds to purchase additional houses')
-      } else {
-        console.log(`You need ${numberOfPropsNeededForMonopoly} properties in order to have a monopoly, but you only have ${propertiesInGroupCount}.`)
-      }
-    }
-  }
-
   sellHouse (propertyPosition) {
     let propertiesArray = this.state.property
     let houseSalePrice = 0
@@ -466,7 +435,11 @@ class DiceRoll extends Component {
               Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {
                 return <div key={index}>{e.PropertyObj.NAME}
                   {e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} />
-                  : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} /> } </div>
+                  : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} /> }
+                  {e.houses ? <BuyHouse propertyPosition={e.position}
+                    propertyGroup={e.PropertyObj.PROPERTY_GROUP} 
+                    reduceFunds={this.reduceFunds} houses={e.houses}
+                    numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} /> : null} </div>
               })} />}
             </div>
           </div>

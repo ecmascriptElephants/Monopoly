@@ -11,6 +11,8 @@ import {
 } from '../components/store/actionCreators'
 import { Button } from 'semantic-ui-react'
 import comments from '../helper/comment'
+import Bankrupt from './Bankrupt'
+
 const BuyProperty = (props) => {
   const handleBuyPropertyButtonClick = () => {
     let propertyPosition = props.userPosArray[props.index]
@@ -24,6 +26,7 @@ const BuyProperty = (props) => {
         propertiesArray.push(newProperty)
       }
     })
+
     if (props.userCashArray[props.index] < propertyPrice) {
       props.dispatch(setEndTurn(!props.doubles))
       props.dispatch(setBuyProperty(false))
@@ -33,6 +36,7 @@ const BuyProperty = (props) => {
         comment,
         showToast: true
       })
+      checkBankruptcy()
     } else {
       props.dispatch(setCash(-propertyPrice, props.index))
       sock.updateMoney({ gameID: props.gameID, money: -propertyPrice, index: props.index })

@@ -22,7 +22,8 @@ import {
   setBuyProperty,
   setPayRent,
   setIncomeTax,
-  setButtons
+  setButtons,
+  setBankruptcy
 } from './store/actionCreators'
 import { Button, List } from 'semantic-ui-react'
 import Card from './Cards'

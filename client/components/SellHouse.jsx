@@ -10,10 +10,10 @@ const SellHouse = (props) => {
       if (property.Position === propertyPosition && property.Houses > 0) {
         houseSalePrice = property.PropertyObj.HOUSE_SALE_PRICE
         property.Houses -= 1
+        props.increaseFunds(houseSalePrice)
+        props.dispatch(setUserProperties(propertiesArray, props.playIndex))
       }
     })
-    props.increaseFunds(houseSalePrice)
-    props.dispatch(setUserProperties(propertiesArray, props.playIndex))
   }
 
   return (
@@ -24,7 +24,7 @@ const SellHouse = (props) => {
 const mapStateToProps = (state) => {
   return {
     userPropertiesArray: state.userPropertiesArray,
-    playerIndex: state,
+    playerIndex: state.playerIndex,
     userCashArray: state.userCashArray
   }
 }

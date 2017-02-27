@@ -27,6 +27,7 @@ import comments from '../helper/comment'
 import Mortgage from './MortgageProperty'
 import UnMortgage from './UnMortgage'
 import BuyHouse from './BuyHouse'
+import SellHouse from './SellHouse'
 
 class DiceRoll extends Component {
   constructor (props) {
@@ -417,10 +418,13 @@ class DiceRoll extends Component {
                 return <div key={index}>{e.PropertyObj.NAME}
                   {e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} />
                   : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} /> }
-                  {e.Houses >= 0 ? <BuyHouse propertyPosition={e.Position}
+                  {<BuyHouse propertyPosition={e.Position}
                     propertyGroup={e.PropertyObj.PROPERTY_GROUP}
                     reduceFunds={this.reduceFunds} houses={e.Houses}
-                    numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} /> : null} </div>
+                    numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} />} 
+                  {<SellHouse propertyPosition={e.Position}
+                    increaseFunds={this.increaseFunds} houses={e.Houses}
+                    />} </div>
               })} />}
             </div>
           </div>

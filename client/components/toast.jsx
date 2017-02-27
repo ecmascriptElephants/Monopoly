@@ -1,9 +1,8 @@
- 
-  \]\ import React from 'react'
-import Toast from 'essence-toast'
+import React from 'react'
+import Toast from 'essence-snackbar'
 const Toaster = (props) => {
   return (
-    <Toast classes={'e-text-white'} visible={props.show} delay={5000}>
+    <Toast classes={'e-text-white'} visible={props.show} delay={1500}>
       {props.message}
     </Toast>
   )

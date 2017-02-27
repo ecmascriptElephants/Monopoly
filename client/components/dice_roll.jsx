@@ -82,7 +82,6 @@ class DiceRoll extends Component {
   componentDidMount () {
     sock.socket.on('yourTurn', (data) => {
       console.log('bankruptcyButtonVisible', this.state.bankruptcyButtonVisible)
-
     })
     sock.socket.on('update properties', (data) => {
       console.log('diceRoll js update properties! socket func! data = ', data)
@@ -92,7 +91,6 @@ class DiceRoll extends Component {
       // this.props.dispatch(setUserProperties(data.userProperties, data.index))
     })
     sock.socket.on('update money', (data) => {
-      console.log('diceRoll js update money! socket func! data = ', data)
       let updatedUserMoneyArray = [...this.state.userMoneyArray]
       updatedUserMoneyArray[data.index] = data.money
       this.setState({ userMoneyArray: updatedUserMoneyArray })

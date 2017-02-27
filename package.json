@@ -25,6 +25,7 @@
     "connect-flash": "^0.1.1",
     "cors": "^2.8.1",
     "essence-core": "^1.0.20",
+    "essence-snackbar": "^1.0.6",
     "essence-toast": "^1.0.7",
     "express": "^4.14.1",
     "express-session": "^1.15.1",

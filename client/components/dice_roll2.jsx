@@ -228,6 +228,24 @@ class DiceRoll extends Component {
     }
   }
 
+  checkMonopoly (propertyGroup, numberNeeded) {
+    const propertiesArray = this.props.userPropertiesArray[this.props.playerIndex]
+    const indexes = []
+    let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property, index) => {
+      if (property.PropertyObj.PROPERTY_GROUP === propertyGroup) {
+        indexes.push(index)
+        numberOfPropertiesInGroup += 1
+        return numberOfPropertiesInGroup
+      }
+    }, 0)
+    if (propertiesInGroupCount === numberNeeded) {
+      for (let i = 0; i < indexes.length; i++) {
+        propertiesArray[indexes[i]].Monopoly = true
+      }
+      this.props.dispatch(propertiesArray, this.props.playerIndex)
+    }
+  }
+
   handleJailPayFineButtonClick () {
     if (this.props.userCashArray[this.props.index] < 50) {
       this.setState({
@@ -260,7 +278,6 @@ class DiceRoll extends Component {
     // say, you do not own a jail free card
     // make jail free card button disappear
   }
-
 
   checkBankruptcy () {
 
@@ -417,14 +434,14 @@ class DiceRoll extends Component {
               Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {
                 return <div key={index}>{e.PropertyObj.NAME}
                   {e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} />
-                  : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} /> }
+                    : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} />}
                   {<BuyHouse propertyPosition={e.Position}
                     propertyGroup={e.PropertyObj.PROPERTY_GROUP}
                     reduceFunds={this.reduceFunds} houses={e.Houses}
-                    numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} />} 
+                    numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} />}
                   {<SellHouse propertyPosition={e.Position}
                     increaseFunds={this.increaseFunds} houses={e.Houses}
-                    />} </div>
+                  />} </div>
               })} />}
             </div>
           </div>

@@ -12,15 +12,36 @@ import {
 import { Button } from 'semantic-ui-react'
 import comments from '../helper/comment'
 const BuyProperty = (props) => {
+  const checkMonopoly = (propertyGroup, numberNeeded) => {
+    const propertiesArray = props.userPropertiesArray[props.playerIndex]
+    const indexes = []
+    let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property, index) => {
+      if (property.PropertyObj.PROPERTY_GROUP === propertyGroup) {
+        indexes.push(index)
+        numberOfPropertiesInGroup += 1
+        return numberOfPropertiesInGroup
+      }
+    }, 0)
+    if (propertiesInGroupCount === numberNeeded) {
+      for (let i = 0; i < indexes.length; i++) {
+        propertiesArray[indexes[i]].Monopoly = true
+      }
+      props.dispatch(propertiesArray, props.playerIndex)
+    }
+  }
   const handleBuyPropertyButtonClick = () => {
     let propertyPosition = props.userPosArray[props.index]
     let propertiesArray = [...props.userPropertiesArray[props.playerIndex]]
     let propertyPrice = 0
-    let newProperty = { PropertyObj: {}, Mortgaged: false, Houses: 0, Position: propertyPosition }
+    let newProperty = { PropertyObj: {}, Mortgaged: false, Houses: 0, Position: propertyPosition, Monopoly: false }
+    let propertyGroup = null
+    let numberNeeded = -1
     rules.Properties.forEach((property) => {
       if (property.BOARD_POSITION === propertyPosition) {
         propertyPrice = property.PRICE
         newProperty.PropertyObj = property
+        propertyGroup = property.PROPERTY_GROUP
+        numberNeeded = property.NUMBER_OF_PROPERTIES_IN_GROUP
         propertiesArray.push(newProperty)
       }
     })
@@ -34,10 +55,26 @@ const BuyProperty = (props) => {
         showToast: true
       })
     } else {
+      let indexes = []
+      console.log(propertyGroup)
+      let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property, index) => {
+        if (property.PropertyObj.PROPERTY_GROUP === propertyGroup) {
+          indexes.push(index)
+          numberOfPropertiesInGroup += 1
+          console.log(numberOfPropertiesInGroup)
+        }
+        return numberOfPropertiesInGroup
+      }, 0)
+      console.log(propertiesInGroupCount, numberNeeded)
+      if (propertiesInGroupCount === numberNeeded) {
+        for (let i = 0; i < indexes.length; i++) {
+          propertiesArray[indexes[i]].Monopoly = true
+        }
+      }
       props.dispatch(setCash(-propertyPrice, props.index))
       sock.updateMoney({ gameID: props.gameID, money: -propertyPrice, index: props.index })
       props.dispatch(setUserProperties(propertiesArray, props.index))
-      console.log(props.userPropertiesArray)
+      checkMonopoly(propertyGroup, numberNeeded)
       props.dispatch(setEndTurn(!props.doubles))
       props.dispatch(setBuyProperty(false))
       props.dispatch(setDiceRoll(!!props.doubles))
@@ -79,7 +116,6 @@ BuyProperty.propTypes = {
   userCashArray: React.PropTypes.array.isRequired,
   setState: React.PropTypes.func.isRequired,
   doubles: React.PropTypes.number.isRequired,
-  userNames: React.PropTypes.array.isRequired,
   diceSum: React.PropTypes.number.isRequired
 }
 

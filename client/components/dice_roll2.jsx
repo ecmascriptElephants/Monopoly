@@ -1,25 +1,19 @@
 import React, { Component } from 'react'
-import rules from '../static/rules'
-import userNames from './user_order'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import {
   setIndex,
-  setUserProperties,
   setUserJail,
   setCash,
-  setUserPositions,
   setMoveToken,
   setDiceRoll,
   setCardButton,
   setEndTurn,
   setLuxury,
   setGoButton,
-  setJailPostions,
   setJailRoll,
   setPayFine,
   setFreeCard,
-  setBuyProperty,
   setPayRent,
   setIncomeTax,
   setButtons
@@ -32,6 +26,8 @@ import Toast from './toast'
 import comments from '../helper/comment'
 import Mortgage from './MortgageProperty'
 import UnMortgage from './UnMortgage'
+import BuyHouse from './BuyHouse'
+import SellHouse from './SellHouse'
 
 class DiceRoll extends Component {
   constructor (props) {
@@ -49,7 +45,8 @@ class DiceRoll extends Component {
       propertyOwner: -1,
       isBankruptArray: [false, false, false, false, false, false, false, false],
       jailRollDoublesButtonVisible: false,
-      showToast: false
+      showToast: false,
+      numOfPlayer: -1
     }
     this.props.dispatch(setButtons())
     this.setStates = this.setStates.bind(this)
@@ -126,6 +123,7 @@ class DiceRoll extends Component {
   }
 
   handleEndTurnButtonClick () {
+    this.props.dispatch(setButtons())
     this.props.dispatch(setEndTurn(false))
     sock.end({ gameID: this.props.gameID, pos: this.props.userPosArray[this.props.index], index: this.props.index })
   }
@@ -163,8 +161,9 @@ class DiceRoll extends Component {
   }
 
   handlePayRentButtonClick () {
-    let currentUser = this.props.index
+    let currentUser = this.props.playerIndex
     let propertyOwner = this.state.propertyOwner
+    console.log('rent', this.state.rentOwed)
     let rentOwed = this.state.rentOwed
     let updatedUserMoney = this.props.userCashArray[currentUser]
     let doubles = this.state.doubles
@@ -262,53 +261,6 @@ class DiceRoll extends Component {
     // if not,
     // say, you do not own a jail free card
     // make jail free card button disappear
-  }
-
-  buyHouse (propertyPosition) {
-    let propertiesArray = this.state.property
-    let housePrice = 0
-    let numberOfPropsNeededForMonopoly = 0
-    let propertyGroup = ''
-    propertiesArray.forEach((property) => {
-      if (property.Position === propertyPosition && property.PropertyObj.ALLOWS_HOUSES && property.Houses < 5) {
-        housePrice = property.PropertyObj.HOUSE_PRICE
-        numberOfPropsNeededForMonopoly = property.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP
-        propertyGroup = property.PropertyObj.PROPERTY_GROUP
-        property.Houses += 1
-      }
-    })
-    let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property) => {
-      if (property.PropertyObj.PROPERTY_GROUP === propertyGroup) {
-        numberOfPropertiesInGroup += 1
-      }
-    }, 0)
-    if (numberOfPropsNeededForMonopoly === propertiesInGroupCount && this.props.userCashArray[this.props.index] >= housePrice) {
-      this.reduceFunds(housePrice)
-      this.setState({
-        property: propertiesArray
-      })
-    } else {
-      if (this.state.money < housePrice) {
-        console.log('You do not have sufficient funds to purchase additional houses')
-      } else {
-        console.log(`You need ${numberOfPropsNeededForMonopoly} properties in order to have a monopoly, but you only have ${propertiesInGroupCount}.`)
-      }
-    }
-  }
-
-  sellHouse (propertyPosition) {
-    let propertiesArray = this.state.property
-    let houseSalePrice = 0
-    propertiesArray.forEach((property) => {
-      if (property.Position === propertyPosition && property.Houses > 0) {
-        houseSalePrice = property.PropertyObj.HOUSE_SALE_PRICE
-        property.Houses -= 1
-      }
-    })
-    this.increaseFunds(houseSalePrice)
-    this.setState({
-      property: propertiesArray
-    })
   }
 
   checkBankruptcy () {
@@ -464,9 +416,16 @@ class DiceRoll extends Component {
           <div className='CurrentUserProperties'>
             <div>
               Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {
-                return <div key={index}>{e.PropertyObj.NAME}
+                return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME}
                   {e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} />
-                  : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} /> } </div>
+                    : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} />}
+                  {e.Monopoly ? <BuyHouse propertyPosition={e.Position}
+                    propertyGroup={e.PropertyObj.PROPERTY_GROUP}
+                    reduceFunds={this.reduceFunds} houses={e.Houses}
+                    numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} /> : null}
+                  {e.Houses > 0 ? <SellHouse propertyPosition={e.Position}
+                    increaseFunds={this.increaseFunds} houses={e.Houses}
+                  /> : null} </div>
               })} />}
             </div>
           </div>

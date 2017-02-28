@@ -6,7 +6,7 @@ import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import { setUserPositions, setPlayers, setPlayerProps, setIndex, setUserProperties } from './store/actionCreators'
 import Others from './OtherPlayers'
-
+import Offer from './ShowOffer'
 class Board extends Component {
   constructor (props) {
     super(props)
@@ -20,6 +20,7 @@ class Board extends Component {
     }
     sock.init({ gameID: this.props.gameID, index: this.props.playerIndex })
     this.dice = this.dice.bind(this)
+    this.showPopup = this.showPopup.bind(this)
   }
 
   dice (value, index, flag) {
@@ -47,8 +48,8 @@ class Board extends Component {
       this.props.dispatch(setPlayers(players))
     })
 
-    sock.socket.on('offer for you', ({position, socket, offer}) => {
-      this.setState({position, socket, offer, showOffer: true})
+    sock.socket.on('offer for you', ({position, socket, offer, offerIndex}) => {
+      this.setState({position, socket, offer, offerIndex, showOffer: true})
     })
 
     sock.socket.on('update position', (data) => {
@@ -60,19 +61,23 @@ class Board extends Component {
       this.props.dispatch(setUserProperties(data.properties, data.index))
     })
   }
+  showPopup () {
+    this.setState({showOffer: false})
+  }
   render () {
     return (
       <div>
+        {
+        this.state.showOffer ? <Offer open={this.state.showOffer} offer={this.state.offer} setShowOffer={this.showPopup} position={this.state.position} offerIndex={this.state.offerIndex} /> : null
+      }
         <div className={'other-players'}>
           {
             this.props.players.map((player, index) => {
               if (index !== this.props.playerIndex) {
-                console.log(player)
                 return <Others key={index} playerUsername={player.username} otherPlayerIndex={index} socket={player.socketID} />
               }
             })
           }
-          {console.log(this.props.players)}
         </div>
         <Player name={this.props.username} dice={this.dice} piece='Hat' />
         <div className='board parent'>

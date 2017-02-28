@@ -17,6 +17,7 @@ class Trade extends Component {
   }
 
   close () {
+    console.log(this.props.position)
     this.setState({open: false})
   }
 
@@ -25,7 +26,8 @@ class Trade extends Component {
   }
 
   offer () {
-    sock.trade(this.props.socket, this.state.offer, this.props.position)
+    sock.trade(this.props.socket, this.state.offer, this.props.position, this.props.playerIndex)
+    this.setState({open: false})
   }
 
   render () {
@@ -37,7 +39,7 @@ class Trade extends Component {
           <Modal.Content image>
             <Image wrapped size='medium' src='http://semantic-ui.com/images/avatar2/large/rachel.png' />
             <Modal.Description>
-              <Header>Trade with {this.props.playerName}</Header>
+              <Header>Trade with {this.props.playerUsername}</Header>
               <Input labelPosition='right' type='text' placeholder='Offer'>
                 <Label basic>$</Label>
                 <input onChange={this.handleOffer} />
@@ -72,6 +74,7 @@ Trade.propTypes = {
   userPropertiesArray: React.PropTypes.array.isRequired,
   index: React.PropTypes.number.isRequired,
   position: React.PropTypes.number.isRequired,
+  owner: React.PropTypes.number.isRequired,
   playerIndex: React.PropTypes.number.isRequired,
   playerName: React.PropTypes.string.isRequired,
   property: React.PropTypes.string.isRequired,

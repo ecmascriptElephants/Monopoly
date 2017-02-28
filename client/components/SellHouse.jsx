@@ -33,7 +33,6 @@ SellHouse.propTypes = {
   userPropertiesArray: React.PropTypes.array.isRequired,
   propertyPosition: React.PropTypes.number.isRequired,
   playerIndex: React.PropTypes.number.isRequired,
-  IncreaseFunds: React.PropTypes.func.isRequired,
-  propertyGroup: React.PropTypes.string.isRequired
+  increaseFunds: React.PropTypes.func.isRequired
 }
 export default connect(mapStateToProps)(SellHouse)

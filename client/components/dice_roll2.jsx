@@ -45,7 +45,8 @@ class DiceRoll extends Component {
       propertyOwner: -1,
       isBankruptArray: [false, false, false, false, false, false, false, false],
       jailRollDoublesButtonVisible: false,
-      showToast: false
+      showToast: false,
+      numOfPlayer: -1
     }
     this.props.dispatch(setButtons())
     this.setStates = this.setStates.bind(this)
@@ -122,6 +123,7 @@ class DiceRoll extends Component {
   }
 
   handleEndTurnButtonClick () {
+    this.props.dispatch(setButtons())
     this.props.dispatch(setEndTurn(false))
     sock.end({ gameID: this.props.gameID, pos: this.props.userPosArray[this.props.index], index: this.props.index })
   }
@@ -225,24 +227,6 @@ class DiceRoll extends Component {
       this.props.dispatch(setLuxury(false))
       this.props.dispatch(setEndTurn(!doubles))
       this.props.dispatch(setDiceRoll(!!doubles))
-    }
-  }
-
-  checkMonopoly (propertyGroup, numberNeeded) {
-    const propertiesArray = this.props.userPropertiesArray[this.props.playerIndex]
-    const indexes = []
-    let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property, index) => {
-      if (property.PropertyObj.PROPERTY_GROUP === propertyGroup) {
-        indexes.push(index)
-        numberOfPropertiesInGroup += 1
-        return numberOfPropertiesInGroup
-      }
-    }, 0)
-    if (propertiesInGroupCount === numberNeeded) {
-      for (let i = 0; i < indexes.length; i++) {
-        propertiesArray[indexes[i]].Monopoly = true
-      }
-      this.props.dispatch(propertiesArray, this.props.playerIndex)
     }
   }
 
@@ -432,16 +416,16 @@ class DiceRoll extends Component {
           <div className='CurrentUserProperties'>
             <div>
               Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {
-                return <div key={index}>{e.PropertyObj.NAME}
+                return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME}
                   {e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} />
                     : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} />}
-                  {<BuyHouse propertyPosition={e.Position}
+                  {e.Monopoly ? <BuyHouse propertyPosition={e.Position}
                     propertyGroup={e.PropertyObj.PROPERTY_GROUP}
                     reduceFunds={this.reduceFunds} houses={e.Houses}
-                    numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} />}
-                  {<SellHouse propertyPosition={e.Position}
+                    numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} /> : null}
+                  {e.Houses > 0 ? <SellHouse propertyPosition={e.Position}
                     increaseFunds={this.increaseFunds} houses={e.Houses}
-                  />} </div>
+                  /> : null} </div>
               })} />}
             </div>
           </div>

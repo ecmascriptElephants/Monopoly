@@ -83,7 +83,6 @@ class DiceRoll extends Component {
       }
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: `It is ${this.props.username}'s turn.` })
     })
-
     sock.socket.on('update money', (data) => {
       this.props.dispatch(setCash(data.money, data.index))
     })
@@ -187,7 +186,6 @@ class DiceRoll extends Component {
   handlePayRentButtonClick () {
     let currentUser = this.props.playerIndex
     let propertyOwner = this.state.propertyOwner
-    console.log('rent', this.state.rentOwed)
     let rentOwed = this.state.rentOwed
     let updatedUserMoney = this.props.userCashArray[currentUser]
     let doubles = this.state.doubles

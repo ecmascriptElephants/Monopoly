@@ -57,7 +57,6 @@ const BuyProperty = (props) => {
       sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
     } else {
       let indexes = []
-      console.log(propertyGroup)
       let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property, index) => {
         if (property.PropertyObj.PROPERTY_GROUP === propertyGroup && property.PropertyObj.ALLOWS_HOUSES) {
           indexes.push(index)
@@ -65,7 +64,6 @@ const BuyProperty = (props) => {
         }
         return numberOfPropertiesInGroup
       }, 0)
-      console.log(propertiesInGroupCount, numberNeeded)
       if (propertiesInGroupCount === numberNeeded) {
         for (let i = 0; i < indexes.length; i++) {
           propertiesArray[indexes[i]].Monopoly = true

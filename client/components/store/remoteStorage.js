@@ -3,7 +3,9 @@ export const saveRemoteState = (state) => {
   if (state.playerIndex === state.index) {
     const serializedState = state
     if (state.gameID > 0) {
-      sock.socket.emit('update database', { gameID: state.gameID, state: serializedState })
+      if (state.index === state.playerIndex) {
+        sock.socket.emit('update database', { gameID: state.gameID, state: serializedState })
+      }
     }
   }
 }

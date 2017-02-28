@@ -58,7 +58,6 @@ module.exports = (io) => {
     })
 
     socket.on('load', (data) => {
-      console.log('in routes/io.js socket.on "load"; data = ', data)
       let gameObj = game[data.gameID]
       let refresh = false
       if (gameObj.playerInfo[data.index].socketID !== socket.id) {
@@ -108,7 +107,7 @@ module.exports = (io) => {
     socket.on('update database', (data) => {
       board.updateState(data)
         .then(() => {
-          //None
+          // None
         })
     })
     socket.on('property update', (data) => {
@@ -140,6 +139,10 @@ module.exports = (io) => {
 
     socket.on('comment', (data) => {
       socket.broadcast.to(data.gameID).emit('receive-comment', data.comment)
+    })
+
+    socket.on('trade offer', (data) => {
+      socket.broadcast.to(data.playerSocket).emit('offer for you', { position: data.position, socket: socket.id, offer: data.offer, offerIndex: data.offerIndex })
     })
   })
 }

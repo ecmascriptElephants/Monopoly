@@ -57,7 +57,6 @@ const BuyProperty = (props) => {
       sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
     } else {
       let indexes = []
-      console.log(propertyGroup)
       let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property, index) => {
         if (property.PropertyObj.PROPERTY_GROUP === propertyGroup && property.PropertyObj.ALLOWS_HOUSES) {
           indexes.push(index)

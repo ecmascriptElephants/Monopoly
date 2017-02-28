@@ -48,7 +48,6 @@ module.exports = {
     socket.emit('get users', gameID)
   },
   trade: (playerSocket, offer, position, offerIndex) => {
-    console.log(offerIndex)
     socket.emit('trade offer', {playerSocket, offer, position, offerIndex})
   }
 }

@@ -16,8 +16,8 @@ const Cards = (props) => {
   const handleClick = () => {
     console.log('in cards.jsx cards function has been invoked!!!')
     let numberOfCards = 16
-    // let cardID = Math.floor((numberOfCards * Math.random()))
-    let cardID = 8
+    let cardID = Math.floor((numberOfCards * Math.random()))
+    // let cardID = 8
     let card = props.card ? rules.Community_Chest[cardID] : rules.Chance[cardID]
     console.log('in cards.jsx card description = ', card.Description)
     if (card.Position !== undefined) {

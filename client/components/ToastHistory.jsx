@@ -1,26 +1,45 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Toaster from './toast'
 import {Header, Container, Segment, Icon, Divider} from 'semantic-ui-react'
 
-const ToastHistory = (props) => {
+class ToastHistory extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      comments: []
+    }
+    this.handleMessage = this.handleMessage.bind(this)
+  }
 
-  return (
-    <Container className='toastHistory'>
+  handleMessage(message) {
+    let comments = this.state.comments
+    comments.push(message)
+    this.setState({comments: comments})
+    comments = this.state.comments.map((msg, i) => {
+      return <li key={i}>{msg}</li>
+    })
+  }
+
+  render () {
+
+    return (
+      <Container className='toastHistory'>
       <Segment raised vertical compact className='content'>
-        <Header as='h6' icon textAlign='center'>
-          <Header.Content>Activity Logs</Header.Content>
-        </Header>
-        <Divider />
-        <div>
-          <Toaster />
-        </div>
+      <Header as='h6' icon textAlign='center'>
+      <Header.Content>Activity Logs</Header.Content>
+      </Header>
+      <Divider />
+      <div>
+      </div>
       </Segment>
-    </Container>
-  )
+      </Container>
+    )
+  }
+
 }
 
 ToastHistory.propTypes = {
-
+  message: React.PropTypes.string.isRequired
 }
 export default ToastHistory

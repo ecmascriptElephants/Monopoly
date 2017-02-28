@@ -3,6 +3,7 @@ import { Header, Container, Segment, Icon, Divider, Message, Button } from 'sema
 import { rules } from '../static/rules'
 import DiceRoll from './dice_roll2'
 import { connect } from 'react-redux'
+import Chat from './chat'
 class Player extends Component {
   constructor (props) {
     super(props)
@@ -152,6 +153,7 @@ class Player extends Component {
           </Message>
           <DiceRoll dice={this.props.dice} setComment={this.props.comment} />
           <div>In player {this.props.comment}</div>
+          <Chat name={this.props.username} />
         </Segment>
       </Container>
     )
@@ -159,6 +161,7 @@ class Player extends Component {
 }
 const mapStateToProps = (state) => {
   return {
+    username: state.username,
     userCashArray: state.userCashArray,
     playerIndex: state.playerIndex
   }

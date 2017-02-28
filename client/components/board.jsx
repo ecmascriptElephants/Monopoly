@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Symbol from './Symbol'
 import Player from './player'
-import Chat from './chat'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import { setUserPositions, setPlayers, setPlayerProps, setIndex, setUserProperties } from './store/actionCreators'
@@ -9,7 +8,7 @@ import Toast from './toast'
 import ToastHistory from './ToastHistory'
 import Others from './OtherPlayers'
 import Offer from './ShowOffer'
-
+import { Card, Accordion } from 'semantic-ui-react'
 class Board extends Component {
   constructor (props) {
     super(props)
@@ -53,7 +52,7 @@ class Board extends Component {
     })
 
     sock.socket.on('offer for you', ({position, socket, offer, offerIndex}) => {
-      this.setState({position, socket, offer, offerIndex, showOffer: true})
+      this.setState({ position, socket, offer, offerIndex, showOffer: true })
     })
 
     sock.socket.on('update position', (data) => {
@@ -68,176 +67,179 @@ class Board extends Component {
 
   setComment (comment) {
     console.log('comment', comment)
-    this.setState({comment})
+    this.setState({ comment })
   }
 
   showPopup () {
-    this.setState({showOffer: false})
+    this.setState({ showOffer: false })
   }
   render () {
     return (
       <div>
-
-        <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment}/>
-        {
-        this.state.showOffer ? <Offer open={this.state.showOffer} offer={this.state.offer} setShowOffer={this.showPopup} position={this.state.position} offerIndex={this.state.offerIndex} /> : null
-      }
-        <div className={'other-players'}>
+        <div className='left'>
           {
-            this.props.players.map((player, index) => {
-              if (index !== this.props.playerIndex) {
-                return <Others key={index} playerUsername={player.username} otherPlayerIndex={index} socket={player.socketID} />
-              }
-            })
+            this.state.showOffer ? <Offer open={this.state.showOffer} offer={this.state.offer} setShowOffer={this.showPopup} position={this.state.position} offerIndex={this.state.offerIndex} /> : null
           }
+          <div className={'other-players'}>
+            <Card.Group>
+              {
+                this.props.players.map((player, index) => {
+                  if (index !== this.props.playerIndex) {
+                    return <Others key={index} playerUsername={player.username} otherPlayerIndex={index} socket={player.socketID} />
+                  }
+                })
+              }
+            </Card.Group>
+          </div>
+          <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment} />
         </div>
-        <Player name={this.props.username} dice={this.dice} piece='Hat' />
-        <div className='board parent'>
-          {
-            this.props.players.map((player, index) => {
-              if (index <= 3) {
-                return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0] - (index + index)}%`} userNumber={index} key={index} />
-              } else {
-                return <Symbol className={`token${index}`} left={`${player.userPosition[1] - 2}%`} top={`${player.userPosition[0] - (index + 4)}%`} userNumber={index} key={index} />
-              }
-            })
-          }
-          <div className='wire'>
-            <div className='flexcol'>
-              <div className='flexrow'>
-                <div className='top' id='Position20'>
-                  20
+        <div className='right'>
+          <div className='board parent'>
+            {
+              this.props.players.map((player, index) => {
+                if (index <= 3) {
+                  return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0] - (index + index)}%`} userNumber={index} key={index} />
+                } else {
+                  return <Symbol className={`token${index}`} left={`${player.userPosition[1] - 2}%`} top={`${player.userPosition[0] - (index + 4)}%`} userNumber={index} key={index} />
+                }
+              })
+            }
+            <div className='wire'>
+              <div className='flexcol'>
+                <div className='flexrow'>
+                  <div className='top' id='Position20'>
+                    20
                 </div>
-                <div className='item' id='Position21'>
-                  21
+                  <div className='item' id='Position21'>
+                    21
                 </div>
-                <div className='item' id='Position22'>
-                  22
+                  <div className='item' id='Position22'>
+                    22
                 </div>
-                <div className='item' id='Position23'>
-                  23
+                  <div className='item' id='Position23'>
+                    23
                 </div>
-                <div className='item' id='Position24'>
-                  24
+                  <div className='item' id='Position24'>
+                    24
                 </div>
-                <div className='item' id='Position25'>
-                  25
+                  <div className='item' id='Position25'>
+                    25
                 </div>
-                <div className='item' id='Position26'>
-                  26
+                  <div className='item' id='Position26'>
+                    26
                 </div>
-                <div className='item' id='Position27'>
-                  27
+                  <div className='item' id='Position27'>
+                    27
                 </div>
-                <div className='item' id='Position28'>
-                  28
+                  <div className='item' id='Position28'>
+                    28
                 </div>
-                <div className='item' id='Position29'>
-                  29
+                  <div className='item' id='Position29'>
+                    29
                 </div>
-                <div className='top' id='Position30'>
-                  30
+                  <div className='top' id='Position30'>
+                    30
                 </div>
-              </div>
-              <div className='flexmiddle'>
-                <div className='flexside'>
-                  <div className='item' id='Position19'>
-                    19
+                </div>
+                <div className='flexmiddle'>
+                  <div className='flexside'>
+                    <div className='item' id='Position19'>
+                      19
                   </div>
-                  <div className='item' id='Position18'>
-                    18
+                    <div className='item' id='Position18'>
+                      18
                   </div>
-                  <div className='item' id='Position17'>
-                    17
+                    <div className='item' id='Position17'>
+                      17
                   </div>
-                  <div className='item' id='Position16'>
-                    16
+                    <div className='item' id='Position16'>
+                      16
                   </div>
-                  <div className='item' id='Position15'>
-                    15
+                    <div className='item' id='Position15'>
+                      15
                   </div>
-                  <div className='item' id='Position14'>
-                    14
+                    <div className='item' id='Position14'>
+                      14
                   </div>
-                  <div className='item' id='Position13'>
-                    13
+                    <div className='item' id='Position13'>
+                      13
                   </div>
-                  <div className='item' id='Position12'>
-                    12
+                    <div className='item' id='Position12'>
+                      12
                   </div>
-                  <div className='item' id='Position11'>
-                    11
+                    <div className='item' id='Position11'>
+                      11
+                  </div>
+                  </div>
+                  <div className='flexside'>
+                    <div className='item' id='Position31'>
+                      31
+                  </div>
+                    <div className='item' id='Position32'>
+                      32
+                  </div>
+                    <div className='item' id='Position33'>
+                      33
+                  </div>
+                    <div className='item' id='Position34'>
+                      34
+                  </div>
+                    <div className='item' id='Position35'>
+                      35
+                  </div>
+                    <div className='item' id='Position36'>
+                      36
+                  </div>
+                    <div className='item' id='Position37'>
+                      37
+                  </div>
+                    <div className='item' id='Position38'>
+                      38
+                  </div>
+                    <div className='item' id='Position39'>
+                      39
+                  </div>
                   </div>
                 </div>
-                <div className='flexside'>
-                  <div className='item' id='Position31'>
-                    31
-                  </div>
-                  <div className='item' id='Position32'>
-                    32
-                  </div>
-                  <div className='item' id='Position33'>
-                    33
-                  </div>
-                  <div className='item' id='Position34'>
-                    34
-                  </div>
-                  <div className='item' id='Position35'>
-                    35
-                  </div>
-                  <div className='item' id='Position36'>
-                    36
-                  </div>
-                  <div className='item' id='Position37'>
-                    37
-                  </div>
-                  <div className='item' id='Position38'>
-                    38
-                  </div>
-                  <div className='item' id='Position39'>
-                    39
-                  </div>
+                <div className='flexrow'>
+                  <div className='top' id='Position10'>
+                    10
                 </div>
-              </div>
-              <div className='flexrow'>
-                <div className='top' id='Position10'>
-                  10
+                  <div className='item' id='Position9'>
+                    9
                 </div>
-                <div className='item' id='Position9'>
-                  9
+                  <div className='item' id='Position8'>
+                    8
                 </div>
-                <div className='item' id='Position8'>
-                  8
+                  <div className='item' id='Position7'>
+                    7
                 </div>
-                <div className='item' id='Position7'>
-                  7
+                  <div className='item' id='Position6'>
+                    6
                 </div>
-                <div className='item' id='Position6'>
-                  6
+                  <div className='item' id='Position5'>
+                    5
                 </div>
-                <div className='item' id='Position5'>
-                  5
+                  <div className='item' id='Position4'>
+                    4
                 </div>
-                <div className='item' id='Position4'>
-                  4
+                  <div className='item' id='Position3'>
+                    3
                 </div>
-                <div className='item' id='Position3'>
-                  3
+                  <div className='item' id='Position2'>
+                    2
                 </div>
-                <div className='item' id='Position2'>
-                  2
+                  <div className='item' id='Position1'>
+                    1
                 </div>
-                <div className='item' id='Position1'>
-                  1
+                  <div className='top' id='Position0'>
+                    0
                 </div>
-                <div className='top' id='Position0'>
-                  0
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <Chat name={this.props.username} />
       </div>
     )
   }

@@ -33,6 +33,7 @@ import Toast from './toast'
 import comments from '../helper/comment'
 import Mortgage from './MortgageProperty'
 import UnMortgage from './UnMortgage'
+import Bankrupt from './Bankrupt'
 
 class DiceRoll extends Component {
   constructor (props) {
@@ -56,6 +57,7 @@ class DiceRoll extends Component {
     this.setStates = this.setStates.bind(this)
     this.increaseFunds = this.increaseFunds.bind(this)
     this.reduceFunds = this.reduceFunds.bind(this)
+    this.checkBankruptcy = this.checkBankruptcy.bind(this)
   }
 
   componentDidMount () {
@@ -175,6 +177,7 @@ class DiceRoll extends Component {
         comment,
         showToast: true
       })
+      this.checkBankruptcy()
     } else {
       this.props.dispatch(setCash(-rentOwed, currentUser))
       this.props.dispatch(setCash(rentOwed, propertyOwner))
@@ -197,6 +200,7 @@ class DiceRoll extends Component {
         comment,
         showToast: true
       })
+      this.checkBankruptcy()
     } else {
       this.props.dispatch(setCash(-200, this.props.index))
       sock.updateMoney({
@@ -219,6 +223,7 @@ class DiceRoll extends Component {
       this.setState({
         squareTypeComment: 'You do not have enough money to pay the $100 luxury tax.'
       })
+      this.checkBankruptcy()
     } else {
       this.props.dispatch(setCash(-100, this.props.index))
       sock.updateMoney({
@@ -237,6 +242,7 @@ class DiceRoll extends Component {
       this.setState({
         comment: 'You cannot afford the $50 fine.'
       })
+    this.checkBankruptcy()
     } else {
       this.props.dispatch(setCash(-50, this.props.index))
       sock.updateMoney({ gameID: this.props.gameID, money: -50, index: this.props.index })
@@ -313,18 +319,16 @@ class DiceRoll extends Component {
   }
 
   checkBankruptcy () {
-    let usersProperties = [...this.props.userPropertiesArray]
-    if (userProperties[this.props.index].length === 0) {
-      console.log('bankruptcy!')
-      this.setState({bankruptcyButtonVisible: true})
+    console.log('check bank kruptcy')
+    let usersProperties = [...this.props.userPropertiesArray[this.props.index]]
+    let count = 0
+    usersProperties.forEach((property) => {
+      if (property.Mortgaged) count++
+    })
+    if (count === usersProperties.length) {
+      console.log('bankruptcy')
       this.props.dispatch(setBankruptcy(true))
     }
-  }
-
-  handleBankruptcyButtonClick () {
-    this.props.userCashArray[this.props.index] = 0
-    this.state.userPropertiesArray[this.props.index] = []
-    this.state.isBankruptArray[this.props.index] = true
   }
 
   render () {
@@ -412,7 +416,7 @@ class DiceRoll extends Component {
             <div className='bankruptcy-btn_div'>
               {this.props.bankruptcyButton
                 ? <div>
-                  <Button secondary fluid onClick={() => { this.handleBankruptcyButtonClick() }}> Bankruptcy. </Button>
+                  <Bankrupt setState={this.setStates} />
                 </div> : null
               }
             </div>

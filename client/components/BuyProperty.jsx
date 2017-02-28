@@ -36,7 +36,6 @@ const BuyProperty = (props) => {
         comment,
         showToast: true
       })
-      checkBankruptcy()
     } else {
       props.dispatch(setCash(-propertyPrice, props.index))
       sock.updateMoney({ gameID: props.gameID, money: -propertyPrice, index: props.index })

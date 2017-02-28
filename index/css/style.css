@@ -1,8 +1,9 @@
 * {
-    margin: 0;
-    padding: 0;
-    font-family: 'Raleway', sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: 'Raleway', sans-serif;
 }
+
 .board {
   position: fixed;
   left: 0;
@@ -12,7 +13,7 @@
   width: 45%;
   border: 1px solid black;
   background-image: url('https://images-na.ssl-images-amazon.com/images/I/81oC5pYhh2L._SL1500_.jpg');
-  background-size: contain ;
+  background-size: contain;
   background-repeat: no-repeat;
 }
 
@@ -48,6 +49,7 @@
   overflow: hidden;
   width: 100%;
 }
+
 .flexside {
   display: flex;
   flex-direction: column;
@@ -56,24 +58,28 @@
   width: 13.5%;
   height: 100%;
 }
+
 .item {
-  border: 1px solid black;   /* <-- just for demonstration */
+  border: 1px solid black;
+  /* <-- just for demonstration */
   height: 100%;
   width: 100%;
 }
 
 .col_item {
-  border: 1px solid black;   /* <-- just for demonstration */
+  border: 1px solid black;
+  /* <-- just for demonstration */
   height: 100px;
   width: 130px;
 }
+
 .flexmiddle {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   width: 100%;
   height: 74%;
- justify-content: space-between;
+  justify-content: space-between;
 }
 
 .top {
@@ -82,21 +88,21 @@
 }
 
 .ui.vertical.segment:last-child {
-    width: 40%;
-    border-bottom: none;
-    margin: auto;
+  width: 40%;
+  border-bottom: none;
+  margin: auto;
 }
 
 .ui.container {
-    padding-top: 145px;
+  padding-top: 145px;
 }
 
 .wire {
- display: flex;
- width: 100%;
- z-index: 10;
- height: 100%;
- position: absolute
+  display: flex;
+  width: 100%;
+  z-index: 10;
+  height: 100%;
+  position: absolute
 }
 
 .pcard {
@@ -134,12 +140,13 @@
 .Yellow {
   background-color: yellow
 }
+
 .Brown {
   background-color: Brown
 }
 
 .DarkBlue {
-  background-color:  darkblue
+  background-color: darkblue
 }
 
 .LightBlue {
@@ -167,4 +174,15 @@
   right: 100px;
   bottom: 300px;
   width: 30%!important;
+}
+
+.left {
+  width: 50%;
+  float: right;
+  margin-top: 5%;
+}
+
+.right {
+  width: 50%;
+  height: 100%;
 }

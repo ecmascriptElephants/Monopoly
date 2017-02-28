@@ -33,7 +33,7 @@ class Trade extends Component {
   render () {
     return (
       <div>
-        <Button onClick={() => this.open()}>Trade</Button>
+        <Button basic color='green' onClick={() => this.open()}>Trade</Button>
         <Modal open={this.state.open} onClose={this.close}>
           <Modal.Header>Trade {this.props.property}</Modal.Header>
           <Modal.Content image>

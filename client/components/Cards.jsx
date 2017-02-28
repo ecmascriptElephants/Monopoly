@@ -34,9 +34,6 @@ const Cards = (props) => {
       props.setState({diceSum: diceSum})
       props.dispatch(setMoveToken(true))
       props.dispatch(setEndTurn(false))
-    if (card.Position) {
-      props.dispatch(setUserPositions(card.Position, props.index))
-      // todo check for passing GO
     } else if (card.Cash) {
       console.log('card.Cash = ', card.Cash)
       props.dispatch(setCash(card.Cash, props.index))

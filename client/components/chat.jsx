@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Header, Container, Segment, Icon, Divider} from 'semantic-ui-react'
+import {List, Container, Segment, Divider} from 'semantic-ui-react'
 import sock from '../helper/socket'
 
 class Chat extends Component {
@@ -34,24 +34,12 @@ class Chat extends Component {
       return <li key={i}>{msg.sender}: {msg.message}</li>
     })
     return (
-      <Container className='chatBox'>
-        <Segment raised vertical compact className='content'>
-          <Header as='h6' icon textAlign='center'>
-            <Icon name='users' circular />
-            <Header.Content>
-              {this.state.name}
-            </Header.Content>
-          </Header>
-          <Divider />
-          <div>
-            <ul>
-              {messages}
-            </ul>
-          </div>
-          <input id='chatBox' name='chatBox' type='text' />
-          <button onClick={this.submitMessage}>Send</button>
-        </Segment>
-      </Container>
+      <Segment raised vertical compact className='content'>
+        <Divider />
+        <List items={messages} />
+        <input id='chatBox' name='chatBox' type='text' />
+        <button onClick={this.submitMessage}>Send</button>
+      </Segment>
     )
   }
 }

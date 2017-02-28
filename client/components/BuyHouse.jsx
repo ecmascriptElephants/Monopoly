@@ -21,7 +21,6 @@ const BuyHouse = (props) => {
             if (props.userCashArray[props.playerIndex] >= housePrice) {
               property.Houses += 1
               props.reduceFunds(housePrice)
-              console.log(propertiesArray)
               props.dispatch(setUserProperties(propertiesArray, props.index))
             }
           }

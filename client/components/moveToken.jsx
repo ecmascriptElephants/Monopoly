@@ -31,6 +31,11 @@ const MoveToken = (props) => {
 
   const handleLandOnOrPassGo = (oldUserPosition, userPosition, jail) => {
     if (!jail && userPosition < oldUserPosition) {
+      if (userPosition !== 0) {
+        let newComment = comments.passGo(props.username)
+        props.setState({ comment: newComment, showToast: true })
+        sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
+      }
       const doubles = props.doubles
       props.dispatch(setEndTurn(!doubles))
       props.dispatch(setGoButton(true))
@@ -54,26 +59,46 @@ const MoveToken = (props) => {
       props.dispatch(setMoveToken(false))
       props.dispatch(setEndTurn(true))
       props.dispatch(setUserJail(props.index, 1))
+      if (doubles === 3) {
+        let newComment = comments.tripleDoubles(props.username)
+        props.setState({ comment: newComment, showToast: true })
+        sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
+      } else {
+        let newComment = comments.squareTypeGoToJail(props.username)
+        props.setState({ comment: newComment, showToast: true })
+        sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
+      }
     } else if (squareType === 'CHANCE') {
       props.dispatch(setMoveToken(false))
       props.dispatch(setCardButton(true))
       props.setState({card: false})
-      const send = comments.chance(props.username)
-      sock.comment(props.gameID, send)
+      let newComment = comments.squareTypeChance(props.username)
+      props.setState({ comment: newComment, showToast: true })
+      sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
     } else if (squareType === 'COMMUNITY_CHEST') {
       props.dispatch(setMoveToken(false))
       props.dispatch(setCardButton(true))
       props.setState({card: true})
-      const send = comments.community(props.username)
-      sock.comment(props.gameID, send)
+      let newComment = comments.squareTypeCommunityChest(props.username)
+      props.setState({ comment: newComment, showToast: true })
+      sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
     } else if (squareType === 'PROPERTY') {
       if (propertyIsOwned(userPosition) === false) {
         props.dispatch(setMoveToken(false))
         props.dispatch(setBuyProperty(true))
         props.dispatch(setEndTurn(!doubles))
         props.dispatch(setDiceRoll(!!doubles))
-        const send = comments.unowned(props.username)
-        sock.comment(props.gameID, send)
+        let propertyName = ''
+        let cost = 0
+        rules.Properties.forEach((prop) => {
+          if(prop.BOARD_POSITION === userPosition) {
+            propertyName = prop.NAME
+            cost = prop.PRICE
+          }
+        })
+        let newComment = comments.squareTypeUnownedProperty(props.username, propertyName, cost)
+        props.setState({ comment: newComment, showToast: true })
+        sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
       } else {
         let propertyOwner = propertyIsOwned(userPosition)
         let rentOwed = 0
@@ -92,6 +117,7 @@ const MoveToken = (props) => {
                 }
               })
               rentOwed = (diceSum) * (prop.PropertyObj.RENT[utilityCount])
+              console.log('movetoken line 120 landed on an owned utilities rentOwed = ', rentOwed, diceSum)
             } else if (prop.PropertyObj.PROPERTY_GROUP === 'Stations') {
               let stationCount = -1
               props.userPropertiesArray[propertyOwner].forEach(prop => {
@@ -99,82 +125,74 @@ const MoveToken = (props) => {
                   stationCount += 1
                 }
               })
+              console.log('movetoken line 120 landed on an owned station rentOwed = ', rentOwed, diceSum)
               rentOwed = prop.PropertyObj.RENT[stationCount]
             } else {
+              console.log('movetoken line 120 landed on an owned property rentOwed = ', rentOwed, diceSum)
               rentOwed = prop.PropertyObj.RENT[prop.Houses]
             }
           }
         })
-        const send = comments.owned(props.username, propName, rentOwed, props.username)
-        sock.comment(props.gameID, send)
         if (propertyOwner === props.index || mortgagedFlag) {
           props.dispatch(setMoveToken(false))
           props.dispatch(setEndTurn(!doubles))
           props.dispatch(setDiceRoll(!!doubles))
           props.dispatch(setPayRent(false))
+
+          if (propertyOwner === props.index) {
+            let newComment = comments.propertyAlreadyOwned(props.username, propName)
+            props.setState({ comment: newComment, showToast: true })
+            sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
+          } else {
+            let newComment = comments.propertyIsMortgaged(props.username, propName)
+            props.setState({ comment: newComment, showToast: true })
+            sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
+          }
         } else {
           props.dispatch(setMoveToken(false))
           props.dispatch(setPayRent(true))
-          const comment = comments.rentOwned(propName, rentOwed, propertyOwner) // fix propertyOwner
-          props.setState({
-            comment,
-            rentOwed,
-            propertyOwner,
-            showToast: true
-          })
+          let newComment = comments.rentOwed(props.username, propName, rentOwed, 'the property owner')
+          props.setState({ comment: newComment, showToast: true, rentOwed: rentOwed, propertyOwner: propertyOwner })
+          sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
         }
       }
     } else if (squareType === 'GO') {
       props.dispatch(setMoveToken(false))
       props.dispatch(setGoButton(true))
-      const comment = comments.landOnGo()
-      props.setState({
-        comment,
-        showToast: true
-      })
-      sock.socket.emit('comment', `${props.username} landed on GO. Collect $200!`)
+      let newComment = comments.squareTypeGo(props.username)
+      props.setState({ comment: newComment, showToast: true })
+      sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
       props.dispatch(setEndTurn(!doubles))
       props.dispatch(setDiceRoll(!!doubles))
     } else if (squareType === 'FREE_PARKING') {
       props.dispatch(setMoveToken(false))
-      const comment = comments.freeParking()
-      props.setState({
-        comment,
-        showToast: true
-      })
-      sock.comment(props.gameID, `${props.username} landed on Free Parking. Nothing happens.`)
+      let newComment = comments.squareTypeFreeParking(props.username)
+      props.setState({ comment: newComment, showToast: true })
+      sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
       props.dispatch(setEndTurn(!doubles))
       props.dispatch(setDiceRoll(!!doubles))
     } else if (squareType === 'JAIL') {
       props.dispatch(setMoveToken(false))
-      const comment = comments.jailLand()
-      props.setState({
-        comment,
-        showToast: true
-      })
-      sock.comment(props.gameID, `${props.username} landed on Jail. But ${props.username} is just visiting.`)
+      let newComment = comments.squareTypeJail(props.username)
+      props.setState({ comment: newComment, showToast: true})
+      sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
       props.dispatch(setEndTurn(!doubles))
       props.dispatch(setDiceRoll(!!doubles))
     } else if (squareType === 'INCOME_TAX') {
-      sock.socket.emit('comment', `${props.username} landed on Income Tax. Pay $200.`)
+      let newComment = comments.squareTypeIncomeTax(props.username)
+      props.setState({ comment: newComment, showToast: true})
+      sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
       props.dispatch(setMoveToken(false))
       props.dispatch(setIncomeTax(true))
-      const comment = comments.incomeTax()
-      props.setState({
-        comment,
-        showToast: true
-      })
     } else if (squareType === 'LUXURY_TAX') {
       props.dispatch(setMoveToken(false))
       props.dispatch(setLuxury(true))
-      const comment = comments.LuxuryTab
-      props.setState({
-        comment,
-        showToast: true
-      })
-      sock.comment(props.gameID, `${props.username} landed on Luxury Tax.`)
+      let newComment = comments.squareTypeLuxuryTax(props.username)
+      props.setState({ comment: newComment, showToast: true})
+      sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
     }
     handleLandOnOrPassGo(oldUserPosition, userPosition, jail)
+    props.setState({ dice: [0, 0]})
   }
 
   return (

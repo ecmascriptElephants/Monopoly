@@ -11,12 +11,13 @@ import {
   setEndTurn,
   setLuxury,
   setGoButton,
-  setJailPostions,
   setBuyProperty,
   setPayRent,
-  setIncomeTax
+  setIncomeTax,
+  setUserJail
 } from '../components/store/actionCreators'
 import { Button } from 'semantic-ui-react'
+
 const MoveToken = (props) => {
   const propertyIsOwned = (propertyPosition) => {
     let ownerNumber = false
@@ -31,9 +32,9 @@ const MoveToken = (props) => {
   const handleLandOnOrPassGo = (oldUserPosition, userPosition, jail) => {
     if (!jail && userPosition < oldUserPosition) {
       const doubles = props.doubles
-      this.props.dispatch(setEndTurn(!doubles))
-      this.props.dispatch(setGoButton(true))
-      this.props.dispatch(setDiceRoll(!!doubles))
+      props.dispatch(setEndTurn(!doubles))
+      props.dispatch(setGoButton(true))
+      props.dispatch(setDiceRoll(!!doubles))
     }
   }
 
@@ -52,7 +53,7 @@ const MoveToken = (props) => {
       props.dice(10, props.index, true)
       props.dispatch(setMoveToken(false))
       props.dispatch(setEndTurn(true))
-      props.dispatch(setJailPostions(props.index, 1))
+      props.dispatch(setUserJail(props.index, 1))
     } else if (squareType === 'CHANCE') {
       props.dispatch(setMoveToken(false))
       props.dispatch(setCardButton(true))
@@ -67,14 +68,6 @@ const MoveToken = (props) => {
       sock.comment(props.gameID, send)
     } else if (squareType === 'PROPERTY') {
       if (propertyIsOwned(userPosition) === false) {
-        let cost = 0
-        let propertyName = ''
-        rules.Properties.forEach(prop => {
-          if (prop.BOARD_POSITION === userPosition) {
-            cost = prop.PRICE
-            propertyName = prop.NAME
-          }
-        })
         props.dispatch(setMoveToken(false))
         props.dispatch(setBuyProperty(true))
         props.dispatch(setEndTurn(!doubles))
@@ -122,7 +115,7 @@ const MoveToken = (props) => {
         } else {
           props.dispatch(setMoveToken(false))
           props.dispatch(setPayRent(true))
-          const comment = comments.rentOwned(propName, rentOwed, props.userNames[propertyOwner] )
+          const comment = comments.rentOwned(propName, rentOwed, propertyOwner) // fix propertyOwner
           props.setState({
             comment,
             rentOwed,
@@ -139,7 +132,7 @@ const MoveToken = (props) => {
         comment,
         showToast: true
       })
-      sock.socket.emit('comment', `${props.userNames[props.index]} landed on GO. Collect $200!`)
+      sock.socket.emit('comment', `${props.username} landed on GO. Collect $200!`)
       props.dispatch(setEndTurn(!doubles))
       props.dispatch(setDiceRoll(!!doubles))
     } else if (squareType === 'FREE_PARKING') {

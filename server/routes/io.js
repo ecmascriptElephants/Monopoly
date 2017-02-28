@@ -108,7 +108,7 @@ module.exports = (io) => {
     socket.on('update database', (data) => {
       board.updateState(data)
         .then(() => {
-          //None
+          // None
         })
     })
     socket.on('property update', (data) => {
@@ -140,6 +140,10 @@ module.exports = (io) => {
 
     socket.on('comment', (data) => {
       socket.broadcast.to(data.gameID).emit('receive-comment', data.comment)
+
+      socket.on('get users', (data) => {
+        console.log(game[data.gameID].playerInfo)
+      })
     })
   })
 }

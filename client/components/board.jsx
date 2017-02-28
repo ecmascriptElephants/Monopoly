@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import Symbol from './Symbol'
 import Player from './player'
 import Chat from './chat'
-// import userNames from './user_order'
-// import rules from '../static/rules.js'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import { setUserPositions, setPlayers, setPlayerProps, setIndex, setUserProperties } from './store/actionCreators'
 import Toast from './toast'
 import ToastHistory from './ToastHistory'
+import Others from './OtherPlayers'
+
 
 class Board extends Component {
   constructor (props) {
@@ -19,16 +19,10 @@ class Board extends Component {
       valid: false,
       showToast: false
     }
-    // console.log(this.props.playerIndex)
     sock.init({ gameID: this.props.gameID, index: this.props.playerIndex })
     this.dice = this.dice.bind(this)
     this.setComment = this.setComment.bind(this)
   }
-
-  // componentWillReceiveProps (nextProps) {
-  //   const index = nextProps.index
-  //   this.dice(nextProps.userPosArray[index], index)
-  // }
 
   dice (value, index, flag) {
     const location = [
@@ -76,7 +70,17 @@ class Board extends Component {
     return (
       <div>
         <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment}/>
-
+        <div className={'other-players'}>
+          {
+            this.props.players.map((player, index) => {
+              if (index !== this.props.playerIndex) {
+                return <Others key={index} playerUsername={player.username} playerIndex={index} />
+              }
+            })
+          }
+          {console.log(this.props.players)}
+        </div>
+        <Player name={this.props.username} dice={this.dice} piece='Hat' />
         <div className='board parent'>
           {
             this.props.players.map((player, index) => {

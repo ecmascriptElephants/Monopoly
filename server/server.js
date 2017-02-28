@@ -56,6 +56,7 @@ passport.use('local-signup', new LocalStrategy({
     process.nextTick(() => {
       User.findByUsername(username, (result) => {
         if (result[0].length === 0) {
+          console.log('can register')
           bcrypt.genSalt(2, (err, salt) => {
             if (err) {
               console.log('Salt error ', err)
@@ -65,6 +66,7 @@ passport.use('local-signup', new LocalStrategy({
                 console.log(err)
                 return
               }
+              console.log(hash)
               User.addUser(username, hash, req.body.displayName)
                 .then((data) => {
                   passport.user = {id: data, displayname: req.body.displayName}

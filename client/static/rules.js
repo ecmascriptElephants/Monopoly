@@ -175,7 +175,7 @@ const rules = {
     },
     {
       NAME: 'Boardwalk',
-      PROPERTY_GROUP: 'DarkBlue',
+      PROPERTY_GROUP: 'Dark Blue',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 39,
       PRICE: 400,
@@ -188,7 +188,7 @@ const rules = {
     },
     {
       NAME: 'Connecticut Avenue',
-      PROPERTY_GROUP: 'LightBlue',
+      PROPERTY_GROUP: 'Light Blue',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 9,
       PRICE: 120,
@@ -305,7 +305,7 @@ const rules = {
     },
     {
       NAME: 'Oriental Avenue',
-      PROPERTY_GROUP: 'LightBlue',
+      PROPERTY_GROUP: 'Light Blue',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 6,
       PRICE: 100,
@@ -331,7 +331,7 @@ const rules = {
     },
     {
       NAME: 'Park Place',
-      PROPERTY_GROUP: 'DarkBlue',
+      PROPERTY_GROUP: 'Dark Blue',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 37,
       PRICE: 350,
@@ -461,7 +461,7 @@ const rules = {
     },
     {
       NAME: 'Vermont Avenue',
-      PROPERTY_GROUP: 'LightBlue',
+      PROPERTY_GROUP: 'Light Blue',
       ALLOWS_HOUSES: true,
       BOARD_POSITION: 8,
       PRICE: 100,

@@ -11,6 +11,8 @@ import {
 } from '../components/store/actionCreators'
 import { Button } from 'semantic-ui-react'
 import comments from '../helper/comment'
+import Bankrupt from './Bankrupt'
+
 const BuyProperty = (props) => {
   const checkMonopoly = (propertyGroup, numberNeeded) => {
     const propertiesArray = props.userPropertiesArray[props.playerIndex]
@@ -45,6 +47,7 @@ const BuyProperty = (props) => {
         propertiesArray.push(newProperty)
       }
     })
+
     if (props.userCashArray[props.index] < propertyPrice) {
       props.dispatch(setEndTurn(!props.doubles))
       props.dispatch(setBuyProperty(false))

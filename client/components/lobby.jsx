@@ -69,9 +69,9 @@ class Lobby extends Component {
     sock.socket.on('send message', (data) => {
       this.setState({})
     })
-    sock.socket.on('receive-message', (msg) => {
+    sock.socket.on('receive-message', (msgInfo) => {
       let messages = this.state.messages
-      messages.push(msg)
+      messages.push(msgInfo)
       this.setState({ messages: messages })
     })
     sock.socket.on('load state', (state) => {
@@ -119,8 +119,8 @@ class Lobby extends Component {
   }
 
   render () {
-    let messages = this.state.messages.map((msg) => {
-      return <li>{this.props.username}: {msg}</li>
+    let messages = this.state.messages.map((msg, i) => {
+      return <li key={i}>{msg.sender}: {msg.message}</li>
     })
     let queryResults = this.state.queryResults.map((result) => {
       return <li>Sender: {result.sender} Message: {result.message} Room: {result.room}</li>

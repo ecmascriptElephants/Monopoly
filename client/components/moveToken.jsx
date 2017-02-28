@@ -11,6 +11,10 @@ import {
   setEndTurn,
   setLuxury,
   setGoButton,
+<<<<<<< HEAD
+=======
+  setUserJail,
+>>>>>>> cardsBranch2
   setBuyProperty,
   setPayRent,
   setIncomeTax,
@@ -58,7 +62,11 @@ const MoveToken = (props) => {
       props.dice(10, props.index, true)
       props.dispatch(setMoveToken(false))
       props.dispatch(setEndTurn(true))
+<<<<<<< HEAD
       props.dispatch(setJailPostions(props.index, 1))
+=======
+      props.dispatch(setUserJail(props.index, 1))
+>>>>>>> cardsBranch2
       if (doubles === 3) {
         let newComment = comments.tripleDoubles(props.username)
         props.setState({ comment: newComment, showToast: true })
@@ -181,6 +189,7 @@ const MoveToken = (props) => {
       sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
     }
     handleLandOnOrPassGo(oldUserPosition, userPosition, jail)
+    props.setState({ dice: [0, 0]})
   }
 
   return (

@@ -11,7 +11,6 @@ import {
   setEndTurn,
   setLuxury,
   setGoButton,
-  setUserJail,
   setBuyProperty,
   setPayRent,
   setIncomeTax,
@@ -89,6 +88,14 @@ const MoveToken = (props) => {
         props.dispatch(setBuyProperty(true))
         props.dispatch(setEndTurn(!doubles))
         props.dispatch(setDiceRoll(!!doubles))
+        let propertyName = ''
+        let cost = 0
+        rules.Properties.forEach((prop) => {
+          if(prop.BOARD_POSITION === userPosition) {
+            propertyName = prop.NAME
+            cost = prop.PRICE
+          }
+        })
         let newComment = comments.squareTypeUnownedProperty(props.username, propertyName, cost)
         props.setState({ comment: newComment, showToast: true })
         sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
@@ -110,6 +117,7 @@ const MoveToken = (props) => {
                 }
               })
               rentOwed = (diceSum) * (prop.PropertyObj.RENT[utilityCount])
+              console.log('movetoken line 120 landed on an owned utilities rentOwed = ', rentOwed, diceSum)
             } else if (prop.PropertyObj.PROPERTY_GROUP === 'Stations') {
               let stationCount = -1
               props.userPropertiesArray[propertyOwner].forEach(prop => {
@@ -117,8 +125,10 @@ const MoveToken = (props) => {
                   stationCount += 1
                 }
               })
+              console.log('movetoken line 120 landed on an owned station rentOwed = ', rentOwed, diceSum)
               rentOwed = prop.PropertyObj.RENT[stationCount]
             } else {
+              console.log('movetoken line 120 landed on an owned property rentOwed = ', rentOwed, diceSum)
               rentOwed = prop.PropertyObj.RENT[prop.Houses]
             }
           }
@@ -130,18 +140,18 @@ const MoveToken = (props) => {
           props.dispatch(setPayRent(false))
 
           if (propertyOwner === props.index) {
-            let newComment = comments.propertyAlreadyOwned(props.username, propertyName, cost)
+            let newComment = comments.propertyAlreadyOwned(props.username, propName)
             props.setState({ comment: newComment, showToast: true })
             sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
           } else {
-            let newComment = comments.propertyIsMortgaged(props.username, propertyName, cost)
+            let newComment = comments.propertyIsMortgaged(props.username, propName)
             props.setState({ comment: newComment, showToast: true })
             sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
           }
         } else {
           props.dispatch(setMoveToken(false))
           props.dispatch(setPayRent(true))
-          let newComment = comments.rentOwed(props.username, propName, rentOwed, props.userNames[propertyOwner])
+          let newComment = comments.rentOwed(props.username, propName, rentOwed, 'the property owner')
           props.setState({ comment: newComment, showToast: true, rentOwed: rentOwed, propertyOwner: propertyOwner })
           sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
         }

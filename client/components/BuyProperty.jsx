@@ -47,7 +47,7 @@ const BuyProperty = (props) => {
     })
     if (props.userCashArray[props.index] < propertyPrice) {
       props.dispatch(setEndTurn(!props.doubles))
-      props.dispatch(setBuyProperty(false))
+      props.dispatch(setBuyProperty(true))
       props.dispatch(setDiceRoll(!!props.doubles))
       let newComment = comments.propertyInsufficientFunds(props.username)
       props.setState({ comment: newComment, showToast: true })
@@ -56,10 +56,9 @@ const BuyProperty = (props) => {
       let indexes = []
       console.log(propertyGroup)
       let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property, index) => {
-        if (property.PropertyObj.PROPERTY_GROUP === propertyGroup) {
+        if (property.PropertyObj.PROPERTY_GROUP === propertyGroup && property.PropertyObj.ALLOWS_HOUSES) {
           indexes.push(index)
           numberOfPropertiesInGroup += 1
-          console.log(numberOfPropertiesInGroup)
         }
         return numberOfPropertiesInGroup
       }, 0)

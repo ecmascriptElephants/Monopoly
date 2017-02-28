@@ -70,13 +70,11 @@ Trade.propTypes = {
   gameID: React.PropTypes.number.isRequired,
   playerUsername: React.PropTypes.string.isRequired,
   userCashArray: React.PropTypes.array.isRequired,
-  otherPlayerIndex: React.PropTypes.number.isRequired,
   userPropertiesArray: React.PropTypes.array.isRequired,
   index: React.PropTypes.number.isRequired,
   position: React.PropTypes.number.isRequired,
   owner: React.PropTypes.number.isRequired,
   playerIndex: React.PropTypes.number.isRequired,
-  playerName: React.PropTypes.string.isRequired,
   property: React.PropTypes.string.isRequired,
   socket: React.PropTypes.string.isRequired
 }

@@ -75,7 +75,6 @@ class DiceRoll extends Component {
         })
       }
     })
-
     sock.socket.on('update money', (data) => {
       this.props.dispatch(setCash(data.money, data.index))
     })

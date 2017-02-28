@@ -15,7 +15,8 @@ class Board extends Component {
       playerIndex: -1,
       valid: false,
       comment: '',
-      showToast: false
+      showToast: false,
+      showOffer: false
     }
     sock.init({ gameID: this.props.gameID, index: this.props.playerIndex })
     this.dice = this.dice.bind(this)
@@ -46,9 +47,9 @@ class Board extends Component {
       this.props.dispatch(setPlayers(players))
     })
 
-    // sock.socket.on('receive-comment', (comment) => {
-    //   this.setState({ comment, showToast: true })
-    // })
+    sock.socket.on('offer for you', ({position, socket, offer}) => {
+      this.setState({position, socket, offer, showOffer: true})
+    })
 
     sock.socket.on('update position', (data) => {
       this.dice(data.pos, data.index, false)
@@ -66,7 +67,8 @@ class Board extends Component {
           {
             this.props.players.map((player, index) => {
               if (index !== this.props.playerIndex) {
-                return <Others key={index} playerUsername={player.username} otherPlayerIndex={index} />
+                console.log(player)
+                return <Others key={index} playerUsername={player.username} otherPlayerIndex={index} socket={player.socketID} />
               }
             })
           }

@@ -25,7 +25,10 @@ class OtherPlayers extends Component {
             {this.props.userCashArray[this.props.otherPlayerIndex]}
           </Message>
           {this.props.playerIndex === this.props.index ? <List items={this.props.userPropertiesArray[this.props.otherPlayerIndex].map((e, index) => {
-            return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME} </div>
+            console.log(e)
+            return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME}
+              <Trade playerUsername={this.props.playerUsername} property={e.PropertyObj.NAME} socket={this.props.socket} position={e.Position} />
+            </div>
           })} /> : null
           }
         </Segment>
@@ -52,6 +55,7 @@ OtherPlayers.propTypes = {
   otherPlayerIndex: React.PropTypes.number.isRequired,
   userPropertiesArray: React.PropTypes.array.isRequired,
   index: React.PropTypes.number.isRequired,
-  playerIndex: React.PropTypes.number.isRequired
+  playerIndex: React.PropTypes.number.isRequired,
+  socket: React.PropTypes.string.isRequired
 }
 export default connect(mapStateToProps)(OtherPlayers)

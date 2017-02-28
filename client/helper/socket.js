@@ -33,7 +33,6 @@ module.exports = {
     socket.emit('send chat', data)
   },
   updateProps: (data) => {
-    console.log(data.properties)
     socket.emit('property update', data)
   },
   updateMoney: (data) => {
@@ -47,5 +46,8 @@ module.exports = {
   },
   getUsers: (gameID) => {
     socket.emit('get users', gameID)
+  },
+  trade: (playerSocket, offer, position) => {
+    socket.emit('trade offer', {playerSocket, offer, position})
   }
 }

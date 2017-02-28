@@ -351,6 +351,7 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_BUTTONS:
       return setButtons(state, action)
+
     case SET_MORTGAGE_BUTTON:
       return setMortgage(state, action)
 

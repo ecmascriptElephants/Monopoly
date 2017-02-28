@@ -142,7 +142,7 @@ export function setBuyProperty (flag) {
   return {type: SET_BUY_PROPERTY, flag}
 }
 
-export function setMortgageButton (flag) {
+export function setMorgageButton (flag) {
   return {type: SET_MORTGAGE_BUTTON, flag}
 }
 

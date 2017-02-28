@@ -84,6 +84,7 @@ const setIndex = (state, action) => {
 }
 
 const setPlayerIndex = (state, action) => {
+  console.log('setting up player index in redux')
   const newState = {}
   Object.assign(newState, state, { playerIndex: action.index })
   return newState
@@ -350,7 +351,6 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_BUTTONS:
       return setButtons(state, action)
-
     case SET_MORTGAGE_BUTTON:
       return setMortgage(state, action)
 

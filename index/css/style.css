@@ -130,34 +130,3 @@
   opacity: 0.01;
   transition: opacity 300ms ease-in;
 }
-
-.Yellow {
-  background-color: yellow
-}
-.Brown {
-  background-color: Brown
-}
-
-.DarkBlue {
-  background-color:  darkblue
-}
-
-.LightBlue {
-  background-color: lightblue
-}
-
-.Red {
-  background-color: red
-}
-
-.Orange {
-  background-color: Orange
-}
-
-.Green {
-  background-color: Green
-}
-
-.Pink {
-  background-color: Pink
-}

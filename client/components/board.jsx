@@ -8,6 +8,7 @@ import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import { setUserPositions, setPlayers, setPlayerProps, setIndex, setUserProperties } from './store/actionCreators'
 import Toast from './toast'
+import ToastHistory from './ToastHistory'
 
 class Board extends Component {
   constructor (props) {
@@ -71,7 +72,7 @@ class Board extends Component {
     return (
       <div>
         <Player name={this.props.username} dice={this.dice} piece='Hat' />
-        
+
         <div className='board parent'>
           {
             this.props.players.map((player, index) => {
@@ -218,6 +219,7 @@ class Board extends Component {
           </div>
         </div>
         <Chat name={this.props.username} />
+        <ToastHistory />
       </div>
     )
   }

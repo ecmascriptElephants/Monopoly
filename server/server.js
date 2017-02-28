@@ -84,8 +84,6 @@ passport.use('local-signup', new LocalStrategy({
   }
 ))
 
-
-
 passport.use('local-login', new LocalStrategy({
   usernameField: 'username',
   passwordField: 'password',

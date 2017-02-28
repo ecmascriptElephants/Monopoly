@@ -70,6 +70,7 @@ class Board extends Component {
     console.log('comment', comment)
     this.setState({comment})
   }
+
   showPopup () {
     this.setState({showOffer: false})
   }

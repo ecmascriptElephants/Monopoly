@@ -66,7 +66,7 @@ class Board extends Component {
           {
             this.props.players.map((player, index) => {
               if (index !== this.props.playerIndex) {
-                return <Others key={index} playerUsername={player.username} playerIndex={index} />
+                return <Others key={index} playerUsername={player.username} otherPlayerIndex={index} />
               }
             })
           }

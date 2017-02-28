@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Message, Divider, Container, Icon, Segment, Header, List } from 'semantic-ui-react'
+import Trade from './Trade'
 class OtherPlayers extends Component {
   constructor (props) {
     super(props)
     this.state = {
       userObj: {}
     }
-  }
-
-  componentDidMount () {
-
   }
 
   render () {
@@ -25,11 +22,12 @@ class OtherPlayers extends Component {
           </Header>
           <Divider />
           <Message>
-            {this.props.userCashArray[this.props.playerIndex]}
+            {this.props.userCashArray[this.props.otherPlayerIndex]}
           </Message>
-        {  <List items={this.props.userPropertiesArray[this.props.playerIndex].map((e, index) => {
+          {this.props.playerIndex === this.props.index ? <List items={this.props.userPropertiesArray[this.props.otherPlayerIndex].map((e, index) => {
             return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME} </div>
-          })} />>}
+          })} /> : null
+          }
         </Segment>
       </Container>
     )
@@ -41,7 +39,9 @@ const mapStateToProps = (state) => {
     gameID: state.gameID,
     players: state.players,
     userCashArray: state.userCashArray,
-    userPropertiesArray: state.userPropertiesArray
+    userPropertiesArray: state.userPropertiesArray,
+    index: state.index,
+    playerIndex: state.playerIndex
   }
 }
 
@@ -49,8 +49,9 @@ OtherPlayers.propTypes = {
   gameID: React.PropTypes.number.isRequired,
   playerUsername: React.PropTypes.string.isRequired,
   userCashArray: React.PropTypes.array.isRequired,
-  playerIndex: React.PropTypes.number.isRequired,
+  otherPlayerIndex: React.PropTypes.number.isRequired,
   userPropertiesArray: React.PropTypes.array.isRequired,
-  
+  index: React.PropTypes.number.isRequired,
+  playerIndex: React.PropTypes.number.isRequired
 }
 export default connect(mapStateToProps)(OtherPlayers)

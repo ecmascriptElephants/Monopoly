@@ -2,13 +2,11 @@ import React, { Component } from 'react'
 import Symbol from './Symbol'
 import Player from './player'
 import Chat from './chat'
-// import userNames from './user_order'
-// import rules from '../static/rules.js'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import { setUserPositions, setPlayers, setPlayerProps, setIndex, setUserProperties } from './store/actionCreators'
-import Toast from './toast'
-
+import Others from './OtherPlayers'
+import Offer from './ShowOffer'
 class Board extends Component {
   constructor (props) {
     super(props)
@@ -17,17 +15,13 @@ class Board extends Component {
       playerIndex: -1,
       valid: false,
       comment: '',
-      showToast: false
+      showToast: false,
+      showOffer: false
     }
-    // console.log(this.props.playerIndex)
     sock.init({ gameID: this.props.gameID, index: this.props.playerIndex })
     this.dice = this.dice.bind(this)
+    this.showPopup = this.showPopup.bind(this)
   }
-
-  // componentWillReceiveProps (nextProps) {
-  //   const index = nextProps.index
-  //   this.dice(nextProps.userPosArray[index], index)
-  // }
 
   dice (value, index, flag) {
     const location = [
@@ -54,9 +48,9 @@ class Board extends Component {
       this.props.dispatch(setPlayers(players))
     })
 
-    // sock.socket.on('receive-comment', (comment) => {
-    //   this.setState({ comment, showToast: true })
-    // })
+    sock.socket.on('offer for you', ({position, socket, offer, offerIndex}) => {
+      this.setState({position, socket, offer, offerIndex, showOffer: true})
+    })
 
     sock.socket.on('update position', (data) => {
       this.dice(data.pos, data.index, false)
@@ -67,11 +61,25 @@ class Board extends Component {
       this.props.dispatch(setUserProperties(data.properties, data.index))
     })
   }
+  showPopup () {
+    this.setState({showOffer: false})
+  }
   render () {
     return (
       <div>
+        {
+        this.state.showOffer ? <Offer open={this.state.showOffer} offer={this.state.offer} setShowOffer={this.showPopup} position={this.state.position} offerIndex={this.state.offerIndex} /> : null
+      }
+        <div className={'other-players'}>
+          {
+            this.props.players.map((player, index) => {
+              if (index !== this.props.playerIndex) {
+                return <Others key={index} playerUsername={player.username} otherPlayerIndex={index} socket={player.socketID} />
+              }
+            })
+          }
+        </div>
         <Player name={this.props.username} dice={this.dice} piece='Hat' />
-        
         <div className='board parent'>
           {
             this.props.players.map((player, index) => {

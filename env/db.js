@@ -3,7 +3,7 @@ module.exports = {
   connection: {
     host: 'localhost',
     user: 'root',
-    database: 'monopoly',
-    password: '1234'
+    password: '1234',
+    database: 'monopoly'
   }
 }

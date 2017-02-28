@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Toaster from './toast'
 import {Header, Container, Segment, Icon, Divider} from 'semantic-ui-react'
+import sock from '../helper/socket'
 
 class ToastHistory extends Component {
   constructor (props) {
@@ -9,20 +10,18 @@ class ToastHistory extends Component {
     this.state = {
       comments: []
     }
-    this.handleMessage = this.handleMessage.bind(this)
   }
-
-  handleMessage(message) {
-    let comments = this.state.comments
-    comments.push(message)
-    this.setState({comments: comments})
-    comments = this.state.comments.map((msg, i) => {
-      return <li key={i}>{msg}</li>
+  componentDidMount () {
+    sock.socket.on('receive-comment', (comment) => {
+      let comments = this.state.comments
+      comments.push(comment)
+      this.setState({comments: comments})
     })
   }
-
   render () {
-
+    let comments = this.state.comments.map((comment, i) => {
+      return <li key={i}>{comment}</li>
+    })
     return (
       <Container className='toastHistory'>
       <Segment raised vertical compact className='content'>
@@ -31,6 +30,7 @@ class ToastHistory extends Component {
       </Header>
       <Divider />
       <div>
+      {comments}
       </div>
       </Segment>
       </Container>

@@ -95,6 +95,7 @@ class DiceRoll extends Component {
     sock.socket.on('receive-comment', (comment) => {
       this.setState({ comment, showToast: true })
     })
+
   }
 
   handleDiceRollButtonClick () {

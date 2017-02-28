@@ -116,7 +116,8 @@
 }
 
 .content {
-  width: 100%!important;
+  float: left;
+  width: 50%!important;
 }
 
 .button-enter {

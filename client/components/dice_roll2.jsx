@@ -95,10 +95,10 @@ class DiceRoll extends Component {
 
   handleDiceRollButtonClick () {
     this.props.dispatch(setButtons())
-    // const die1 = 1 + Math.floor((6 * Math.random()))
-    // const die2 = 1 + Math.floor((6 * Math.random()))
-    const die1 = 3
-    const die2 = 4
+    const die1 = 1 + Math.floor((6 * Math.random()))
+    const die2 = 1 + Math.floor((6 * Math.random()))
+    // const die1 = 3
+    // const die2 = 4
     if (this.props.jailPositions[this.props.index]) {
       if (die1 === die2) {
         let updatedJailPositionsArray = [...this.props.jailPositions]

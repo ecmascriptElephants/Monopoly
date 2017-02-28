@@ -7,7 +7,6 @@ import {
 const Mortgage = (props) => {
   const mortgageProperty = (propertyName) => {
     let tempProperties = [...props.userPropertiesArray[props.playerIndex]]
-    console.log(tempProperties)
     let mortgageAmount = 0
     tempProperties.forEach((property) => {
       if (property.PropertyObj.NAME === props.propertyName) {

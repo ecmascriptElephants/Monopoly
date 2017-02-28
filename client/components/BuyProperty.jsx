@@ -56,12 +56,10 @@ const BuyProperty = (props) => {
       })
     } else {
       let indexes = []
-      console.log(propertyGroup)
       let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property, index) => {
         if (property.PropertyObj.PROPERTY_GROUP === propertyGroup) {
           indexes.push(index)
           numberOfPropertiesInGroup += 1
-          console.log(numberOfPropertiesInGroup)
         }
         return numberOfPropertiesInGroup
       }, 0)

@@ -162,7 +162,6 @@ class DiceRoll extends Component {
   handlePayRentButtonClick () {
     let currentUser = this.props.playerIndex
     let propertyOwner = this.state.propertyOwner
-    console.log('rent', this.state.rentOwed)
     let rentOwed = this.state.rentOwed
     let updatedUserMoney = this.props.userCashArray[currentUser]
     let doubles = this.state.doubles
@@ -415,7 +414,6 @@ class DiceRoll extends Component {
           <div className='CurrentUserProperties'>
             <div>
               Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {
-                console.log(e)
                 return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME}
                   {e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} />
                     : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} />}

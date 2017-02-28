@@ -10,7 +10,6 @@ const Cards = (props) => {
     let card = props.card ? rules.Community_Chest[cardID] : rules.Chance[cardID]
     if (card.Position) {
       props.dispatch(setUserPositions(card.Position, props.index))
-      console.log('in cards.jsx', props.userPosArray)
       // todo check for passing GO
     } else if (card.Cash) {
       props.dispatch(setUserMoney(props.userMoneyArray[props.index] + card.Cash, props.index))

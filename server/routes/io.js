@@ -114,7 +114,6 @@ module.exports = (io) => {
     })
 
     socket.on('money update', (data) => {
-      console.log(data)
       socket.broadcast.to(data.gameID).emit('update money', { money: data.money, index: data.index })
     })
 
@@ -139,9 +138,6 @@ module.exports = (io) => {
 
     socket.on('comment', (data) => {
       socket.broadcast.to(data.gameID).emit('receive-comment', data.comment)
-      socket.on('get users', (data) => {
-        console.log(game[data.gameID].playerInfo)
-      })
     })
 
     socket.on('trade offer', (data) => {

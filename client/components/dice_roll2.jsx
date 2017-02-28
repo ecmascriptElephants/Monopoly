@@ -51,7 +51,9 @@ class DiceRoll extends Component {
       jailRollDoublesButtonVisible: false,
       showToast: false,
       numOfPlayer: -1,
-      mortgageButtonVisible: true
+      goFlag: false,
+      mortgageButtonVisible: true,
+      doubleRailRoadRentMultiplier: false
     }
     this.props.dispatch(setButtons())
     this.setStates = this.setStates.bind(this)
@@ -73,7 +75,9 @@ class DiceRoll extends Component {
           numOfPlayers: data.numOfPlayers,
           comment: 'It is your turn',
           mortgageButtonVisible: true,
-          showToast: true
+          showToast: true,
+          doubleRailRoadRentMultiplier: false,
+          goFlag: false
         })
       } else {
         this.props.dispatch(setEndTurn(true))
@@ -98,8 +102,8 @@ class DiceRoll extends Component {
     this.props.dispatch(setButtons())
     const die1 = 1 + Math.floor((6 * Math.random()))
     const die2 = 1 + Math.floor((6 * Math.random()))
-    // const die1 = 3
-    // const die2 = 4
+    // const die1 = 4
+    // const die2 = 3
     if (this.props.jailPositions[this.props.index]) {
       if (die1 === die2) {
         let updatedJailPositionsArray = [...this.props.jailPositions]
@@ -123,6 +127,7 @@ class DiceRoll extends Component {
       let doubles = 0
       if (die1 === die2) {
         doubles = this.state.doubles + 1
+        console.log('in diceRoll2jsx handleRollDice  doubles = ', doubles)
         let newComment = comments.rollDoubles(this.props.username, die1 + die2)
         this.setState({comment: newComment, showToast: true, dice: [die1, die2]})
         sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
@@ -156,6 +161,7 @@ class DiceRoll extends Component {
   }
 
   setStates (obj) {
+    console.log('setStates obj = ', obj)
     this.setState(obj)
   }
 
@@ -317,7 +323,7 @@ class DiceRoll extends Component {
           </div>
           <div className='buttons_div'>
             <div className='dice-roll-btn_div'>
-              {(this.props.diceRollButton && !this.props.payRent && !this.props.jailPositions[this.props.index])
+              {(this.props.diceRollButton && !this.props.payRent && !this.props.jailPositions[this.props.index] && !this.props.setGoButton)
                 ? <div>
                   <div>{this.props.index === -1 ? null : `${this.props.username}, it is your turn. Roll the dice!`}</div>
                   <Button secondary fluid onClick={() => { this.handleDiceRollButtonClick() }}>Roll Dice</Button>
@@ -332,7 +338,9 @@ class DiceRoll extends Component {
                     doubles={this.state.doubles}
                     diceSum={this.state.diceSum}
                     dice={this.props.dice}
+                    doubleRailRoadRentMultiplier={this.state.doubleRailRoadRentMultiplier}
                     userNames={this.state.userNames}
+                    goFlag={this.state.goFlag}
                     propertyIsOwned={this.propertyIsOwned}
                   />
                 </div> : null
@@ -344,18 +352,19 @@ class DiceRoll extends Component {
                 dice={this.props.dice}
                 doubles={this.state.doubles}
                 number={this.state.numOfPlayers}
+                doubleRailRoadRentMultiplier={this.state.doubleRailRoadRentMultiplier}
                 setState={this.setStates}
               /> : null
             }
             <div className='buy-property-btn_div'>
-              {(this.props.buyPropertyButton && !this.props.setGoButton)
+              {(this.props.buyPropertyButton && (!this.props.setGoButton || this.state.goFlag))
                 ? <div>
                   <BuyProperty doubles={this.state.doubles} setState={this.setStates} userNames={this.state.userNames} diceSum={this.state.diceSum} />
                 </div> : null
               }
             </div>
             <div className='pass-go-btn_div'>
-              {this.props.setGoButton
+              {(this.props.setGoButton && !this.state.goFlag)
                 ? <div>
                   <Button secondary fluid onClick={() => { this.handleGoButtonClick() }}>  Collect $200. </Button>
                 </div> : null
@@ -376,7 +385,7 @@ class DiceRoll extends Component {
               }
             </div>
             <div className='pay-rent-btn_div'>
-              {(this.props.payRent && !this.props.setGoButton)
+              {(this.props.payRent && (!this.props.setGoButton || this.state.goFlag))
                 ? <div>
                   <div className='rent-comment'>
                     {this.state.payRentComment}
@@ -386,7 +395,7 @@ class DiceRoll extends Component {
               }
             </div>
             <div className='end-turn-btn_div'>
-              {(this.props.endTurnButton && !this.props.luxuryButton && !this.props.setGoButton && !this.props.incomeTaxButton && !this.props.payRent && !this.props.cardButton)
+              {(this.props.endTurnButton && !this.props.luxuryButton && (!this.props.setGoButton || this.state.goFlag) && !this.props.incomeTaxButton && !this.props.payRent && !this.props.cardButton)
                 ? <div>
                   <Button secondary fluid onClick={() => { this.handleEndTurnButtonClick() }}>  End Turn. </Button>
                 </div> : null
@@ -454,15 +463,13 @@ class DiceRoll extends Component {
             <div>
               Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.playerIndex].map((e, index) => {
                 return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME}
-                  {(this.state.mortgageButtonVisible) ? <span>{e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} />
-                    : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} />}
+                  {(this.state.mortgageButtonVisible) ? <span>{e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} setState={this.setStates} />
+                    : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} setState={this.setStates} />}
                   {e.Monopoly ? <BuyHouse propertyPosition={e.Position}
                     propertyGroup={e.PropertyObj.PROPERTY_GROUP}
                     reduceFunds={this.reduceFunds} houses={e.Houses}
-                    numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} /> : null}
-                  {e.Houses > 0 ? <SellHouse propertyPosition={e.Position}
-                    increaseFunds={this.increaseFunds} houses={e.Houses}
-                    /> : null}</span> : null} </div>
+                    numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} setState={this.setStates} /> : null}
+                  {e.Houses > 0 ? <SellHouse propertyPosition={e.Position} increaseFunds={this.increaseFunds} houses={e.Houses} setState={this.setStates} /> : null}</span> : null} </div>
               })} />}
             </div>
           </div>

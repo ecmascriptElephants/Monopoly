@@ -45,6 +45,8 @@ const mapStateToProps = (state) => {
   return {
     userPropertiesArray: state.userPropertiesArray,
     playerIndex: state.playerIndex,
+    gameID: state.gameID,
+    username: state.username,
     userCashArray: state.userCashArray
   }
 }
@@ -53,7 +55,10 @@ BuyHouse.propTypes = {
   userPropertiesArray: React.PropTypes.array.isRequired,
   propertyPosition: React.PropTypes.number.isRequired,
   playerIndex: React.PropTypes.number.isRequired,
+  gameID: React.PropTypes.number.isRequired,
+  username: React.PropTypes.string.isRequired,
   reduceFunds: React.PropTypes.func.isRequired,
+  setState: React.PropTypes.func.isRequired,
   propertyGroup: React.PropTypes.string.isRequired
 }
 export default connect(mapStateToProps)(BuyHouse)

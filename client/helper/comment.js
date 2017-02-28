@@ -112,5 +112,18 @@ module.exports = {
 
   squareTypeLuxuryTax: (name) => {
     return `${name} landed on Luxury Tax, Pay $100.`
+  },
+
+  mortgageProperty: (name, propertyName, amount) => {
+    return `${name} mortgaged ${propertyName} for $${amount}.`
+  },
+
+  unmortgageProperty: (name, propertyName, amount) => {
+    return `${name} unmortgaged ${propertyName} for $${amount}.`
+  },
+
+  unmortgagePropertyInsufficientFunds: (name, propertyName, amount, money) => {
+    return `${name} needs $${amount} in order to unmortgage ${propertyName}, but only has $${money}.`
   }
+
 }

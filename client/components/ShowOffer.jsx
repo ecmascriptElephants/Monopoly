@@ -25,7 +25,6 @@ class ShowOffer extends Component {
     const soldProperty = ownerPropertyArray.splice(this.props.position, 1).pop()
     this.props.dispatch(setUserProperties(ownerPropertyArray, this.props.playerIndex))
     sock.updateProps({ gameID: this.props.gameID, properties: ownerPropertyArray, index: this.props.playerIndex })
-    console.log(soldProperty)
     buyerPropertyArray.push(soldProperty)
     this.props.dispatch(setUserProperties(buyerPropertyArray, this.props.offerIndex))
     sock.updateProps({ gameID: this.props.gameID, properties: buyerPropertyArray, index: this.props.offerIndex })

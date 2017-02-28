@@ -31,6 +31,7 @@ import UnMortgage from './UnMortgage'
 import BuyHouse from './BuyHouse'
 import SellHouse from './SellHouse'
 import Bankrupt from './Bankrupt'
+import ToastHistory from './ToastHistory'
 
 class DiceRoll extends Component {
   constructor (props) {
@@ -470,6 +471,7 @@ class DiceRoll extends Component {
           {this.state.comment}
         </div>
         <Toast message={this.state.comment} show={this.state.showToast} />
+        <ToastHistory message={this.state.comment} />
       </div>
     )
   }
@@ -498,7 +500,8 @@ const mapStateToProps = (state) => {
     payFineButton: state.payFineButton,
     jailRollDiceButton: state.jailRollDiceButton,
     buyPropertyButton: state.buyPropertyButton,
-    freeCardButton: state.freeCardButton
+    freeCardButton: state.freeCardButton,
+    comment: state.comment
   }
 }
 
@@ -526,7 +529,10 @@ DiceRoll.propTypes = {
   payFineButton: React.PropTypes.bool.isRequired,
   jailRollDiceButton: React.PropTypes.bool.isRequired,
   freeCardButton: React.PropTypes.bool.isRequired,
-  buyPropertyButton: React.PropTypes.bool.isRequired
+  buyPropertyButton: React.PropTypes.bool.isRequired,
+  setComment: React.PropTypes.func.isRequired,
+  comment: React.PropTypes.string.isRequired
+
 }
 
 export default connect(mapStateToProps)(DiceRoll)

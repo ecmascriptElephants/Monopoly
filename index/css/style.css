@@ -161,3 +161,10 @@
 .Pink {
   background-color: Pink
 }
+
+.toastHistory {
+  position: fixed;
+  right: 100px;
+  bottom: 300px;
+  width: 30%!important;
+}

@@ -8,6 +8,7 @@ import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import { setUserPositions, setPlayers, setPlayerProps, setIndex, setUserProperties } from './store/actionCreators'
 import Toast from './toast'
+import ToastHistory from './ToastHistory'
 
 class Board extends Component {
   constructor (props) {
@@ -16,12 +17,12 @@ class Board extends Component {
       messages: [],
       playerIndex: -1,
       valid: false,
-      comment: '',
       showToast: false
     }
     // console.log(this.props.playerIndex)
     sock.init({ gameID: this.props.gameID, index: this.props.playerIndex })
     this.dice = this.dice.bind(this)
+    this.setComment = this.setComment.bind(this)
   }
 
   // componentWillReceiveProps (nextProps) {
@@ -67,11 +68,15 @@ class Board extends Component {
       this.props.dispatch(setUserProperties(data.properties, data.index))
     })
   }
+  setComment (comment) {
+    console.log('comment', comment)
+    this.setState({comment})
+  }
   render () {
     return (
       <div>
-        <Player name={this.props.username} dice={this.dice} piece='Hat' />
-        
+        <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment}/>
+
         <div className='board parent'>
           {
             this.props.players.map((player, index) => {

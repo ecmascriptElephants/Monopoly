@@ -88,7 +88,6 @@ class DiceRoll extends Component {
       }
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: `It is ${this.props.username}'s turn.` })
     })
-
     sock.socket.on('update money', (data) => {
       this.props.dispatch(setCash(data.money, data.index))
     })

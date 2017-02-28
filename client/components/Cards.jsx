@@ -16,8 +16,8 @@ const Cards = (props) => {
   const handleClick = () => {
     console.log('in cards.jsx cards function has been invoked!!!')
     let numberOfCards = 16
-    let cardID = Math.floor((numberOfCards * Math.random()))
-    // let cardID = 2
+    // let cardID = Math.floor((numberOfCards * Math.random()))
+    let cardID = 8
     let card = props.card ? rules.Community_Chest[cardID] : rules.Chance[cardID]
     console.log('in cards.jsx card description = ', card.Description)
     if (card.Position !== undefined) {
@@ -25,7 +25,6 @@ const Cards = (props) => {
       let newComment = card.Description
       props.setState({comment: newComment, showToast: true})
       sock.socket.emit('comment', {gameID: props.gameID, comment: newComment})
-
       let diceSum = 0
       if (card.Position - props.userPosArray[props.index] < 0) {
         diceSum = 40 + card.Position - props.userPosArray[props.index]
@@ -33,13 +32,8 @@ const Cards = (props) => {
         diceSum = card.Position - props.userPosArray[props.index]
       }
       props.setState({diceSum: diceSum})
-
       props.dispatch(setMoveToken(true))
       props.dispatch(setEndTurn(false))
-      // props.dispatch(setUserPositions(card.Position, props.index))
-      // props.dice(card.Position, props.index, true)
-      // console.log('in cards.jsx userPosArray = ', props.userPosArray)
-      // todo check for passing GO; check for doubles
     } else if (card.Cash) {
       console.log('card.Cash = ', card.Cash)
       props.dispatch(setCash(card.Cash, props.index))
@@ -47,7 +41,7 @@ const Cards = (props) => {
       props.setState({comment: newComment, showToast: true})
       sock.socket.emit('comment', {gameID: props.gameID, comment: newComment})
       props.dispatch(setEndTurn(!props.doubles))
-      // props.dispatch(setDiceRoll(props.doubles))
+      props.dispatch(setDiceRoll(props.doubles))
       sock.updateMoney({gameID: props.gameID, money: card.Cash, index: props.index})
     } else if (card.Special) {
       if (card.Special === 'COLLECT_50_EVERYONE') {
@@ -66,7 +60,7 @@ const Cards = (props) => {
         let newComment = card.Description
         props.setState({comment: newComment, showToast: true})
         sock.socket.emit('comment', {gameID: props.gameID, comment: newComment})
-        props.dispatch(setUserPositions(pos, props.index))
+        props.dispatch(setUserPositions(10, props.index))
         props.dice(10, props.index, true)
         props.dispatch(setUserJail(1, props.index))
         props.dispatch(setEndTurn(true))
@@ -82,21 +76,12 @@ const Cards = (props) => {
         // props.dispatch(setUserPositions(pos, props.index))
         props.dispatch(setEndTurn(!props.doubles))
       } else if (card.Special === 'POSITION_3') {
-        console.log('in cards.jsx card.special = ', card.special)
+        console.log('in cards.jsx card.special = ', card.Special)
         let newComment = card.Description
         props.setState({comment: newComment, showToast: true})
         sock.socket.emit('comment', {gameID: props.gameID, comment: newComment})
-        // let pos = 0
-        // if (props.userPosArray[props.index] === 7) {
-        //   pos = 4
-        // } else if (props.userPosArray[props.index] === 22) {
-        //   pos = 19
-        // } else if (props.userPosArray[props.index] === 36){
-        //   pos = 33
-        // }
         let diceSum = -3
-
-        props.setState({diceSum: diceSum})
+        props.setState({diceSum: diceSum, goFlag: true})
         props.dispatch(setMoveToken(true))
         props.dispatch(setEndTurn(false))
       } else if (card.Special === 'UTILITY') {
@@ -113,9 +98,17 @@ const Cards = (props) => {
         } else if (props.userPosArray[props.index] === 36){
           pos = 28
         }
-        props.dispatch(setUserPositions(pos, props.index))
-        props.dice(card.Position, props.index, true)
-        props.dispatch(setEndTurn(!props.doubles))
+
+        let diceSum = 0
+        if (card.Position - props.userPosArray[props.index] < 0) {
+          diceSum = 40 + pos - props.userPosArray[props.index]
+        } else {
+          diceSum = pos - props.userPosArray[props.index]
+        }
+        props.setState({diceSum: diceSum, specialRollDice})
+        props.dispatch(setMoveToken(true))
+        props.dispatch(setEndTurn(false))
+
       } else if (card.Special === 'PAY_50_EVERYONE') {
         // let pos = 0
         // if (props.userPosArray[props.index] === 7) {
@@ -134,33 +127,41 @@ const Cards = (props) => {
         sock.socket.emit('comment', {gameID: props.gameID, comment: newComment})
         let pos = 0
         if (props.userPosArray[props.index] === 7) {
-          pos = 15
+          pos = 5
         } else if (props.userPosArray[props.index] === 22) {
           pos = 25
         } else if (props.userPosArray[props.index] === 36) {
-          pos = 5
+          pos = 35
         }
-        props.dispatch(setUserPositions(pos, props.index))
-        props.dice(pos, props.index, true)
-        props.dispatch(setEndTurn(!props.doubles))
+        let diceSum = 0
+        if (pos - props.userPosArray[props.index] < 0) {
+          diceSum = 40 + pos - props.userPosArray[props.index]
+        } else {
+          diceSum = pos - props.userPosArray[props.index]
+        }
+        props.setState({diceSum: diceSum, doubleRailRoadRentMultiplier: true})
+        props.dispatch(setMoveToken(true))
+        props.dispatch(setEndTurn(false))
       }
     } else if (card.House) {
       console.log('in cards.jsx card.description = ', card.Description)
       let amountOwed = 0
-      userPropArray = [...props.userPropertiesArray[props.index]]
+      let userPropArray = [...props.userPropertiesArray[props.index]]
       userPropArray.forEach((prop) => {
         if (prop.Houses === 5) {
-          amountOwed += 115
+          amountOwed += card.Hotel
         } else {
-          amountOwed += prop.Houses * 40
+          amountOwed += prop.Houses * card.House
         }
       })
       console.log('houses & hotels amount owed = ', amountOwed)
-      props.dispatch(setCash(-amountOwed, props.index))
-      let newComment = card.Description + `${props.username} paid $${amountOwed}`
+      props.dispatch(setCash(amountOwed, props.index))
+      let newComment = card.Description
       props.setState({comment: newComment, showToast: true})
       sock.socket.emit('comment', {gameID: props.gameID, comment: newComment})
       props.dispatch(setEndTurn(!props.doubles))
+      props.dispatch(setDiceRoll(props.doubles))
+      sock.updateMoney({gameID: props.gameID, money: card.Cash, index: props.index})
     }
     props.button()
   }
@@ -177,8 +178,7 @@ const mapStateToProps = (state) => {
     index: state.index,
     jailPositions: state.jailPositions,
     userCashArray: state.userCashArray,
-    userPropertiesArray: state.userPropertiesArray,
-    doubles: state.doubles
+    userPropertiesArray: state.userPropertiesArray
   }
 }
 
@@ -192,10 +192,12 @@ Cards.propTypes = {
   index: React.PropTypes.number.isRequired,
   userCashArray: React.PropTypes.array.isRequired,
   card: React.PropTypes.bool.isRequired,
+  goFlag: React.PropTypes.bool.isRequired,
   userPropertiesArray: React.PropTypes.array.isRequired,
   setState: React.PropTypes.func.isRequired,
   button: React.PropTypes.func.isRequired,
   number: React.PropTypes.number.isRequired,
+  doubleRailRoadRentMultiplier: React.PropTypes.bool.isRequired,
   doubles: React.PropTypes.number.isRequired
 }
 

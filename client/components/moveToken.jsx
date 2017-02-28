@@ -30,7 +30,7 @@ const MoveToken = (props) => {
   }
 
   const handleLandOnOrPassGo = (oldUserPosition, userPosition, jail) => {
-    if (!jail && userPosition < oldUserPosition) {
+    if (!jail && userPosition < oldUserPosition && !props.goFlag) {
       if (userPosition !== 0) {
         let newComment = comments.passGo(props.username)
         props.setState({ comment: newComment, showToast: true })
@@ -46,6 +46,7 @@ const MoveToken = (props) => {
   const handleMoveToken = () => {
     const doubles = props.doubles
     const diceSum = props.diceSum
+    console.log('movetokenjsx handleMoveToken props.goFlag = ', props.goFlag)
     let jail = false
     let oldUserPosition = props.userPosArray[props.index]
     let userPosition = (props.userPosArray[props.index] + diceSum) % 40
@@ -58,7 +59,7 @@ const MoveToken = (props) => {
       props.dice(10, props.index, true)
       props.dispatch(setMoveToken(false))
       props.dispatch(setEndTurn(true))
-      props.dispatch(setUserJail(props.index, 1))
+      props.dispatch(setUserJail(1, props.index))
       if (doubles === 3) {
         let newComment = comments.tripleDoubles(props.username)
         props.setState({ comment: newComment, showToast: true })
@@ -127,6 +128,9 @@ const MoveToken = (props) => {
               })
               console.log('movetoken line 120 landed on an owned station rentOwed = ', rentOwed, diceSum)
               rentOwed = prop.PropertyObj.RENT[stationCount]
+              if (props.doubleRailRoadRentMultiplier) {
+                rentOwed *= 2
+              }
             } else {
               console.log('movetoken line 120 landed on an owned property rentOwed = ', rentOwed, diceSum)
               rentOwed = prop.PropertyObj.RENT[prop.Houses]
@@ -219,6 +223,8 @@ MoveToken.propTypes = {
   userPosArray: React.PropTypes.array.isRequired,
   jailPositions: React.PropTypes.array.isRequired,
   index: React.PropTypes.number.isRequired,
+  goFlag: React.PropTypes.bool.isRequired,
+  doubleRailRoadRentMultiplier: React.PropTypes.bool.isRequired,
   userPropertiesArray: React.PropTypes.array.isRequired,
   userCashArray: React.PropTypes.array.isRequired,
   setState: React.PropTypes.func.isRequired,

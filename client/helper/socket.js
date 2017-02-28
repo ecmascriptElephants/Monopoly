@@ -43,6 +43,9 @@ module.exports = {
     socket.emit('load game', gameID)
   },
   comment: (gameID, string) => {
-    socket.emit(gameID, 'comment', string)
+    socket.emit('comment', {gameID, string})
+  },
+  getUsers: (gameID) => {
+    socket.emit('get users', gameID)
   }
 }

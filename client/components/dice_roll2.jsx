@@ -10,6 +10,7 @@ import {
   setCardButton,
   setEndTurn,
   setLuxury,
+  setBuyProperty,
   setGoButton,
   setJailRoll,
   setPayFine,
@@ -48,7 +49,7 @@ class DiceRoll extends Component {
       isBankruptArray: [false, false, false, false, false, false, false, false],
       jailRollDoublesButtonVisible: false,
       showToast: false,
-      numOfPlayer: -1
+      numOfPlayer: -1,
       mortgageButtonVisible: true
     }
     this.props.dispatch(setButtons())
@@ -132,6 +133,8 @@ class DiceRoll extends Component {
       }
       this.props.dispatch(setDiceRoll(false))
       this.props.dispatch(setMoveToken(true))
+      this.props.dispatch(setBuyProperty(false))
+
       this.setState({
         diceSum: die1 + die2,
         doubles: doubles,
@@ -193,7 +196,7 @@ class DiceRoll extends Component {
       this.setState({comment: newComment, showToast: true})
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
     } else {
-      let newComment = comments.rentPaid(this.props.username, this.state.userNames[propertyOwner], rentOwed)
+      let newComment = comments.rentPaid(this.props.username, 'the property owner', rentOwed)
       this.setState({comment: newComment, showToast: true})
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
       this.props.dispatch(setCash(-rentOwed, currentUser))
@@ -222,7 +225,7 @@ class DiceRoll extends Component {
       this.props.dispatch(setCash(-200, this.props.index))
       sock.updateMoney({
         gameID: this.props.gameID,
-        money: updatedUserMoneyArray[this.props.index],
+        money: -200,
         index: this.props.index
       })
       this.props.dispatch(setIncomeTax(false))
@@ -247,7 +250,7 @@ class DiceRoll extends Component {
       this.props.dispatch(setCash(-100, this.props.index))
       sock.updateMoney({
         gameID: this.props.gameID,
-        money: updatedUserMoneyArray[this.props.index],
+        money: -100,
         index: this.props.index
       })
       this.props.dispatch(setLuxury(false))
@@ -382,7 +385,7 @@ class DiceRoll extends Component {
               }
             </div>
             <div className='end-turn-btn_div'>
-              {(this.props.endTurnButton && !this.props.luxuryButton && !this.props.setGoButton && !this.props.incomeTaxButton && !this.props.payRent)
+              {(this.props.endTurnButton && !this.props.luxuryButton && !this.props.setGoButton && !this.props.incomeTaxButton && !this.props.payRent && !this.props.cardButton)
                 ? <div>
                   <Button secondary fluid onClick={() => { this.handleEndTurnButtonClick() }}>  End Turn. </Button>
                 </div> : null
@@ -448,9 +451,9 @@ class DiceRoll extends Component {
           </div>
           <div className='CurrentUserProperties'>
             <div>
-              Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {
+              Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.playerIndex].map((e, index) => {
                 return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME}
-                  {e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} />
+                  {(this.state.mortgageButtonVisible) ? <span>{e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} />
                     : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} />}
                   {e.Monopoly ? <BuyHouse propertyPosition={e.Position}
                     propertyGroup={e.PropertyObj.PROPERTY_GROUP}
@@ -458,7 +461,7 @@ class DiceRoll extends Component {
                     numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} /> : null}
                   {e.Houses > 0 ? <SellHouse propertyPosition={e.Position}
                     increaseFunds={this.increaseFunds} houses={e.Houses}
-                  /> : null} </div>
+                    /> : null}</span> : null} </div>
               })} />}
             </div>
           </div>

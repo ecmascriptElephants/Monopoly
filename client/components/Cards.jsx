@@ -9,13 +9,15 @@ import {
   setCash,
   setUserJail,
   setMoveToken,
-  setEndTurn
+  setEndTurn,
+  setDiceRoll
 } from './store/actionCreators'
 const Cards = (props) => {
   const handleClick = () => {
     console.log('in cards.jsx cards function has been invoked!!!')
     let numberOfCards = 16
-    let cardID = Math.floor((numberOfCards * Math.random()))
+    // let cardID = Math.floor((numberOfCards * Math.random()))
+    let cardID = 2
     let card = props.card ? rules.Community_Chest[cardID] : rules.Chance[cardID]
     console.log('in cards.jsx card description = ', card.Description)
     if (card.Position !== undefined) {
@@ -37,7 +39,7 @@ const Cards = (props) => {
       // props.dispatch(setUserPositions(card.Position, props.index))
       // props.dice(card.Position, props.index, true)
       // console.log('in cards.jsx userPosArray = ', props.userPosArray)
-      // todo check for passing GO
+      // todo check for passing GO; check for doubles
     } else if (card.Cash) {
       console.log('card.Cash = ', card.Cash)
       props.dispatch(setCash(card.Cash, props.index))
@@ -45,6 +47,8 @@ const Cards = (props) => {
       props.setState({comment: newComment, showToast: true})
       sock.socket.emit('comment', {gameID: props.gameID, comment: newComment})
       props.dispatch(setEndTurn(!props.doubles))
+      // props.dispatch(setDiceRoll(props.doubles))
+      sock.updateMoney({gameID: props.gameID, money: card.Cash, index: props.index})
     } else if (card.Special) {
       if (card.Special === 'COLLECT_50_EVERYONE') {
         // let pos = 0
@@ -82,17 +86,19 @@ const Cards = (props) => {
         let newComment = card.Description
         props.setState({comment: newComment, showToast: true})
         sock.socket.emit('comment', {gameID: props.gameID, comment: newComment})
-        let pos = 0
-        if (props.userPosArray[props.index] === 7) {
-          pos = 4
-        } else if (props.userPosArray[props.index] === 22) {
-          pos = 19
-        } else if (props.userPosArray[props.index] === 36){
-          pos = 33
-        }
-        props.dispatch(setUserPositions(pos, props.index))
-        props.dice(pos, props.index, true)
-        props.dispatch(setEndTurn(!props.doubles))
+        // let pos = 0
+        // if (props.userPosArray[props.index] === 7) {
+        //   pos = 4
+        // } else if (props.userPosArray[props.index] === 22) {
+        //   pos = 19
+        // } else if (props.userPosArray[props.index] === 36){
+        //   pos = 33
+        // }
+        let diceSum = -3
+
+        props.setState({diceSum: diceSum})
+        props.dispatch(setMoveToken(true))
+        props.dispatch(setEndTurn(false))
       } else if (card.Special === 'UTILITY') {
         console.log('in cards.jsx card.special = ', card.special)
         let newComment = card.Description

@@ -415,6 +415,7 @@ class DiceRoll extends Component {
           <div className='CurrentUserProperties'>
             <div>
               Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {
+                console.log(e)
                 return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME}
                   {e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} />
                     : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} />}

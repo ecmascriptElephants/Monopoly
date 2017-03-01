@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {List, Container, Segment, Divider} from 'semantic-ui-react'
+import {List, Segment, Divider} from 'semantic-ui-react'
 import sock from '../helper/socket'
 
 class Chat extends Component {
@@ -34,7 +34,7 @@ class Chat extends Component {
       return <li key={i}>{msg.sender}: {msg.message}</li>
     })
     return (
-      <Segment raised vertical compact className='content'>
+      <Segment vertical compact className='content'>
         <Divider />
         <List items={messages} />
         <input id='chatBox' name='chatBox' type='text' />

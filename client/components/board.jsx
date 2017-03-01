@@ -76,7 +76,7 @@ class Board extends Component {
   render () {
     return (
       <div>
-        <div className='left'>
+        <div className='left'> <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment} />
           {
             this.state.showOffer ? <Offer open={this.state.showOffer} offer={this.state.offer} setShowOffer={this.showPopup} position={this.state.position} offerIndex={this.state.offerIndex} /> : null
           }
@@ -91,7 +91,6 @@ class Board extends Component {
               }
             </Card.Group>
           </div>
-          <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment} />
         </div>
         <div className='right'>
           <div className='board parent'>

@@ -152,7 +152,6 @@ class Player extends Component {
             {this.props.userCashArray[this.props.playerIndex]}
           </Message>
           <DiceRoll dice={this.props.dice} setComment={this.props.comment} />
-          <div>In player {this.props.comment}</div>
           <Chat name={this.props.username} />
         </Segment>
       </Container>
@@ -167,6 +166,7 @@ const mapStateToProps = (state) => {
   }
 }
 Player.propTypes = {
+  username: React.PropTypes.string.isRequired,
   name: React.PropTypes.string.isRequired,
   piece: React.PropTypes.string.isRequired,
   dice: React.PropTypes.func.isRequired,

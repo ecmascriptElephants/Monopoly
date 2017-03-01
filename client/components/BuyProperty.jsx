@@ -11,7 +11,7 @@ import {
 } from '../components/store/actionCreators'
 import { Button } from 'semantic-ui-react'
 import comments from '../helper/comment'
-import Bankrupt from './Bankrupt'
+// import Bankrupt from './Bankrupt'
 
 const BuyProperty = (props) => {
   const checkMonopoly = (propertyGroup, numberNeeded) => {

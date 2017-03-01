@@ -9,7 +9,6 @@ import {
 } from './store/actionCreators'
 
 const Bankrupt = (props) => {
-
   const handleBankrupt = () => {
     console.log('props', props)
     let tempProperties = [...props.userPropertiesArray[props.playerIndex]]

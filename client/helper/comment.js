@@ -78,10 +78,6 @@ module.exports = {
     return `${name} landed on a community chest space.`
   },
 
-  squareTypeUnownedProperty: (name, property, price) => {
-    return `${name} landed on ${property}, and can buy it for $${price}!`
-  },
-
   propertyAlreadyOwned: (name, property) => {
     return `${name} landed on ${property}, but already owns it.`
   },

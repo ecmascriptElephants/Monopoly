@@ -110,7 +110,7 @@ class DiceRoll extends Component {
         this.props.dispatch(setMoveToken(true))
         this.props.dispatch(setJailRoll(false))
         let newComment = comments.jailDoubles(this.props.username, die1 + die2)
-        this.setState({comment: newComment, showToast: true, dice: [die1, die2]})
+        this.setState({ comment: newComment, showToast: true, dice: [die1, die2] })
         sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
       } else {
         let updatedJailPositionsArray = [...this.props.jailPositions]
@@ -119,7 +119,7 @@ class DiceRoll extends Component {
         this.dispatch(setJailRoll(false))
 
         let newComment = comments.jailNotDoubles(this.props.username)
-        this.setState({comment: newComment, showToast: true, dice: [die1, die2]})
+        this.setState({ comment: newComment, showToast: true, dice: [die1, die2] })
         sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
       }
     } else {
@@ -128,12 +128,12 @@ class DiceRoll extends Component {
         doubles = this.state.doubles + 1
         console.log('in diceRoll2jsx handleRollDice  doubles = ', doubles)
         let newComment = comments.rollDoubles(this.props.username, die1 + die2)
-        this.setState({comment: newComment, showToast: true, dice: [die1, die2]})
+        this.setState({ comment: newComment, showToast: true, dice: [die1, die2] })
         sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
       }
       if (die1 !== die2) {
         let newComment = comments.diceRoll(this.props.username, die1 + die2)
-        this.setState({comment: newComment, showToast: true, dice: [die1, die2]})
+        this.setState({ comment: newComment, showToast: true, dice: [die1, die2] })
         sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
       }
       this.props.dispatch(setDiceRoll(false))
@@ -198,11 +198,11 @@ class DiceRoll extends Component {
     let doubles = this.state.doubles
     if (updatedUserMoney < rentOwed) {
       let newComment = comments.rentInsufficientFunds(this.props.username, rentOwed, updatedUserMoney[currentUser])
-      this.setState({comment: newComment, showToast: true})
+      this.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
     } else {
       let newComment = comments.rentPaid(this.props.username, 'the property owner', rentOwed)
-      this.setState({comment: newComment, showToast: true})
+      this.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
       this.props.dispatch(setCash(-rentOwed, currentUser))
       this.props.dispatch(setCash(rentOwed, propertyOwner))
@@ -221,11 +221,11 @@ class DiceRoll extends Component {
       this.props.dispatch(setEndTurn(false))
       this.props.dispatch(setMoveToken(false))
       let newComment = comments.incomeTaxInsufficientFunds(this.props.username)
-      this.setState({comment: newComment, showToast: true})
+      this.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
     } else {
       let newComment = comments.incomeTaxPaid(this.props.username)
-      this.setState({comment: newComment, showToast: true})
+      this.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
       this.props.dispatch(setCash(-200, this.props.index))
       sock.updateMoney({
@@ -246,11 +246,11 @@ class DiceRoll extends Component {
       this.props.dispatch(setEndTurn(false))
       this.props.dispatch(setMoveToken(false))
       let newComment = comments.luxuryTaxInsufficientFunds(this.props.username)
-      this.setState({comment: newComment, showToast: true})
+      this.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
     } else {
       let newComment = comments.luxuryTaxPaid(this.props.username)
-      this.setState({comment: newComment, showToast: true})
+      this.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
       this.props.dispatch(setCash(-100, this.props.index))
       sock.updateMoney({
@@ -269,7 +269,7 @@ class DiceRoll extends Component {
       this.setState({
         comment: 'You cannot afford the $50 fine.'
       })
-    this.checkBankruptcy()
+      this.checkBankruptcy()
     } else {
       this.props.dispatch(setCash(-50, this.props.index))
       sock.updateMoney({ gameID: this.props.gameID, money: -50, index: this.props.index })
@@ -445,31 +445,23 @@ class DiceRoll extends Component {
             }
           </div>
         </div>
-        <div className='UserMoney_div'>
-          {`Everyone's Money ${this.props.userCashArray}`}
-        </div>
         <div className='Comments_div'>
           <div className='doubles-comment_div'>
             {this.state.comment}
           </div>
         </div>
-        <div className='CurrentUser_div'>
-          <div className='CurrentUserMoney'>
-            {this.props.index === -1 ? null : `You have: $${this.props.userCashArray[this.props.playerIndex]}`}
-          </div>
-          <div className='CurrentUserProperties'>
-            <div>
-              Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {
-                return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME}
-                  {(this.state.mortgageButtonVisible) ? <span>{e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} setState={this.setStates} />
-                    : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} setState={this.setStates} />}
+        <div className='CurrentUserProperties'>
+          <div>
+            Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {
+              return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME}
+                {(this.state.mortgageButtonVisible) ? <span>{e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} setState={this.setStates} />
+                  : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} setState={this.setStates} />}
                   {e.Monopoly ? <BuyHouse propertyPosition={e.Position}
                     propertyGroup={e.PropertyObj.PROPERTY_GROUP}
                     reduceFunds={this.reduceFunds} houses={e.Houses}
                     numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} setState={this.setStates} /> : null}
                   {e.Houses > 0 ? <SellHouse propertyPosition={e.Position} increaseFunds={this.increaseFunds} houses={e.Houses} setState={this.setStates} /> : null}</span> : null} </div>
-              })} />}
-            </div>
+            })} />}
           </div>
         </div>
         <div className='comment'>

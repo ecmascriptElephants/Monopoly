@@ -14,8 +14,6 @@ import {
 } from './store/actionCreators'
 const Cards = (props) => {
   const handleClick = () => {
-    console.log('in cards.jsx cards function has been invoked!!!')
-    let numberOfCards = 16
     // let cardID = Math.floor((numberOfCards * Math.random()))
     let cardID = 8
     let card = props.card ? rules.Community_Chest[cardID] : rules.Chance[cardID]
@@ -55,7 +53,6 @@ const Cards = (props) => {
         // }
         // props.dispatch(setUserPositions(pos, props.index))
         props.dispatch(setEndTurn(!props.doubles))
-
       } else if (card.Special === 'JAIL') {
         let newComment = card.Description
         props.setState({comment: newComment, showToast: true})
@@ -92,10 +89,9 @@ const Cards = (props) => {
         let pos = 0
         if (props.userPosArray[props.index] === 7) {
           pos = 12
-
         } else if (props.userPosArray[props.index] === 22) {
           pos = 28
-        } else if (props.userPosArray[props.index] === 36){
+        } else if (props.userPosArray[props.index] === 36) {
           pos = 28
         }
 
@@ -108,7 +104,6 @@ const Cards = (props) => {
         props.setState({diceSum: diceSum, specialRollDice})
         props.dispatch(setMoveToken(true))
         props.dispatch(setEndTurn(false))
-
       } else if (card.Special === 'PAY_50_EVERYONE') {
         // let pos = 0
         // if (props.userPosArray[props.index] === 7) {

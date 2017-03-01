@@ -92,7 +92,7 @@ const MoveToken = (props) => {
         let propertyName = ''
         let cost = 0
         rules.Properties.forEach((prop) => {
-          if(prop.BOARD_POSITION === userPosition) {
+          if (prop.BOARD_POSITION === userPosition) {
             propertyName = prop.NAME
             cost = prop.PRICE
           }
@@ -178,13 +178,13 @@ const MoveToken = (props) => {
     } else if (squareType === 'JAIL') {
       props.dispatch(setMoveToken(false))
       let newComment = comments.squareTypeJail(props.username)
-      props.setState({ comment: newComment, showToast: true})
+      props.setState({comment: newComment, showToast: true})
       sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
       props.dispatch(setEndTurn(!doubles))
       props.dispatch(setDiceRoll(!!doubles))
     } else if (squareType === 'INCOME_TAX') {
       let newComment = comments.squareTypeIncomeTax(props.username)
-      props.setState({ comment: newComment, showToast: true})
+      props.setState({comment: newComment, showToast: true})
       sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
       props.dispatch(setMoveToken(false))
       props.dispatch(setIncomeTax(true))
@@ -192,11 +192,11 @@ const MoveToken = (props) => {
       props.dispatch(setMoveToken(false))
       props.dispatch(setLuxury(true))
       let newComment = comments.squareTypeLuxuryTax(props.username)
-      props.setState({ comment: newComment, showToast: true})
+      props.setState({comment: newComment, showToast: true})
       sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
     }
     handleLandOnOrPassGo(oldUserPosition, userPosition, jail)
-    props.setState({ dice: [0, 0]})
+    props.setState({dice: [0, 0]})
   }
 
   return (

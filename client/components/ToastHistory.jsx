@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Toaster from './toast'
-import {Header, Container, Segment, Icon, Divider} from 'semantic-ui-react'
+import {Header, Container, Segment, Divider} from 'semantic-ui-react'
 
 class ToastHistory extends Component {
   constructor (props) {
@@ -12,7 +12,7 @@ class ToastHistory extends Component {
     this.handleMessage = this.handleMessage.bind(this)
   }
 
-  handleMessage(message) {
+  handleMessage (message) {
     let comments = this.state.comments
     comments.push(message)
     this.setState({comments: comments})
@@ -22,17 +22,15 @@ class ToastHistory extends Component {
   }
 
   render () {
-
     return (
       <Container className='toastHistory'>
-      <Segment raised vertical compact className='content'>
-      <Header as='h6' icon textAlign='center'>
-      <Header.Content>Activity Logs</Header.Content>
-      </Header>
-      <Divider />
-      <div>
-      </div>
-      </Segment>
+        <Segment raised vertical compact className='content'>
+          <Header as='h6' icon textAlign='center'>
+            <Header.Content>Activity Logs</Header.Content>
+          </Header>
+          <Divider />
+          <div />
+        </Segment>
       </Container>
     )
   }

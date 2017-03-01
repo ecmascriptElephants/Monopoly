@@ -464,9 +464,6 @@ class DiceRoll extends Component {
             })} />}
           </div>
         </div>
-        <div className='comment'>
-          {this.state.comment}
-        </div>
         <Toast message={this.state.comment} show={this.state.showToast} />
         <ToastHistory message={this.state.comment} />
       </div>

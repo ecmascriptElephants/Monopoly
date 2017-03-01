@@ -109,7 +109,7 @@ position: absolute
 float: left;
 margin-right: 0px!important;
 width: 30%!important;
-float: left;
+padding-top: 0!important;
 }
 
 .chatBox {
@@ -197,4 +197,9 @@ width: 45%
 .ui.cards>.card>.extra {
 height: 100px;
 overflow: auto;
+}
+
+.CurrentUserProperties{
+  height: 100px;
+  overflow: auto;
 }

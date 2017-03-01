@@ -17,7 +17,6 @@ class Trade extends Component {
   }
 
   close () {
-    console.log(this.props.position)
     this.setState({open: false})
   }
 
@@ -31,13 +30,14 @@ class Trade extends Component {
   }
 
   render () {
+    console.log(this.props.userPropertiesArray[this.props.otherIndex][this.props.position])
     return (
       <div>
-        <Button basic color='green' onClick={() => this.open()}>Trade</Button>
-        <Modal open={this.state.open} onClose={this.close}>
+        <Button  color='purple' onClick={() => this.open()}>Trade</Button>
+        <Modal open={this.state.open} onClose={this.close} closeIcon='close'>
           <Modal.Header>Trade {this.props.property}</Modal.Header>
           <Modal.Content image>
-            <Image wrapped size='medium' src='http://semantic-ui.com/images/avatar2/large/rachel.png' />
+            <Image wrapped size='medium' src={`Property_Cards/${this.props.userPropertiesArray[this.props.otherIndex][this.props.position].Position}.png`} />
             <Modal.Description>
               <Header>Trade with {this.props.playerUsername}</Header>
               <Input labelPosition='right' type='text' placeholder='Offer'>
@@ -76,7 +76,8 @@ Trade.propTypes = {
   owner: React.PropTypes.number.isRequired,
   playerIndex: React.PropTypes.number.isRequired,
   property: React.PropTypes.string.isRequired,
-  socket: React.PropTypes.string.isRequired
+  socket: React.PropTypes.string.isRequired,
+  otherIndex: React.PropTypes.number.isRequired
 }
 export default connect(mapStateToProps)(Trade)
 

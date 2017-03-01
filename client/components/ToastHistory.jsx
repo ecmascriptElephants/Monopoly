@@ -30,7 +30,7 @@ class ToastHistory extends Component {
       </Header>
       <Divider />
       <div>
-      {comments}
+        {comments}
       </div>
       </Segment>
       </Container>

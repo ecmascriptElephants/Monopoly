@@ -6,9 +6,13 @@ import { connect } from 'react-redux'
 import { setUserPositions, setPlayers, setPlayerProps, setIndex, setUserProperties } from './store/actionCreators'
 import Toast from './toast'
 import ToastHistory from './ToastHistory'
+<<<<<<< HEAD
 import Others from './OtherPlayers'
 import Offer from './ShowOffer'
 import { Card, Accordion } from 'semantic-ui-react'
+=======
+
+>>>>>>> 04b8d6fa14f87d6d050c55387d886f1e2efd205b
 class Board extends Component {
   constructor (props) {
     super(props)
@@ -16,14 +20,21 @@ class Board extends Component {
       messages: [],
       playerIndex: -1,
       valid: false,
+<<<<<<< HEAD
       showToast: false,
       comment: '',
       showOffer: false
+=======
+      showToast: false
+>>>>>>> 04b8d6fa14f87d6d050c55387d886f1e2efd205b
     }
     sock.init({ gameID: this.props.gameID, index: this.props.playerIndex })
     this.dice = this.dice.bind(this)
     this.setComment = this.setComment.bind(this)
+<<<<<<< HEAD
     this.showPopup = this.showPopup.bind(this)
+=======
+>>>>>>> 04b8d6fa14f87d6d050c55387d886f1e2efd205b
   }
 
   dice (value, index, flag) {

@@ -32,6 +32,7 @@ class Lobby extends Component {
     this.sendChat = this.sendChat.bind(this)
     this.submitMessage = this.submitMessage.bind(this)
     this.getChats = this.getChats.bind(this)
+    this.signOut = this.signOut.bind(this)
   }
   componentDidMount () {
     // window.localStorage.removeItem('state')
@@ -118,6 +119,14 @@ class Lobby extends Component {
       .catch((err) => console.error(err))
   }
 
+  signOut () {
+    console.log('sign out called')
+    window.localStorage.removeItem('token')
+    window.localStorage.removeItem('displayname')
+    window.localStorage.removeItem('id')
+    this.setState({promise: false})
+  }
+
   render () {
     let messages = this.state.messages.map((msg, i) => {
       return <li key={i}>{msg.sender}: {msg.message}</li>
@@ -133,7 +142,9 @@ class Lobby extends Component {
           {this.state.start ? <Link to='/board'><button onClick={this.startGame}> Start Game </button></Link> : null}
           <span>{this.props.username}</span>
         </div>
-
+        <div>
+          <Link to='/'><button onCLick={this.signOut}>Sign Out </button></Link>
+        </div>
         <div>
           <ul>
             {messages}

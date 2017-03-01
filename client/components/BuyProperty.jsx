@@ -9,7 +9,7 @@ import {
   setUserProperties,
   setCash
 } from '../components/store/actionCreators'
-import { Button,  Header, Image, Modal, Input, Label } from 'semantic-ui-react'
+import { Button, Image, Modal } from 'semantic-ui-react'
 import comments from '../helper/comment'
 // import Bankrupt from './Bankrupt'
 

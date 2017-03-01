@@ -88,7 +88,7 @@ const BuyProperty = (props) => {
   }
 
   return (
-    <Modal open={props.buyPropertyButton} size='small' closeIcon='close' dommer='none'>
+    <Modal open={props.buyPropertyButton} size='small' closeIcon='close' dimmer='none'>
       <Modal.Header> Buy Property </Modal.Header>
       <Modal.Content image>
         <Image wrapped size='medium' centered src={`Property_Cards/${props.userPosArray[props.index]}.png`} />

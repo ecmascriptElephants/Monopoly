@@ -1,7 +1,7 @@
 import React from 'react'
 import rules from '../static/rules'
 import { connect } from 'react-redux'
-import { Button } from 'semantic-ui-react'
+import { Button, Modal, Image } from 'semantic-ui-react'
 import sock from '../helper/socket'
 import comments from '../helper/comment'
 import {
@@ -12,10 +12,15 @@ import {
   setEndTurn,
   setDiceRoll
 } from './store/actionCreators'
+
+let cardID = -1
 const Cards = (props) => {
+  const close = () => {
+    props.setState({cardModal: false})
+  }
   const handleClick = () => {
     // let cardID = Math.floor((numberOfCards * Math.random()))
-    let cardID = 8
+    cardID = 8
     let card = props.card ? rules.Community_Chest[cardID] : rules.Chance[cardID]
     console.log('in cards.jsx card description = ', card.Description)
     if (card.Position !== undefined) {
@@ -161,7 +166,15 @@ const Cards = (props) => {
     props.button()
   }
   return (
-    <Button secondary fluid onClick={handleClick}>  Pick a {props.card ? 'Community Chest' : 'Chance'} Card! </Button>
+    <div>
+      <Button secondary fluid onClick={handleClick}>  Pick a {props.card ? 'Community Chest' : 'Chance'} Card! </Button>
+      <Modal open={props.open} size='small'>
+        <Modal.Content image>
+          <Image wrapped size='medium' centered src={`${props.card ? 'community' : 'chance'}/${cardID}.png`} />
+        </Modal.Content>
+        <Button onClick={close}> Close </Button>
+      </Modal>
+    </div>
   )
 }
 
@@ -193,7 +206,8 @@ Cards.propTypes = {
   button: React.PropTypes.func.isRequired,
   number: React.PropTypes.number.isRequired,
   doubleRailRoadRentMultiplier: React.PropTypes.bool.isRequired,
-  doubles: React.PropTypes.number.isRequired
+  doubles: React.PropTypes.number.isRequired,
+  open: React.PropTypes.bool.isRequired
 }
 
 export default connect(mapStateToProps)(Cards)

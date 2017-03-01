@@ -42,18 +42,16 @@ class DiceRoll extends Component {
       comment: '',
       doubles: 0,
       card: true,
-      userPropertiesArray: [[], [], [], [], [], [], [], []],
       userJailFreeCardArray: [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]],
-      endTurnButtonVisible: false,
       rentOwed: 0,
       propertyOwner: -1,
       isBankruptArray: [false, false, false, false, false, false, false, false],
-      jailRollDoublesButtonVisible: false,
       showToast: false,
       numOfPlayer: -1,
       goFlag: false,
       mortgageButtonVisible: true,
-      doubleRailRoadRentMultiplier: false
+      doubleRailRoadRentMultiplier: false,
+      cardModal: true
     }
     this.props.dispatch(setButtons())
     this.setStates = this.setStates.bind(this)
@@ -352,6 +350,7 @@ class DiceRoll extends Component {
                 number={this.state.numOfPlayers}
                 doubleRailRoadRentMultiplier={this.state.doubleRailRoadRentMultiplier}
                 setState={this.setStates}
+                open={this.state.cardModal}
               /> : null
             }
             <div className='buy-property-btn_div'>

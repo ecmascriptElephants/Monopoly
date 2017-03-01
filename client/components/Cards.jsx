@@ -13,14 +13,16 @@ import {
   setDiceRoll
 } from './store/actionCreators'
 
-let cardID = -1
 const Cards = (props) => {
+  console.log(props.open)
   const close = () => {
     props.setState({cardModal: false})
   }
+
   const handleClick = () => {
     // let cardID = Math.floor((numberOfCards * Math.random()))
-    cardID = 8
+    let cardID = 8
+    props.setState({cardModal: true, cardID})
     let card = props.card ? rules.Community_Chest[cardID] : rules.Chance[cardID]
     console.log('in cards.jsx card description = ', card.Description)
     if (card.Position !== undefined) {
@@ -167,13 +169,7 @@ const Cards = (props) => {
   }
   return (
     <div>
-      <Button secondary fluid onClick={handleClick}>  Pick a {props.card ? 'Community Chest' : 'Chance'} Card! </Button>
-      <Modal open={props.open} size='small'>
-        <Modal.Content image>
-          <Image wrapped size='medium' centered src={`${props.card ? 'community' : 'chance'}/${cardID}.png`} />
-        </Modal.Content>
-        <Button onClick={close}> Close </Button>
-      </Modal>
+      <Button secondary fluid onClick={() => { handleClick() }}>  Pick a {props.card ? 'Community Chest' : 'Chance'} Card! </Button>
     </div>
   )
 }

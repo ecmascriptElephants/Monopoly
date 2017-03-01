@@ -20,7 +20,7 @@ import {
   setButtons,
   setBankruptcy
 } from './store/actionCreators'
-import { Button, List } from 'semantic-ui-react'
+import { Button, List, Modal, Image } from 'semantic-ui-react'
 import Card from './Cards'
 import Move from './moveToken'
 import BuyProperty from './BuyProperty'
@@ -51,7 +51,7 @@ class DiceRoll extends Component {
       goFlag: false,
       mortgageButtonVisible: true,
       doubleRailRoadRentMultiplier: false,
-      cardModal: true
+      cardModal: false
     }
     this.props.dispatch(setButtons())
     this.setStates = this.setStates.bind(this)
@@ -350,8 +350,16 @@ class DiceRoll extends Component {
                 number={this.state.numOfPlayers}
                 doubleRailRoadRentMultiplier={this.state.doubleRailRoadRentMultiplier}
                 setState={this.setStates}
-                open={this.state.cardModal}
               /> : null
+            }
+            {
+              this.state.cardModal
+                ? <Modal open={this.state.cardModal} size='small'>
+                  <Modal.Content image>
+                    <Image wrapped size='medium' centered src={`${this.state.card ? 'community' : 'chance'}/${this.state.cardID}.png`} />
+                  </Modal.Content>
+                  <Button onClick={() => { this.setState({cardModal: false}) }}> Close </Button>
+                </Modal> : null
             }
             <div className='buy-property-btn_div'>
               {(this.props.buyPropertyButton && (!this.props.setGoButton || this.state.goFlag))

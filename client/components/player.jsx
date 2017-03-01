@@ -4,6 +4,8 @@ import { rules } from '../static/rules'
 import DiceRoll from './dice_roll2'
 import { connect } from 'react-redux'
 import Chat from './chat'
+import {Link} from 'react-router-dom'
+
 class Player extends Component {
   constructor (props) {
     super(props)
@@ -147,7 +149,6 @@ class Player extends Component {
             </Header.Content>
           </Header>
           <Divider />
-          <Button>Leave Game</Button>
           <Message>
             {this.props.userCashArray[this.props.playerIndex]}
           </Message>

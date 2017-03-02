@@ -8,6 +8,7 @@ import {
   SET_USERS_PROPERTIES,
   SET_USERS_MONEY,
   SET_USERS_JAIL,
+  SET_USERS_JAIL_FREE,
   SET_MYINDEX,
   SET_CASH,
   SET_PLAYERS,
@@ -43,6 +44,7 @@ const DEFAULT_STATE = {
   jailPositions: [0, 0, 0, 0, 0, 0, 0, 0],
   userCashArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500],
   userMoneyArray: [1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500],
+  jailFreeArray: [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]],
   diceRollButton: false,
   moveTokenButton: false,
   cardButton: false,
@@ -64,31 +66,26 @@ const setGameID = (state, action) => {
   Object.assign(newState, state, { gameID: action.id })
   return newState
 }
-
 const setUsername = (state, action) => {
   const newState = {}
   Object.assign(newState, state, { username: action.username })
   return newState
 }
-
 const setUserID = (state, action) => {
   const newState = {}
   Object.assign(newState, state, { userID: action.userID })
   return newState
 }
-
 const setIndex = (state, action) => {
   const newState = {}
   Object.assign(newState, state, { index: action.index })
   return newState
 }
-
 const setPlayerIndex = (state, action) => {
   const newState = {}
   Object.assign(newState, state, { playerIndex: action.index })
   return newState
 }
-
 const setUserPosition = (state, action) => {
   let newArr = [...state.userPosArray.slice(0, action.index),
     action.userPos,
@@ -97,13 +94,11 @@ const setUserPosition = (state, action) => {
   Object.assign(newState, state, { userPosArray: newArr })
   return newState
 }
-
 const setMessageID = (state, action) => {
   const newState = {}
   Object.assign(newState, state, { messageID: action.messageID })
   return newState
 }
-
 const setUserProperties = (state, action) => {
   let newArr = [...state.userPropertiesArray.slice(0, action.index),
     action.userProperties,
@@ -112,7 +107,6 @@ const setUserProperties = (state, action) => {
   Object.assign(newState, state, { userPropertiesArray: newArr })
   return newState
 }
-
 const setUserCash = (state, action) => {
   let cash = state.userCashArray[action.index] + action.cash
   let newArr = [...state.userCashArray.slice(0, action.index),
@@ -122,7 +116,6 @@ const setUserCash = (state, action) => {
   Object.assign(newState, state, { userCashArray: newArr })
   return newState
 }
-
 const setUserMoney = (state, action) => {
   let newArr = [...state.userMoneyArray.slice(0, action.index),
     action.userMoney,
@@ -131,7 +124,6 @@ const setUserMoney = (state, action) => {
   Object.assign(newState, state, { userMoneyArray: newArr })
   return newState
 }
-
 const setUserJail = (state, action) => {
   let newArr = [...state.jailPositions.slice(0, action.index),
     action.userJail,
@@ -140,14 +132,21 @@ const setUserJail = (state, action) => {
   Object.assign(newState, state, { jailPositions: newArr })
   return newState
 }
-
+const setUserJailFree = (state, action) => {
+  console.log('in reducers setUserJailFree has been invoked; action = ', action, 'state = ', state)
+  let newArr = [...state.jailFreeArray.slice(0, action.index),
+    action.jailFreeArray,
+    ...state.jailFreeArray.slice(action.index + 1)]
+  const newState = {}
+  Object.assign(newState, state, { jailFreeArray: newArr })
+  return newState
+}
 const setPlayersArray = (state, action) => {
   let newState = {}
   let newArray = [...action.playersArray]
   Object.assign(newState, state, { players: newArray })
   return newState
 }
-
 const setPlayerProps = (state, action) => {
   let player = state.players[action.index]
   player.userPosition = action.playerProps
@@ -158,19 +157,16 @@ const setPlayerProps = (state, action) => {
   Object.assign(newState, state, { players: newArr })
   return newState
 }
-
 const setDefault = (state, action) => {
   const newState = {}
   Object.assign(newState, state, DEFAULT_STATE)
   return newState
 }
-
 const setState = (state, action) => {
   const newState = {}
   Object.assign(newState, state, action.state)
   return newState
 }
-
 const setMove = (state, action) => {
   const newState = {}
   Object.assign(newState, state, { moveTokenButton: action.flag })
@@ -236,7 +232,6 @@ const setMortgage = (state, action) => {
   Object.assign(newState, state, { mortgageButton: action.flag })
   return newState
 }
-
 const setBuyProperty = (state, action) => {
   const newState = {}
   Object.assign(newState, state, { buyPropertyButton: action.flag })
@@ -293,6 +288,9 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
 
     case SET_USERS_JAIL:
       return setUserJail(state, action)
+
+    case SET_USERS_JAIL_FREE:
+      return setUserJailFree(state, action)
 
     case SET_MYINDEX:
       return setPlayerIndex(state, action)

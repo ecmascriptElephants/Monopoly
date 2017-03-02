@@ -44,6 +44,7 @@ const MoveToken = (props) => {
   }
 
   const handleMoveToken = () => {
+    console.log('moveTokenjsx handlemovetoken props.specialCardButton = ',props.specialCardButton)
     const doubles = props.doubles
     const diceSum = props.diceSum
     console.log('movetokenjsx handleMoveToken props.goFlag = ', props.goFlag)
@@ -92,7 +93,7 @@ const MoveToken = (props) => {
         let propertyName = ''
         let cost = 0
         rules.Properties.forEach((prop) => {
-          if(prop.BOARD_POSITION === userPosition) {
+          if (prop.BOARD_POSITION === userPosition) {
             propertyName = prop.NAME
             cost = prop.PRICE
           }
@@ -117,7 +118,12 @@ const MoveToken = (props) => {
                   utilityCount += 1
                 }
               })
-              rentOwed = (diceSum) * (prop.PropertyObj.RENT[utilityCount])
+              if (props.specialCardButton) {
+                console.log('in movetokenjsx is working')
+                rentOwed = 10 * (props.dies[0] + props.dies[1])
+              } else {
+                rentOwed = (diceSum) * (prop.PropertyObj.RENT[utilityCount])
+              }
               console.log('movetoken line 120 landed on an owned utilities rentOwed = ', rentOwed, diceSum)
             } else if (prop.PropertyObj.PROPERTY_GROUP === 'Stations') {
               let stationCount = -1
@@ -134,6 +140,9 @@ const MoveToken = (props) => {
             } else {
               console.log('movetoken line 120 landed on an owned property rentOwed = ', rentOwed, diceSum)
               rentOwed = prop.PropertyObj.RENT[prop.Houses]
+              if (prop.Monopoly && prop.Houses === 0) {
+                rentOwed *= 2
+              }
             }
           }
         })
@@ -142,7 +151,6 @@ const MoveToken = (props) => {
           props.dispatch(setEndTurn(!doubles))
           props.dispatch(setDiceRoll(!!doubles))
           props.dispatch(setPayRent(false))
-
           if (propertyOwner === props.index) {
             let newComment = comments.propertyAlreadyOwned(props.username, propName)
             props.setState({ comment: newComment, showToast: true })
@@ -178,13 +186,13 @@ const MoveToken = (props) => {
     } else if (squareType === 'JAIL') {
       props.dispatch(setMoveToken(false))
       let newComment = comments.squareTypeJail(props.username)
-      props.setState({ comment: newComment, showToast: true})
+      props.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
       props.dispatch(setEndTurn(!doubles))
       props.dispatch(setDiceRoll(!!doubles))
     } else if (squareType === 'INCOME_TAX') {
       let newComment = comments.squareTypeIncomeTax(props.username)
-      props.setState({ comment: newComment, showToast: true})
+      props.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
       props.dispatch(setMoveToken(false))
       props.dispatch(setIncomeTax(true))
@@ -192,11 +200,11 @@ const MoveToken = (props) => {
       props.dispatch(setMoveToken(false))
       props.dispatch(setLuxury(true))
       let newComment = comments.squareTypeLuxuryTax(props.username)
-      props.setState({ comment: newComment, showToast: true})
+      props.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
     }
     handleLandOnOrPassGo(oldUserPosition, userPosition, jail)
-    props.setState({ dice: [0, 0]})
+    props.setState({ dice: [0, 0] })
   }
 
   return (
@@ -217,9 +225,11 @@ const mapStateToProps = (state) => {
 
 MoveToken.propTypes = {
   dice: React.PropTypes.func.isRequired,
+  dies: React.PropTypes.array.isRequired,
   dispatch: React.PropTypes.func.isRequired,
   username: React.PropTypes.string.isRequired,
   gameID: React.PropTypes.number.isRequired,
+  specialCardButton: React.PropTypes.number.isRequired,
   userPosArray: React.PropTypes.array.isRequired,
   jailPositions: React.PropTypes.array.isRequired,
   index: React.PropTypes.number.isRequired,

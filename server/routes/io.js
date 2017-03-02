@@ -97,12 +97,13 @@ module.exports = (io) => {
     })
 
     socket.on('new-message', (msgInfo) => {
-      io.emit('receive-message', msgInfo)
       let sender = msgInfo.sender
       let message = msgInfo.message
       let room = msgInfo.room
-      console.log('sender', sender)
       msgHistory.addMessage(sender, message, room)
+      .then(({sender, message, room, _id}) => {
+        io.emit('receive-message', {sender, message, room, _id})
+      })
     })
 
     socket.on('update database', (data) => {

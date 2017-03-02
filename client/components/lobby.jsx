@@ -7,6 +7,9 @@ import Toast from './toast'
 import axios from 'axios'
 // import { Button } from 'semantic-ui-react'
 import LoadGame from './LoadGame'
+import { Button, Header, Container, Segment, Input, Icon, Divider, Form, Ui, Secondary, Menu } from 'semantic-ui-react'
+import { Motion, spring, TransitionMotion } from 'react-motion'
+const springPreset = { wobbly: [130, 11] }
 class Lobby extends Component {
   constructor (props) {
     super(props)
@@ -127,30 +130,101 @@ class Lobby extends Component {
     this.setState({promise: false})
   }
 
+  getStyles() {
+		let configs = {}
+		this.state.messages.forEach( (val,index) => {
+  		configs[val.id] = {
+  			opacity: spring(1),
+  		  top: spring(0, springPreset.wobbly)
+  		}
+		})
+		return configs
+	}
+
+	willEnter(key) {
+		return {
+			opacity: spring(0),
+			top: spring(100, springPreset.wobbly)
+		}
+	}
+
   render () {
     let messages = this.state.messages.map((msg, i) => {
-      return <li key={i}>{msg.sender}: {msg.message}</li>
+      return <li className='oneChat' key={i}> <strong>{msg.sender}</strong>: {msg.message}</li>
     })
+
     let queryResults = this.state.queryResults.map((result) => {
       return <li>Sender: {result.sender} Message: {result.message} Room: {result.room}</li>
     })
     return (
       <div>
-        <div>
-          <button onClick={this.newGame}> New Game </button>
-          {this.state.join ? <button onClick={this.joinGame}> Join Game </button> : null}
-          {this.state.start ? <Link to='/board'><button onClick={this.startGame}> Start Game </button></Link> : null}
-          <span>{this.props.username}</span>
+        <nav className='navbar navbar-default navbar-fixed-top'>
+          <div className='container'>
+            <div className='navbar-header'>
+              <button type='button' className='navbar-toggle collapsed' data-toggle='collapse' aria-expanded='false' aria-controls='navbar'>
+                <span className='sr-only'>Toggle navigation</span>
+                <span className='icon-bar'></span>
+                <span className='icon-bar'></span>
+                <span className='icon-bar'></span>
+              </button>
+              <a className='navbar-brand' href='#/'>Hacknopoly</a>
+            </div>
+            <div id='navbar' className='collapse navbar-collapse'>
+              <ul className='nav navbar-nav'>
+                <li><a href='/'>Home</a></li>
+                <li><a href='/'>Profile</a></li>
+              </ul>
+              <span>Welcome {this.props.username}</span>
+              <div>
+                <Link to='/'><button onClick={this.signOut}>Sign Out </button></Link>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <div className='container' id='lobby'>
+          <div className='row'>
+            <div className='col-md-9'>
+              <div className='panel panel-primary chatWindow'>
+                <div className='panel-heading'>
+                  <span className='glyphicon glyphicon-comment'></span> Chat
+                </div>
+                <div className='panel-body'>
+                  <ul>
+                    {messages}
+                  </ul>
+
+                </div>
+
+                <div className='panel-footer'>
+                  <div className='input-group'>
+                    <input id='message' type='text' className='form-control input-sm' placeholder='Enter your message...'/>
+                    <span className='input-group-btn'>
+                      <button className='btn btn-warning btn-sm' onClick={this.submitMessage}>Send</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className='col-md-3'>
+              <div className='panel panel-primary onlinePlayers'>
+                <div className='panel-heading'> Online Players </div>
+              </div>
+              <div className='panel panel-primary gameList'>
+                <div className='panel-heading'> Game List </div>
+                <LoadGame pendingGames={this.state.pendingGames} load={this.state.resume} />
+              </div>
+              <div className='gameButton'>
+                <div>
+                  <Button color='teal' size='massive' onClick={this.newGame}> New Game </Button>
+                  {this.state.join ? <button color='teal' size='massive' onClick={this.joinGame}> Join Game </button> : null}
+                  {this.state.start ? <Link to='/board'><button color='teal' size='massive' onClick={this.startGame}> Start Game </button></Link> : null}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div>
-          <Link to='/'><button onCLick={this.signOut}>Sign Out </button></Link>
-        </div>
-        <div>
-          <ul>
-            {messages}
-          </ul>
-          <input id='message' type='text' /><button onClick={this.submitMessage}>Send</button>
-        </div>
+
         <Toast message={this.state.comment} show={this.state.showToast} />
         <br />
         <div>
@@ -173,7 +247,6 @@ class Lobby extends Component {
           <ul>
             {queryResults}
           </ul>
-          <LoadGame pendingGames={this.state.pendingGames} load={this.state.resume} />
         </div>
       </div>
     )

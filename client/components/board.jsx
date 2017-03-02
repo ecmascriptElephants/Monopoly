@@ -78,10 +78,11 @@ class Board extends Component {
     return (
       <div>
         <div className='left'>
-          {
-            this.state.showOffer ? <Offer open={this.state.showOffer} offer={this.state.offer} setShowOffer={this.showPopup} position={this.state.position} offerIndex={this.state.offerIndex} /> : null
-          }
-          <div className={'other-players'}>
+        <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment}/>
+        {
+        this.state.showOffer ? <Offer open={this.state.showOffer} offer={this.state.offer} setShowOffer={this.showPopup} position={this.state.position} offerIndex={this.state.offerIndex} /> : null
+      }
+        <div className={'other-players'}>
             <Card.Group>
               {
                 this.props.players.map((player, index) => {
@@ -92,7 +93,6 @@ class Board extends Component {
               }
             </Card.Group>
           </div>
-          <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment} />
         </div>
         <div className='right'>
           <div className='board parent'>

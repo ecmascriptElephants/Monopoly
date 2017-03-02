@@ -340,7 +340,7 @@ const rules = {
       MORTGAGE_PRICE: 175,
       HOUSE_SALE_PRICE: 100,
       UNMORTGAGE_PRICE: 192,
-      NUMBER_OF_PROPERTIES_IN_GROUP: 3
+      NUMBER_OF_PROPERTIES_IN_GROUP: 2
     },
     {
       NAME: 'Pennsylvania Avenue',
@@ -418,7 +418,7 @@ const rules = {
       MORTGAGE_PRICE: 90,
       HOUSE_SALE_PRICE: 50,
       UNMORTGAGE_PRICE: 99,
-      NUMBER_OF_PROPERTIES_IN_GROUP: 2
+      NUMBER_OF_PROPERTIES_IN_GROUP: 3
     },
     {
       NAME: 'States Avenue',

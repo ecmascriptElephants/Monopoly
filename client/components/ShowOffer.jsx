@@ -25,7 +25,23 @@ class ShowOffer extends Component {
     const soldProperty = ownerPropertyArray.splice(this.props.position, 1).pop()
     this.props.dispatch(setUserProperties(ownerPropertyArray, this.props.playerIndex))
     sock.updateProps({ gameID: this.props.gameID, properties: ownerPropertyArray, index: this.props.playerIndex })
+    soldProperty.Monopoly = false
+    let propGroup = soldProperty.PropertyObj.PROPERTY_GROUP
+    let numberForMonopoly = soldProperty.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP
+    let propCount = 0
     buyerPropertyArray.push(soldProperty)
+    buyerPropertyArray.forEach(property => {
+      if (property.PropertyObj.PROPERTY_GROUP === propGroup) {
+        propCount += 1
+      }
+    })
+    if (propCount === numberForMonopoly && propGroup !== 'Utilities' && propGroup !== 'Stations') {
+      buyerPropertyArray.forEach(property => {
+        if (property.PropertyObj.PROPERTY_GROUP === propGroup) {
+          property.Monopoly = true
+        }
+      })
+    }
     this.props.dispatch(setUserProperties(buyerPropertyArray, this.props.offerIndex))
     sock.updateProps({ gameID: this.props.gameID, properties: buyerPropertyArray, index: this.props.offerIndex })
     this.props.setShowOffer()

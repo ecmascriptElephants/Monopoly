@@ -51,7 +51,7 @@ module.exports = {
   },
 
   jailFineInsufficientFunds: (name) => {
-    return `${name} cannot afford the $50 fine.`
+    return `${name} cannot afford the $50 jail fine.`
   },
 
   incomeTaxInsufficientFunds: (name) => {
@@ -120,6 +120,35 @@ module.exports = {
 
   unmortgageProperty: (name, propertyName, amount) => {
     return `${name} unmortgaged ${propertyName} for $${amount}.`
+  },
+
+  boughtHouse: (name, propertyName, amount) => {
+    return `${name} bought a house on ${propertyName} for $${amount}.`
+  },
+
+  boughtHotel: (name, propertyName, amount) => {
+    return `${name} bought a hotel on ${propertyName} for $${amount}.`
+  },
+
+  soldHouse: (name, propertyName, amount) => {
+    return `${name} sold a house on ${propertyName} for $${amount}.`
+  },
+
+  soldHotel: (name, propertyName, amount) => {
+    return `${name} sold a hotel on ${propertyName} for $${amount}.`
+  },
+
+
+  alreadyHaveHotel: (name, propertyName) => {
+    return `${name} already has a hotel on ${propertyName}.`
+  },
+
+  buyHouseInsufficientFunds: (name, propertyName, amount, cash) => {
+    return `${name} needs $${amount} to buy a house on ${propertyName}, but only has $${cash}.`
+  },
+
+  buyHotelInsufficientFunds: (name, propertyName, amount, cash) => {
+    return `${name} needs $${amount} to buy a hotel on ${propertyName}, but only has $${cash}.`
   },
 
   unmortgagePropertyInsufficientFunds: (name, propertyName, amount, money) => {

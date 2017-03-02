@@ -51,11 +51,12 @@ class ShowOffer extends Component {
   }
 
   render () {
+    console.log(this.props.userPropertiesArray[this.props.index][this.props.position])
     return (
       <Modal open={this.props.open} basic size='small'>
         <Header icon='archive' content='Offer' />
         <Modal.Content>
-          <Image wrapped size='medium' src='http://semantic-ui.com/images/avatar2/large/rachel.png' />
+          <Image wrapped size='medium' centered src={`Property_Cards/${this.props.userPropertiesArray[this.props.playerIndex][this.props.position].Position}.png`} />
           <Modal.Description>
             <Header>Someone Made an offer</Header>
             <Message>

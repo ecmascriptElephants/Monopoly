@@ -7,7 +7,7 @@ import Toast from './toast'
 import axios from 'axios'
 // import { Button } from 'semantic-ui-react'
 import LoadGame from './LoadGame'
-import { Button, Header, Container, Segment, Input, Icon, Divider, Form, Ui, Secondary, Menu } from 'semantic-ui-react'
+import { Button } from 'semantic-ui-react'
 import { Motion, spring, TransitionMotion } from 'react-motion'
 const springPreset = { wobbly: [130, 11] }
 class Lobby extends Component {

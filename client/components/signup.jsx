@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Input, Icon, Divider, Form } from 'semantic-ui-react'
-import {Redirect} from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import Authenticate from '../helper/authenticate'
 class Signup extends Component {
@@ -37,7 +37,7 @@ class Signup extends Component {
         window.localStorage.setItem('token', res.data.token)
         window.localStorage.setItem('displayname', res.data.user.displayname)
         window.localStorage.setItem('id', res.data.user.id)
-        this.setState({valid: true})
+        this.setState({ valid: true })
       })
       .catch((err) => console.error(err))
   }

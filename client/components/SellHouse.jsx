@@ -16,12 +16,12 @@ const SellHouse = (props) => {
         sock.updateMoney({ gameID: props.gameID, money: houseSalePrice, index: props.playerIndex })
         props.dispatch(setUserProperties(propertiesArray, props.playIndex))
         let newComment = ''
-        if(property.Houses === 4) {
+        if (property.Houses === 4) {
           newComment = comments.soldHotel(props.username, property.PropertyObj.NAME, houseSalePrice)
         } else {
           newComment = comments.soldHouse(props.username, property.PropertyObj.NAME, houseSalePrice)
         }
-        props.setState({comment: newComment, showToast: true})
+        props.setState({ comment: newComment, showToast: true })
         sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
       }
     })

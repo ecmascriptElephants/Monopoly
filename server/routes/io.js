@@ -28,7 +28,7 @@ module.exports = (io) => {
       data.socketID = socket.id
       data.userPosition = [97, 97]
       var state = { players: 1, i: 0, playerInfo: { 0: data } }
-
+      console.log(data)
       board.addGame(state, data)
         .then((result) => {
           const gameID = result[0]

@@ -32,7 +32,6 @@ class Lobby extends Component {
     this.joinGame = this.joinGame.bind(this)
     this.newGame = this.newGame.bind(this)
     this.startGame = this.startGame.bind(this)
-    this.sendChat = this.sendChat.bind(this)
     this.submitMessage = this.submitMessage.bind(this)
     this.getChats = this.getChats.bind(this)
     this.signOut = this.signOut.bind(this)
@@ -88,15 +87,11 @@ class Lobby extends Component {
   }
 
   joinGame () {
-    sock.join({ username: this.props.username, userID: this.props.userID, gameID: this.props.gameID })
+    sock.join({ username: this.props.username, userID: this.props.userID, gameID: this.props.gameID, picture: window.localStorage.picture })
   }
 
   startGame () {
     sock.start({ gameID: this.props.gameID })
-  }
-
-  sendChat () {
-    sock.sendChat({ senderID: this.props.senderID, messageID: this.props.messageID })
   }
 
   submitMessage () {

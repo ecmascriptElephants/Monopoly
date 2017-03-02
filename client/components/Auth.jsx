@@ -19,7 +19,10 @@ export default class Auth extends Component {
         window.localStorage.setItem('picture', res.data.picture)
         this.setState({promise: true})
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        this.setState({promise: true})
+        console.log(err)
+      })
   }
 
   render () {

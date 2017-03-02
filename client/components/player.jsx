@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Header, Container, Segment, Icon, Divider, Message, Button } from 'semantic-ui-react'
+import { Header, Container, Segment, Icon, Divider, Message, Button, Image } from 'semantic-ui-react'
 import { rules } from '../static/rules'
 import DiceRoll from './dice_roll2'
 import { connect } from 'react-redux'
@@ -143,7 +143,7 @@ class Player extends Component {
       <Container className='pcard'>
         <Segment raised vertical compact className='content'>
           <Header as='h6' icon textAlign='center'>
-            <Icon name='users' circular />
+            <Image src={`${window.localStorage.picture}`} size='mini' shape='circular' />
             <Header.Content>
               {this.state.name}
             </Header.Content>

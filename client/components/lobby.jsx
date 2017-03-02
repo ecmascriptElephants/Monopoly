@@ -84,7 +84,7 @@ class Lobby extends Component {
     })
   }
   newGame () {
-    sock.newGame({ username: this.props.username, userID: this.props.userID })
+    sock.newGame({ username: this.props.username, userID: this.props.userID, picture: window.localStorage.picture })
   }
 
   joinGame () {
@@ -284,7 +284,6 @@ Lobby.propTypes = {
   username: React.PropTypes.string.isRequired,
   gameID: React.PropTypes.number.isRequired,
   userID: React.PropTypes.string.isRequired,
-  senderID: React.PropTypes.number.isRequired,
   messageID: React.PropTypes.number.isRequired
 }
 export default connect(mapStateToProps)(Lobby)

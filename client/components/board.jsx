@@ -114,7 +114,7 @@ class Board extends Component {
               {
                 this.props.players.map((player, index) => {
                   if (index !== this.props.playerIndex) {
-                    return <Others key={index} playerUsername={player.username} otherPlayerIndex={index} socket={player.socketID} />
+                    return <Others key={index} playerUsername={player.username} otherPlayerIndex={index} socket={player.socketID} picture={player.picture} />
                   }
                 })
               }
@@ -125,15 +125,15 @@ class Board extends Component {
           <div className='board parent'>
             {
               this.props.players.map((player, index) => {
+                console.log(player.picture)
                 if (index <= 3) {
-                  return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0] - (index + index)}%`} userNumber={index} key={index} />
+                  return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0] - (index + index)}%`} picture={player.picture} key={index} />
                 } else {
                   return <Symbol className={`token${index}`} left={`${player.userPosition[1] - 2}%`} top={`${player.userPosition[0] - (index + 4)}%`} userNumber={index} key={index} />
                 }
               })
             }
             <div className='wire'>
-              <ToastHistory message={this.state.comment} />
               <div className='flexcol'>
                 <div className='flexrow'>
                   <div className='top' id='Position20' />
@@ -208,6 +208,7 @@ class Board extends Component {
                       })}
                     </div>
                   </div>
+                  <ToastHistory message={this.state.comment} />
                   <div className='flexside'>
                     <div className='item-right' id='Position31'>
                       {this.state.h31.map((item) => {
@@ -224,7 +225,6 @@ class Board extends Component {
                       {this.state.h34.map((item) => {
                         return <img src='house.png' id='house' />
                       })}
-
                     </div>
                     <div className='item-right' id='Position35' />
                     <div className='item-right' id='Position36' />
@@ -232,12 +232,17 @@ class Board extends Component {
                       {this.state.h37.map((item) => {
                         return <img src='house.png' id='house' />
                       })}
-
                     </div>
-                    <div className='item-right' id='Position38' />
-                    {this.state.h38.map((item) => {
-                      return <img src='house.png' id='house' />
-                    })}
+                    <div className='item-right' id='Position38' >
+                      {this.state.h38.map((item) => {
+                        return <img src='house.png' id='house' />
+                      })}
+                    </div>
+                    <div className='item-right' id='Position39' >
+                      {this.state.h39.map((item) => {
+                        return <img src='house.png' id='house' />
+                      })}
+                    </div>
                   </div>
                 </div>
                 <div className='flexrow'>

@@ -19,6 +19,7 @@ const io = require('socket.io')(server)
 const ioRouter = require('./routes/io.js')
 const token = require('./jwt/jwt')
 const mongodb = require('./mongodb/config')
+const axios = require('axios')
 app.use(cors())
 
 const port = process.env.PORT || 8000
@@ -31,6 +32,7 @@ passport.use(new FacebookStrategy({
   callbackURL: config.callbackURL
 },
   (accessToken, refreshToken, profile, done) => {
+    passport.photo = `https://graph.facebook.com/v2.8/${profile.id}/picture`
     process.nextTick(() => {
       db.raw(`SELECT  * FROM fb_user where fbID = ${Number(profile.id)}`)
         .then((result) => {

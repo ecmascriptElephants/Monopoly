@@ -32,6 +32,7 @@ class Land extends Component {
       window.localStorage.setItem('token', res.data.token)
       window.localStorage.setItem('displayname', res.data.user.displayname)
       window.localStorage.setItem('id', res.data.user.id)
+      window.localStorage.setItem('picture', res.data.picture)
       this.setState({valid: true})
     })
     .catch((err) => console.error(err))

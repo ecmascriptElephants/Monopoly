@@ -6,14 +6,14 @@ module.exports = (app, express, passport) => {
     failureFlash: true
   }),
     (req, res) => {
-      res.send({ token: passport.token, user: passport.user })
+      res.send({ token: passport.token, user: passport.user, picture: `https://robohash.org/${passport.user.displayname}` })
     })
 
   app.post('/login', passport.authenticate('local-login', {
     failureRedirect: '/#/'
   }),
     (req, res) => {
-      res.send({ token: passport.token, user: passport.user })
+      res.send({ token: passport.token, user: passport.user, picture: `https://robohash.org/${passport.user.displayname}` })
     })
 
   app.get('/auth/facebook', passport.authenticate('facebook'))
@@ -41,7 +41,7 @@ module.exports = (app, express, passport) => {
   })
 
   app.get('/get-info', (req, res) => {
-    res.send({ token: passport.token, user: passport.user })
+    res.send({ token: passport.token, user: passport.user, picture: passport.photo })
   })
 
   app.get('/user', (req, res) => {

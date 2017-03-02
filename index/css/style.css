@@ -201,10 +201,12 @@ background-color: Pink
 }
 
 .toastHistory {
-position: fixed;
-right: 100px;
-bottom: 300px;
-width: 30%!important;
+position: static;
+width: 76%!important;
+padding: 1%;
+background-color: aliceblue;
+overflow: auto;
+padding-top: 0!important
 }
 
 .left {

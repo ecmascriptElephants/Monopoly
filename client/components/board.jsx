@@ -51,7 +51,7 @@ class Board extends Component {
       this.props.dispatch(setPlayers(players))
     })
 
-    sock.socket.on('offer for you', ({position, socket, offer, offerIndex}) => {
+    sock.socket.on('offer for you', ({ position, socket, offer, offerIndex }) => {
       this.setState({ position, socket, offer, offerIndex, showOffer: true })
     })
 
@@ -113,7 +113,7 @@ class Board extends Component {
                     <img src='house.png' id='house' />
                     <img src='house.png' id='house' />
                     <img src='house.png' id='house' />
-                </div>
+                  </div>
                   <div className='item' id='Position21'>
                     21
                 </div>
@@ -124,7 +124,7 @@ class Board extends Component {
                     <img src='house.png' id='house' />
                     <img src='house.png' id='house' />
                     <img src='house.png' id='house' />
-                </div>
+                  </div>
                   <div className='item' id='Position23'>
                     23
                 </div>
@@ -135,7 +135,7 @@ class Board extends Component {
                     <img src='house.png' id='house' />
                     <img src='house.png' id='house' />
                     <img src='house.png' id='house' />
-                </div>
+                  </div>
                   <div className='item' id='Position25'>
                     25
                 </div>
@@ -169,11 +169,11 @@ class Board extends Component {
                     <div className='item' id='Position16'>
                       16
                       <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                  </div>
+                      <img src='house.png' id='house' />
+                      <img src='house.png' id='house' />
+                      <img src='house.png' id='house' />
+                      <img src='house.png' id='house' />
+                    </div>
                     <div className='item' id='Position15'>
                       15
                   </div>
@@ -251,9 +251,9 @@ class Board extends Component {
                     <img src='house.png' id='house' />
                     <img src='house.png' id='house' />
                     <img src='house.png' id='house' />
-                </div>
+                  </div>
                   <div className='item' id='Position1'>
-                  <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
                     <img src='house.png' id='house' />
                     <img src='house.png' id='house' />
                     <img src='house.png' id='house' />

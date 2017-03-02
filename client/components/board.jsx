@@ -77,7 +77,6 @@ class Board extends Component {
   render () {
     return (
       <div>
-
         <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment}/>
         {
         this.state.showOffer ? <Offer open={this.state.showOffer} offer={this.state.offer} setShowOffer={this.showPopup} position={this.state.position} offerIndex={this.state.offerIndex} /> : null
@@ -91,7 +90,6 @@ class Board extends Component {
             })
           }
         </div>
-        <Player name={this.props.username} dice={this.dice} piece='Hat' />
         <div className='board parent'>
           {
             this.props.players.map((player, index) => {

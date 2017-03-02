@@ -8,8 +8,8 @@ import axios from 'axios'
 // import { Button } from 'semantic-ui-react'
 import LoadGame from './LoadGame'
 import { Button, Header, Container, Segment, Input, Icon, Divider, Form, Ui, Secondary, Menu } from 'semantic-ui-react'
-import { Motion, spring, TransitionMotion } from 'react-motion'
-const springPreset = { wobbly: [130, 11] }
+// import { Motion, spring, TransitionMotion } from 'react-motion'
+// const springPreset = { wobbly: [130, 11] }
 class Lobby extends Component {
   constructor (props) {
     super(props)
@@ -80,7 +80,7 @@ class Lobby extends Component {
     })
     sock.socket.on('load state', (state) => {
       this.props.dispatch(setState(state))
-      this.setState({resume: false})
+      this.setState({ resume: false })
     })
   }
   newGame () {
@@ -127,26 +127,26 @@ class Lobby extends Component {
     window.localStorage.removeItem('token')
     window.localStorage.removeItem('displayname')
     window.localStorage.removeItem('id')
-    this.setState({promise: false})
+    this.setState({ promise: false })
   }
 
-  getStyles() {
-		let configs = {}
-		this.state.messages.forEach( (val,index) => {
-  		configs[val.id] = {
-  			opacity: spring(1),
-  		  top: spring(0, springPreset.wobbly)
-  		}
-		})
-		return configs
-	}
+  // getStyles () {
+  //   let configs = {}
+  //   this.state.messages.forEach((val, index) => {
+  //     configs[val.id] = {
+  //       opacity: spring(1),
+  //       top: spring(0, springPreset.wobbly)
+  //     }
+  //   })
+  //   return configs
+  // }
 
-	willEnter(key) {
-		return {
-			opacity: spring(0),
-			top: spring(100, springPreset.wobbly)
-		}
-	}
+  // willEnter (key) {
+  //   return {
+  //     opacity: spring(0),
+  //     top: spring(100, springPreset.wobbly)
+  //   }
+  // }
 
   render () {
     let messages = this.state.messages.map((msg, i) => {
@@ -163,9 +163,9 @@ class Lobby extends Component {
             <div className='navbar-header'>
               <button type='button' className='navbar-toggle collapsed' data-toggle='collapse' aria-expanded='false' aria-controls='navbar'>
                 <span className='sr-only'>Toggle navigation</span>
-                <span className='icon-bar'></span>
-                <span className='icon-bar'></span>
-                <span className='icon-bar'></span>
+                <span className='icon-bar' />
+                <span className='icon-bar' />
+                <span className='icon-bar' />
               </button>
               <a className='navbar-brand' href='#/'>Hacknopoly</a>
             </div>
@@ -187,7 +187,7 @@ class Lobby extends Component {
             <div className='col-md-9'>
               <div className='panel panel-primary chatWindow'>
                 <div className='panel-heading'>
-                  <span className='glyphicon glyphicon-comment'></span> Chat
+                  <span className='glyphicon glyphicon-comment' /> Chat
                 </div>
                 <div className='panel-body'>
                   <ul>
@@ -198,7 +198,7 @@ class Lobby extends Component {
 
                 <div className='panel-footer'>
                   <div className='input-group'>
-                    <input id='message' type='text' className='form-control input-sm' placeholder='Enter your message...'/>
+                    <input id='message' type='text' className='form-control input-sm' placeholder='Enter your message...' />
                     <span className='input-group-btn'>
                       <button className='btn btn-warning btn-sm' onClick={this.submitMessage}>Send</button>
                     </span>

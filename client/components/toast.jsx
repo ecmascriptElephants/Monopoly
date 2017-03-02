@@ -2,7 +2,7 @@ import React from 'react'
 import Toast from 'essence-snackbar'
 const Toaster = (props) => {
   return (
-    <Toast classes={'e-text-white'} visible={props.show} delay={1500}>
+    <Toast classes={'e-text-white'} visible={props.show} delay={2000}>
       {props.message}
     </Toast>
   )

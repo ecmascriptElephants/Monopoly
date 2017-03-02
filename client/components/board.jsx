@@ -8,7 +8,7 @@ import Toast from './toast'
 import ToastHistory from './ToastHistory'
 import Others from './OtherPlayers'
 import Offer from './ShowOffer'
-import { Card, Accordion } from 'semantic-ui-react'
+import { Card } from 'semantic-ui-react'
 
 class Board extends Component {
   constructor (props) {
@@ -52,7 +52,7 @@ class Board extends Component {
       this.props.dispatch(setPlayers(players))
     })
 
-    sock.socket.on('offer for you', ({position, socket, offer, offerIndex}) => {
+    sock.socket.on('offer for you', ({ position, socket, offer, offerIndex }) => {
       this.setState({ position, socket, offer, offerIndex, showOffer: true })
     })
 
@@ -77,12 +77,11 @@ class Board extends Component {
   render () {
     return (
       <div>
-        <div className='left'>
-        <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment}/>
-        {
-        this.state.showOffer ? <Offer open={this.state.showOffer} offer={this.state.offer} setShowOffer={this.showPopup} position={this.state.position} offerIndex={this.state.offerIndex} /> : null
-      }
-        <div className={'other-players'}>
+        <div className='left'> <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment} />
+          {
+            this.state.showOffer ? <Offer open={this.state.showOffer} offer={this.state.offer} setShowOffer={this.showPopup} position={this.state.position} offerIndex={this.state.offerIndex} /> : null
+          }
+          <div className={'other-players'}>
             <Card.Group>
               {
                 this.props.players.map((player, index) => {
@@ -110,19 +109,34 @@ class Board extends Component {
                 <div className='flexrow'>
                   <div className='top' id='Position20'>
                     20
-                </div>
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                  </div>
                   <div className='item' id='Position21'>
                     21
                 </div>
                   <div className='item' id='Position22'>
                     22
-                </div>
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                  </div>
                   <div className='item' id='Position23'>
                     23
                 </div>
                   <div className='item' id='Position24'>
                     24
-                </div>
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                  </div>
                   <div className='item' id='Position25'>
                     25
                 </div>
@@ -155,7 +169,12 @@ class Board extends Component {
                   </div>
                     <div className='item' id='Position16'>
                       16
-                  </div>
+                      <img src='house.png' id='house' />
+                      <img src='house.png' id='house' />
+                      <img src='house.png' id='house' />
+                      <img src='house.png' id='house' />
+                      <img src='house.png' id='house' />
+                    </div>
                     <div className='item' id='Position15'>
                       15
                   </div>
@@ -228,12 +247,26 @@ class Board extends Component {
                     3
                 </div>
                   <div className='item' id='Position2'>
-                    2
-                </div>
+                    2<img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                  </div>
                   <div className='item' id='Position1'>
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
                     1
                 </div>
                   <div className='top' id='Position0'>
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
                     0
                 </div>
                 </div>

@@ -1,191 +1,192 @@
 * {
-  margin: 0;
-  padding: 0;
-  font-family: 'Raleway', sans-serif;
+margin: 0;
+padding: 0;
+font-family: 'Raleway', sans-serif;
 }
 
 .board {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  display: flex;
-  margin: 0 auto;
-  width: 45%;
-  border: 1px solid black;
-  background-image: url('https://images-na.ssl-images-amazon.com/images/I/81oC5pYhh2L._SL1500_.jpg');
-  background-size: contain;
-  background-repeat: no-repeat;
+position: fixed;
+left: 0;
+bottom: 0;
+display: flex;
+margin: 0 auto;
+width: 45%;
+border: 1px solid black;
+background-image: url('https://images-na.ssl-images-amazon.com/images/I/81oC5pYhh2L._SL1500_.jpg');
+background-size: contain;
+background-repeat: no-repeat;
 }
 
 .board:after {
-  content: "";
-  display: block;
-  padding-bottom: 100%;
+content: "";
+display: block;
+padding-bottom: 100%;
 }
 
 .symbol {
-  position: absolute;
-  z-index: 20;
-  display: flex;
+position: absolute;
+z-index: 20;
+display: flex;
 }
 
 #tophat {
-  width: 15px;
-  height: 15px;
+width: 15px;
+height: 15px;
+}
+
+#house {
+  height: 22%;
+  width: 30%;
 }
 
 .flexrow {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  width: 100%;
-  height: 13%
+display: flex;
+flex-direction: row;
+flex-wrap: nowrap;
+width: 100%;
+height: 13%
 }
 
 .flexcol {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  overflow: hidden;
-  width: 100%;
+display: flex;
+flex-direction: column;
+flex-wrap: nowrap;
+overflow: hidden;
+width: 100%;
 }
 
 .flexside {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  overflow: auto;
-  width: 13.5%;
-  height: 100%;
+display: flex;
+flex-direction: column;
+flex-wrap: nowrap;
+overflow: auto;
+width: 13.5%;
+height: 100%;
 }
 
 .item {
-  border: 1px solid black;
-  /* <-- just for demonstration */
-  height: 100%;
-  width: 100%;
+border: 1px solid black;
+/* <-- just for demonstration */
+height: 100%;
+width: 100%;
 }
 
 .col_item {
-  border: 1px solid black;
-  /* <-- just for demonstration */
-  height: 100px;
-  width: 130px;
+border: 1px solid black;
+/* <-- just for demonstration */
+height: 100px;
+width: 130px;
 }
 
 .flexmiddle {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  width: 100%;
-  height: 74%;
-  justify-content: space-between;
+display: flex;
+flex-direction: row;
+flex-wrap: nowrap;
+width: 100%;
+height: 74%;
+justify-content: space-between;
 }
 
 .top {
-  width: 160%;
-  height: 100%;
+width: 160%;
+height: 100%;
 }
 
 .ui.vertical.segment:last-child {
-  width: 40%;
-  border-bottom: none;
-  margin: auto;
+width: 40%;
+border-bottom: none;
+margin: auto;
 }
 
 .ui.container {
-  padding-top: 145px;
+padding-top: 145px;
 }
 
 .wire {
-  display: flex;
-  width: 100%;
-  z-index: 10;
-  height: 100%;
-  position: absolute
+display: flex;
+width: 100%;
+z-index: 10;
+height: 100%;
+position: absolute
 }
 
 .pcard {
-  float: right;
-  width: 17%!important;
+float: left;
+margin-right: 0px!important;
+width: 30%!important;
+padding-top: 0!important;
 }
 
 .chatBox {
-  float: right;
-  width: 17%!important;
+float: right;
+width: 17%!important;
 }
 
 .content {
-  float: left;
-  width: 50%!important;
+  width: 100%!important;
 }
 
 .button-enter {
-  opacity: 0.01;
+opacity: 0.01;
 }
 
 .button-enter.button-enter-active {
-  opacity: 1;
-  transition: opacity 500ms ease-in;
+opacity: 1;
+transition: opacity 500ms ease-in;
 }
 
 .button-leave {
-  opacity: 1;
+opacity: 1;
 }
 
 .button-leave.button-leave-active {
-  opacity: 0.01;
-  transition: opacity 300ms ease-in;
+opacity: 0.01;
+transition: opacity 300ms ease-in;
 }
 
 .Yellow {
-  background-color: yellow
+background-color: yellow
 }
 
 .Brown {
-  background-color: Brown
+background-color: Brown
 }
 
 .DarkBlue {
-  background-color: darkblue
+background-color: darkblue
 }
 
 .LightBlue {
-  background-color: lightblue
+background-color: lightblue
 }
 
 .Red {
-  background-color: red
+background-color: red
 }
 
 .Orange {
-  background-color: Orange
+background-color: Orange
 }
 
 .Green {
-  background-color: Green
+background-color: Green
 }
 
 .Pink {
-  background-color: Pink
+background-color: Pink
 }
 
 .toastHistory {
-  position: fixed;
-  right: 100px;
-  bottom: 300px;
-  width: 30%!important;
+position: fixed;
+right: 100px;
+bottom: 300px;
+width: 30%!important;
 }
 
 .left {
-  width: 50%;
-  float: right;
-  margin-top: 5%;
-}
-
-.right {
-  width: 50%;
-  height: 100%;
+width: 55%;
+float: right;
+margin-top: 5%;
 }
 
 #lobby {
@@ -223,3 +224,24 @@
 .gameList {
   height: 250px;
 }
+
+.right {
+width: 45%;
+height: 100%;
+}
+
+.ui.cards>.card {
+width: 45%
+}
+
+.ui.card>.extra,
+.ui.cards>.card>.extra {
+height: 100px;
+overflow: auto;
+}
+
+.CurrentUserProperties{
+  height: 100px;
+  overflow: auto;
+}
+

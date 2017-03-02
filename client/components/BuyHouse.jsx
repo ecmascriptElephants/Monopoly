@@ -7,50 +7,46 @@ import sock from '../helper/socket'
 const BuyHouse = (props) => {
   const buyHouse = (propertyPosition) => {
     let propName = ''
+    let propArr = [...props.userPropertiesArray[props.playerIndex]]
+    propArr.forEach(prop => {
+      if (prop.Position === propertyPosition) {
+        propName = prop.PropertyObj.NAME
+      }
+    })
     if (props.houses < 5) {
       let propertiesArray = [...props.userPropertiesArray[props.playerIndex]]
       let housePrice = 0
-      // let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property) => {
-      //   if (property.PropertyObj.PROPERTY_GROUP === props.propertyGroup) {
-      //     numberOfPropertiesInGroup += 1
-      //     return numberOfPropertiesInGroup
-      //   }
-      // }, 0)
-      // if (props.numberNeeded === propertiesInGroupCount) {
         propertiesArray.forEach((property) => {
-          if (property.Position === propertyPosition && property.PropertyObj.ALLOWS_HOUSES) {
-            housePrice = property.PropertyObj.HOUSE_PRICE
-            propName = property.PropertyObj.NAME
-            if (props.userCashArray[props.playerIndex] >= housePrice) {
-              property.Houses += 1
-              props.reduceFunds(housePrice)
-              sock.updateMoney({ gameID: props.gameID, money: -housePrice, index: props.playerIndex })
-              let newComment = ''
-              if(property.Houses === 5) {
-                newComment = comments.boughtHotel(props.username, property.PropertyObj.NAME, housePrice)
+        if (property.Position === propertyPosition && property.PropertyObj.ALLOWS_HOUSES) {
+          housePrice = property.PropertyObj.HOUSE_PRICE
+          propName = property.PropertyObj.NAME
+          if (props.userCashArray[props.playerIndex] >= housePrice) {
+            property.Houses += 1
+            props.reduceFunds(housePrice)
+            sock.updateMoney({ gameID: props.gameID, money: -housePrice, index: props.playerIndex })
+            let newComment = ''
+            if (property.Houses === 5) {
+              newComment = comments.boughtHotel(props.username, property.PropertyObj.NAME, housePrice)
+            } else {
+              newComment = comments.boughtHouse(props.username, property.PropertyObj.NAME, housePrice)
+            }
+            props.setState({comment: newComment, showToast: true})
+            sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
+            props.dispatch(setUserProperties(propertiesArray, props.index))
+          } else if (props.userCashArray[props.playerIndex] < housePrice) {
+          console.log('You do not have sufficient funds to purchase additional houses')
+           let newComment = ''
+              if (property.Houses === 4) {
+                newComment = comments.buyHotelInsufficientFunds(props.username, property.PropertyObj.NAME, housePrice, props.userCashArray[props.playerIndex])
               } else {
-                newComment = comments.boughtHouse(props.username, property.PropertyObj.NAME, housePrice)
+                newComment = comments.buyHouseInsufficientFunds(props.username, property.PropertyObj.NAME, housePrice, props.userCashArray[props.playerIndex])
               }
               props.setState({comment: newComment, showToast: true})
               sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
-              props.dispatch(setUserProperties(propertiesArray, props.index))
-            } else if (props.userCashArray[props.playerIndex] < housePrice) {
-            console.log('You do not have sufficient funds to purchase additional houses')
-             let newComment = ''
-                if(property.Houses === 4) {
-                  newComment = comments.buyHotelInsufficientFunds(props.username, property.PropertyObj.NAME, housePrice, props.userCashArray[props.playerIndex])
-                } else {
-                  newComment = comments.buyHouseInsufficientFunds(props.username, property.PropertyObj.NAME, housePrice, props.userCashArray[props.playerIndex])
-                }
-                props.setState({comment: newComment, showToast: true})
-                sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
             }
           }
         })
-      } /*else {
-        console.log(`You need ${props.numberNeeded} properties in order to have a monopoly, but you only have ${propertiesInGroupCount}.`)
-      }
-    }*/ else {
+      } else {
       console.log('You can not buy any more houses')
       let newComment = comments.alreadyHaveHotel(props.username, propName)
       props.setState({comment: newComment, showToast: true})

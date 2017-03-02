@@ -22,7 +22,6 @@ const Mortgage = (props) => {
     props.dispatch(setUserProperties(tempProperties, props.playerIndex))
     props.increaseFunds(mortgageAmount)
     sock.updateMoney({ gameID: props.gameID, money: mortgageAmount, index: props.playerIndex })
-
   }
   return (
     <button onClick={() => { mortgageProperty() }}>Mortgage</button>

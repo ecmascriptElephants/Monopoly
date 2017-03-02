@@ -452,11 +452,6 @@ class DiceRoll extends Component {
             }
           </div>
         </div>
-        <div className='Comments_div'>
-          <div className='doubles-comment_div'>
-            {this.state.comment}
-          </div>
-        </div>
         <div className='CurrentUserProperties'>
           <div>
             Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {

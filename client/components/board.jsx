@@ -108,18 +108,33 @@ class Board extends Component {
                 <div className='flexrow'>
                   <div className='top' id='Position20'>
                     20
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
                 </div>
                   <div className='item' id='Position21'>
                     21
                 </div>
                   <div className='item' id='Position22'>
                     22
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
                 </div>
                   <div className='item' id='Position23'>
                     23
                 </div>
                   <div className='item' id='Position24'>
                     24
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
                 </div>
                   <div className='item' id='Position25'>
                     25
@@ -153,6 +168,11 @@ class Board extends Component {
                   </div>
                     <div className='item' id='Position16'>
                       16
+                      <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
                   </div>
                     <div className='item' id='Position15'>
                       15
@@ -226,12 +246,26 @@ class Board extends Component {
                     3
                 </div>
                   <div className='item' id='Position2'>
-                    2
+                    2<img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
                 </div>
                   <div className='item' id='Position1'>
+                  <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
                     1
                 </div>
                   <div className='top' id='Position0'>
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
+                    <img src='house.png' id='house' />
                     0
                 </div>
                 </div>

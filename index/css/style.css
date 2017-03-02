@@ -34,6 +34,11 @@ width: 15px;
 height: 15px;
 }
 
+#house {
+  height: 22%;
+  width: 30%;
+}
+
 .flexrow {
 display: flex;
 flex-direction: row;

@@ -18,6 +18,14 @@ const BuyHouse = (props) => {
             property.Houses += 1
             props.reduceFunds(housePrice)
             sock.updateMoney({ gameID: props.gameID, money: -housePrice, index: props.playerIndex })
+            let arr = []
+            for (let i = 0; i < property.Houses; i++) {
+              arr.push(i)
+            }
+            var house = `h${propertyPosition}`
+            let obj = {}
+            obj[house] = arr
+            props.setHouse(obj)
             let newComment = ''
             if (property.Houses === 5) {
               newComment = comments.boughtHotel(props.username, property.PropertyObj.NAME, housePrice)

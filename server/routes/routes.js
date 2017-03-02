@@ -2,16 +2,16 @@ let msgHistory = require('../controllers/msgHistoryController')
 const token = require('../jwt/jwt')
 module.exports = (app, express, passport) => {
   app.post('/signup', passport.authenticate('local-signup', {
-      failureRedirect: '/',
-      failureFlash: true
-    }),
+    failureRedirect: '/',
+    failureFlash: true
+  }),
     (req, res) => {
       res.send({ token: passport.token, user: passport.user })
     })
 
   app.post('/login', passport.authenticate('local-login', {
-      failureRedirect: '/#/'
-    }),
+    failureRedirect: '/#/'
+  }),
     (req, res) => {
       res.send({ token: passport.token, user: passport.user })
     })

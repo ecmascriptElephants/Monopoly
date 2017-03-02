@@ -152,7 +152,7 @@ class Player extends Component {
           <Message>
             {this.props.userCashArray[this.props.playerIndex]}
           </Message>
-          <DiceRoll dice={this.props.dice} setComment={this.props.comment} />
+          <DiceRoll dice={this.props.dice} setComment={this.props.setComment} setHouse={this.props.setHouse} />
           <Chat name={this.props.username} />
         </Segment>
       </Container>
@@ -173,6 +173,7 @@ Player.propTypes = {
   dice: React.PropTypes.func.isRequired,
   userCashArray: React.PropTypes.array.isRequired,
   playerIndex: React.PropTypes.number.isRequired,
-  setComment: React.PropTypes.func.isRequired
+  setComment: React.PropTypes.func.isRequired,
+  setHouse: React.PropTypes.func.isRequired
 }
 export default connect(mapStateToProps)(Player)

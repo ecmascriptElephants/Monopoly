@@ -19,12 +19,41 @@ class Board extends Component {
       valid: false,
       showToast: false,
       comment: '',
-      showOffer: false
+      showOffer: false,
+      h1: [],
+      h3: [],
+      h6: [],
+      h8: [],
+      h9: [],
+      h11: [],
+      h13: [],
+      h14: [],
+      h16: [],
+      h18: [],
+      h19: [],
+      h20: [],
+      h23: [],
+      h24: [],
+      h26: [],
+      h27: [],
+      h29: [],
+      h31: [],
+      h32: [],
+      h34: [],
+      h37: [],
+      h38: [],
+      h39: []
+
     }
     sock.init({ gameID: this.props.gameID, index: this.props.playerIndex })
     this.dice = this.dice.bind(this)
     this.setComment = this.setComment.bind(this)
     this.showPopup = this.showPopup.bind(this)
+    this.setHouse = this.setHouse.bind(this)
+  }
+
+  setHouse (obj) {
+    this.setState(obj)
   }
 
   dice (value, index, flag) {
@@ -67,7 +96,6 @@ class Board extends Component {
   }
 
   setComment (comment) {
-    console.log('comment', comment)
     this.setState({ comment })
   }
 
@@ -77,7 +105,7 @@ class Board extends Component {
   render () {
     return (
       <div>
-        <div className='left'> <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment} />
+        <div className='left'> <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment} setHouse={this.setHouse} />
           {
             this.state.showOffer ? <Offer open={this.state.showOffer} offer={this.state.offer} setShowOffer={this.showPopup} position={this.state.position} offerIndex={this.state.offerIndex} /> : null
           }
@@ -105,170 +133,150 @@ class Board extends Component {
               })
             }
             <div className='wire'>
+              <ToastHistory message={this.state.comment} />
               <div className='flexcol'>
                 <div className='flexrow'>
-                  <div className='top' id='Position20'>
-                    20
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
+                  <div className='top' id='Position20' />
+                  <div className='item-top' id='Position21'>
+                    {this.state.h20.map((item) => {
+                      return <img src='house.png' id='house' />
+                    })}
                   </div>
-                  <div className='item' id='Position21'>
-                    21
-                </div>
-                  <div className='item' id='Position22'>
-                    22
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
+                  <div className='item-top' id='Position22' />
+                  <div className='item-top' id='Position23'>
+                    {this.state.h23.map((item) => {
+                      return <img src='house.png' id='house' />
+                    })}
                   </div>
-                  <div className='item' id='Position23'>
-                    23
-                </div>
-                  <div className='item' id='Position24'>
-                    24
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
+                  <div className='item-top' id='Position24'>
+                    {this.state.h24.map((item) => {
+                      return <img src='house.png' id='house' />
+                    })}
                   </div>
-                  <div className='item' id='Position25'>
-                    25
-                </div>
-                  <div className='item' id='Position26'>
-                    26
-                </div>
-                  <div className='item' id='Position27'>
-                    27
-                </div>
-                  <div className='item' id='Position28'>
-                    28
-                </div>
-                  <div className='item' id='Position29'>
-                    29
-                </div>
-                  <div className='top' id='Position30'>
-                    30
-                </div>
+                  <div className='item-top' id='Position25' />
+                  <div className='item-top' id='Position26'>
+                    {this.state.h26.map((item) => {
+                      return <img src='house.png' id='house' />
+                    })}
+                  </div>
+                  <div className='item-top' id='Position27'>
+                    {this.state.h27.map((item) => {
+                      return <img src='house.png' id='house' />
+                    })}
+                  </div>
+                  <div className='item-top' id='Position28' />
+                  <div className='item-top' id='Position29'>
+                    {this.state.h29.map((item) => {
+                      return <img src='house.png' id='house' />
+                    })}
+                  </div>
+                  <div className='top' id='Position30' />
                 </div>
                 <div className='flexmiddle'>
                   <div className='flexside'>
-                    <div className='item' id='Position19'>
-                      19
-                  </div>
-                    <div className='item' id='Position18'>
-                      18
-                  </div>
-                    <div className='item' id='Position17'>
-                      17
-                  </div>
-                    <div className='item' id='Position16'>
-                      16
-                      <img src='house.png' id='house' />
-                      <img src='house.png' id='house' />
-                      <img src='house.png' id='house' />
-                      <img src='house.png' id='house' />
-                      <img src='house.png' id='house' />
+                    <div className='item-left' id='Position19'>
+                      {this.state.h19.map((item) => {
+                        return <img src='house.png' id='house' />
+                      })}
                     </div>
-                    <div className='item' id='Position15'>
-                      15
-                  </div>
-                    <div className='item' id='Position14'>
-                      14
-                  </div>
-                    <div className='item' id='Position13'>
-                      13
-                  </div>
-                    <div className='item' id='Position12'>
-                      12
-                  </div>
-                    <div className='item' id='Position11'>
-                      11
-                  </div>
+                    <div className='item-left' id='Position18'>
+                      {this.state.h18.map((item) => {
+                        return <img src='house.png' id='house' />
+                      })}
+                    </div>
+                    <div className='item-left' id='Position17' />
+                    <div className='item-left' id='Position16'>
+                      {this.state.h16.map((item) => {
+                        return <img src='house.png' id='house' />
+                      })}
+                    </div>
+                    <div className='item-left' id='Position15' />
+                    <div className='item-left' id='Position14'>
+                      {this.state.h14.map((item) => {
+                        return <img src='house.png' id='house' />
+                      })}
+                    </div>
+                    <div className='item-left' id='Position13'>
+                      {this.state.h13.map((item) => {
+                        return <img src='house.png' id='house' />
+                      })}
+                    </div>
+                    <div className='item-left' id='Position12' />
+                    <div className='item-left' id='Position11'>
+                      {this.state.h11.map((item) => {
+                        return <img src='house.png' id='house' />
+                      })}
+                    </div>
                   </div>
                   <div className='flexside'>
-                    <div className='item' id='Position31'>
-                      31
-                  </div>
-                    <div className='item' id='Position32'>
-                      32
-                  </div>
-                    <div className='item' id='Position33'>
-                      33
-                  </div>
-                    <div className='item' id='Position34'>
-                      34
-                  </div>
-                    <div className='item' id='Position35'>
-                      35
-                  </div>
-                    <div className='item' id='Position36'>
-                      36
-                  </div>
-                    <div className='item' id='Position37'>
-                      37
-                  </div>
-                    <div className='item' id='Position38'>
-                      38
-                  </div>
-                    <div className='item' id='Position39'>
-                      39
-                  </div>
+                    <div className='item-right' id='Position31'>
+                      {this.state.h31.map((item) => {
+                        return <img src='house.png' id='house' />
+                      })}
+                    </div>
+                    <div className='item-right' id='Position32'>
+                      {this.state.h32.map((item) => {
+                        return <img src='house.png' id='house' />
+                      })}
+                    </div>
+                    <div className='item-right' id='Position33' />
+                    <div className='item-right' id='Position34'>
+                      {this.state.h34.map((item) => {
+                        return <img src='house.png' id='house' />
+                      })}
+
+                    </div>
+                    <div className='item-right' id='Position35' />
+                    <div className='item-right' id='Position36' />
+                    <div className='item-right' id='Position37'>
+                      {this.state.h37.map((item) => {
+                        return <img src='house.png' id='house' />
+                      })}
+
+                    </div>
+                    <div className='item-right' id='Position38' />
+                    {this.state.h38.map((item) => {
+                      return <img src='house.png' id='house' />
+                    })}
                   </div>
                 </div>
                 <div className='flexrow'>
-                  <div className='top' id='Position10'>
-                    10
-                </div>
-                  <div className='item' id='Position9'>
-                    9
-                </div>
-                  <div className='item' id='Position8'>
-                    8
-                </div>
-                  <div className='item' id='Position7'>
-                    7
-                </div>
-                  <div className='item' id='Position6'>
-                    6
-                </div>
-                  <div className='item' id='Position5'>
-                    5
-                </div>
-                  <div className='item' id='Position4'>
-                    4
-                </div>
-                  <div className='item' id='Position3'>
-                    3
-                </div>
-                  <div className='item' id='Position2'>
-                    2<img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
+                  <div className='top' id='Position10' />
+                  <div className='item-bottom' id='Position9'>
+                    {this.state.h9.map((item) => {
+                      return <img src='house.png' id='house' />
+                    })}
+
                   </div>
-                  <div className='item' id='Position1'>
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    1
-                </div>
-                  <div className='top' id='Position0'>
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    <img src='house.png' id='house' />
-                    0
-                </div>
+                  <div className='item-bottom' id='Position8'>
+                    {this.state.h8.map((item) => {
+                      return <img src='house.png' id='house' />
+                    })}
+
+                  </div>
+                  <div className='item-bottom' id='Position7' />
+                  <div className='item-bottom' id='Position6'>
+                    {this.state.h6.map((item) => {
+                      return <img src='house.png' id='house' />
+                    })}
+
+                  </div>
+                  <div className='item-bottom' id='Position5' />
+                  <div className='item-bottom' id='Position4' />
+                  <div className='item-bottom' id='Position3'>
+                    {this.state.h3.map((item) => {
+                      return <img src='house.png' id='house' />
+                    })}
+
+                  </div>
+                  <div className='item-bottom' id='Position2' />
+                  <div className='item-bottom' id='Position1'>
+                    {this.state.h1.map((item) => {
+                      return <img src='house.png' id='house' />
+                    })}
+
+                  </div>
+                  <div className='top' id='Position0' />
                 </div>
               </div>
             </div>

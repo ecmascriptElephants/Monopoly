@@ -168,16 +168,18 @@ class Lobby extends Component {
                 <span className='icon-bar' />
                 <span className='icon-bar' />
               </button>
-              <a className='navbar-brand' href='#/'>Hacknopoly</a>
+              <a className='navbar-brand' href='#/lobby'>Hacknopoly</a>
             </div>
             <div id='navbar' className='collapse navbar-collapse'>
               <ul className='nav navbar-nav'>
-                <li><a href='/'>Home</a></li>
-                <li><a href='/'>Profile</a></li>
+                <li><a href='#/lobby'>Home</a></li>
+                <li><a href='#/profile'>Profile</a></li>
               </ul>
-              <span>Welcome {this.props.username}</span>
+              <ul className='nav navbar-nav navbar-right'>
+                <li><a href='#lobby'>Welcome {this.props.username}</a></li>
+                <li><Link to='/'><button onClick={this.signOut}>Sign Out </button></Link></li>
+              </ul>
               <div>
-                <Link to='/'><button onClick={this.signOut}>Sign Out </button></Link>
               </div>
             </div>
           </div>
@@ -200,7 +202,7 @@ class Lobby extends Component {
                         {this.state.messages.map((comment, i) => {
                           const {...style} = interp[i + 1]
                           return (
-                            <div className='comment-node' sender={comment.sender} key={comment._id} style={style}>
+                            <div className='oneChat' sender={comment.sender} key={comment._id} style={style}>
                               <div className='print-author'>
                                 {comment.sender + ' - '}
                               </div>
@@ -242,30 +244,7 @@ class Lobby extends Component {
             </div>
           </div>
         </div>
-
         <Toast message={this.state.comment} show={this.state.showToast} />
-        <br />
-        <div>
-          <form onSubmit={this.getChats}>
-            <input type='text' placeholder='keyword' id='keyword' />
-            <select id='room' name='room'>
-              <option>All Rooms</option>
-              <option value='lobby'>Lobby</option>
-              <option value='board'>Board</option>
-            </select>
-
-            <select id='date'>
-              <option>This Week</option>
-              <option value='thisWeek'>This Month</option>
-              <option value='thisYear'>This Year</option>
-            </select>
-            <button type='submit'>Show chats</button>
-          </form>
-          <p> You have total of {this.state.queryResults.length} messages </p>
-          <ul>
-            {queryResults}
-          </ul>
-        </div>
       </div>
     )
   }

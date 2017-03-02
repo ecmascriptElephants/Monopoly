@@ -190,7 +190,7 @@ margin-top: 5%;
 }
 
 #lobby {
-  margin-top: 150px;
+  margin-top: 100px;
 }
 
 .chatWindow {
@@ -245,3 +245,24 @@ overflow: auto;
   overflow: auto;
 }
 
+.video {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  opacity: 0.5;
+}
+
+#loginForm {
+  position: relative;
+  top: 30%;
+  z-index: 2;
+  margin: 0 auto;
+}

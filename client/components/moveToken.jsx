@@ -44,7 +44,7 @@ const MoveToken = (props) => {
   }
 
   const handleMoveToken = () => {
-    console.log('moveTokenjsx handlemovetoken props.specialCardButton = ',props.specialCardButton)
+    console.log('moveTokenjsx handlemovetoken props.specialCardButton = ', props.specialCardButton)
     const doubles = props.doubles
     const diceSum = props.diceSum
     console.log('movetokenjsx handleMoveToken props.goFlag = ', props.goFlag)
@@ -73,14 +73,14 @@ const MoveToken = (props) => {
     } else if (squareType === 'CHANCE') {
       props.dispatch(setMoveToken(false))
       props.dispatch(setCardButton(true))
-      props.setState({card: false})
+      props.setState({ card: false })
       let newComment = comments.squareTypeChance(props.username)
       props.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
     } else if (squareType === 'COMMUNITY_CHEST') {
       props.dispatch(setMoveToken(false))
       props.dispatch(setCardButton(true))
-      props.setState({card: true})
+      props.setState({ card: true })
       let newComment = comments.squareTypeCommunityChest(props.username)
       props.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
@@ -186,13 +186,13 @@ const MoveToken = (props) => {
     } else if (squareType === 'JAIL') {
       props.dispatch(setMoveToken(false))
       let newComment = comments.squareTypeJail(props.username)
-      props.setState({comment: newComment, showToast: true})
+      props.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
       props.dispatch(setEndTurn(!doubles))
       props.dispatch(setDiceRoll(!!doubles))
     } else if (squareType === 'INCOME_TAX') {
       let newComment = comments.squareTypeIncomeTax(props.username)
-      props.setState({comment: newComment, showToast: true})
+      props.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
       props.dispatch(setMoveToken(false))
       props.dispatch(setIncomeTax(true))
@@ -200,11 +200,11 @@ const MoveToken = (props) => {
       props.dispatch(setMoveToken(false))
       props.dispatch(setLuxury(true))
       let newComment = comments.squareTypeLuxuryTax(props.username)
-      props.setState({comment: newComment, showToast: true})
+      props.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
     }
     handleLandOnOrPassGo(oldUserPosition, userPosition, jail)
-    props.setState({dice: [0, 0]})
+    props.setState({ dice: [0, 0] })
   }
 
   return (

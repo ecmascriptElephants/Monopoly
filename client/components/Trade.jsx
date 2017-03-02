@@ -13,20 +13,20 @@ class Trade extends Component {
   }
 
   open () {
-    this.setState({open: true})
+    this.setState({ open: true })
   }
 
   close () {
-    this.setState({open: false})
+    this.setState({ open: false })
   }
 
   handleOffer (e) {
-    this.setState({offer: e.target.value})
+    this.setState({ offer: e.target.value })
   }
 
   offer () {
     sock.trade(this.props.socket, this.state.offer, this.props.position, this.props.playerIndex)
-    this.setState({open: false})
+    this.setState({ open: false })
   }
 
   render () {

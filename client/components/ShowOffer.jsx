@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Image, Modal, Icon, Message } from 'semantic-ui-react'
 import sock from '../helper/socket'
-import {setCash, setUserProperties} from './store/actionCreators'
+import { setCash, setUserProperties } from './store/actionCreators'
 class ShowOffer extends Component {
   constructor (props) {
     super(props)
@@ -20,8 +20,8 @@ class ShowOffer extends Component {
     let buyerPropertyArray = ([...this.props.userPropertiesArray[this.props.offerIndex]])
     this.props.dispatch(setCash(offer, this.props.playerIndex))
     this.props.dispatch(setCash(-offer, this.props.offerIndex))
-    sock.updateMoney({gameID: this.props.gameID, money: -offer, index: this.props.offerIndex})
-    sock.updateMoney({gameID: this.props.gameID, money: offer, index: this.props.playerIndex})
+    sock.updateMoney({ gameID: this.props.gameID, money: -offer, index: this.props.offerIndex })
+    sock.updateMoney({ gameID: this.props.gameID, money: offer, index: this.props.playerIndex })
     const soldProperty = ownerPropertyArray.splice(this.props.position, 1).pop()
     this.props.dispatch(setUserProperties(ownerPropertyArray, this.props.playerIndex))
     sock.updateProps({ gameID: this.props.gameID, properties: ownerPropertyArray, index: this.props.playerIndex })

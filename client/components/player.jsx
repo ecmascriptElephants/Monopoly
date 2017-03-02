@@ -4,7 +4,7 @@ import { rules } from '../static/rules'
 import DiceRoll from './dice_roll2'
 import { connect } from 'react-redux'
 import Chat from './chat'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 class Player extends Component {
   constructor (props) {
@@ -29,7 +29,7 @@ class Player extends Component {
   }
 
   componentWillReceiveProps (prev) {
-    this.setState({name: prev.name})
+    this.setState({ name: prev.name })
   }
 
   increaseFunds (value) {

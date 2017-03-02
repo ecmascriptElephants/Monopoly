@@ -19,11 +19,11 @@ const UnMortgage = (props) => {
           props.reduceFunds(mortgageAmount)
           sock.updateMoney({ gameID: props.gameID, money: -mortgageAmount, index: props.playerIndex })
           let newComment = comments.unmortgageProperty(props.username, props.propertyName, mortgageAmount)
-          props.setState({comment: newComment, showToast: true})
+          props.setState({ comment: newComment, showToast: true })
           sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
         } else {
           let newComment = comments.unmortgagePropertyInsufficientFunds(props.username, props.propertyName, mortgageAmount, props.cash)
-          props.setState({comment: newComment, showToast: true})
+          props.setState({ comment: newComment, showToast: true })
           sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
         }
       }

@@ -123,8 +123,7 @@ width: 17%!important;
 }
 
 .content {
-  float: left;
-  width: 50%!important;
+  width: 100%!important;
 }
 
 .button-enter {
@@ -245,4 +244,4 @@ overflow: auto;
   height: 100px;
   overflow: auto;
 }
->>>>>>> refactorv5
+

@@ -187,3 +187,39 @@
   width: 50%;
   height: 100%;
 }
+
+#lobby {
+  margin-top: 150px;
+}
+
+.chatWindow {
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.2);
+  background: #eef;
+}
+
+.oneChat {
+  list-style: none;
+  position: relative;
+	margin-bottom: 1em;
+	padding: 1.5em;
+	background: #fff;
+	border-radius: 2.1em;
+}
+
+.oneChat li {
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+
+.panel-body {
+  overflow-y: auto;
+  height: 500px;
+}
+
+.onlinePlayers {
+  height: 250px;
+}
+
+.gameList {
+  height: 250px;
+}

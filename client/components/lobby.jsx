@@ -8,8 +8,8 @@ import axios from 'axios'
 // import { Button } from 'semantic-ui-react'
 import LoadGame from './LoadGame'
 import { Button, Header, Container, Segment, Input, Icon, Divider, Form, Ui, Secondary, Menu } from 'semantic-ui-react'
-// import { Motion, spring, TransitionMotion } from 'react-motion'
-// const springPreset = { wobbly: [130, 11] }
+import { Motion, spring, TransitionMotion } from 'react-motion'
+const springPreset = { wobbly: [130, 11] }
 class Lobby extends Component {
   constructor (props) {
     super(props)
@@ -74,9 +74,9 @@ class Lobby extends Component {
       this.setState({})
     })
     sock.socket.on('receive-message', (msgInfo) => {
-      let messages = this.state.messages
+      let messages = [...this.state.messages]
       messages.push(msgInfo)
-      this.setState({ messages: messages })
+      this.setState({ messages })
     })
     sock.socket.on('load state', (state) => {
       this.props.dispatch(setState(state))
@@ -130,29 +130,30 @@ class Lobby extends Component {
     this.setState({ promise: false })
   }
 
-  // getStyles () {
-  //   let configs = {}
-  //   this.state.messages.forEach((val, index) => {
-  //     configs[val.id] = {
-  //       opacity: spring(1),
-  //       top: spring(0, springPreset.wobbly)
-  //     }
-  //   })
-  //   return configs
-  // }
+  getStyles () {
+    let configs = {}
+    this.state.messages.forEach((val, index) => {
+      console.log(val, index)
+      configs[val._id] = {
+        opacity: spring(1),
+        top: spring(0, springPreset.wobbly)
+      }
+    })
+    return configs
+  }
 
-  // willEnter (key) {
-  //   return {
-  //     opacity: spring(0),
-  //     top: spring(100, springPreset.wobbly)
-  //   }
-  // }
+  willEnter (key) {
+    return {
+      opacity: spring(0),
+      top: spring(100, springPreset.wobbly)
+    }
+  }
 
   render () {
-    let messages = this.state.messages.map((msg, i) => {
-      return <li className='oneChat' key={i}> <strong>{msg.sender}</strong>: {msg.message}</li>
-    })
-
+    // let messages = this.state.messages.map((msg, i) => {
+    //   return <li className='oneChat' key={i}> <strong>{msg.sender}</strong>: {msg.message}</li>
+    // })
+    console.log(this.getStyles())
     let queryResults = this.state.queryResults.map((result) => {
       return <li>Sender: {result.sender} Message: {result.message} Room: {result.room}</li>
     })
@@ -190,9 +191,26 @@ class Lobby extends Component {
                   <span className='glyphicon glyphicon-comment' /> Chat
                 </div>
                 <div className='panel-body'>
-                  <ul>
-                    {messages}
-                  </ul>
+                  <TransitionMotion
+                    styles={this.getStyles()}
+                    willEnter={this.willEnter}
+                    willLeave={this.willLeave}>
+                    {interp =>
+                      <div className='comment-list'>
+                        {this.state.messages.map((comment, i) => {
+                          const {...style} = interp[i + 1]
+                          return (
+                            <div className='comment-node' sender={comment.sender} key={comment._id} style={style}>
+                              <div className='print-author'>
+                                {comment.sender + ' - '}
+                              </div>
+                              {comment.message}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    }
+                  </TransitionMotion>
 
                 </div>
 

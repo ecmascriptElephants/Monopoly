@@ -7,6 +7,12 @@ import sock from '../helper/socket'
 const BuyHouse = (props) => {
   const buyHouse = (propertyPosition) => {
     let propName = ''
+    let propArr = [...props.userPropertiesArray[props.playerIndex]]
+    propArr.forEach(prop => {
+      if (prop.Position === propertyPosition) {
+        propName = prop.PropertyObj.NAME
+      }
+    })
     if (props.houses < 5) {
       let propertiesArray = [...props.userPropertiesArray[props.playerIndex]]
       let housePrice = 0

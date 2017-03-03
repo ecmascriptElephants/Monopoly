@@ -3,6 +3,8 @@ import { Button, Header, Container, Segment, Input, Icon, Divider, Form } from '
 import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import Authenticate from '../helper/authenticate'
+import escape from 'lodash.escape'
+
 class Signup extends Component {
   constructor (props) {
     super(props)
@@ -26,15 +28,15 @@ class Signup extends Component {
   }
 
   onEmailChange (e) {
-    this.setState({ email: e.target.value })
+    this.setState({ email: escape(e.target.value) })
   }
 
   onPasswordChange (e) {
-    this.setState({ password: e.target.value })
+    this.setState({ password: escape(e.target.value) })
   }
 
   onDisplayChange (e) {
-    this.setState({ displayName: e.target.value })
+    this.setState({ displayName: escape(e.target.value) })
   }
 
   handleSignup (e) {
@@ -44,6 +46,7 @@ class Signup extends Component {
         window.localStorage.setItem('token', res.data.token)
         window.localStorage.setItem('displayname', res.data.user.displayname)
         window.localStorage.setItem('id', res.data.user.id)
+        window.localStorage.setItem('picture', res.data.picture)
         this.setState({ valid: true })
       })
       .catch((err) => console.error(err))

@@ -14,13 +14,13 @@ class OtherPlayers extends Component {
     return (
       <Card>
         <Card.Content>
-          <Image floated='right' size='mini' src='http://semantic-ui.com/images/avatar/large/steve.jpg' />
+          <Image floated='right' size='mini' src={`${this.props.picture}`} />
           <Card.Header>
             {this.props.playerUsername}
           </Card.Header>
           <Card.Description>
             <Message>
-              {this.props.userCashArray[this.props.otherPlayerIndex]}
+              ${this.props.userCashArray[this.props.otherPlayerIndex]}
             </Message>
           </Card.Description>
         </Card.Content>
@@ -56,6 +56,7 @@ const mapStateToProps = (state) => {
 OtherPlayers.propTypes = {
   gameID: React.PropTypes.number.isRequired,
   playerUsername: React.PropTypes.string.isRequired,
+  picture: React.PropTypes.string.isRequired,
   userCashArray: React.PropTypes.array.isRequired,
   otherPlayerIndex: React.PropTypes.number.isRequired,
   userPropertiesArray: React.PropTypes.array.isRequired,

@@ -1,14 +1,17 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import { setUsername, setGameID, setUserID, setMyIndex, setDefaultState, setState } from './store/actionCreators'
 import Toast from './toast'
 import axios from 'axios'
-// import { Button } from 'semantic-ui-react'
 import LoadGame from './LoadGame'
 import { Button } from 'semantic-ui-react'
 import { Motion, spring, TransitionMotion } from 'react-motion'
+import escape from 'lodash.escape'
+import Authenticate from '../helper/authenticate'
+
+
 const springPreset = { wobbly: [130, 11] }
 class Lobby extends Component {
   constructor (props) {
@@ -22,7 +25,10 @@ class Lobby extends Component {
       comment: '',
       queryResults: [],
       pendingGames: [],
-      resume: true
+      resume: true,
+      games: {},
+      auth: false,
+      promise: false
     }
     this.props.dispatch(setDefaultState())
     this.props.dispatch(setUsername(window.localStorage.displayname))
@@ -32,17 +38,35 @@ class Lobby extends Component {
     this.joinGame = this.joinGame.bind(this)
     this.newGame = this.newGame.bind(this)
     this.startGame = this.startGame.bind(this)
-    this.sendChat = this.sendChat.bind(this)
     this.submitMessage = this.submitMessage.bind(this)
     this.getChats = this.getChats.bind(this)
     this.signOut = this.signOut.bind(this)
   }
+
+  componentWillMount () {
+    axios.post('/tokenauth', { token: window.localStorage.token })
+      .then((res) => {
+        console.log(res.data)
+        if (res.data.validToken) {
+          this.setState({auth: true})
+        }
+      })
+      .catch((err) => console.error(err))
+      .then(() => {
+        this.setState({promise: true})
+      })
+  }
+
   componentDidMount () {
     // window.localStorage.removeItem('state')
+    sock.socket.on('get games', (data) => {
+      this.setState({games: data})
+    })
+    sock.socket.on('update games', (data) => {
+      this.setState({games: data})
+    })
     sock.socket.on('new game', (data) => {
-      this.setState({ join: true })
-      window.localStorage.setItem('gameID', data.gameID)
-      this.props.dispatch(setGameID(data.gameID))
+      this.setState({games: data.newGame})
     })
 
     sock.socket.on('pending games', (pendingGames) => {
@@ -84,23 +108,20 @@ class Lobby extends Component {
     })
   }
   newGame () {
-    sock.newGame({ username: this.props.username, userID: this.props.userID })
+    sock.newGame({ username: this.props.username, userID: this.props.userID, picture: window.localStorage.picture })
   }
 
   joinGame () {
-    sock.join({ username: this.props.username, userID: this.props.userID, gameID: this.props.gameID })
+    this.setState({join: false})
+    sock.join({ username: this.props.username, userID: this.props.userID, gameID: this.props.gameID, picture: window.localStorage.picture })
   }
 
   startGame () {
     sock.start({ gameID: this.props.gameID })
   }
 
-  sendChat () {
-    sock.sendChat({ senderID: this.props.senderID, messageID: this.props.messageID })
-  }
-
   submitMessage () {
-    let message = document.getElementById('message').value
+    let message = escape(document.getElementById('message').value)
     document.getElementById('message').value = ''
     let sender = this.props.username
     let room = 'lobby'
@@ -109,10 +130,16 @@ class Lobby extends Component {
     sock.socket.emit('new-message', msgInfo)
   }
 
+  handleGameClick (gameID) {
+    this.setState({join: true})
+    this.props.dispatch(setGameID(gameID))
+    window.localStorage.setItem('gameID', gameID)
+  }
+
   getChats (e) {
     e.preventDefault()
     let room = document.getElementById('room').value
-    let keyword = document.getElementById('keyword').value
+    let keyword = escape(document.getElementById('keyword').value)
     let date = document.getElementById('date').value
     document.getElementById('keyword').value = ''
     axios.post('/chats', { room: room, keyword: keyword, date: date })
@@ -159,6 +186,10 @@ class Lobby extends Component {
     })
     return (
       <div>
+        { this.state.promise ?
+      <div>
+        { this.state.auth ? console.log('lobby.jsx the user is authenticated to go to' +
+            ' the lobby') : <Redirect to={{ pathname: '/' }} /> }
         <nav className='navbar navbar-default navbar-fixed-top'>
           <div className='container'>
             <div className='navbar-header'>
@@ -168,7 +199,7 @@ class Lobby extends Component {
                 <span className='icon-bar' />
                 <span className='icon-bar' />
               </button>
-              <a className='navbar-brand' href='#/lobby'>Hacknopoly</a>
+              <a className='navbar-brand' href='#/lobby'>Hackopoly</a>
             </div>
             <div id='navbar' className='collapse navbar-collapse'>
               <ul className='nav navbar-nav'>
@@ -237,14 +268,40 @@ class Lobby extends Component {
               <div className='gameButton'>
                 <div>
                   <Button color='teal' size='huge' onClick={this.newGame}> New Game </Button>
+                  {Object.keys(this.state.games).map((item) => {
+                    return <div key={item} onClick={() => { this.handleGameClick(this.state.games[item]) }}>Game: {item}</div>
+                  })}
                   {this.state.join ? <Button color='teal' size='huge' onClick={this.joinGame}> Join Game </Button> : null}
-                  {this.state.start ? <Link to='/board'><Button color='teal' size='huge' onClick={this.startGame}> Start Game </Button></Link> : null}
+                  {this.state.start ? <Link to='/board'><button color='teal' size='massive' onClick={this.startGame}> Start Game </button></Link> : null}
                 </div>
               </div>
             </div>
           </div>
         </div>
         <Toast message={this.state.comment} show={this.state.showToast} />
+        <br />
+        <div>
+          <form onSubmit={this.getChats}>
+            <input type='text' placeholder='keyword' id='keyword' />
+            <select id='room' name='room'>
+              <option>All Rooms</option>
+              <option value='lobby'>Lobby</option>
+              <option value='board'>Board</option>
+            </select>
+
+            <select id='date'>
+              <option>This Week</option>
+              <option value='thisWeek'>This Month</option>
+              <option value='thisYear'>This Year</option>
+            </select>
+            <button type='submit'>Show chats</button>
+          </form>
+          <p> You have total of {this.state.queryResults.length} messages </p>
+          <ul>
+            {queryResults}
+          </ul>
+        </div>
+      </div> : null }
       </div>
     )
   }
@@ -258,12 +315,12 @@ const mapStateToProps = (state) => {
     messageID: state.messageID
   }
 }
+
 Lobby.propTypes = {
   dispatch: React.PropTypes.func.isRequired,
   username: React.PropTypes.string.isRequired,
   gameID: React.PropTypes.number.isRequired,
   userID: React.PropTypes.string.isRequired,
-  senderID: React.PropTypes.number.isRequired,
   messageID: React.PropTypes.number.isRequired
 }
 export default connect(mapStateToProps)(Lobby)

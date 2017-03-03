@@ -32,7 +32,6 @@ import UnMortgage from './UnMortgage'
 import BuyHouse from './BuyHouse'
 import SellHouse from './SellHouse'
 import Bankrupt from './Bankrupt'
-import ToastHistory from './ToastHistory'
 
 class DiceRoll extends Component {
   constructor (props) {
@@ -100,14 +99,13 @@ class DiceRoll extends Component {
     sock.socket.on('receive-comment', (comment) => {
       this.setState({ comment, showToast: true })
     })
+    this.props.setComment({comment: this.state.comment})
   }
 
   handleDiceRollButtonClick () {
     this.props.dispatch(setButtons())
     const die1 = 1 + Math.floor((6 * Math.random()))
     const die2 = 1 + Math.floor((6 * Math.random()))
-    // const die1 = 1
-    // const die2 = 1
     if (this.state.specialCardButton) {
       let newComment = `${this.props.username} rolled a ${die1 + die2}!`
       this.props.dispatch(setMoveToken(true))
@@ -204,10 +202,13 @@ class DiceRoll extends Component {
 
   increaseFunds (value) {
     this.props.dispatch(setCash(value, this.props.index))
+    sock.updateMoney({ gameID: this.props.gameID, money: value, index: this.props.index })
   }
 
   reduceFunds (value) {
     this.props.dispatch(setCash(-value, this.props.index))
+    sock.updateMoney({ gameID: this.props.gameID, money: -value, index: this.props.index })
+
   }
 
   handlePayRentButtonClick () {
@@ -385,7 +386,7 @@ class DiceRoll extends Component {
               }
             </div>
             {
-              this.props.cardButton ? <Card button={() => { this.handleCardButtonClick() }}
+              (this.props.cardButton && !this.props.setGoButton) ? <Card button={() => { this.handleCardButtonClick() }}
                 card={this.state.card}
                 jailFreeArray={this.props.jailFreeArray}
                 dice={this.props.dice}
@@ -397,7 +398,7 @@ class DiceRoll extends Component {
             }
             {
               this.state.cardModal
-                ? <Modal open={this.state.cardModal} size='small'>
+                ? <Modal id='card-modal' open={this.state.cardModal} wrapped centered >
                   <Modal.Content image>
                     <Image wrapped size='medium' centered src={`${this.state.card ? 'community' : 'chance'}/${this.state.cardID}.png`} />
                   </Modal.Content>
@@ -460,9 +461,8 @@ class DiceRoll extends Component {
           <div className='jail_div'>
             {(this.props.jailPositions[this.props.index] && !this.props.endTurnButton)
               ? <div>
-                <div> {this.props.payFineButton ? 'You are in jail. Pay' +
-                  ' $50 to get out immediately, try to roll doubles, or use' +
-                  ' a Get Out of Jail Free card' : 'You are in jail :( '} </div>
+                <div> {this.props.payFineButton ? (this.props.jailPositions[this.props.index] === 3) ? 'This is your 3rd turn in jail. Pay $50 or use a Get Out of Jail Free card' : 'You are in jail. Pay $50 to get out immediately, try to roll doubles,' +
+                    ' or use a Get Out of Jail Free card' : 'You are in jail :( '} </div>
                 <div className='jail-pay-fine-btn_div'>
                   {(this.props.payFineButton && !this.props.endTurnButton)
                     ? <div>
@@ -474,7 +474,7 @@ class DiceRoll extends Component {
                   }
                 </div>
                 <div className='jail-roll-doubles-btn_div'>
-                  {(this.props.jailRollDiceButton && !this.props.endTurnButton)
+                  {(this.props.jailRollDiceButton && !this.props.endTurnButton && this.props.jailPositions[this.props.index] < 3)
                     ? <div>
                       <Button secondary fluid onClick={() => {
                         this.handleDiceRollButtonClick()
@@ -504,20 +504,27 @@ class DiceRoll extends Component {
         </div>
         <div className='CurrentUserProperties'>
           <div>
-            Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {
+            Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.playerIndex].map((e, index) => {
               return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME}
                 {(this.state.mortgageButtonVisible) ? <span>{e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} setState={this.setStates} />
                   : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} setState={this.setStates} />}
                   {e.Monopoly ? <BuyHouse propertyPosition={e.Position}
                     propertyGroup={e.PropertyObj.PROPERTY_GROUP}
-                    reduceFunds={this.reduceFunds} houses={e.Houses}
-                    numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} setState={this.setStates} /> : null}
-                  {e.Houses > 0 ? <SellHouse propertyPosition={e.Position} increaseFunds={this.increaseFunds} houses={e.Houses} setState={this.setStates} /> : null}</span> : null} </div>
+                    reduceFunds={this.reduceFunds}
+                    houses={e.Houses}
+                    numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP}
+                    setState={this.setStates}
+                    setHouse={this.props.setHouse} /> : null}
+                  {e.Houses > 0 ? <SellHouse propertyPosition={e.Position}
+                    increaseFunds={this.increaseFunds}
+                    houses={e.Houses}
+                    setState={this.setStates}
+                    setHouse={this.props.setHouse}
+                     /> : null}</span> : null} </div>
             })} />}
           </div>
         </div>
         <Toast message={this.state.comment} show={this.state.showToast} />
-        <ToastHistory message={this.state.comment} />
       </div>
     )
   }
@@ -579,6 +586,7 @@ DiceRoll.propTypes = {
   freeCardButton: React.PropTypes.bool.isRequired,
   buyPropertyButton: React.PropTypes.bool.isRequired,
   setComment: React.PropTypes.func.isRequired,
+  setHouse: React.PropTypes.func.isRequired,
   comment: React.PropTypes.string.isRequired
 }
 

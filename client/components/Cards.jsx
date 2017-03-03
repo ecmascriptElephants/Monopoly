@@ -190,7 +190,7 @@ const Cards = (props) => {
       sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
       props.dispatch(setEndTurn(!props.doubles))
       props.dispatch(setDiceRoll(props.doubles))
-      sock.updateMoney({ gameID: props.gameID, money: card.Cash, index: props.index })
+      sock.updateMoney({ gameID: props.gameID, money: amountOwed, index: props.index })
     }
     props.button()
   }

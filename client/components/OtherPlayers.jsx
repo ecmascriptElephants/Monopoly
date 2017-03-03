@@ -20,7 +20,7 @@ class OtherPlayers extends Component {
           </Card.Header>
           <Card.Description>
             <Message>
-              {this.props.userCashArray[this.props.otherPlayerIndex]}
+              ${this.props.userCashArray[this.props.otherPlayerIndex]}
             </Message>
           </Card.Description>
         </Card.Content>

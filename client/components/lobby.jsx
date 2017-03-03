@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import { setUsername, setGameID, setUserID, setMyIndex, setDefaultState, setState } from './store/actionCreators'
@@ -8,6 +8,10 @@ import axios from 'axios'
 import LoadGame from './LoadGame'
 import { Button } from 'semantic-ui-react'
 import { Motion, spring, TransitionMotion } from 'react-motion'
+import escape from 'lodash.escape'
+import Authenticate from '../helper/authenticate'
+
+
 const springPreset = { wobbly: [130, 11] }
 class Lobby extends Component {
   constructor (props) {
@@ -22,7 +26,9 @@ class Lobby extends Component {
       queryResults: [],
       pendingGames: [],
       resume: true,
-      games: {}
+      games: {},
+      auth: false,
+      promise: false
     }
     this.props.dispatch(setDefaultState())
     this.props.dispatch(setUsername(window.localStorage.displayname))
@@ -36,6 +42,21 @@ class Lobby extends Component {
     this.getChats = this.getChats.bind(this)
     this.signOut = this.signOut.bind(this)
   }
+
+  componentWillMount () {
+    axios.post('/tokenauth', { token: window.localStorage.token })
+      .then((res) => {
+        console.log(res.data)
+        if (res.data.validToken) {
+          this.setState({auth: true})
+        }
+      })
+      .catch((err) => console.error(err))
+      .then(() => {
+        this.setState({promise: true})
+      })
+  }
+
   componentDidMount () {
     // window.localStorage.removeItem('state')
     sock.socket.on('get games', (data) => {
@@ -100,7 +121,7 @@ class Lobby extends Component {
   }
 
   submitMessage () {
-    let message = document.getElementById('message').value
+    let message = escape(document.getElementById('message').value)
     document.getElementById('message').value = ''
     let sender = this.props.username
     let room = 'lobby'
@@ -118,7 +139,7 @@ class Lobby extends Component {
   getChats (e) {
     e.preventDefault()
     let room = document.getElementById('room').value
-    let keyword = document.getElementById('keyword').value
+    let keyword = escape(document.getElementById('keyword').value)
     let date = document.getElementById('date').value
     document.getElementById('keyword').value = ''
     axios.post('/chats', { room: room, keyword: keyword, date: date })
@@ -165,6 +186,10 @@ class Lobby extends Component {
     })
     return (
       <div>
+        { this.state.promise ?
+      <div>
+        { this.state.auth ? console.log('lobby.jsx the user is authenticated to go to' +
+            ' the lobby') : <Redirect to={{ pathname: '/' }} /> }
         <nav className='navbar navbar-default navbar-fixed-top'>
           <div className='container'>
             <div className='navbar-header'>
@@ -174,7 +199,7 @@ class Lobby extends Component {
                 <span className='icon-bar' />
                 <span className='icon-bar' />
               </button>
-              <a className='navbar-brand' href='#/lobby'>Hacknopoly</a>
+              <a className='navbar-brand' href='#/lobby'>Hackopoly</a>
             </div>
             <div id='navbar' className='collapse navbar-collapse'>
               <ul className='nav navbar-nav'>
@@ -254,6 +279,29 @@ class Lobby extends Component {
           </div>
         </div>
         <Toast message={this.state.comment} show={this.state.showToast} />
+        <br />
+        <div>
+          <form onSubmit={this.getChats}>
+            <input type='text' placeholder='keyword' id='keyword' />
+            <select id='room' name='room'>
+              <option>All Rooms</option>
+              <option value='lobby'>Lobby</option>
+              <option value='board'>Board</option>
+            </select>
+
+            <select id='date'>
+              <option>This Week</option>
+              <option value='thisWeek'>This Month</option>
+              <option value='thisYear'>This Year</option>
+            </select>
+            <button type='submit'>Show chats</button>
+          </form>
+          <p> You have total of {this.state.queryResults.length} messages </p>
+          <ul>
+            {queryResults}
+          </ul>
+        </div>
+      </div> : null }
       </div>
     )
   }
@@ -267,6 +315,7 @@ const mapStateToProps = (state) => {
     messageID: state.messageID
   }
 }
+
 Lobby.propTypes = {
   dispatch: React.PropTypes.func.isRequired,
   username: React.PropTypes.string.isRequired,

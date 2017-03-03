@@ -134,7 +134,6 @@ module.exports = {
     return `${name} sold a hotel on ${propertyName} for $${amount}.`
   },
 
-
   alreadyHaveHotel: (name, propertyName) => {
     return `${name} already has a hotel on ${propertyName}.`
   },

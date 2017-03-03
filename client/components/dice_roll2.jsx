@@ -202,10 +202,13 @@ class DiceRoll extends Component {
 
   increaseFunds (value) {
     this.props.dispatch(setCash(value, this.props.index))
+    sock.updateMoney({ gameID: this.props.gameID, money: value, index: this.props.index })
   }
 
   reduceFunds (value) {
     this.props.dispatch(setCash(-value, this.props.index))
+    sock.updateMoney({ gameID: this.props.gameID, money: -value, index: this.props.index })
+
   }
 
   handlePayRentButtonClick () {
@@ -383,7 +386,7 @@ class DiceRoll extends Component {
               }
             </div>
             {
-              this.props.cardButton ? <Card button={() => { this.handleCardButtonClick() }}
+              (this.props.cardButton && !this.props.setGoButton) ? <Card button={() => { this.handleCardButtonClick() }}
                 card={this.state.card}
                 jailFreeArray={this.props.jailFreeArray}
                 dice={this.props.dice}
@@ -395,7 +398,7 @@ class DiceRoll extends Component {
             }
             {
               this.state.cardModal
-                ? <Modal open={this.state.cardModal} size='small'>
+                ? <Modal id='card-modal' open={this.state.cardModal} wrapped centered >
                   <Modal.Content image>
                     <Image wrapped size='medium' centered src={`${this.state.card ? 'community' : 'chance'}/${this.state.cardID}.png`} />
                   </Modal.Content>
@@ -458,9 +461,8 @@ class DiceRoll extends Component {
           <div className='jail_div'>
             {(this.props.jailPositions[this.props.index] && !this.props.endTurnButton)
               ? <div>
-                <div> {this.props.payFineButton ? 'You are in jail. Pay' +
-                  ' $50 to get out immediately, try to roll doubles, or use' +
-                  ' a Get Out of Jail Free card' : 'You are in jail :( '} </div>
+                <div> {this.props.payFineButton ? (this.props.jailPositions[this.props.index] === 3) ? 'This is your 3rd turn in jail. Pay $50 or use a Get Out of Jail Free card' : 'You are in jail. Pay $50 to get out immediately, try to roll doubles,' +
+                    ' or use a Get Out of Jail Free card' : 'You are in jail :( '} </div>
                 <div className='jail-pay-fine-btn_div'>
                   {(this.props.payFineButton && !this.props.endTurnButton)
                     ? <div>
@@ -472,7 +474,7 @@ class DiceRoll extends Component {
                   }
                 </div>
                 <div className='jail-roll-doubles-btn_div'>
-                  {(this.props.jailRollDiceButton && !this.props.endTurnButton)
+                  {(this.props.jailRollDiceButton && !this.props.endTurnButton && this.props.jailPositions[this.props.index] < 3)
                     ? <div>
                       <Button secondary fluid onClick={() => {
                         this.handleDiceRollButtonClick()

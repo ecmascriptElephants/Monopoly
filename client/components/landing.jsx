@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Input, Icon, Divider, Form } from 'semantic-ui-react'
-import {Link, Redirect} from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import axios from 'axios'
 import Authenticate from '../helper/authenticate'
+import escape from 'lodash.escape'
 
 class Land extends Component {
   constructor (props) {
@@ -10,7 +11,9 @@ class Land extends Component {
     this.state = {
       username: '',
       password: '',
-      valid: false
+      promise: false,
+      auth: false,
+      authFail: false
     }
     this.onUsernameChange = this.onUsernameChange.bind(this)
     this.onPasswordChange = this.onPasswordChange.bind(this)
@@ -25,26 +28,50 @@ class Land extends Component {
   }
 
   onUsernameChange (e) {
-    this.setState({username: e.target.value})
+    this.setState({username: escape(e.target.value)})
   }
 
   onPasswordChange (e) {
-    this.setState({password: e.target.value})
+    this.setState({password: escape(e.target.value)})
   }
 
   handleLogin (e) {
     e.preventDefault()
+    console.log('handleLOGIN has been invoked!!!')
     axios.post('/login', this.state)
     .then((res) => {
       window.localStorage.setItem('token', res.data.token)
       window.localStorage.setItem('displayname', res.data.user.displayname)
       window.localStorage.setItem('id', res.data.user.id)
       window.localStorage.setItem('picture', res.data.picture)
-      this.setState({valid: true})
     })
-    .catch((err) => console.error(err))
+    .catch((err) => {
+      console.error(err)
+    })
+    .then(() => {
+      axios.post('/tokenauth', { token: window.localStorage.token })
+        .then((res) => {
+          console.log(res.data)
+          if (res.data.validToken) {
+            this.setState({auth: true})
+          } else {
+            this.setState({authFail: true})
+            // send a pop-up that says
+            // The email or password you’ve entered doesn’t match any account. <Link to
+            // ='/signup'>Sign up</Link> for an account.
+            // for an
+            // account.
+          }
+        })
+        .catch((err) => {
+          this.setState({authFail: true})
+        console.error(err)
+        })
+        .then(() => {
+          this.setState({promise: true})
+        })
+    })
   }
-
 
   render () {
     return (
@@ -57,10 +84,16 @@ class Land extends Component {
                 Hackopoly
               </Header.Content>
             </Header>
+            {
+              this.state.authFail ?
+                <Container text='true' textAlign='center' className='login-validation'>The email or password you’ve entered doesn’t match any account.
+                  <Link to='/signup'>Sign up</Link> for an account.
+                </Container> : null
+            }
             <Form onSubmit={this.handleLogin}>
-              <Input focus fluid name='username' placeholder='Username' onChange={this.onUsernameChange} />
+              <Input focus fluid error={this.state.authFail} name='email' placeholder='Email' onChange={this.onUsernameChange} />
               <Divider horizontal />
-              <Input focus fluid name='password' placeholder='Password' type='password' onChange={this.onPasswordChange} />
+              <Input focus fluid error={this.state.authFail} name='password' placeholder='Password' type='password' onChange={this.onPasswordChange} />
               <Divider horizontal />
               <Button secondary fluid type='submit'>Login</Button>
             </Form>
@@ -72,7 +105,7 @@ class Land extends Component {
             </Button>
           </Segment>
           {
-             this.state.valid ? Authenticate.isAuth() ? <Redirect to={{ pathname: '/lobby' }} /> : <Redirect to={{ pathname: '/' }} /> : null
+            (this.state.promise && this.state.auth) ? <Redirect to={{ pathname: '/lobby' }} /> : null
           }
         </Container>
 

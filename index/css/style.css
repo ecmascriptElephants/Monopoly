@@ -377,31 +377,6 @@ overflow: auto;
   height: 250px;
 }
 
-<<<<<<< HEAD
-=======
-.ui list history {
-  margin: 1%
-}
-
->>>>>>> 76bbe5abac7f9cce922716c9f03fa642da5a83b3
-.techPic {
-  width: 150px;
-  height: 150px;
-}
-
-.techPic2 {
-  width: 450px;
-  height: 150px;
-}
-
-.marginTech {
-  padding-top: 50px;
-}
-
-.social-space {
-  margin-right: 10px;
-}
-<<<<<<< HEAD
 
 .ui list history {
   margin: 1%
@@ -513,5 +488,22 @@ span {
     margin: 0!important;
     height: 15%;
 }
-=======
->>>>>>> 76bbe5abac7f9cce922716c9f03fa642da5a83b3
+
+
+.techPic {
+  width: 150px;
+  height: 150px;
+}
+
+.techPic2 {
+  width: 450px;
+  height: 150px;
+}
+
+.marginTech {
+  padding-top: 50px;
+}
+
+.social-space {
+  margin-right: 10px;
+}

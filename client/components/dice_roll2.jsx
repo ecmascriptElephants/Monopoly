@@ -504,7 +504,7 @@ class DiceRoll extends Component {
         </div>
         <div className='CurrentUserProperties'>
           <div>
-            Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.playerIndex].map((e, index) => {
+            {this.props.index === -1 ? null : !this.props.userPropertiesArray[this.props.playerIndex].length ? null : <div>Properties: <List items={this.props.userPropertiesArray[this.props.playerIndex].map((e, index) => {
               return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME}
                 {(this.state.mortgageButtonVisible) ? <span>{e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} setState={this.setStates} />
                   : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} setState={this.setStates} />}
@@ -521,7 +521,7 @@ class DiceRoll extends Component {
                     setState={this.setStates}
                     setHouse={this.props.setHouse}
                      /> : null}</span> : null} </div>
-            })} />}
+                })} /></div>}
           </div>
         </div>
         <Toast message={this.state.comment} show={this.state.showToast} />

@@ -21,7 +21,8 @@ class Lobby extends Component {
       comment: '',
       queryResults: [],
       pendingGames: [],
-      resume: true
+      resume: true,
+      games: {}
     }
     this.props.dispatch(setDefaultState())
     this.props.dispatch(setUsername(window.localStorage.displayname))
@@ -37,12 +38,16 @@ class Lobby extends Component {
   }
   componentDidMount () {
     // window.localStorage.removeItem('state')
-    sock.socket.on('new game', (data) => {
-      this.setState({ join: true })
-      window.localStorage.setItem('gameID', data.gameID)
-      this.props.dispatch(setGameID(data.gameID))
+    sock.socket.on('get games', (data) => {
+      this.setState({games: data.newGames})
     })
-
+    sock.socket.on('new game', (data) => {
+      console.log(data)
+      this.setState({games: data.newGame})
+      // this.setState({ join: true })
+      // window.localStorage.setItem('gameID', data.gameID)
+      // this.props.dispatch(setGameID(data.gameID))
+    })
     sock.socket.on('pending games', (pendingGames) => {
       this.setState({ pendingGames })
     })
@@ -86,6 +91,7 @@ class Lobby extends Component {
   }
 
   joinGame () {
+    this.stateState({join: false})
     sock.join({ username: this.props.username, userID: this.props.userID, gameID: this.props.gameID, picture: window.localStorage.picture })
   }
 
@@ -101,6 +107,12 @@ class Lobby extends Component {
     let msgInfo = { sender: sender, message: message, room: room }
     JSON.stringify(msgInfo)
     sock.socket.emit('new-message', msgInfo)
+  }
+
+  handleGameClick (gameID) {
+    this.setState({join: true})
+    this.props.dispatch(setGameID(gameID))
+    window.localStorage.setItem('gameID', gameID)
   }
 
   getChats (e) {
@@ -229,7 +241,10 @@ class Lobby extends Component {
               <div className='gameButton'>
                 <div>
                   <Button color='teal' size='massive' onClick={this.newGame}> New Game </Button>
-                  {this.state.join ? <button color='teal' size='massive' onClick={this.joinGame}> Join Game </button> : null}
+                  {Object.keys(this.state.games).map((item) => {
+                    return <div onClick={() => { this.handleGameClick(this.state.games[item]) }}>Game: {item}</div>
+                  })}
+                  {this.state.join ? <Button color='teal' size='massive' onClick={this.joinGame}> Join Game </Button> : null}
                   {this.state.start ? <Link to='/board'><button color='teal' size='massive' onClick={this.startGame}> Start Game </button></Link> : null}
                 </div>
               </div>

@@ -1,12 +1,12 @@
 import React from 'react'
-import { Image } from 'semantic-ui-react'
+
 const Symbol = (props) => {
   const left = props.left
   const top = props.top
 
   return (
     <div className='symbol' style={{ left, top }}>
-      <Image size='small' shape='circular' src={`${props.picture}`} />
+      <img id='tophat' alt='' src={`${props.picture}`} />
     </div>
   )
 }

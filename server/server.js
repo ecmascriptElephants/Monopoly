@@ -18,7 +18,7 @@ const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 const ioRouter = require('./routes/io.js')
 const token = require('./jwt/jwt')
-const mongodb = require('./mongodb/config')
+// const mongodb = require('./mongodb/config')
 const axios = require('axios')
 app.use(cors())
 

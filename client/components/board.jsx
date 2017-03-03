@@ -57,10 +57,10 @@ class Board extends Component {
 
   dice (value, index, flag) {
     const location = [
-      [97, 97], [97, 83], [97, 75], [97, 66.5], [97, 58.5], [97, 50], [97, 42], [97, 34], [97, 25.5], [97, 17.5], [97, 2.5],
-      [84.5, 2.5], [76.4, 2.5], [68.2, 2.5], [60, 2.5], [51.8, 2.5], [43.5, 2.5], [35.4, 2.5], [27.1, 2.5], [19, 2.5], [7, 2.5],
-      [7, 17.5], [7, 25.5], [7, 34], [7, 42], [7, 50], [7, 58.5], [7, 66.5], [7, 75], [7, 83],
-      [7, 97], [19, 97], [27.1, 97], [35.4, 97], [43.5, 97], [51.8, 97], [60, 97], [68.2, 97], [76.4, 97], [84.5, 97]
+      [91, 91], [91, 81], [91, 72], [91, 64], [91, 56], [91, 48], [91, 39], [91, 31], [91, 23], [91, 14], [91, 0],
+      [80, 0], [72, 0], [63, 0], [56, 0], [47, 0], [39, 0], [31, 0], [23, 0], [15, 0], [2, 0],
+      [2, 14], [2, 22], [2, 31], [2, 39], [2, 47], [2, 55], [2, 64], [2, 72], [2, 80],
+      [2, 91], [15, 91], [23, 91], [31, 91], [39, 91], [47, 91], [56, 91], [63, 91], [72, 91], [80, 91]
     ]
     let playerProps = location[value]
     if (index >= 0) {
@@ -126,9 +126,9 @@ class Board extends Component {
               this.props.players.map((player, index) => {
                 console.log(player.picture)
                 if (index <= 3) {
-                  return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0] - (index + index)}%`} picture={player.picture} key={index} />
+                  return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0]}%`} picture={player.picture} key={index} />
                 } else {
-                  return <Symbol className={`token${index}`} left={`${player.userPosition[1] - 2}%`} top={`${player.userPosition[0] - (index + 4)}%`} userNumber={index} key={index} />
+                  return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0]}%`} userNumber={index} key={index} />
                 }
               })
             }

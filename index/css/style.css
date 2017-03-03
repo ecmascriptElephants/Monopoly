@@ -30,8 +30,11 @@ display: flex;
 }
 
 #tophat {
-width: 15px;
-height: 15px;
+width: 36px;
+height: 36px;
+background-color: currentColor;
+border: 1px solid;
+border-radius: 100%
 }
 
 #house {
@@ -124,6 +127,7 @@ margin: auto;
 
 .ui.container {
 padding-top: 145px;
+margin-left: 1%!important
 }
 
 .wire {
@@ -136,7 +140,7 @@ position: absolute
 
 .pcard {
 float: left;
-margin-right: 0px!important;
+margin-left: 5px!important;
 width: 30%!important;
 padding-top: 0!important;
 }
@@ -271,3 +275,6 @@ overflow: auto;
   overflow: auto;
 }
 
+.ui list history {
+  margin: 1%
+}

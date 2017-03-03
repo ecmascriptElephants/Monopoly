@@ -81,14 +81,15 @@ class Lobby extends Component {
         start: true
       })
     })
-    sock.socket.on('send message', (data) => {
-      this.setState({})
-    })
+
     sock.socket.on('receive-message', (msgInfo) => {
+      console.log(msgInfo)
       let messages = [...this.state.messages]
       messages.push(msgInfo)
+      console.log(messages)
       this.setState({ messages })
     })
+
     sock.socket.on('load state', (state) => {
       this.props.dispatch(setState(state))
       this.setState({ resume: false })
@@ -108,17 +109,14 @@ class Lobby extends Component {
   }
 
   submitMessage (e) {
-    console.log(this.state.userMessage)
-    // let message = e.target.value
-    // let sender = this.props.username
-    // let room = 'lobby'
-    // let msgInfo = { sender: sender, message: message, room: room }
-    // JSON.stringify(msgInfo)
-    // sock.socket.emit('new-message', msgInfo)
+    let sender = this.props.username
+    let room = 'lobby'
+    let msgInfo = { sender: sender, message: this.state.userMessage, room: room }
+    JSON.stringify(msgInfo)
+    sock.socket.emit('new-message', msgInfo)
   }
 
   message (e) {
-    console.log(this.state.userMessage)
     this.setState({userMessage: e.target.value})
   }
 
@@ -169,13 +167,6 @@ class Lobby extends Component {
   }
 
   render () {
-    // let messages = this.state.messages.map((msg, i) => {
-    //   return <li className='oneChat' key={i}> <strong>{msg.sender}</strong>: {msg.message}</li>
-    // })
-    console.log(this.getStyles())
-    let queryResults = this.state.queryResults.map((result) => {
-      return <li>Sender: {result.sender} Message: {result.message} Room: {result.room}</li>
-    })
     return (
       <MuiThemeProvider>
         <div>
@@ -188,9 +179,12 @@ class Lobby extends Component {
                   <Toolbar className='headers' >
                     <ToolbarTitle text='Chat' className='title' />
                   </Toolbar>
-                  <div className='messages' />
-                  <Input fluid placeholder='Type Here' onChange={this.message} action={<Button onClick={(e) => this.submitMessage(e)}> Send </Button>} />
-
+                  <div className='messages'>
+                    { this.state.messages.map((msg, i) => {
+                      return <li className='oneChat' key={i}> <strong>{msg.sender}</strong>: {msg.message}</li>
+                    })}
+                  </div>
+                  <Input fluid placeholder='Type Here' id='message' onChange={this.message} action={<Button onClick={(e) => this.submitMessage(e)}> Send </Button>} />
                 </Paper>
               </div>
             </div>

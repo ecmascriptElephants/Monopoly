@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Input, Icon, Divider, Form } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 import axios from 'axios'
-import Authenticate from '../helper/authenticate'
 import escape from 'lodash.escape'
 
 class Signup extends Component {
@@ -12,7 +11,9 @@ class Signup extends Component {
       email: '',
       password: '',
       displayName: '',
-      valid: false
+      promise: false,
+      auth: false,
+      authFail: false
     }
     this.onEmailChange = this.onEmailChange.bind(this)
     this.onPasswordChange = this.onPasswordChange.bind(this)
@@ -47,9 +48,18 @@ class Signup extends Component {
         window.localStorage.setItem('displayname', res.data.user.displayname)
         window.localStorage.setItem('id', res.data.user.id)
         window.localStorage.setItem('picture', res.data.picture)
-        this.setState({ valid: true })
+        this.setState({
+          promise: true,
+          auth: true
+        })
       })
-      .catch((err) => console.error(err))
+      .catch((err) => {
+        this.setState({
+          promise: true,
+          authFail: true
+        })
+        console.error(err)
+      })
   }
 
   render () {
@@ -63,6 +73,12 @@ class Signup extends Component {
                 Signup
               </Header.Content>
             </Header>
+            {
+              this.state.authFail ?
+                <Container text='true' textAlign='center' className='login-validation'>
+                  That login information is already taken.
+                </Container> : null
+            }
             <Form onSubmit={this.handleSignup}>
               <Input focus fluid name='email' type='email' placeholder='Email' onChange={this.onEmailChange} />
               <Divider horizontal />
@@ -75,10 +91,10 @@ class Signup extends Component {
             <Divider horizontal />
           </Segment>
           {
-            this.state.valid ? Authenticate.isAuth() ? <Redirect to={{ pathname: '/lobby' }} /> : <Redirect to={{ pathname: '/' }} /> : null
+            this.state.auth ? <Redirect to={{ pathname: '/lobby' }} /> : null
           }
         </Container>
-        <video id='monoSignup' className='video' loop>
+        <video id='monoSignup' className='video' loop muted>
           <source src='mono.mp4' type='video/mp4' />
           <source src='mono.ogv' type='video/ogg' />
           <source src='mono.webm' type='video/webm' />

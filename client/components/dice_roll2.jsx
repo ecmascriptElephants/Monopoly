@@ -32,7 +32,6 @@ import UnMortgage from './UnMortgage'
 import BuyHouse from './BuyHouse'
 import SellHouse from './SellHouse'
 import Bankrupt from './Bankrupt'
-import ToastHistory from './ToastHistory'
 
 class DiceRoll extends Component {
   constructor (props) {
@@ -100,14 +99,13 @@ class DiceRoll extends Component {
     sock.socket.on('receive-comment', (comment) => {
       this.setState({ comment, showToast: true })
     })
+    this.props.setComment({comment: this.state.comment})
   }
 
   handleDiceRollButtonClick () {
     this.props.dispatch(setButtons())
     const die1 = 1 + Math.floor((6 * Math.random()))
     const die2 = 1 + Math.floor((6 * Math.random()))
-    // const die1 = 1
-    // const die2 = 1
     if (this.state.specialCardButton) {
       let newComment = `${this.props.username} rolled a ${die1 + die2}!`
       this.props.dispatch(setMoveToken(true))
@@ -504,20 +502,27 @@ class DiceRoll extends Component {
         </div>
         <div className='CurrentUserProperties'>
           <div>
-            Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {
+            Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.playerIndex].map((e, index) => {
               return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME}
                 {(this.state.mortgageButtonVisible) ? <span>{e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} setState={this.setStates} />
                   : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} setState={this.setStates} />}
                   {e.Monopoly ? <BuyHouse propertyPosition={e.Position}
                     propertyGroup={e.PropertyObj.PROPERTY_GROUP}
-                    reduceFunds={this.reduceFunds} houses={e.Houses}
-                    numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} setState={this.setStates} /> : null}
-                  {e.Houses > 0 ? <SellHouse propertyPosition={e.Position} increaseFunds={this.increaseFunds} houses={e.Houses} setState={this.setStates} /> : null}</span> : null} </div>
+                    reduceFunds={this.reduceFunds}
+                    houses={e.Houses}
+                    numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP}
+                    setState={this.setStates}
+                    setHouse={this.props.setHouse} /> : null}
+                  {e.Houses > 0 ? <SellHouse propertyPosition={e.Position}
+                    increaseFunds={this.increaseFunds}
+                    houses={e.Houses}
+                    setState={this.setStates}
+                    setHouse={this.props.setHouse}
+                     /> : null}</span> : null} </div>
             })} />}
           </div>
         </div>
         <Toast message={this.state.comment} show={this.state.showToast} />
-        <ToastHistory message={this.state.comment} />
       </div>
     )
   }
@@ -579,6 +584,7 @@ DiceRoll.propTypes = {
   freeCardButton: React.PropTypes.bool.isRequired,
   buyPropertyButton: React.PropTypes.bool.isRequired,
   setComment: React.PropTypes.func.isRequired,
+  setHouse: React.PropTypes.func.isRequired,
   comment: React.PropTypes.string.isRequired
 }
 

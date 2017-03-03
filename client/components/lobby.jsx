@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { setUsername, setGameID, setUserID, setMyIndex, setDefaultState, setState } from './store/actionCreators'
 import Toast from './toast'
 import axios from 'axios'
-// import { Button } from 'semantic-ui-react'
 import LoadGame from './LoadGame'
 import { Button } from 'semantic-ui-react'
 import { Motion, spring, TransitionMotion } from 'react-motion'
@@ -22,7 +21,8 @@ class Lobby extends Component {
       comment: '',
       queryResults: [],
       pendingGames: [],
-      resume: true
+      resume: true,
+      games: {}
     }
     this.props.dispatch(setDefaultState())
     this.props.dispatch(setUsername(window.localStorage.displayname))
@@ -32,17 +32,20 @@ class Lobby extends Component {
     this.joinGame = this.joinGame.bind(this)
     this.newGame = this.newGame.bind(this)
     this.startGame = this.startGame.bind(this)
-    this.sendChat = this.sendChat.bind(this)
     this.submitMessage = this.submitMessage.bind(this)
     this.getChats = this.getChats.bind(this)
     this.signOut = this.signOut.bind(this)
   }
   componentDidMount () {
     // window.localStorage.removeItem('state')
+    sock.socket.on('get games', (data) => {
+      this.setState({games: data})
+    })
+    sock.socket.on('update games', (data) => {
+      this.setState({games: data})
+    })
     sock.socket.on('new game', (data) => {
-      this.setState({ join: true })
-      window.localStorage.setItem('gameID', data.gameID)
-      this.props.dispatch(setGameID(data.gameID))
+      this.setState({games: data.newGame})
     })
 
     sock.socket.on('pending games', (pendingGames) => {
@@ -84,19 +87,16 @@ class Lobby extends Component {
     })
   }
   newGame () {
-    sock.newGame({ username: this.props.username, userID: this.props.userID })
+    sock.newGame({ username: this.props.username, userID: this.props.userID, picture: window.localStorage.picture })
   }
 
   joinGame () {
-    sock.join({ username: this.props.username, userID: this.props.userID, gameID: this.props.gameID })
+    this.setState({join: false})
+    sock.join({ username: this.props.username, userID: this.props.userID, gameID: this.props.gameID, picture: window.localStorage.picture })
   }
 
   startGame () {
     sock.start({ gameID: this.props.gameID })
-  }
-
-  sendChat () {
-    sock.sendChat({ senderID: this.props.senderID, messageID: this.props.messageID })
   }
 
   submitMessage () {
@@ -107,6 +107,12 @@ class Lobby extends Component {
     let msgInfo = { sender: sender, message: message, room: room }
     JSON.stringify(msgInfo)
     sock.socket.emit('new-message', msgInfo)
+  }
+
+  handleGameClick (gameID) {
+    this.setState({join: true})
+    this.props.dispatch(setGameID(gameID))
+    window.localStorage.setItem('gameID', gameID)
   }
 
   getChats (e) {
@@ -237,8 +243,11 @@ class Lobby extends Component {
               <div className='gameButton'>
                 <div>
                   <Button color='teal' size='huge' onClick={this.newGame}> New Game </Button>
+                  {Object.keys(this.state.games).map((item) => {
+                    return <div key={item} onClick={() => { this.handleGameClick(this.state.games[item]) }}>Game: {item}</div>
+                  })}
                   {this.state.join ? <Button color='teal' size='huge' onClick={this.joinGame}> Join Game </Button> : null}
-                  {this.state.start ? <Link to='/board'><Button color='teal' size='huge' onClick={this.startGame}> Start Game </Button></Link> : null}
+                  {this.state.start ? <Link to='/board'><button color='teal' size='massive' onClick={this.startGame}> Start Game </button></Link> : null}
                 </div>
               </div>
             </div>
@@ -263,7 +272,6 @@ Lobby.propTypes = {
   username: React.PropTypes.string.isRequired,
   gameID: React.PropTypes.number.isRequired,
   userID: React.PropTypes.string.isRequired,
-  senderID: React.PropTypes.number.isRequired,
   messageID: React.PropTypes.number.isRequired
 }
 export default connect(mapStateToProps)(Lobby)

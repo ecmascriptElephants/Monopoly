@@ -17,7 +17,7 @@ export default class Auth extends Component {
         window.localStorage.setItem('token', req.data.token)
         window.localStorage.setItem('displayname', req.data.user.displayName)
         window.localStorage.setItem('id', req.data.user.id)
-    window.localStorage.setItem('picture', res.data.picture)
+        window.localStorage.setItem('picture', res.data.picture)
       })
       .catch((err) => console.log(err))
       .then(() => {

@@ -22,8 +22,8 @@ const SellHouse = (props) => {
         console.log(obj)
         props.setHouse(obj)
         props.increaseFunds(houseSalePrice)
-        sock.updateMoney({ gameID: props.gameID, money: houseSalePrice, index: props.playerIndex })
-        props.dispatch(setUserProperties(propertiesArray, props.playIndex))
+        // sock.updateMoney({ gameID: props.gameID, money: houseSalePrice, index: props.playerIndex })
+        props.dispatch(setUserProperties(propertiesArray, props.playerIndex))
         let newComment = ''
         if (property.Houses === 4) {
           newComment = comments.soldHotel(props.username, property.PropertyObj.NAME, houseSalePrice)

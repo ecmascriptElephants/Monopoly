@@ -93,6 +93,14 @@ display: flex;
 flex-flow: column
 }
 
+/*@media screen and (min-width: 1px) {*/
+  /*#card-modal {*/
+    /*width: 40%;*/
+    /*height: 40%;*/
+    /*margin: 0px;*/
+  /*}*/
+/*}*/
+
 .item-bottom {
 border: 1px solid black;
 height: 100%;

@@ -1,7 +1,5 @@
-import React, { Component } from 'react'
-import { Button, Card, Image, Grid } from 'semantic-ui-react'
-import { Redirect } from 'react-router-dom'
-import Authenticate from '../helper/authenticate'
+import React from 'react'
+import { Card, Image } from 'semantic-ui-react'
 
 const Team = () => {
   return (
@@ -33,7 +31,7 @@ const Team = () => {
               <Card.Header className='text-center'>RJ Mohammad</Card.Header>
               <Card.Description className='text-center'>
                 Software Engineer <br />
-                <a href='https://github.com/rjmohammad'><Image src='github.png' size='mini' className='social-space'/> </a>
+                <a href='https://github.com/rjmohammad'><Image src='github.png' size='mini' className='social-space' /> </a>
                 <a href='https://www.linkedin.com/in/rj-mohammad/'><Image src='linkedin.png' size='mini' /></a>
               </Card.Description>
             </Card.Content>
@@ -47,7 +45,7 @@ const Team = () => {
               <Card.Header className='text-center'>Jinwei Lin</Card.Header>
               <Card.Description className='text-center'>
                 Scrum Master | Software Engineer
-                <a href='http://github.com/jinweilin8'><Image src='github.png' size='mini' className='social-space'/> </a>
+                <a href='http://github.com/jinweilin8'><Image src='github.png' size='mini' className='social-space' /> </a>
                 <a href='http://linkedin.com/in/jinwei-lin8'><Image src='linkedin.png' size='mini' /></a>
               </Card.Description>
             </Card.Content>

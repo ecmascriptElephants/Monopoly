@@ -10,7 +10,7 @@ import Offer from './ShowOffer'
 import { Card } from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 import axios from 'axios'
-import Authenticate from '../helper/authenticate'
+import Nav from './nav'
 
 class Board extends Component {
   constructor (props) {
@@ -44,7 +44,7 @@ class Board extends Component {
       h37: [],
       h38: [],
       h39: [],
-      auth:false,
+      auth: false,
       promise: false
     }
 
@@ -122,9 +122,10 @@ class Board extends Component {
   render () {
     return (
       <div>
-        { this.state.promise ?
-      <div>
+        { this.state.promise
+      ? <div>
         { this.state.auth ? null : <Redirect to={{ pathname: '/' }} /> }
+        <Nav />
         <div className='left'> <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment} setHouse={this.setHouse} />
           {
             this.state.showOffer ? <Offer open={this.state.showOffer} offer={this.state.offer} setShowOffer={this.showPopup} position={this.state.position} offerIndex={this.state.offerIndex} /> : null
@@ -145,7 +146,6 @@ class Board extends Component {
           <div className='board parent'>
             {
               this.props.players.map((player, index) => {
-                console.log(player.picture)
                 if (index <= 3) {
                   return <Symbol className={`token${index}`} left={`${player.userPosition[1]}%`} top={`${player.userPosition[0]}%`} picture={player.picture} key={index} />
                 } else {

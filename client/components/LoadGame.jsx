@@ -10,10 +10,10 @@ const LoadGame = (props) => {
     <div>
       {
         props.pendingGames.map((game, index) => {
-          return (props.load ? <Button secondary key={index} onClick={() => { loadGame(game.gameID) }}>
+          return (props.load ? <Button fluid key={game.gameID} onClick={() => { loadGame(game.gameID) }}>
             Load {game.gameID}
           </Button> : <Link to='/board'>
-            <Button secondary key={index}>
+            <Button fluid key={index}>
             Resume Now
              </Button>
           </Link>)

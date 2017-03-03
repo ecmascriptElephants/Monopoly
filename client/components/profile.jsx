@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import { Button} from 'semantic-ui-react'
-import { Redirect } from 'react-router-dom'
 import axios from 'axios'
-import Authenticate from '../helper/authenticate'
 class Profile extends Component {
   constructor (props) {
     super(props)

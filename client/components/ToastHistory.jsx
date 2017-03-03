@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import Toaster from './toast'
-import { Header, Container, Segment, Icon, Divider, List } from 'semantic-ui-react'
+import { Header, Container, Segment, Divider, List } from 'semantic-ui-react'
 import sock from '../helper/socket'
 
 class ToastHistory extends Component {

@@ -65,7 +65,7 @@ class Land extends Component {
         })
         .catch((err) => {
           this.setState({authFail: true})
-        console.error(err)
+          console.error(err)
         })
         .then(() => {
           this.setState({promise: true})
@@ -104,7 +104,7 @@ class Land extends Component {
             }
           </Container>
         </div>
-        <video id='monoLanding' className='video' loop>
+        <video id='monoLanding' className='video' loop muted>
           <source src='mono.mp4' type='video/mp4' />
           <source src='mono.ogv' type='video/ogg' />
           <source src='mono.webm' type='video/webm' />

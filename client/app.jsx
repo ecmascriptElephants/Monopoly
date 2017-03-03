@@ -10,6 +10,7 @@ import store from './components/store/store'
 import Auth from './components/auth'
 import Profile from './components/profile'
 import Nav from './components/nav'
+import Loading from './components/Loading'
 class App extends Component {
   render () {
     return (
@@ -23,6 +24,7 @@ class App extends Component {
             <Route path='/auth' component={Auth} />
             <Route path='/profile' component={Profile} />
             <Route path='/nav' component={Nav} />
+            <Route path='/loading' component={Loading} />
           </div>
         </Provider>
       </Router>

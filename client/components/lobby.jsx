@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import sock from '../helper/socket'
 import { connect } from 'react-redux'
 import { setUsername, setGameID, setUserID, setMyIndex, setDefaultState, setState } from './store/actionCreators'
@@ -31,7 +31,7 @@ class Lobby extends Component {
       userMessage: '',
       showGames: true,
       showNewGameButton: true,
-      onlineUser: []
+      onlineUsers: {}
     }
 
     this.props.dispatch(setDefaultState())
@@ -49,7 +49,7 @@ class Lobby extends Component {
     this.setShowGames = this.setShowGames.bind(this)
   }
   componentDidMount () {
-    sock.socked.on('user joined', (data) => {
+    sock.socket.on('user joined', (data) => {
       this.setState({onlineUsers: data})
     })
     sock.socket.on('get games', (data) => {
@@ -203,7 +203,7 @@ class Lobby extends Component {
                       </List>
                     })}
                   </div>
-                  <Input fluid placeholder='Type Here' id='message' onChange={this.message} action={<Button type='submit' size='large' color='teal' onClick={(e) => this.submitMessage(e)}> Send </Button>} />
+                  <Input fluid placeholder='Type Here' id='message' onChange={this.message} action={<Button size='large' color='teal' onClick={(e) => this.submitMessage(e)}> Send </Button>} />
                 </Paper>
               </div>
             </div>
@@ -214,6 +214,16 @@ class Lobby extends Component {
                     <Toolbar className='headers'>
                       <ToolbarTitle text='Online Users' className='title' />
                     </Toolbar>
+                    { Object.keys(this.state.onlineUsers).map((user, i) => {
+                      return <List>
+                        <List.Item>
+                          <Image avatar src={`${this.state.onlineUsers[user].picture}`} />
+                          
+                            <List.Description as='a'>{this.state.onlineUsers[user].displayName}</List.Description>
+                         
+                        </List.Item>
+                      </List>
+                    })}
                   </Paper>
                 </div>
               </div>
@@ -232,7 +242,7 @@ class Lobby extends Component {
                         return <Button fluid key={item} onClick={() => { this.handleGameClick(this.state.games[item]) }}> Game: {item} </Button>
                       })}
                     </div>
-                    
+
                       {this.state.start ? <div className='start'><Link to='/board'><Button color='green' size='massive' onClick={this.startGame}> Start Game </Button></Link></div> : this.state.showNewGameButton ? <Button.Group size='massive' fluid>
                         <Button color='green' onClick={() => this.newGame()}>New Game</Button>
                         <Button.Or />

@@ -10,13 +10,12 @@ const location = [
 ]
 
 module.exports = (io) => {
-  let userStorage = []
+  let userStorage = {}
   io.on('connection', function (socket) {
     socket.on('user joined', (data) => {
-      userStorage.push(data)
+      userStorage[data.id] = data
       socket.emit('user joined', userStorage)
       socket.emit('get games', newGame)
-      console.log(userStorage)
       board.lookupGame(data.id)
         .then((results) => {
           if (results[0].length > 0) {

@@ -523,3 +523,21 @@ span {
     margin: 0!important;
     height: 15%;
 }
+
+.techPic {
+  width: 150px;
+  height: 150px;
+}
+
+.techPic2 {
+  width: 450px;
+  height: 150px;
+}
+
+.marginTech {
+  padding-top: 50px;
+}
+
+.social-space {
+  margin-right: 10px;
+}

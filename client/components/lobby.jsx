@@ -41,13 +41,13 @@ class Lobby extends Component {
     sock.socket.on('get games', (data) => {
       this.setState({games: data})
     })
-    sock.socket.on('new game', (data) => {
-      console.log(data)
-      this.setState({games: data.newGame})
-      // this.setState({ join: true })
-      // window.localStorage.setItem('gameID', data.gameID)
-      // this.props.dispatch(setGameID(data.gameID))
+    sock.socket.on('update games', (data) => {
+      this.setState({games: data})
     })
+    sock.socket.on('new game', (data) => {
+      this.setState({games: data.newGame})
+    })
+
     sock.socket.on('pending games', (pendingGames) => {
       this.setState({ pendingGames })
     })
@@ -242,7 +242,7 @@ class Lobby extends Component {
                 <div>
                   <Button color='teal' size='massive' onClick={this.newGame}> New Game </Button>
                   {Object.keys(this.state.games).map((item) => {
-                    return <div onClick={() => { this.handleGameClick(this.state.games[item]) }}>Game: {item}</div>
+                    return <div key={item} onClick={() => { this.handleGameClick(this.state.games[item]) }}>Game: {item}</div>
                   })}
                   {this.state.join ? <Button color='teal' size='massive' onClick={this.joinGame}> Join Game </Button> : null}
                   {this.state.start ? <Link to='/board'><button color='teal' size='massive' onClick={this.startGame}> Start Game </button></Link> : null}

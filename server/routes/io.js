@@ -57,6 +57,8 @@ module.exports = (io) => {
     })
 
     socket.on('start', (data) => {
+      delete newGame[data.gameID]
+      io.emit('update games', newGame)
       socket.broadcast.to(data.gameID).emit('player started')
     })
 

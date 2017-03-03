@@ -17,7 +17,7 @@ const UnMortgage = (props) => {
           property.Mortgaged = false
           props.dispatch(setUserProperties(tempProperties, props.playerIndex))
           props.reduceFunds(mortgageAmount)
-          sock.updateMoney({ gameID: props.gameID, money: -mortgageAmount, index: props.playerIndex })
+          // sock.updateMoney({ gameID: props.gameID, money: -mortgageAmount, index: props.playerIndex })
           let newComment = comments.unmortgageProperty(props.username, props.propertyName, mortgageAmount)
           props.setState({ comment: newComment, showToast: true })
           sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })

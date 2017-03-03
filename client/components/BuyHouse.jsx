@@ -23,7 +23,7 @@ const BuyHouse = (props) => {
           if (props.userCashArray[props.playerIndex] >= housePrice) {
             property.Houses += 1
             props.reduceFunds(housePrice)
-            sock.updateMoney({ gameID: props.gameID, money: -housePrice, index: props.playerIndex })
+            // sock.updateMoney({ gameID: props.gameID, money: -housePrice, index: props.playerIndex })
             let arr = []
             for (let i = 0; i < property.Houses; i++) {
               arr.push(i)

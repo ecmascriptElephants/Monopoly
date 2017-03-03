@@ -35,7 +35,7 @@ class Trade extends Component {
     console.log(this.props.userPropertiesArray[this.props.otherIndex][this.props.position])
     return (
       <div>
-        <Button color='purple' onClick={() => this.open()}>Trade</Button>
+        <Button color='black' onClick={() => this.open()}>Trade</Button>
         <Modal open={this.state.open} onClose={this.close} closeIcon='close'>
           <Modal.Header>Trade {this.props.property}</Modal.Header>
           <Modal.Content image>

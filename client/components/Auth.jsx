@@ -12,13 +12,17 @@ export default class Auth extends Component {
 
   componentWillMount () {
     axios.get('/get-info')
-      .then((req) => {
-        window.localStorage.setItem('token', req.data.token)
-        window.localStorage.setItem('displayname', req.data.user.displayName)
-        window.localStorage.setItem('id', req.data.user.id)
+      .then((res) => {
+        window.localStorage.setItem('token', res.data.token)
+        window.localStorage.setItem('displayname', res.data.user.displayName)
+        window.localStorage.setItem('id', res.data.user.id)
+        window.localStorage.setItem('picture', res.data.picture)
         this.setState({promise: true})
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        this.setState({promise: true})
+        console.log(err)
+      })
   }
 
   render () {
@@ -30,8 +34,4 @@ export default class Auth extends Component {
       </div>
     )
   }
-}
-
-Auth.propTypes = {
-  router: React.PropTypes.object.isRequired
 }

@@ -8,8 +8,8 @@ font-family: 'Raleway', sans-serif;
 
 .board {
 position: fixed;
-left: 0;
-bottom: 0;
+left: 1%;
+bottom: 1%;
 display: flex;
 margin: 0 auto;
 width: 45%;
@@ -32,13 +32,16 @@ display: flex;
 }
 
 #tophat {
-width: 15px;
-height: 15px;
+width: 36px;
+height: 36px;
+background-color: currentColor;
+border: 1px solid;
+border-radius: 100%
 }
 
 #house {
-  height: 22%;
-  width: 30%;
+  height: 20%;
+  width: 24%;
 }
 
 .flexrow {
@@ -66,11 +69,35 @@ width: 13.5%;
 height: 100%;
 }
 
-.item {
+.item-top {
 border: 1px solid black;
-/* <-- just for demonstration */
 height: 100%;
 width: 100%;
+display: flex;
+align-items: flex-end
+}
+
+.item-left {
+border: 1px solid black;
+height: 100%;
+width: 100%;
+display: flex;
+flex-flow: column wrap-reverse;
+}
+
+.item-right {
+border: 1px solid black;
+height: 100%;
+width: 100%;
+display: flex;
+flex-flow: column
+}
+
+.item-bottom {
+border: 1px solid black;
+height: 100%;
+width: 100%;
+display: flex
 }
 
 .col_item {
@@ -102,6 +129,7 @@ margin: auto;
 
 .ui.container {
 padding-top: 145px;
+margin-left: 1%!important
 }
 
 .wire {
@@ -114,7 +142,7 @@ position: absolute
 
 .pcard {
 float: left;
-margin-right: 0px!important;
+margin-left: 5px!important;
 width: 30%!important;
 padding-top: 0!important;
 }
@@ -179,10 +207,12 @@ background-color: Pink
 }
 
 .toastHistory {
-position: fixed;
-right: 100px;
-bottom: 300px;
-width: 30%!important;
+position: static;
+width: 76%!important;
+padding: 1%;
+background-color: aliceblue;
+overflow: auto;
+padding-top: 0!important
 }
 
 .left {
@@ -330,3 +360,8 @@ overflow: auto;
 .gameList {
   height: 250px;
 }
+
+.ui list history {
+  margin: 1%
+}
+

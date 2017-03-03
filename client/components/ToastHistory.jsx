@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Toaster from './toast'
-import { Header, Container, Segment, Icon, Divider } from 'semantic-ui-react'
+import { Header, Container, Segment, Icon, Divider, List } from 'semantic-ui-react'
 import sock from '../helper/socket'
 
 class ToastHistory extends Component {
@@ -20,9 +20,6 @@ class ToastHistory extends Component {
     })
   }
   render () {
-    let comments = this.state.comments.map((comment, i) => {
-      return <li key={i}>{comment}</li>
-    })
     return (
       <Container className='toastHistory'>
         <Segment raised vertical compact className='content'>
@@ -30,9 +27,9 @@ class ToastHistory extends Component {
             <Header.Content>Activity Logs</Header.Content>
           </Header>
           <Divider />
-          <div>
-            {comments}
-          </div>
+          <List className='history' items={this.state.comments.map((comment, i) => {
+            return <li key={i}>{comment}</li>
+          })} />
         </Segment>
       </Container>
     )

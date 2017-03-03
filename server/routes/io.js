@@ -1,6 +1,6 @@
 const msgHistory = require('../controllers/msgHistoryController')
 const board = require('../models/board')
-
+let newGame = {}
 let game = {}
 const location = [
   [97, 97], [97, 83], [97, 75], [97, 66.5], [97, 58.5], [97, 50], [97, 42], [97, 34], [97, 25.5], [97, 17.5], [97, 2.5],
@@ -15,6 +15,7 @@ module.exports = (io) => {
   io.on('connection', function (socket) {
     socket.on('user joined', (data) => {
       userStorage.push(data)
+      socket.emit('get games', newGame)
       // user++
       board.lookupGame(data.id)
         .then((results) => {
@@ -26,15 +27,16 @@ module.exports = (io) => {
 
     socket.on('new game', (data) => {
       data.socketID = socket.id
-      data.userPosition = [97, 97]
+      data.userPosition = [91, 91]
       var state = { players: 1, i: 0, playerInfo: { 0: data } }
-
+      console.log(data)
       board.addGame(state, data)
         .then((result) => {
           const gameID = result[0]
           board.addPlayer(gameID, data.userID)
           game[gameID] = state
-          socket.broadcast.emit('new game', { gameID, socketID: socket.id })
+          newGame[gameID] = gameID
+          socket.broadcast.emit('new game', { newGame, socketID: socket.id })
           io.to(socket.id).emit('your index', game[gameID].players - 1)
           socket.join(result.toString())
         })
@@ -45,7 +47,7 @@ module.exports = (io) => {
       var index = gameObj.players++
       data.socketID = socket.id
       board.addPlayer(data.gameID, data.userID)
-      data.userPosition = [97, 97]
+      data.userPosition = [91, 91]
       socket.join(data.gameID)
       var obj = {}
       obj[index] = data
@@ -55,6 +57,8 @@ module.exports = (io) => {
     })
 
     socket.on('start', (data) => {
+      delete newGame[data.gameID]
+      io.emit('update games', newGame)
       socket.broadcast.to(data.gameID).emit('player started')
     })
 

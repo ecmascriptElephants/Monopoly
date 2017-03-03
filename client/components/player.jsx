@@ -28,7 +28,7 @@ class Player extends Component {
           </Header>
           <Divider />
           <Message>
-            {this.props.userCashArray[this.props.playerIndex]}
+            ${this.props.userCashArray[this.props.playerIndex]}
           </Message>
           <DiceRoll dice={this.props.dice} setComment={this.props.setComment} setHouse={this.props.setHouse} />
           <Chat name={this.props.username} />

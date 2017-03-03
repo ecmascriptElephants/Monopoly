@@ -104,10 +104,8 @@ class DiceRoll extends Component {
 
   handleDiceRollButtonClick () {
     this.props.dispatch(setButtons())
-    // const die1 = 1 + Math.floor((6 * Math.random()))
-    // const die2 = 1 + Math.floor((6 * Math.random()))
-    const die1 = 3
-    const die2 = 4
+    const die1 = 1 + Math.floor((6 * Math.random()))
+    const die2 = 1 + Math.floor((6 * Math.random()))
     if (this.state.specialCardButton) {
       let newComment = `${this.props.username} rolled a ${die1 + die2}!`
       this.props.dispatch(setMoveToken(true))

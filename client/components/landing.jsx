@@ -12,7 +12,8 @@ class Land extends Component {
       username: '',
       password: '',
       promise: false,
-      auth: false
+      auth: false,
+      authFail: false
     }
     this.onUsernameChange = this.onUsernameChange.bind(this)
     this.onPasswordChange = this.onPasswordChange.bind(this)
@@ -44,22 +45,33 @@ class Land extends Component {
       window.localStorage.setItem('id', res.data.user.id)
       window.localStorage.setItem('picture', res.data.picture)
     })
-    .catch((err) => console.error(err))
+    .catch((err) => {
+      console.error(err)
+    })
     .then(() => {
       axios.post('/tokenauth', { token: window.localStorage.token })
         .then((res) => {
           console.log(res.data)
           if (res.data.validToken) {
             this.setState({auth: true})
+          } else {
+            this.setState({authFail: true})
+            // send a pop-up that says
+            // The email or password you’ve entered doesn’t match any account. <Link to
+            // ='/signup'>Sign up</Link> for an account.
+            // for an
+            // account.
           }
         })
-        .catch((err) => console.error(err))
+        .catch((err) => {
+          this.setState({authFail: true})
+        console.error(err)
+        })
         .then(() => {
           this.setState({promise: true})
         })
     })
   }
-
 
   render () {
     return (
@@ -72,10 +84,16 @@ class Land extends Component {
                 Hackopoly
               </Header.Content>
             </Header>
+            {
+              this.state.authFail ?
+                <Container text='true' textAlign='center' className='login-validation'>The email or password you’ve entered doesn’t match any account.
+                  <Link to='/signup'>Sign up</Link> for an account.
+                </Container> : null
+            }
             <Form onSubmit={this.handleLogin}>
-              <Input focus fluid name='username' placeholder='Username' onChange={this.onUsernameChange} />
+              <Input focus fluid error={this.state.authFail} name='email' placeholder='Email' onChange={this.onUsernameChange} />
               <Divider horizontal />
-              <Input focus fluid name='password' placeholder='Password' type='password' onChange={this.onPasswordChange} />
+              <Input focus fluid error={this.state.authFail} name='password' placeholder='Password' type='password' onChange={this.onPasswordChange} />
               <Divider horizontal />
               <Button secondary fluid type='submit'>Login</Button>
             </Form>

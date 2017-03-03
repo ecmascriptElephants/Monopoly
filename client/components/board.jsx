@@ -9,6 +9,9 @@ import ToastHistory from './ToastHistory'
 import Others from './OtherPlayers'
 import Offer from './ShowOffer'
 import { Card } from 'semantic-ui-react'
+import { Redirect } from 'react-router-dom'
+import axios from 'axios'
+import Authenticate from '../helper/authenticate'
 
 class Board extends Component {
   constructor (props) {
@@ -16,12 +19,13 @@ class Board extends Component {
     this.state = {
       messages: [],
       playerIndex: -1,
-      valid: false,
       showToast: false,
       comment: '',
-      showOffer: false
+      showOffer: false,
+      auth:false,
+      promise: false
     }
-    sock.init({ gameID: this.props.gameID, index: this.props.playerIndex })
+
     this.dice = this.dice.bind(this)
     this.setComment = this.setComment.bind(this)
     this.showPopup = this.showPopup.bind(this)
@@ -42,6 +46,21 @@ class Board extends Component {
       sock.updatePos({ gameID: this.props.gameID, pos: value, index: index })
     }
     this.props.dispatch(setPlayerProps(playerProps, index))
+  }
+
+  componentWillMount () {
+    axios.post('/tokenauth', { token: window.localStorage.token })
+      .then((res) => {
+        console.log(res.data)
+        if (res.data.validToken && this.props.gameID !== undefined) {
+          this.setState({auth: true})
+          sock.init({ gameID: this.props.gameID, index: this.props.playerIndex })
+        }
+      })
+      .catch((err) => console.error(err))
+      .then(() => {
+        this.setState({promise: true})
+      })
   }
 
   componentDidMount () {
@@ -77,6 +96,9 @@ class Board extends Component {
   render () {
     return (
       <div>
+        { this.state.promise ?
+      <div>
+        { this.state.auth ? null : <Redirect to={{ pathname: '/' }} /> }
         <div className='left'> <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment} />
           {
             this.state.showOffer ? <Offer open={this.state.showOffer} offer={this.state.offer} setShowOffer={this.showPopup} position={this.state.position} offerIndex={this.state.offerIndex} /> : null
@@ -274,6 +296,7 @@ class Board extends Component {
             </div>
           </div>
         </div>
+      </div> : null }
       </div>
     )
   }

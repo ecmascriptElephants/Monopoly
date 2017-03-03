@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Input, Icon, Divider, Form } from 'semantic-ui-react'
-import {Link, Redirect} from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import axios from 'axios'
 import Authenticate from '../helper/authenticate'
+import escape from 'lodash.escape'
 
 class Land extends Component {
   constructor (props) {
@@ -10,7 +11,8 @@ class Land extends Component {
     this.state = {
       username: '',
       password: '',
-      valid: false
+      promise: false,
+      auth: false
     }
     this.onUsernameChange = this.onUsernameChange.bind(this)
     this.onPasswordChange = this.onPasswordChange.bind(this)
@@ -18,23 +20,36 @@ class Land extends Component {
   }
 
   onUsernameChange (e) {
-    this.setState({username: e.target.value})
+    this.setState({username: escape(e.target.value)})
   }
 
   onPasswordChange (e) {
-    this.setState({password: e.target.value})
+    this.setState({password: escape(e.target.value)})
   }
 
   handleLogin (e) {
     e.preventDefault()
+    console.log('handleLOGIN has been invoked!!!')
     axios.post('/login', this.state)
     .then((res) => {
       window.localStorage.setItem('token', res.data.token)
       window.localStorage.setItem('displayname', res.data.user.displayname)
       window.localStorage.setItem('id', res.data.user.id)
-      this.setState({valid: true})
     })
     .catch((err) => console.error(err))
+    .then(() => {
+      axios.post('/tokenauth', { token: window.localStorage.token })
+        .then((res) => {
+          console.log(res.data)
+          if (res.data.validToken) {
+            this.setState({auth: true})
+          }
+        })
+        .catch((err) => console.error(err))
+        .then(() => {
+          this.setState({promise: true})
+        })
+    })
   }
 
   render () {
@@ -48,7 +63,7 @@ class Land extends Component {
             </Header.Content>
           </Header>
           <Form onSubmit={this.handleLogin}>
-            <Input focus fluid name='username' placeholder='Username' onChange={this.onUsernameChange} />
+            <Input focus fluid name='email' placeholder='Email' onChange={this.onUsernameChange} />
             <Divider horizontal />
             <Input focus fluid name='password' placeholder='Password' type='password' onChange={this.onPasswordChange} />
             <Divider horizontal />
@@ -62,7 +77,7 @@ class Land extends Component {
           </Button>
         </Segment>
         {
-           this.state.valid ? Authenticate.isAuth() ? <Redirect to={{ pathname: '/lobby' }} /> : <Redirect to={{ pathname: '/' }} /> : null
+          (this.state.promise && this.state.auth) ? <Redirect to={{ pathname: '/lobby' }} /> : null
         }
       </Container>
     )

@@ -8,7 +8,8 @@ module.exports = {
     return jwt.sign(payload, 'ecmascriptElephant')
   },
 
-  verifyToken: (token, cb) => {
-    jwt.verify(token, 'ecmascriptElephant', cb)
+  verifyToken: (token) => {
+    console.log('in jwt.js verifyToken has been invoked! jwt.verify(token, "secret" = ', jwt.verify(token, 'ecmascriptElephant'))
+    return jwt.verify(token, 'ecmascriptElephant')
   }
 }

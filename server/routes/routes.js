@@ -16,6 +16,17 @@ module.exports = (app, express, passport) => {
       res.send({ token: passport.token, user: passport.user })
     })
 
+  app.post('/tokenauth', (req, res) => {
+    console.log('in routes.js /tokenauth has been invoked!!! req.body = ', req.body.token)
+    if (token.verifyToken(req.body.token) !== undefined) {
+      console.log('in routes.js /tokenauth token is valid')
+      res.send({ validToken: true })
+    } else {
+      console.log('in routes.js /tokenauth token is invalid')
+      res.send({ validToken: false })
+    }
+  })
+
   app.get('/auth/facebook', passport.authenticate('facebook'))
 
   app.get('/auth/facebook/callback', passport.authenticate('facebook', {

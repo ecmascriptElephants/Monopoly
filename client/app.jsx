@@ -9,7 +9,7 @@ import { Provider } from 'react-redux'
 import store from './components/store/store'
 import Auth from './components/auth'
 import Profile from './components/profile'
-
+import Nav from './components/nav'
 class App extends Component {
   render () {
     return (

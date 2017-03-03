@@ -39,7 +39,7 @@ class Lobby extends Component {
   componentDidMount () {
     // window.localStorage.removeItem('state')
     sock.socket.on('get games', (data) => {
-      this.setState({games: data.newGames})
+      this.setState({games: data})
     })
     sock.socket.on('new game', (data) => {
       console.log(data)
@@ -91,7 +91,7 @@ class Lobby extends Component {
   }
 
   joinGame () {
-    this.stateState({join: false})
+    this.setState({join: false})
     sock.join({ username: this.props.username, userID: this.props.userID, gameID: this.props.gameID, picture: window.localStorage.picture })
   }
 

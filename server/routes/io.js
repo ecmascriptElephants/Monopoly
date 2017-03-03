@@ -15,6 +15,7 @@ module.exports = (io) => {
   io.on('connection', function (socket) {
     socket.on('user joined', (data) => {
       userStorage.push(data)
+      socket.emit('get games', newGame)
       // user++
       board.lookupGame(data.id)
         .then((results) => {

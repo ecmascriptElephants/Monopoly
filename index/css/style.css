@@ -3,6 +3,7 @@
 margin: 0;
 padding: 0;
 font-family: 'Helvetica', sans-serif;
+text-transform: uppercase!important;
 }
 
 .board {
@@ -12,7 +13,6 @@ bottom: 1%;
 display: flex;
 margin: 0 auto;
 width: 45%;
-border: 1px solid black;
 background-image: url('https://images-na.ssl-images-amazon.com/images/I/81oC5pYhh2L._SL1500_.jpg');
 background-size: contain;
 background-repeat: no-repeat;
@@ -34,7 +34,6 @@ display: flex;
 width: 36px;
 height: 36px;
 background-color: currentColor;
-border: 1px solid;
 border-radius: 100%
 }
 
@@ -80,7 +79,6 @@ height: 100%;
 }
 
 .item-top {
-border: 1px solid black;
 height: 100%;
 width: 100%;
 display: flex;
@@ -88,7 +86,6 @@ align-items: flex-end
 }
 
 .item-left {
-border: 1px solid black;
 height: 100%;
 width: 100%;
 display: flex;
@@ -96,30 +93,19 @@ flex-flow: column wrap-reverse;
 }
 
 .item-right {
-border: 1px solid black;
 height: 100%;
 width: 100%;
 display: flex;
 flex-flow: column
 }
 
-/*@media screen and (min-width: 1px) {*/
-  /*#card-modal {*/
-    /*width: 40%;*/
-    /*height: 40%;*/
-    /*margin: 0px;*/
-  /*}*/
-/*}*/
-
 .item-bottom {
-border: 1px solid black;
 height: 100%;
 width: 100%;
 display: flex
 }
 
 .col_item {
-border: 1px solid black;
 height: 100px;
 width: 130px;
 }
@@ -420,7 +406,6 @@ overflow: auto;
 .signout {
   margin-top: 12px!important;
   font-family: 'Helvetica'!important;
-  text-transform: lowercase!important;
   color: #333333!important
 }
 
@@ -440,23 +425,20 @@ span {
 }
 
 .chat {
-  border: 1px solid;
   width: 60%;
   height: 80%;
 }
 
 .users {
-  border: 1px solid;
-    height: 300px;
-    margin: 10px;
-    width: 620px
+  height: 300px;
+  margin: 10px;
+  width: 620px
 }
 
 .game {
-  border: 1px solid;
   height: 340px;
-    margin: 10px;
-    width: 620px;
+  margin: 10px;
+  width: 620px;
 }
 
 .chat-container{
@@ -478,7 +460,7 @@ span {
 }
 
 .headers {
-  background-color: darkturquoise!important;
+  background-color: silver!important;
 }
 
 .messages {

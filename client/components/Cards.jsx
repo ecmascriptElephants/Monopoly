@@ -3,7 +3,6 @@ import rules from '../static/rules'
 import { connect } from 'react-redux'
 import { Button } from 'semantic-ui-react'
 import sock from '../helper/socket'
-import comments from '../helper/comment'
 import {
   setUserPositions,
   setCash,

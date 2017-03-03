@@ -10,26 +10,23 @@ const location = [
 ]
 
 module.exports = (io) => {
-  // let user = 0
-  let userStorage = []
+  let userStorage = {}
   io.on('connection', function (socket) {
     socket.on('user joined', (data) => {
-      userStorage.push(data)
+      userStorage[data.id] = data
+      socket.emit('user joined', userStorage)
       socket.emit('get games', newGame)
-      // user++
       board.lookupGame(data.id)
         .then((results) => {
           if (results[0].length > 0) {
             socket.emit('pending games', results[0])
           }
         })
-    })
-
+    })    
     socket.on('new game', (data) => {
       data.socketID = socket.id
       data.userPosition = [91, 91]
       var state = { players: 1, i: 0, playerInfo: { 0: data } }
-      console.log(data)
       board.addGame(state, data)
         .then((result) => {
           const gameID = result[0]
@@ -37,29 +34,34 @@ module.exports = (io) => {
           game[gameID] = state
           newGame[gameID] = gameID
           socket.broadcast.emit('new game', { newGame, socketID: socket.id })
-          io.to(socket.id).emit('your index', game[gameID].players - 1)
+          io.to(socket.id).emit('your index', {index: game[gameID].players - 1, newGame})
           socket.join(result.toString())
         })
     })
 
     socket.on('join', (data) => {
       let gameObj = game[data.gameID]
-      var index = gameObj.players++
-      data.socketID = socket.id
-      board.addPlayer(data.gameID, data.userID)
-      data.userPosition = [91, 91]
-      socket.join(data.gameID)
-      var obj = {}
-      obj[index] = data
-      gameObj.playerInfo[index] = data
-      io.to(socket.id).emit('your index', index)
-      socket.broadcast.to(gameObj.playerInfo[0].socketID).emit('player joined', data)
+      if (gameObj.players < 8) {
+        var index = gameObj.players++
+        data.socketID = socket.id
+        board.addPlayer(data.gameID, data.userID)
+        data.userPosition = [91, 91]
+        socket.join(data.gameID)
+        var obj = {}
+        obj[index] = data
+        gameObj.playerInfo[index] = data
+        console.log(index)
+        io.to(socket.id).emit('your index', {index})
+        socket.broadcast.to(gameObj.playerInfo[0].socketID).emit('player joined', data)
+      } else {
+        io.sockets.in(data.gameID).emit('player started')
+      }
     })
 
     socket.on('start', (data) => {
       delete newGame[data.gameID]
       io.emit('update games', newGame)
-      socket.broadcast.to(data.gameID).emit('player started')
+      io.sockets.in(data.gameID).emit('player started')
     })
 
     socket.on('load', (data) => {
@@ -104,9 +106,10 @@ module.exports = (io) => {
       let sender = msgInfo.sender
       let message = msgInfo.message
       let room = msgInfo.room
-      msgHistory.addMessage(sender, message, room)
-      .then(({sender, message, room, _id}) => {
-        io.emit('receive-message', {sender, message, room, _id})
+      let picture = msgInfo.picture
+      msgHistory.addMessage(sender, message, room, picture)
+      .then(({sender, message, room, _id, picture}) => {
+        io.emit('receive-message', {sender, message, room, _id, picture})
       })
     })
 

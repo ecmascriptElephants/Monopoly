@@ -208,7 +208,6 @@ class DiceRoll extends Component {
   reduceFunds (value) {
     this.props.dispatch(setCash(-value, this.props.index))
     sock.updateMoney({ gameID: this.props.gameID, money: -value, index: this.props.index })
-
   }
 
   handlePayRentButtonClick () {

@@ -1,7 +1,5 @@
-import React, { Component } from 'react'
-import { Button, Card, Image, Grid } from 'semantic-ui-react'
-import { Redirect } from 'react-router-dom'
-import Authenticate from '../helper/authenticate'
+import React from 'react'
+import { Card, Image } from 'semantic-ui-react'
 
 const Team = () => {
   return (

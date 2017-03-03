@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
-import Authenticate from '../helper/authenticate'
 import axios from 'axios'
 export default class Auth extends Component {
   constructor (props, context) {
@@ -13,10 +12,10 @@ export default class Auth extends Component {
 
   componentWillMount () {
     axios.get('/get-info')
-      .then((req) => {
-        window.localStorage.setItem('token', req.data.token)
-        window.localStorage.setItem('displayname', req.data.user.displayName)
-        window.localStorage.setItem('id', req.data.user.id)
+      .then((res) => {
+        window.localStorage.setItem('token', res.data.token)
+        window.localStorage.setItem('displayname', res.data.user.displayName)
+        window.localStorage.setItem('id', res.data.user.id)
         window.localStorage.setItem('picture', res.data.picture)
       })
       .catch((err) => console.log(err))

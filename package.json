@@ -33,6 +33,7 @@
     "jsonwebtoken": "^7.3.0",
     "knex": "^0.12.6",
     "lodash.escape": "^4.0.1",
+    "material-ui": "^0.17.0",
     "mongoose": "^4.8.4",
     "morgan": "^1.8.0",
     "mysql": "^2.13.0",

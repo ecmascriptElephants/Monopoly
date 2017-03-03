@@ -6,7 +6,7 @@ import { setUsername, setGameID, setUserID, setMyIndex, setDefaultState, setStat
 import Toast from './toast'
 import axios from 'axios'
 import LoadGame from './LoadGame'
-import { Input, Button } from 'semantic-ui-react'
+import { Input, Button, List, Image } from 'semantic-ui-react'
 import { Motion, spring, TransitionMotion } from 'react-motion'
 import Nav from './nav'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -19,7 +19,7 @@ class Lobby extends Component {
     super(props)
     this.state = {
       button: false,
-      join: false,
+      join: true,
       start: false,
       messages: [],
       showToast: false,
@@ -77,7 +77,7 @@ class Lobby extends Component {
     })
     sock.socket.on('player started', (data) => {
       this.setState({
-        join: false,
+        join: true,
         start: true
       })
     })
@@ -111,7 +111,7 @@ class Lobby extends Component {
   submitMessage (e) {
     let sender = this.props.username
     let room = 'lobby'
-    let msgInfo = { sender: sender, message: this.state.userMessage, room: room }
+    let msgInfo = { sender: sender, message: this.state.userMessage, room: room, picture: window.localStorage.picture }
     JSON.stringify(msgInfo)
     sock.socket.emit('new-message', msgInfo)
   }
@@ -181,14 +181,22 @@ class Lobby extends Component {
                   </Toolbar>
                   <div className='messages'>
                     { this.state.messages.map((msg, i) => {
-                      return <li className='oneChat' key={i}> <strong>{msg.sender}</strong>: {msg.message}</li>
+                      return <List>
+                        <List.Item>
+                          <Image avatar src={`${msg.picture}`} />
+                          <List.Content>
+                            <List.Header as='a'>{msg.sender}</List.Header>
+                            <List.Description>{msg.message}</List.Description>
+                          </List.Content>
+                        </List.Item>
+                      </List>
                     })}
                   </div>
                   <Input fluid placeholder='Type Here' id='message' onChange={this.message} action={<Button onClick={(e) => this.submitMessage(e)}> Send </Button>} />
                 </Paper>
               </div>
             </div>
-            <div col>
+            <div className='col'>
               <div className='users'>
                 <div className='user-container'>
                   <Paper className='paper-chat' zDepth={5}>
@@ -202,8 +210,14 @@ class Lobby extends Component {
                 <div className='user-container'>
                   <Paper className='paper-chat' zDepth={5}>
                     <Toolbar className='headers'>
-                      <ToolbarTitle text='Game' className='title' />
+                      <ToolbarTitle text='Games' className='title' />
                     </Toolbar>
+                    <div className='show-games' />
+                    <Button.Group size='massive' fluid>
+                      <Button color='green' onClick={this.newGame}>New Game</Button>
+                      <Button.Or />
+                      <Button color='purple' disabled={this.state.join} onClick={this.joinGame}>Join</Button>
+                    </Button.Group>
                   </Paper>
                 </div>
               </div>

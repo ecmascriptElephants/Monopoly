@@ -101,14 +101,13 @@ module.exports = (io) => {
     })
 
     socket.on('new-message', (msgInfo) => {
-      console.log(msgInfo)
       let sender = msgInfo.sender
       let message = msgInfo.message
       let room = msgInfo.room
-      msgHistory.addMessage(sender, message, room)
-      .then(({sender, message, room, _id}) => {
-        console.log(message, 'on line 100')
-        io.emit('receive-message', {sender, message, room, _id})
+      let picture = msgInfo.picture
+      msgHistory.addMessage(sender, message, room, picture)
+      .then(({sender, message, room, _id, picture}) => {
+        io.emit('receive-message', {sender, message, room, _id, picture})
       })
     })
 

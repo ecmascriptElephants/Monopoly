@@ -5,11 +5,12 @@ const queryMSG = Q.nbind(msgHistory.find, msgHistory)
 const add = Q.nbind(msgHistory.create, msgHistory)
 module.exports = {
 
-  addMessage: (sender, message, room) => {
+  addMessage: (sender, message, room, picture) => {
     return add({
       sender: sender,
       message: message,
-      room: room
+      room: room,
+      picture: picture
     })
   },
   getMessage: () => {

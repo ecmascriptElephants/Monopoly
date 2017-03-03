@@ -4,7 +4,7 @@
   "description": "a web app for monopoly",
   "main": "server/server.js",
   "scripts": {
-    "start": "webpack",
+    "start": "node server/server.js",
     "start-dev": "webpack-dev-server",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "node_modules/.bin/eslint server/**/*.js"
@@ -39,6 +39,7 @@
     "passport-facebook": "^2.1.1",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
+    "q": "^1.4.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-motion": "^0.4.7",

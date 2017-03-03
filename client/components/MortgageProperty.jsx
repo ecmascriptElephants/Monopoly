@@ -17,10 +17,11 @@ const Mortgage = (props) => {
       }
     })
     let newComment = comments.mortgageProperty(props.username, props.propertyName, mortgageAmount)
-    props.setState({comment: newComment, showToast: true})
+    props.setState({ comment: newComment, showToast: true })
     sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
     props.dispatch(setUserProperties(tempProperties, props.playerIndex))
     props.increaseFunds(mortgageAmount)
+    sock.updateMoney({ gameID: props.gameID, money: mortgageAmount, index: props.playerIndex })
   }
   return (
     <button onClick={() => { mortgageProperty() }}>Mortgage</button>

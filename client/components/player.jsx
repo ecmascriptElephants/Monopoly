@@ -4,7 +4,7 @@ import { rules } from '../static/rules'
 import DiceRoll from './dice_roll2'
 import { connect } from 'react-redux'
 import Chat from './chat'
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 class Player extends Component {
   constructor (props) {
@@ -29,7 +29,7 @@ class Player extends Component {
   }
 
   componentWillReceiveProps (prev) {
-    this.setState({name: prev.name})
+    this.setState({ name: prev.name })
   }
 
   increaseFunds (value) {
@@ -153,7 +153,6 @@ class Player extends Component {
             {this.props.userCashArray[this.props.playerIndex]}
           </Message>
           <DiceRoll dice={this.props.dice} setComment={this.props.comment} />
-          <div>In player {this.props.comment}</div>
           <Chat name={this.props.username} />
         </Segment>
       </Container>
@@ -168,6 +167,7 @@ const mapStateToProps = (state) => {
   }
 }
 Player.propTypes = {
+  username: React.PropTypes.string.isRequired,
   name: React.PropTypes.string.isRequired,
   piece: React.PropTypes.string.isRequired,
   dice: React.PropTypes.func.isRequired,

@@ -28,6 +28,7 @@ module.exports = (io) => {
       data.socketID = socket.id
       data.userPosition = [97, 97]
       var state = { players: 1, i: 0, playerInfo: { 0: data } }
+
       board.addGame(state, data)
         .then((result) => {
           const gameID = result[0]
@@ -66,11 +67,11 @@ module.exports = (io) => {
       }
       if (!refresh) {
         io.emit('users', { players: gameObj['playerInfo'] })
-        socket.broadcast.to(gameObj.playerInfo[0].socketID).emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.playerInfo.length })
+        socket.broadcast.to(gameObj.playerInfo[0].socketID).emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.players })
       } else {
         if (Number(data.index) === gameObj.i) {
           socket.join(data.gameID)
-          socket.emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.playerInfo.length })
+          socket.emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.players })
         }
       }
       // TODO Randomize users
@@ -83,7 +84,7 @@ module.exports = (io) => {
         gameObj.i = 0
       }
       gameObj['playerInfo'][data.index].userPosition = location[data.pos]
-      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.playerInfo.length })
+      socket.broadcast.to(gameObj.playerInfo[gameObj.i].socketID).emit('yourTurn', { index: gameObj.i, numOfPlayers: gameObj.players })
     })
 
     socket.on('dice rolled', (data) => {
@@ -96,12 +97,13 @@ module.exports = (io) => {
     })
 
     socket.on('new-message', (msgInfo) => {
-      io.emit('receive-message', msgInfo)
       let sender = msgInfo.sender
       let message = msgInfo.message
       let room = msgInfo.room
-      console.log('sender', sender)
       msgHistory.addMessage(sender, message, room)
+      .then(({sender, message, room, _id}) => {
+        io.emit('receive-message', {sender, message, room, _id})
+      })
     })
 
     socket.on('update database', (data) => {
@@ -116,6 +118,11 @@ module.exports = (io) => {
 
     socket.on('money update', (data) => {
       socket.broadcast.to(data.gameID).emit('update money', { money: data.money, index: data.index })
+    })
+
+    socket.on('jail free update', (data) => {
+      console.log('in io.js "jail free update" has been invoked data = ', data)
+      socket.broadcast.to(data.gameID).emit('update jail free', { jailFreeArray: data.jailFreeArray, index: data.index })
     })
 
     socket.on('load game', (data) => {

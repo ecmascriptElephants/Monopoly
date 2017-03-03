@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { setUserProperties } from './store/actionCreators'
+import comments from '../helper/comment'
+import sock from '../helper/socket'
 
 const SellHouse = (props) => {
   const sellHouse = (propertyPosition) => {
@@ -11,7 +13,16 @@ const SellHouse = (props) => {
         houseSalePrice = property.PropertyObj.HOUSE_SALE_PRICE
         property.Houses -= 1
         props.increaseFunds(houseSalePrice)
+        sock.updateMoney({ gameID: props.gameID, money: houseSalePrice, index: props.playerIndex })
         props.dispatch(setUserProperties(propertiesArray, props.playIndex))
+        let newComment = ''
+        if (property.Houses === 4) {
+          newComment = comments.soldHotel(props.username, property.PropertyObj.NAME, houseSalePrice)
+        } else {
+          newComment = comments.soldHouse(props.username, property.PropertyObj.NAME, houseSalePrice)
+        }
+        props.setState({ comment: newComment, showToast: true })
+        sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
       }
     })
   }

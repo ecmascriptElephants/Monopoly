@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Header, Container, Segment, Input, Icon, Divider, Form } from 'semantic-ui-react'
-import {Redirect} from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import Authenticate from '../helper/authenticate'
 class Signup extends Component {
@@ -16,6 +16,13 @@ class Signup extends Component {
     this.onPasswordChange = this.onPasswordChange.bind(this)
     this.onDisplayChange = this.onDisplayChange.bind(this)
     this.handleSignup = this.handleSignup.bind(this)
+  }
+
+  componentDidMount () {
+    let video = document.getElementById('monoSignup')
+    video.addEventListener('canplay', () => {
+      video.play()
+    })
   }
 
   onEmailChange (e) {
@@ -37,36 +44,43 @@ class Signup extends Component {
         window.localStorage.setItem('token', res.data.token)
         window.localStorage.setItem('displayname', res.data.user.displayname)
         window.localStorage.setItem('id', res.data.user.id)
-        this.setState({valid: true})
+        this.setState({ valid: true })
       })
       .catch((err) => console.error(err))
   }
 
   render () {
     return (
-      <Container>
-        <Segment raised vertical compact>
-          <Header as='h2' icon textAlign='center'>
-            <Icon name='users' circular />
-            <Header.Content>
-              Signup!
-            </Header.Content>
-          </Header>
-          <Form onSubmit={this.handleSignup}>
-            <Input focus fluid name='email' type='email' placeholder='Email' onChange={this.onEmailChange} />
+      <div>
+        <Container className='landingForm'>
+          <Segment vertical compact>
+            <Header as='h1' icon textAlign='center'>
+              <Icon name='users' circular />
+              <Header.Content>
+                Signup
+              </Header.Content>
+            </Header>
+            <Form onSubmit={this.handleSignup}>
+              <Input focus fluid name='email' type='email' placeholder='Email' onChange={this.onEmailChange} />
+              <Divider horizontal />
+              <Input focus fluid name='displayName' placeholder='Display Name' onChange={this.onDisplayChange} />
+              <Divider horizontal />
+              <Input focus fluid name='password' placeholder='Password' type='password' onChange={this.onPasswordChange} />
+              <Divider horizontal />
+              <Button secondary fluid type='submit'>Sign Up</Button>
+            </Form>
             <Divider horizontal />
-            <Input focus fluid name='displayName' placeholder='Display Name' onChange={this.onDisplayChange} />
-            <Divider horizontal />
-            <Input focus fluid name='password' placeholder='Password' type='password' onChange={this.onPasswordChange} />
-            <Divider horizontal />
-            <Button secondary fluid type='submit'>Sign Up</Button>
-          </Form>
-          <Divider horizontal />
-        </Segment>
-        {
-          this.state.valid ? Authenticate.isAuth() ? <Redirect to={{ pathname: '/lobby' }} /> : <Redirect to={{ pathname: '/' }} /> : null
-        }
-      </Container>
+          </Segment>
+          {
+            this.state.valid ? Authenticate.isAuth() ? <Redirect to={{ pathname: '/lobby' }} /> : <Redirect to={{ pathname: '/' }} /> : null
+          }
+        </Container>
+        <video id='monoSignup' className='video' loop>
+          <source src='mono.mp4' type='video/mp4' />
+          <source src='mono.ogv' type='video/ogg' />
+          <source src='mono.webm' type='video/webm' />
+        </video>
+      </div>
     )
   }
 }

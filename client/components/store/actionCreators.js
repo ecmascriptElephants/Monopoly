@@ -8,6 +8,7 @@ import { SET_GAME_ID,
   SET_CASH,
   SET_USERS_MONEY,
   SET_USERS_JAIL,
+  SET_USERS_JAIL_FREE,
   SET_MYINDEX,
   SET_PLAYERS,
   SET_PLAYER_PROPS,
@@ -72,6 +73,10 @@ export function setUserMoney (userMoney, index) {
 
 export function setUserJail (userJail, index) {
   return {type: SET_USERS_JAIL, userJail, index}
+}
+
+export function setUserJailFree (jailFreeArray, index) {
+  return {type: SET_USERS_JAIL_FREE, jailFreeArray, index}
 }
 
 export function setPlayers (playersArray) {

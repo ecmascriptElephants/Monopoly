@@ -31,7 +31,8 @@ class OtherPlayers extends Component {
                 property={e.PropertyObj.NAME}
                 socket={this.props.socket}
                 position={index}
-                owner={this.props.otherPlayerIndex} />
+                owner={this.props.otherPlayerIndex}
+                otherIndex={this.props.otherPlayerIndex} />
             </div>
           })} /> : null
           }

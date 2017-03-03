@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import {
   setIndex,
   setUserJail,
+  setUserJailFree,
   setCash,
   setMoveToken,
   setDiceRoll,
@@ -20,7 +21,7 @@ import {
   setButtons,
   setBankruptcy
 } from './store/actionCreators'
-import { Button, List } from 'semantic-ui-react'
+import { Button, List, Modal, Image } from 'semantic-ui-react'
 import Card from './Cards'
 import Move from './moveToken'
 import BuyProperty from './BuyProperty'
@@ -42,18 +43,17 @@ class DiceRoll extends Component {
       comment: '',
       doubles: 0,
       card: true,
-      userPropertiesArray: [[], [], [], [], [], [], [], []],
       userJailFreeCardArray: [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]],
-      endTurnButtonVisible: false,
       rentOwed: 0,
       propertyOwner: -1,
       isBankruptArray: [false, false, false, false, false, false, false, false],
-      jailRollDoublesButtonVisible: false,
       showToast: false,
-      numOfPlayer: -1,
+      numOfPlayers: -1,
       goFlag: false,
       mortgageButtonVisible: true,
-      doubleRailRoadRentMultiplier: false
+      doubleRailRoadRentMultiplier: false,
+      specialCardButton: 0,
+      cardModal: false
     }
     this.props.dispatch(setButtons())
     this.setStates = this.setStates.bind(this)
@@ -77,7 +77,9 @@ class DiceRoll extends Component {
           mortgageButtonVisible: true,
           showToast: true,
           doubleRailRoadRentMultiplier: false,
-          goFlag: false
+          goFlag: false,
+          specialCardButton: 0,
+          doubles: 0
         })
       } else {
         this.props.dispatch(setEndTurn(true))
@@ -91,36 +93,54 @@ class DiceRoll extends Component {
     sock.socket.on('update money', (data) => {
       this.props.dispatch(setCash(data.money, data.index))
     })
-
+    sock.socket.on('update jail free', (data) => {
+      console.log('in diceRoll2 socketon "update jail free" invoked data = ', data)
+      this.props.dispatch(setUserJailFree(data.jailFreeArray, data.index))
+    })
     sock.socket.on('receive-comment', (comment) => {
       this.setState({ comment, showToast: true })
     })
-
   }
 
   handleDiceRollButtonClick () {
     this.props.dispatch(setButtons())
     const die1 = 1 + Math.floor((6 * Math.random()))
     const die2 = 1 + Math.floor((6 * Math.random()))
-    // const die1 = 4
-    // const die2 = 3
-    if (this.props.jailPositions[this.props.index]) {
+    // const die1 = 1
+    // const die2 = 1
+    if (this.state.specialCardButton) {
+      let newComment = `${this.props.username} rolled a ${die1 + die2}!`
+      this.props.dispatch(setMoveToken(true))
+      this.props.dispatch(setDiceRoll(false))
+      this.setState({
+        comment: newComment,
+        showToast: true,
+        dice: [die1, die2]
+      })
+      sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
+    } else if (this.props.jailPositions[this.props.index]) {
       if (die1 === die2) {
         let updatedJailPositionsArray = [...this.props.jailPositions]
         updatedJailPositionsArray[this.props.index] = 0
+
+        this.props.dispatch(setUserJail(updatedJailPositionsArray[this.props.index], this.props.index))
+
         this.props.dispatch(setMoveToken(true))
         this.props.dispatch(setJailRoll(false))
         let newComment = comments.jailDoubles(this.props.username, die1 + die2)
-        this.setState({comment: newComment, showToast: true, dice: [die1, die2]})
+        this.setState({ comment: newComment, showToast: true, dice: [die1, die2] })
         sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
       } else {
         let updatedJailPositionsArray = [...this.props.jailPositions]
         updatedJailPositionsArray[this.props.index] += 1
-        this.dispatch(setEndTurn(true))
-        this.dispatch(setJailRoll(false))
+
+        this.props.dispatch(setUserJail(updatedJailPositionsArray[this.props.index], this.props.index))
+
+        this.props.dispatch(setEndTurn(true))
+        this.props.dispatch(setJailRoll(false))
 
         let newComment = comments.jailNotDoubles(this.props.username)
-        this.setState({comment: newComment, showToast: true, dice: [die1, die2]})
+        this.setState({ comment: newComment, showToast: true, dice: [die1, die2] })
         sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
       }
     } else {
@@ -129,18 +149,17 @@ class DiceRoll extends Component {
         doubles = this.state.doubles + 1
         console.log('in diceRoll2jsx handleRollDice  doubles = ', doubles)
         let newComment = comments.rollDoubles(this.props.username, die1 + die2)
-        this.setState({comment: newComment, showToast: true, dice: [die1, die2]})
+        this.setState({ comment: newComment, showToast: true, dice: [die1, die2] })
         sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
       }
       if (die1 !== die2) {
         let newComment = comments.diceRoll(this.props.username, die1 + die2)
-        this.setState({comment: newComment, showToast: true, dice: [die1, die2]})
+        this.setState({ comment: newComment, showToast: true, dice: [die1, die2] })
         sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
       }
       this.props.dispatch(setDiceRoll(false))
       this.props.dispatch(setMoveToken(true))
       this.props.dispatch(setBuyProperty(false))
-
       this.setState({
         diceSum: die1 + die2,
         doubles: doubles,
@@ -199,11 +218,11 @@ class DiceRoll extends Component {
     let doubles = this.state.doubles
     if (updatedUserMoney < rentOwed) {
       let newComment = comments.rentInsufficientFunds(this.props.username, rentOwed, updatedUserMoney[currentUser])
-      this.setState({comment: newComment, showToast: true})
+      this.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
     } else {
       let newComment = comments.rentPaid(this.props.username, 'the property owner', rentOwed)
-      this.setState({comment: newComment, showToast: true})
+      this.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
       this.props.dispatch(setCash(-rentOwed, currentUser))
       this.props.dispatch(setCash(rentOwed, propertyOwner))
@@ -222,11 +241,11 @@ class DiceRoll extends Component {
       this.props.dispatch(setEndTurn(false))
       this.props.dispatch(setMoveToken(false))
       let newComment = comments.incomeTaxInsufficientFunds(this.props.username)
-      this.setState({comment: newComment, showToast: true})
+      this.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
     } else {
       let newComment = comments.incomeTaxPaid(this.props.username)
-      this.setState({comment: newComment, showToast: true})
+      this.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
       this.props.dispatch(setCash(-200, this.props.index))
       sock.updateMoney({
@@ -247,11 +266,11 @@ class DiceRoll extends Component {
       this.props.dispatch(setEndTurn(false))
       this.props.dispatch(setMoveToken(false))
       let newComment = comments.luxuryTaxInsufficientFunds(this.props.username)
-      this.setState({comment: newComment, showToast: true})
+      this.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
     } else {
       let newComment = comments.luxuryTaxPaid(this.props.username)
-      this.setState({comment: newComment, showToast: true})
+      this.setState({ comment: newComment, showToast: true })
       sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
       this.props.dispatch(setCash(-100, this.props.index))
       sock.updateMoney({
@@ -267,10 +286,10 @@ class DiceRoll extends Component {
 
   handleJailPayFineButtonClick () {
     if (this.props.userCashArray[this.props.index] < 50) {
-      this.setState({
-        comment: 'You cannot afford the $50 fine.'
-      })
-    this.checkBankruptcy()
+      let newComment = comments.jailFineInsufficientFunds(this.props.username)
+      this.setState({ comment: newComment, showToast: true })
+      sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
+      this.checkBankruptcy()
     } else {
       this.props.dispatch(setCash(-50, this.props.index))
       sock.updateMoney({ gameID: this.props.gameID, money: -50, index: this.props.index })
@@ -285,22 +304,40 @@ class DiceRoll extends Component {
   }
 
   handleJailFreeCardButtonClick () {
-    if (this.state.userJailFreeCardArray[this.props.index][0] === 0 && this.state.userJailFreeCardArray[this.props.index][1] === 0) {
-
+    if (this.props.jailFreeArray[this.props.index][0] === 0 && this.props.jailFreeArray[this.props.index][1] === 0) {
+      let newComment = `${this.props.username} does not have any jail free cards.`
+      this.setState({ comment: newComment, showToast: true })
+      sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
+    } else {
+      if (this.props.jailFreeArray[this.props.index][0] === 1) {
+        let updatedJailFreeArray = [...this.props.jailFreeArray]
+        updatedJailFreeArray[this.props.index][0] = 0
+        this.props.dispatch(setUserJailFree(updatedJailFreeArray[this.props.index], this.props.index))
+        sock.updateJailFree({ gameID: this.props.gameID, jailFreeArray: updatedJailFreeArray[this.props.index], index: this.props.index })
+        let newComment = `${this.props.username} used the community chest Get-Out-Of-Jail Free card.`
+        this.setState({ comment: newComment, showToast: true })
+        sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
+      } else if (this.props.jailFreeArray[this.props.index][1] === 1) {
+        let updatedJailFreeArray = [...this.props.jailFreeArray]
+        updatedJailFreeArray[this.props.index][1] = 0
+        this.props.dispatch(setUserJailFree(updatedJailFreeArray[this.props.index], this.props.index))
+        sock.updateJailFree({ gameID: this.props.gameID, jailFreeArray: updatedJailFreeArray[this.props.index], index: this.props.index })
+        let newComment = `${this.props.username} used the chance Get-Out-Of-Jail Free card.`
+        this.setState({ comment: newComment, showToast: true })
+        sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
+      }
+      let updatedJailPositions = [...this.props.jailPositions]
+      updatedJailPositions[this.props.index] = 0
+      this.props.dispatch(setUserJail(updatedJailPositions[this.props.index], this.props.index))
+      this.props.dispatch(setDiceRoll(true))
+      this.props.dispatch(setPayFine(false))
+      this.props.dispatch(setJailRoll(false))
+      this.props.dispatch(setFreeCard(false))
     }
-    // check if a user has a jail free card
-    // if so,
-    // remove user's jail free card
-    // set jail to 0
-    // set comment to ''
-    // make diceRollButtonVisible
-    // if not,
-    // say, you do not own a jail free card
-    // make jail free card button disappear
   }
 
   checkBankruptcy () {
-    console.log('check bank kruptcy')
+    console.log('check bankruptcy')
     let usersProperties = [...this.props.userPropertiesArray[this.props.index]]
     let count = 0
     usersProperties.forEach((property) => {
@@ -337,6 +374,8 @@ class DiceRoll extends Component {
                     doubles={this.state.doubles}
                     diceSum={this.state.diceSum}
                     dice={this.props.dice}
+                    dies={this.state.dice}
+                    specialCardButton={this.state.specialCardButton}
                     doubleRailRoadRentMultiplier={this.state.doubleRailRoadRentMultiplier}
                     userNames={this.state.userNames}
                     goFlag={this.state.goFlag}
@@ -348,12 +387,22 @@ class DiceRoll extends Component {
             {
               this.props.cardButton ? <Card button={() => { this.handleCardButtonClick() }}
                 card={this.state.card}
+                jailFreeArray={this.props.jailFreeArray}
                 dice={this.props.dice}
                 doubles={this.state.doubles}
-                number={this.state.numOfPlayers}
+                numOfPlayers={this.state.numOfPlayers}
                 doubleRailRoadRentMultiplier={this.state.doubleRailRoadRentMultiplier}
                 setState={this.setStates}
               /> : null
+            }
+            {
+              this.state.cardModal
+                ? <Modal open={this.state.cardModal} size='small'>
+                  <Modal.Content image>
+                    <Image wrapped size='medium' centered src={`${this.state.card ? 'community' : 'chance'}/${this.state.cardID}.png`} />
+                  </Modal.Content>
+                  <Button onClick={() => { this.setState({ cardModal: false }) }}> Close </Button>
+                </Modal> : null
             }
             <div className='buy-property-btn_div'>
               {(this.props.buyPropertyButton && (!this.props.setGoButton || this.state.goFlag))
@@ -428,7 +477,7 @@ class DiceRoll extends Component {
                   {(this.props.jailRollDiceButton && !this.props.endTurnButton)
                     ? <div>
                       <Button secondary fluid onClick={() => {
-                        this.handleJailRollDoublesButtonClick()
+                        this.handleDiceRollButtonClick()
                       }}> Attempt to roll doubles. </Button>
                     </div> : null
                   }
@@ -446,35 +495,26 @@ class DiceRoll extends Component {
             }
           </div>
         </div>
-        <div className='UserMoney_div'>
-          {`Everyone's Money ${this.props.userCashArray}`}
+        <div className='CurrentUserJailFree'>
+          {(this.props.jailFreeArray[this.props.playerIndex][0] === 1 && this.props.jailFreeArray[this.props.playerIndex][1] === 1)
+            ? `You have both the community chest and the chance Get-Out-Of-Jail Free cards.`
+            : (this.props.jailFreeArray[this.props.playerIndex][0] === 1) ? `You have the community chest Get-Out-Of-Jail Free card.`
+              : (this.props.jailFreeArray[this.props.playerIndex][1] === 1) ? `You have the chance Get-Out-Of-Jail Free card.` : null
+          }
         </div>
-        <div className='Comments_div'>
-          <div className='doubles-comment_div'>
-            {this.state.comment}
-          </div>
-        </div>
-        <div className='CurrentUser_div'>
-          <div className='CurrentUserMoney'>
-            {this.props.index === -1 ? null : `You have: $${this.props.userCashArray[this.props.playerIndex]}`}
-          </div>
-          <div className='CurrentUserProperties'>
-            <div>
-              Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {
-                return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME}
-                  {(this.state.mortgageButtonVisible) ? <span>{e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} setState={this.setStates} />
-                    : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} setState={this.setStates} />}
+        <div className='CurrentUserProperties'>
+          <div>
+            Properties : {this.props.index === -1 ? null : <List items={this.props.userPropertiesArray[this.props.index].map((e, index) => {
+              return <div key={index} className={e.PropertyObj.PROPERTY_GROUP} >{e.PropertyObj.NAME}
+                {(this.state.mortgageButtonVisible) ? <span>{e.Mortgaged ? <UnMortgage propertyName={e.PropertyObj.NAME} reduceFunds={this.reduceFunds} cash={this.props.userCashArray[this.props.playerIndex]} setState={this.setStates} />
+                  : <Mortgage propertyName={e.PropertyObj.NAME} increaseFunds={this.increaseFunds} setState={this.setStates} />}
                   {e.Monopoly ? <BuyHouse propertyPosition={e.Position}
                     propertyGroup={e.PropertyObj.PROPERTY_GROUP}
                     reduceFunds={this.reduceFunds} houses={e.Houses}
                     numberNeeded={e.PropertyObj.NUMBER_OF_PROPERTIES_IN_GROUP} setState={this.setStates} /> : null}
                   {e.Houses > 0 ? <SellHouse propertyPosition={e.Position} increaseFunds={this.increaseFunds} houses={e.Houses} setState={this.setStates} /> : null}</span> : null} </div>
-              })} />}
-            </div>
+            })} />}
           </div>
-        </div>
-        <div className='comment'>
-          {this.state.comment}
         </div>
         <Toast message={this.state.comment} show={this.state.showToast} />
         <ToastHistory message={this.state.comment} />
@@ -494,6 +534,7 @@ const mapStateToProps = (state) => {
     index: state.index,
     playerIndex: state.playerIndex,
     userCashArray: state.userCashArray,
+    jailFreeArray: state.jailFreeArray,
     diceRollButton: state.diceRollButton,
     moveTokenButton: state.moveTokenButton,
     cardButton: state.cardButton,
@@ -523,6 +564,7 @@ DiceRoll.propTypes = {
   playerIndex: React.PropTypes.number.isRequired,
   userPropertiesArray: React.PropTypes.array.isRequired,
   userCashArray: React.PropTypes.array.isRequired,
+  jailFreeArray: React.PropTypes.array.isRequired,
   diceRollButton: React.PropTypes.bool.isRequired,
   moveTokenButton: React.PropTypes.bool.isRequired,
   cardButton: React.PropTypes.bool.isRequired,
@@ -538,7 +580,6 @@ DiceRoll.propTypes = {
   buyPropertyButton: React.PropTypes.bool.isRequired,
   setComment: React.PropTypes.func.isRequired,
   comment: React.PropTypes.string.isRequired
-
 }
 
 export default connect(mapStateToProps)(DiceRoll)

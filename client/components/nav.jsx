@@ -7,9 +7,9 @@ const Nav = (props) => {
   return (
     <MuiThemeProvider>
       <Toolbar className='headers'>
-        <ToolbarTitle text='Hackopoly' className='title' />
-        <ToolbarTitle text={`Welcome ${window.localStorage.displayname}`} className='name' />
-        <FlatButton label='Sign Out' primary className='signout' />
+        <ToolbarTitle text='HACKOPOLY' className='title' />
+        <ToolbarTitle text={`WELCOME ${window.localStorage.displayname.toUpperCase()}`} className='name' />
+        <FlatButton label='SIGN OUT' primary className='signout' />
       </Toolbar>
     </MuiThemeProvider>
   )

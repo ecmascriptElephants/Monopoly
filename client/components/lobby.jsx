@@ -188,7 +188,7 @@ class Lobby extends Component {
               <div className='chat-container'>
                 <Paper className='paper-chat' zDepth={5}>
                   <Toolbar className='headers' >
-                    <ToolbarTitle text='Chat' className='title' />
+                    <ToolbarTitle text='CHAT' className='title' />
                   </Toolbar>
                   <div className='messages'>
                     { this.state.messages.map((msg, i) => {
@@ -203,7 +203,7 @@ class Lobby extends Component {
                       </List>
                     })}
                   </div>
-                  <Input fluid placeholder='Type Here' id='message' onChange={this.message} action={<Button size='large' color='teal' onClick={(e) => this.submitMessage(e)}> Send </Button>} />
+                  <Input fluid placeholder='Type Here' id='message' onChange={this.message} action={<Button size='large' color='red' onClick={(e) => this.submitMessage(e)}> SEND </Button>} />
                 </Paper>
               </div>
             </div>
@@ -212,7 +212,7 @@ class Lobby extends Component {
                 <div className='user-container'>
                   <Paper className='paper-chat' zDepth={5}>
                     <Toolbar className='headers'>
-                      <ToolbarTitle text='Online Users' className='title' />
+                      <ToolbarTitle text='ONLINE USERS' className='title' />
                     </Toolbar>
                     { Object.keys(this.state.onlineUsers).map((user, i) => {
                       return <List>
@@ -229,27 +229,27 @@ class Lobby extends Component {
                 <div className='user-container'>
                   <Paper className='paper-chat' zDepth={5}>
                     <Toolbar className='headers'>
-                      <ToolbarTitle text='Games' className='title' />
+                      <ToolbarTitle text='GAMES' className='title' />
                     </Toolbar>
                     <Menu widths={2} className='gameMenu'>
-                      <Menu.Item name='New Game' onClick={() => this.setShowGames(true)} />
-                      <Menu.Item name='Resume Game' onClick={() => this.setShowGames(false)} />
+                      <Menu.Item name='Join New Games' onClick={() => this.setShowGames(true)} />
+                      <Menu.Item name='Resume Old Games' onClick={() => this.setShowGames(false)} />
                     </Menu>
                     {this.state.showGames ? <div className='showMenuGame' ><div className='show-games'>
                       {Object.keys(this.state.games).map((item) => {
-                        return <Button fluid key={item} onClick={() => { this.handleGameClick(this.state.games[item]) }}> Game: {item} </Button>
+                        return <Button fluid key={item} onClick={() => { this.handleGameClick(this.state.games[item]) }}> GAME: {item} </Button>
                       })}
                     </div>
 
-                      {this.state.start ? <div className='start'><Button color='green' size='massive' onClick={this.startGame}> Start Game </Button></div> : this.state.showNewGameButton ? <Button.Group size='massive' fluid>
-                        <Button color='green' onClick={() => this.newGame()}>New Game</Button>
+                      {this.state.start ? <div className='start'><Button color='green' size='massive' onClick={this.startGame}> START GAME </Button></div> : this.state.showNewGameButton ? <Button.Group size='massive' fluid>
+                        <Button color='green' onClick={() => this.newGame()}>NEW GAME</Button>
                         <Button.Or />
-                        <Button color='purple' disabled={this.state.join} onClick={() => this.joinGame()}>Join</Button>
+                        <Button color='black' disabled={this.state.join} onClick={() => this.joinGame()}>JOIN</Button>
                       </Button.Group> : this.state.join
                       ? <Message className={'message'}>
-                        <Message.Header>Waiting for More Players</Message.Header>
+                        <Message.Header>WAITING FOR MORE PLAYERS</Message.Header>
                       </Message> : <Message className={'message'}>
-                        <Message.Header>Waiting for Players to Join </Message.Header>
+                        <Message.Header>WAITING FOR PLAYERS TO JOIN</Message.Header>
                       </Message>} </div>
                        : <div className='showMenuGame' >
                          <LoadGame pendingGames={this.state.pendingGames} load={this.state.resume} />

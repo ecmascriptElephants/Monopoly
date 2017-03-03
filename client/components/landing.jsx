@@ -56,11 +56,6 @@ class Land extends Component {
             this.setState({auth: true})
           } else {
             this.setState({authFail: true})
-            // send a pop-up that says
-            // The email or password you’ve entered doesn’t match any account. <Link to
-            // ='/signup'>Sign up</Link> for an account.
-            // for an
-            // account.
           }
         })
         .catch((err) => {
@@ -85,6 +80,12 @@ class Land extends Component {
                   Hackopoly
                 </Header.Content>
               </Header>
+              {
+                this.state.authFail ?
+                  <Container text='true' textAlign='center' className='login-validation'>The email or password you’ve entered doesn’t match any account.
+                    <Link to='/signup'>Sign up</Link> for an account.
+                  </Container> : null
+              }
               <Form onSubmit={this.handleLogin}>
                 <Input focus fluid name='username' placeholder='Username' onChange={this.onUsernameChange} />
                 <Divider horizontal />
@@ -100,7 +101,7 @@ class Land extends Component {
               </Button>
             </Segment>
             {
-               this.state.valid ? Authenticate.isAuth() ? <Redirect to={{ pathname: '/lobby' }} /> : <Redirect to={{ pathname: '/' }} /> : null
+               this.state.auth ? <Redirect to={{ pathname: '/lobby' }} /> : null
             }
           </Container>
         </div>

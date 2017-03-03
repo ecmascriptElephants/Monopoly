@@ -1,9 +1,11 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
-
+import { Dimmer, Loader } from 'semantic-ui-react'
 const Loading = () => {
   return (
-    <Redirect to={{ pathname: '/board' }} />
+    <Dimmer active>
+      <Loader />
+    </Dimmer>
   )
 }
 

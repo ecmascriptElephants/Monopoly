@@ -82,6 +82,7 @@ const setIndex = (state, action) => {
   return newState
 }
 const setPlayerIndex = (state, action) => {
+  console.trace(action.index)
   const newState = {}
   Object.assign(newState, state, { playerIndex: action.index })
   return newState

@@ -89,3 +89,44 @@
         </div>
         <Toast message={this.state.comment} show={this.state.showToast} />
       </div>
+
+
+
+
+      <div className='newGame'>
+                            <div className='show-games'>
+                              {Object.keys(this.state.games).map((item) => {
+                                return <div key={item} onClick={() => { this.handleGameClick(this.state.games[item]) }}>Game: {item}</div>
+                              })}
+                            </div>
+                            <Button.Group size='massive' fluid>
+                              <Button color='green' onClick={this.newGame}>New Game</Button>
+                              <Button.Or />
+                              <Button color='purple' disabled={this.state.join} onClick={this.joinGame}>Join</Button>
+                            </Button.Group>
+                          </div>
+
+                          <Toolbar className='headers'>
+                      <ToolbarTitle text='Games' className='title' />
+                    </Toolbar>
+                    <div className='tabs'>
+                      <Tabs>
+                        <Tab label='New Game' >
+                        <div className='newGame'>
+                          <div className='show-games'>
+                          {Object.keys(this.state.games).map((item) => {
+                            return <div key={item} onClick={() => { this.handleGameClick(this.state.games[item]) }}>Game: {item}</div>
+                          })}
+                        </div>
+                          <Button.Group size='massive' fluid>
+                          <Button color='green' onClick={this.newGame}>New Game</Button>
+                          <Button.Or />
+                          <Button color='purple' disabled={this.state.join} onClick={this.joinGame}>Join</Button>
+                        </Button.Group>
+                        </div>
+                      </Tab>
+                        <Tab label='Pending Games' >
+                      buhahah
+                      </Tab>
+                      </Tabs>
+                    </div>

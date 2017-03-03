@@ -6,7 +6,7 @@ import { setUsername, setGameID, setUserID, setMyIndex, setDefaultState, setStat
 import Toast from './toast'
 import axios from 'axios'
 import LoadGame from './LoadGame'
-import { Input, Button, List, Image } from 'semantic-ui-react'
+import { Input, Button, List, Image, Menu, Message } from 'semantic-ui-react'
 import { Motion, spring, TransitionMotion } from 'react-motion'
 import Nav from './nav'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -28,13 +28,16 @@ class Lobby extends Component {
       pendingGames: [],
       resume: true,
       games: {},
-      userMessage: ''
+      userMessage: '',
+      showGames: true,
+      showNewGameButton: true,
+      onlineUser: []
     }
 
     this.props.dispatch(setDefaultState())
     this.props.dispatch(setUsername(window.localStorage.displayname))
     this.props.dispatch(setUserID(window.localStorage.id))
-    sock.userJoined({ id: window.localStorage.id, displayName: window.localStorage.displayname })
+    sock.userJoined({ id: window.localStorage.id, displayName: window.localStorage.displayname, picture: window.localStorage.picture })
 
     this.joinGame = this.joinGame.bind(this)
     this.newGame = this.newGame.bind(this)
@@ -43,9 +46,12 @@ class Lobby extends Component {
     this.getChats = this.getChats.bind(this)
     this.signOut = this.signOut.bind(this)
     this.message = this.message.bind(this)
+    this.setShowGames = this.setShowGames.bind(this)
   }
   componentDidMount () {
-    // window.localStorage.removeItem('state')
+    sock.socked.on('user joined', (data) => {
+      this.setState({onlineUsers: data})
+    })
     sock.socket.on('get games', (data) => {
       this.setState({ games: data })
     })
@@ -61,7 +67,9 @@ class Lobby extends Component {
     })
 
     sock.socket.on('your index', (data) => {
-      this.props.dispatch(setMyIndex(data))
+      console.log('myIndex', data)
+      this.props.dispatch(setMyIndex(data.index))
+      this.setState({games: data.newGame})
     })
 
     sock.socket.on('player joined', (data) => {
@@ -83,10 +91,8 @@ class Lobby extends Component {
     })
 
     sock.socket.on('receive-message', (msgInfo) => {
-      console.log(msgInfo)
       let messages = [...this.state.messages]
       messages.push(msgInfo)
-      console.log(messages)
       this.setState({ messages })
     })
 
@@ -96,6 +102,7 @@ class Lobby extends Component {
     })
   }
   newGame () {
+    this.setState({showNewGameButton: false})
     sock.newGame({ username: this.props.username, userID: this.props.userID, picture: window.localStorage.picture })
   }
 
@@ -105,6 +112,8 @@ class Lobby extends Component {
   }
 
   startGame () {
+    console.log(this.props.playerIndex)
+    console.log(this.props.gameID)
     sock.start({ gameID: this.props.gameID })
   }
 
@@ -121,7 +130,7 @@ class Lobby extends Component {
   }
 
   handleGameClick (gameID) {
-    this.setState({ join: true })
+    this.setState({ join: false })
     this.props.dispatch(setGameID(gameID))
     window.localStorage.setItem('gameID', gameID)
   }
@@ -150,7 +159,6 @@ class Lobby extends Component {
   getStyles () {
     let configs = {}
     this.state.messages.forEach((val, index) => {
-      console.log(val, index)
       configs[val._id] = {
         opacity: spring(1),
         top: spring(0, springPreset.wobbly)
@@ -166,6 +174,9 @@ class Lobby extends Component {
     }
   }
 
+  setShowGames (bool) {
+    this.setState({showGames: bool})
+  }
   render () {
     return (
       <MuiThemeProvider>
@@ -192,7 +203,7 @@ class Lobby extends Component {
                       </List>
                     })}
                   </div>
-                  <Input fluid placeholder='Type Here' id='message' onChange={this.message} action={<Button onClick={(e) => this.submitMessage(e)}> Send </Button>} />
+                  <Input fluid placeholder='Type Here' id='message' onChange={this.message} action={<Button type='submit' size='large' color='teal' onClick={(e) => this.submitMessage(e)}> Send </Button>} />
                 </Paper>
               </div>
             </div>
@@ -212,17 +223,36 @@ class Lobby extends Component {
                     <Toolbar className='headers'>
                       <ToolbarTitle text='Games' className='title' />
                     </Toolbar>
-                    <div className='show-games' />
-                    <Button.Group size='massive' fluid>
-                      <Button color='green' onClick={this.newGame}>New Game</Button>
-                      <Button.Or />
-                      <Button color='purple' disabled={this.state.join} onClick={this.joinGame}>Join</Button>
-                    </Button.Group>
+                    <Menu widths={2} className='gameMenu'>
+                      <Menu.Item name='New Game' onClick={() => this.setShowGames(true)} />
+                      <Menu.Item name='Resume Game' onClick={() => this.setShowGames(false)} />
+                    </Menu>
+                    {this.state.showGames ? <div className='showMenuGame' ><div className='show-games'>
+                      {Object.keys(this.state.games).map((item) => {
+                        return <Button fluid key={item} onClick={() => { this.handleGameClick(this.state.games[item]) }}> Game: {item} </Button>
+                      })}
+                    </div>
+                    
+                      {this.state.start ? <div className='start'><Link to='/board'><Button color='green' size='massive' onClick={this.startGame}> Start Game </Button></Link></div> : this.state.showNewGameButton ? <Button.Group size='massive' fluid>
+                        <Button color='green' onClick={() => this.newGame()}>New Game</Button>
+                        <Button.Or />
+                        <Button color='purple' disabled={this.state.join} onClick={() => this.joinGame()}>Join</Button>
+                      </Button.Group> : this.state.join
+                      ? <Message>
+                        <Message.Header>Waiting for More Players</Message.Header>
+                      </Message> : <Message>
+                        <Message.Header>Waiting for Players to Join </Message.Header>
+                      </Message>} </div>
+                       : <div className='showMenuGame' >
+                         <LoadGame pendingGames={this.state.pendingGames} load={this.state.resume} />
+                       </div>
+                  }
                   </Paper>
                 </div>
               </div>
             </div>
           </div>
+          <Toast message={this.state.comment} show={this.state.showToast} />
         </div>
       </MuiThemeProvider>
     )
@@ -234,7 +264,9 @@ const mapStateToProps = (state) => {
     username: state.username,
     gameID: state.gameID,
     userID: state.userID,
-    messageID: state.messageID
+    messageID: state.messageID,
+    playerIndex: state.playerIndex,
+    bankruptcyButton: state.bankruptcyButton
   }
 }
 Lobby.propTypes = {

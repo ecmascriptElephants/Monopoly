@@ -76,39 +76,34 @@ class Land extends Component {
   render () {
     return (
       <div>
-        <Container className='landingForm'>
-          <Segment vertical compact>
-            <Header as='h1' icon textAlign='center'>
-              <Icon name='users' circular />
-              <Header.Content>
-                Hackopoly
-              </Header.Content>
-            </Header>
+        <div id='videoContainer'>
+          <Container className='landingForm'>
+            <Segment vertical compact>
+              <Header as='h1' icon textAlign='center'>
+                <Icon name='users' circular />
+                <Header.Content>
+                  Hackopoly
+                </Header.Content>
+              </Header>
+              <Form onSubmit={this.handleLogin}>
+                <Input focus fluid name='username' placeholder='Username' onChange={this.onUsernameChange} />
+                <Divider horizontal />
+                <Input focus fluid name='password' placeholder='Password' type='password' onChange={this.onPasswordChange} />
+                <Divider horizontal />
+                <Button secondary fluid type='submit'>Login</Button>
+              </Form>
+              <Divider horizontal>Or</Divider>
+              <Link to='/signup'> <Button secondary fluid>Sign Up</Button></Link>
+              <Divider horizontal />
+              <Button fluid color='facebook' href='/auth/facebook'>
+                <Icon name='facebook' /> Facebook
+              </Button>
+            </Segment>
             {
-              this.state.authFail ?
-                <Container text='true' textAlign='center' className='login-validation'>The email or password you’ve entered doesn’t match any account.
-                  <Link to='/signup'>Sign up</Link> for an account.
-                </Container> : null
+               this.state.valid ? Authenticate.isAuth() ? <Redirect to={{ pathname: '/lobby' }} /> : <Redirect to={{ pathname: '/' }} /> : null
             }
-            <Form onSubmit={this.handleLogin}>
-              <Input focus fluid error={this.state.authFail} name='email' placeholder='Email' onChange={this.onUsernameChange} />
-              <Divider horizontal />
-              <Input focus fluid error={this.state.authFail} name='password' placeholder='Password' type='password' onChange={this.onPasswordChange} />
-              <Divider horizontal />
-              <Button secondary fluid type='submit'>Login</Button>
-            </Form>
-            <Divider horizontal>Or</Divider>
-            <Link to='/signup'> <Button secondary fluid>Sign Up</Button></Link>
-            <Divider horizontal />
-            <Button fluid color='facebook' href='/auth/facebook'>
-              <Icon name='facebook' /> Facebook
-            </Button>
-          </Segment>
-          {
-            (this.state.promise && this.state.auth) ? <Redirect to={{ pathname: '/lobby' }} /> : null
-          }
-        </Container>
-
+          </Container>
+        </div>
         <video id='monoLanding' className='video' loop>
           <source src='mono.mp4' type='video/mp4' />
           <source src='mono.ogv' type='video/ogg' />

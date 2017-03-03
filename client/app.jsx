@@ -9,6 +9,7 @@ import { Provider } from 'react-redux'
 import store from './components/store/store'
 import Auth from './components/auth'
 import Profile from './components/profile'
+import Team from './components/team'
 
 class App extends Component {
   render () {
@@ -22,6 +23,7 @@ class App extends Component {
             <Route path='/lobby' component={Lobby} />
             <Route path='/auth' component={Auth} />
             <Route path='/profile' component={Profile} />
+            <Route path='/team' component={Team} />
           </div>
         </Provider>
       </Router>

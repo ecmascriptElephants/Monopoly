@@ -308,6 +308,17 @@ overflow: auto;
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   opacity: 0.8;
+  background-size: cover;
+  height: 100vh;
+}
+
+#videoContainer {
+  height: 100%;
+  background-size: cover;
+}
+
+#team {
+  height: 100%;
 }
 
 .landingForm {
@@ -324,7 +335,7 @@ overflow: auto;
 }
 
 .marginTop {
-  margin-top: 100px;
+  margin-top: 80px;
 }
 
 .filterRow {
@@ -377,6 +388,24 @@ overflow: auto;
 
 .gameList {
   height: 250px;
+}
+
+.techPic {
+  width: 150px;
+  height: 150px;
+}
+
+.techPic2 {
+  width: 450px;
+  height: 150px;
+}
+
+.marginTech {
+  padding-top: 50px;
+}
+
+.social-space {
+  margin-right: 10px;
 }
 
 .ui list history {

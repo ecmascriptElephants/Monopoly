@@ -182,7 +182,7 @@ class Lobby extends Component {
       <MuiThemeProvider>
         <div>
           <Nav />
-          {this.state.startGame ? <Redirect to={{ pathname: '/loading' }} /> : null}
+          {this.state.startGame ? <Redirect to={{ pathname: '/board' }} /> : null}
           <div className='lobby' >
             <div className='chat'>
               <div className='chat-container'>

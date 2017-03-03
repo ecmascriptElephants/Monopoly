@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import {List, Segment, Divider} from 'semantic-ui-react'
 import sock from '../helper/socket'
-
+import escape from 'lodash.escape'
 class Chat extends Component {
   constructor (props) {
     super(props)
@@ -20,13 +20,14 @@ class Chat extends Component {
   }
 
   submitMessage () {
-    let message = document.getElementById('chatBox').value
+    let message = escape(document.getElementById('chatBox').value)
     document.getElementById('chatBox').value = ''
     let sender = this.state.name
     let room = 'board'
     let msgInfo = {sender: sender, message: message, room: room}
+
     JSON.stringify(msgInfo)
-    sock.socket.emit('new-message', msgInfo)
+    sock.socket.emit('new-message', escape(msgInfo))
   }
 
   render () {

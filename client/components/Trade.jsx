@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Image, Modal, Input, Label } from 'semantic-ui-react'
 import sock from '../helper/socket'
+import escape from 'lodash.escape'
+
 class Trade extends Component {
   constructor (props) {
     super(props)
@@ -21,7 +23,7 @@ class Trade extends Component {
   }
 
   handleOffer (e) {
-    this.setState({ offer: e.target.value })
+    this.setState({ offer: +escape(e.target.value) || 0 })
   }
 
   offer () {

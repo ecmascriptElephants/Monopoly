@@ -27,7 +27,7 @@ class Profile extends Component {
 
   render () {
     let queryResults = this.state.queryResults.map((result) => {
-      return <li className='oneChat'>Sender: {result.sender} Message: {result.message} Room: {result.room}</li>
+      return <li className='oneChat'>Sender: {result.sender} Room: {result.room} <br />Message: {result.message}</li>
     })
     return (
       <div className='container marginTop'>

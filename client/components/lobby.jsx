@@ -190,7 +190,7 @@ class Lobby extends Component {
             <div className='col-md-9'>
               <div className='panel panel-primary chatWindow'>
                 <div className='panel-heading'>
-                  <span className='glyphicon glyphicon-comment' /> Chat
+                  <i className='glyphicon glyphicon-comment'> Chat </i>
                 </div>
                 <div className='panel-body'>
                   <TransitionMotion

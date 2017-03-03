@@ -236,9 +236,9 @@ class Lobby extends Component {
               </div>
               <div className='gameButton'>
                 <div>
-                  <Button color='teal' size='massive' onClick={this.newGame}> New Game </Button>
-                  {this.state.join ? <button color='teal' size='massive' onClick={this.joinGame}> Join Game </button> : null}
-                  {this.state.start ? <Link to='/board'><button color='teal' size='massive' onClick={this.startGame}> Start Game </button></Link> : null}
+                  <Button color='teal' size='huge' onClick={this.newGame}> New Game </Button>
+                  {this.state.join ? <Button color='teal' size='huge' onClick={this.joinGame}> Join Game </Button> : null}
+                  {this.state.start ? <Link to='/board'><Button color='teal' size='huge' onClick={this.startGame}> Start Game </Button></Link> : null}
                 </div>
               </div>
             </div>

@@ -18,7 +18,7 @@ class Land extends Component {
   }
 
   componentDidMount () {
-    let video = document.getElementById('monoVideo')
+    let video = document.getElementById('monoLanding')
     video.addEventListener('canplay', () => {
       video.play()
     })
@@ -48,9 +48,9 @@ class Land extends Component {
   render () {
     return (
       <div>
-        <Container id='loginForm'>
-          <Segment raised vertical compact>
-            <Header as='h2' icon textAlign='center'>
+        <Container className='landingForm'>
+          <Segment vertical compact>
+            <Header as='h1' icon textAlign='center'>
               <Icon name='users' circular />
               <Header.Content>
                 Hackopoly
@@ -75,12 +75,11 @@ class Land extends Component {
           }
         </Container>
 
-        <video id='monoVideo' className='video'  loop>
+        <video id='monoLanding' className='video' loop>
           <source src='mono.mp4' type='video/mp4' />
-          <source src='../../index/mono.ogv' type='video/ogg' />
-          <source src='../../index/mono.webm' type='video/webm' />
+          <source src='mono.ogv' type='video/ogg' />
+          <source src='mono.webm' type='video/webm' />
         </video>
-
       </div>
     )
   }

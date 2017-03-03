@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Header, Container, Segment, Input, Icon, Divider, Form } from 'semantic-ui-react'
+import { Button} from 'semantic-ui-react'
 import { Redirect } from 'react-router-dom'
 import axios from 'axios'
 import Authenticate from '../helper/authenticate'
@@ -27,30 +27,49 @@ class Profile extends Component {
 
   render () {
     let queryResults = this.state.queryResults.map((result) => {
-      return <li>Sender: {result.sender} Message: {result.message} Room: {result.room}</li>
+      return <li className='oneChat'>Sender: {result.sender} Message: {result.message} Room: {result.room}</li>
     })
     return (
-      <div className='container'>
-        <h1>Search your chats!</h1>
-        <form onSubmit={this.getChats}>
-          <input type='text' placeholder='keyword' id='keyword' />
-          <select id='room' name='room'>
-            <option>All Rooms</option>
-            <option value='lobby'>Lobby</option>
-            <option value='board'>Board</option>
-          </select>
+      <div className='container marginTop'>
+        <div className='row'>
+          <div className='col-md-6 col-md-offset-3 text-center'>
+            <h1>Search your chats!</h1>
+            <p> Enter Your Search Criteria Below! </p>
+            <form role='form' onSubmit={this.getChats}>
+              <div className='form-group'>
+                <div className='input-group'>
+                  <input type='text' className='form-control' placeholder='Enter keywords here...' id='keyword' />
+                </div>
+              </div>
+              <div className='row filterRow'>
+                <div className='col-md-4'>
+                  <select id='room' name='room' className='selectpicker'>
+                    <option>All Rooms</option>
+                    <option value='lobby'>Lobby</option>
+                    <option value='board'>Board</option>
+                  </select>
+                </div>
+                <div className='col-md-4'>
+                  <select id='date' className='selectpicker'>
+                    <option>This Week</option>
+                    <option value='thisWeek'>This Month</option>
+                    <option value='thisYear'>This Year</option>
+                  </select>
+                </div>
+                <div className='col-md-4'>
+                  <button type='submit' className=' btn btn-lg btn-success'>Show chats</button>
+                </div>
+              </div>
+            </form>
+            <p> You have total of {this.state.queryResults.length} messages </p>
+            <div className='chatWindow'>
+              <ul>
+                {queryResults}
+              </ul>
+            </div>
+          </div>
+        </div>
 
-          <select id='date'>
-            <option>This Week</option>
-            <option value='thisWeek'>This Month</option>
-            <option value='thisYear'>This Year</option>
-          </select>
-          <button type='submit'>Show chats</button>
-        </form>
-        <p> You have total of {this.state.queryResults.length} messages </p>
-        <ul>
-          {queryResults}
-        </ul>
       </div>
     )
   }

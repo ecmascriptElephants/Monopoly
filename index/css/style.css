@@ -257,12 +257,38 @@ overflow: auto;
   -webkit-transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  opacity: 0.5;
+  opacity: 1;
 }
 
-#loginForm {
+.landingForm {
   position: relative;
   top: 30%;
   z-index: 2;
   margin: 0 auto;
+}
+
+#keyword {
+  width: 560px;
+  padding: 20px 0 20px 10px;
+  height: 40px;
+}
+
+.marginTop {
+  margin-top: 100px;
+}
+
+.filterRow {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.selectpicker {
+  width: 150px;
+  height: 35px;
+  line-height: 35px;
+  margin: 5px 0;
+  padding: 0 15px 0 20px;
+  border-radius: 0;
+  letter-spacing: .25px;
+  overflow: hidden;
 }

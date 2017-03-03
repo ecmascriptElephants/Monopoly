@@ -250,9 +250,9 @@ class Lobby extends Component {
                         <Button.Or />
                         <Button color='purple' disabled={this.state.join} onClick={() => this.joinGame()}>Join</Button>
                       </Button.Group> : this.state.join
-                      ? <Message>
+                      ? <Message className={'message'}>
                         <Message.Header>Waiting for More Players</Message.Header>
-                      </Message> : <Message>
+                      </Message> : <Message className={'message'}>
                         <Message.Header>Waiting for Players to Join </Message.Header>
                       </Message>} </div>
                        : <div className='showMenuGame' >

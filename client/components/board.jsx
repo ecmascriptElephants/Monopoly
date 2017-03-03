@@ -8,6 +8,7 @@ import ToastHistory from './ToastHistory'
 import Others from './OtherPlayers'
 import Offer from './ShowOffer'
 import { Card } from 'semantic-ui-react'
+import Nav from './nav'
 
 class Board extends Component {
   constructor (props) {
@@ -104,6 +105,7 @@ class Board extends Component {
   render () {
     return (
       <div>
+        <Nav />
         <div className='left'> <Player name={this.props.username} dice={this.dice} piece='Hat' setComment={this.setComment} setHouse={this.setHouse} />
           {
             this.state.showOffer ? <Offer open={this.state.showOffer} offer={this.state.offer} setShowOffer={this.showPopup} position={this.state.position} offerIndex={this.state.offerIndex} /> : null

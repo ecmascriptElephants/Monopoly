@@ -54,14 +54,14 @@ module.exports = (io) => {
         io.to(socket.id).emit('your index', {index})
         socket.broadcast.to(gameObj.playerInfo[0].socketID).emit('player joined', data)
       } else {
-        socket.broadcast.to(data.gameID).emit('player started')
+        io.sockets.in(data.gameID).emit('player started')
       }
     })
 
     socket.on('start', (data) => {
       delete newGame[data.gameID]
       io.emit('update games', newGame)
-      socket.broadcast.to(data.gameID).emit('player started')
+      io.sockets.in(data.gameID).emit('player started')
     })
 
     socket.on('load', (data) => {

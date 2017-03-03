@@ -31,7 +31,8 @@ class Lobby extends Component {
       userMessage: '',
       showGames: true,
       showNewGameButton: true,
-      onlineUsers: {}
+      onlineUsers: {},
+      startGame: false
     }
 
     this.props.dispatch(setDefaultState())
@@ -83,10 +84,11 @@ class Lobby extends Component {
       })
       this.props.dispatch(setGameID(data.gameID))
     })
+
     sock.socket.on('player started', (data) => {
       this.setState({
         join: true,
-        start: true
+        startGame: true
       })
     })
 
@@ -101,6 +103,7 @@ class Lobby extends Component {
       this.setState({ resume: false })
     })
   }
+
   newGame () {
     this.setState({showNewGameButton: false})
     sock.newGame({ username: this.props.username, userID: this.props.userID, picture: window.localStorage.picture })
@@ -112,8 +115,6 @@ class Lobby extends Component {
   }
 
   startGame () {
-    console.log(this.props.playerIndex)
-    console.log(this.props.gameID)
     sock.start({ gameID: this.props.gameID })
   }
 
@@ -182,6 +183,7 @@ class Lobby extends Component {
       <MuiThemeProvider>
         <div>
           <Nav />
+          {this.state.startGame ? <Redirect to={{ pathname: '/loading' }} /> : null}
           <div className='lobby' >
             <div className='chat'>
 
@@ -243,7 +245,7 @@ class Lobby extends Component {
                       })}
                     </div>
 
-                      {this.state.start ? <div className='start'><Link to='/board'><Button color='green' size='massive' onClick={this.startGame}> Start Game </Button></Link></div> : this.state.showNewGameButton ? <Button.Group size='massive' fluid>
+                      {this.state.start ? <div className='start'><Button color='green' size='massive' onClick={this.startGame}> Start Game </Button></div> : this.state.showNewGameButton ? <Button.Group size='massive' fluid>
                         <Button color='green' onClick={() => this.newGame()}>New Game</Button>
                         <Button.Or />
                         <Button color='purple' disabled={this.state.join} onClick={() => this.joinGame()}>Join</Button>

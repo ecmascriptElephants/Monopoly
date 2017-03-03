@@ -1,16 +1,18 @@
 import React from 'react'
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import AppBar from 'material-ui/AppBar'
+import FlatButton from 'material-ui/FlatButton'
+import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar'
 
 const Nav = (props) => {
-
-return (
-     <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-      </MuiThemeProvider>
-)
+  return (
+    <MuiThemeProvider>
+      <Toolbar className='headers'>
+        <ToolbarTitle text='Hackopoly' className='title' />
+        <ToolbarTitle text={`Welcome ${window.localStorage.displayname}`} className='name' />
+        <FlatButton label='Sign Out' primary className='signout' />
+      </Toolbar>
+    </MuiThemeProvider>
+  )
 }
-
 
 export default Nav

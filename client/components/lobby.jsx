@@ -6,9 +6,12 @@ import { setUsername, setGameID, setUserID, setMyIndex, setDefaultState, setStat
 import Toast from './toast'
 import axios from 'axios'
 import LoadGame from './LoadGame'
-import { Button } from 'semantic-ui-react'
+import { Input, Button } from 'semantic-ui-react'
 import { Motion, spring, TransitionMotion } from 'react-motion'
-
+import Nav from './nav'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import Paper from 'material-ui/Paper'
+import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar'
 
 const springPreset = { wobbly: [130, 11] }
 class Lobby extends Component {
@@ -24,8 +27,10 @@ class Lobby extends Component {
       queryResults: [],
       pendingGames: [],
       resume: true,
-      games: {}
+      games: {},
+      userMessage: ''
     }
+
     this.props.dispatch(setDefaultState())
     this.props.dispatch(setUsername(window.localStorage.displayname))
     this.props.dispatch(setUserID(window.localStorage.id))
@@ -37,17 +42,18 @@ class Lobby extends Component {
     this.submitMessage = this.submitMessage.bind(this)
     this.getChats = this.getChats.bind(this)
     this.signOut = this.signOut.bind(this)
+    this.message = this.message.bind(this)
   }
   componentDidMount () {
     // window.localStorage.removeItem('state')
     sock.socket.on('get games', (data) => {
-      this.setState({games: data})
+      this.setState({ games: data })
     })
     sock.socket.on('update games', (data) => {
-      this.setState({games: data})
+      this.setState({ games: data })
     })
     sock.socket.on('new game', (data) => {
-      this.setState({games: data.newGame})
+      this.setState({ games: data.newGame })
     })
 
     sock.socket.on('pending games', (pendingGames) => {
@@ -93,7 +99,7 @@ class Lobby extends Component {
   }
 
   joinGame () {
-    this.setState({join: false})
+    this.setState({ join: false })
     sock.join({ username: this.props.username, userID: this.props.userID, gameID: this.props.gameID, picture: window.localStorage.picture })
   }
 
@@ -101,18 +107,23 @@ class Lobby extends Component {
     sock.start({ gameID: this.props.gameID })
   }
 
-  submitMessage () {
-    let message = document.getElementById('message').value
-    document.getElementById('message').value = ''
-    let sender = this.props.username
-    let room = 'lobby'
-    let msgInfo = { sender: sender, message: message, room: room }
-    JSON.stringify(msgInfo)
-    sock.socket.emit('new-message', msgInfo)
+  submitMessage (e) {
+    console.log(this.state.userMessage)
+    // let message = e.target.value
+    // let sender = this.props.username
+    // let room = 'lobby'
+    // let msgInfo = { sender: sender, message: message, room: room }
+    // JSON.stringify(msgInfo)
+    // sock.socket.emit('new-message', msgInfo)
+  }
+
+  message (e) {
+    console.log(this.state.userMessage)
+    this.setState({userMessage: e.target.value})
   }
 
   handleGameClick (gameID) {
-    this.setState({join: true})
+    this.setState({ join: true })
     this.props.dispatch(setGameID(gameID))
     window.localStorage.setItem('gameID', gameID)
   }
@@ -166,97 +177,46 @@ class Lobby extends Component {
       return <li>Sender: {result.sender} Message: {result.message} Room: {result.room}</li>
     })
     return (
-      <div>
-        <nav className='navbar navbar-default navbar-fixed-top'>
-          <div className='container'>
-            <div className='navbar-header'>
-              <button type='button' className='navbar-toggle collapsed' data-toggle='collapse' aria-expanded='false' aria-controls='navbar'>
-                <span className='sr-only'>Toggle navigation</span>
-                <span className='icon-bar' />
-                <span className='icon-bar' />
-                <span className='icon-bar' />
-              </button>
-              <a className='navbar-brand' href='#/lobby'>Hacknopoly</a>
-            </div>
-            <div id='navbar' className='collapse navbar-collapse'>
-              <ul className='nav navbar-nav'>
-                <li><a href='#/lobby'>Home</a></li>
-                <li><a href='#/profile'>Profile</a></li>
-              </ul>
-              <ul className='nav navbar-nav navbar-right'>
-                <li><a href='#lobby'>Welcome {this.props.username}</a></li>
-                <li><Link to='/'><button onClick={this.signOut}>Sign Out </button></Link></li>
-              </ul>
-              <div>
+      <MuiThemeProvider>
+        <div>
+          <Nav />
+          <div className='lobby' >
+            <div className='chat'>
+
+              <div className='chat-container'>
+                <Paper className='paper-chat' zDepth={5}>
+                  <Toolbar className='headers' >
+                    <ToolbarTitle text='Chat' className='title' />
+                  </Toolbar>
+                  <div className='messages' />
+                  <Input fluid placeholder='Type Here' onChange={this.message} action={<Button onClick={(e) => this.submitMessage(e)}> Send </Button>} />
+
+                </Paper>
               </div>
             </div>
-          </div>
-        </nav>
-
-        <div className='container' id='lobby'>
-          <div className='row'>
-            <div className='col-md-9'>
-              <div className='panel panel-primary chatWindow'>
-                <div className='panel-heading'>
-                  <i className='glyphicon glyphicon-comment'> Chat </i>
-                </div>
-                <div className='panel-body'>
-                  <TransitionMotion
-                    styles={this.getStyles()}
-                    willEnter={this.willEnter}
-                    willLeave={this.willLeave}>
-                    {interp =>
-                      <div className='comment-list'>
-                        {this.state.messages.map((comment, i) => {
-                          const {...style} = interp[i + 1]
-                          return (
-                            <div className='oneChat' sender={comment.sender} key={comment._id} style={style}>
-                              <div className='print-author'>
-                                {comment.sender + ' - '}
-                              </div>
-                              {comment.message}
-                            </div>
-                          )
-                        })}
-                      </div>
-                    }
-                  </TransitionMotion>
-
-                </div>
-
-                <div className='panel-footer'>
-                  <div className='input-group'>
-                    <input id='message' type='text' className='form-control input-sm' placeholder='Enter your message...' />
-                    <span className='input-group-btn'>
-                      <button className='btn btn-warning btn-sm' onClick={this.submitMessage}>Send</button>
-                    </span>
-                  </div>
+            <div col>
+              <div className='users'>
+                <div className='user-container'>
+                  <Paper className='paper-chat' zDepth={5}>
+                    <Toolbar className='headers'>
+                      <ToolbarTitle text='Online Users' className='title' />
+                    </Toolbar>
+                  </Paper>
                 </div>
               </div>
-            </div>
-            <div className='col-md-3'>
-              <div className='panel panel-primary onlinePlayers'>
-                <div className='panel-heading'> Online Players </div>
-              </div>
-              <div className='panel panel-primary gameList'>
-                <div className='panel-heading'> Game List </div>
-                <LoadGame pendingGames={this.state.pendingGames} load={this.state.resume} />
-              </div>
-              <div className='gameButton'>
-                <div>
-                  <Button color='teal' size='huge' onClick={this.newGame}> New Game </Button>
-                  {Object.keys(this.state.games).map((item) => {
-                    return <div key={item} onClick={() => { this.handleGameClick(this.state.games[item]) }}>Game: {item}</div>
-                  })}
-                  {this.state.join ? <Button color='teal' size='huge' onClick={this.joinGame}> Join Game </Button> : null}
-                  {this.state.start ? <Link to='/board'><button color='teal' size='massive' onClick={this.startGame}> Start Game </button></Link> : null}
+              <div className='game'>
+                <div className='user-container'>
+                  <Paper className='paper-chat' zDepth={5}>
+                    <Toolbar className='headers'>
+                      <ToolbarTitle text='Game' className='title' />
+                    </Toolbar>
+                  </Paper>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <Toast message={this.state.comment} show={this.state.showToast} />
-      </div>
+      </MuiThemeProvider>
     )
   }
 }

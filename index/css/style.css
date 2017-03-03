@@ -277,6 +277,10 @@ overflow: auto;
   overflow: auto;
 }
 
+.name {
+  margin: 0 auto;
+  font-family: 'Supermercado One'!important
+}
 .video {
   position: fixed;
   top: 50%;
@@ -365,3 +369,75 @@ overflow: auto;
   margin: 1%
 }
 
+.title {
+  font-family: 'Supermercado One'!important
+}
+
+.signout {
+  margin-top: 12px!important;
+  font-family: 'Supermercado One'!important;
+  text-transform: lowercase!important;
+  color: #333333!important
+}
+
+span {
+  font-family: 'Supermercado One'!important;
+  text-transform: none!important;
+  font-weight: 0!important;
+  font-size: 20px!important;
+}
+
+.lobby {
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+    border: 1px solid;
+    display: flex
+}
+
+.chat {
+  border: 1px solid;
+  width: 60%;
+  height: 80%;
+}
+
+.users {
+  border: 1px solid;
+    height: 300px;
+    margin: 10px;
+    width: 620px
+}
+
+.game {
+  border: 1px solid;
+  height: 340px;
+    margin: 10px;
+    width: 620px;
+}
+
+.chat-container{
+  height: 100%;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+}
+
+.paper-chat {
+  width: 100%;
+  height: 100%;
+  margin: 1%;
+}
+
+.user-container {
+  width: 100%;
+    height: 100%;
+}
+
+.headers {
+  background-color: darkturquoise!important;
+}
+
+.messages {
+    width: 100%;
+    height: 560px
+}

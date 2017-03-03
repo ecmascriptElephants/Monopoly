@@ -22,6 +22,7 @@ class App extends Component {
             <Route path='/lobby' component={Lobby} />
             <Route path='/auth' component={Auth} />
             <Route path='/profile' component={Profile} />
+            <Route path='/nav' component={Nav} />
           </div>
         </Provider>
       </Router>

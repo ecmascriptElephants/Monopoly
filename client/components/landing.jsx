@@ -81,8 +81,8 @@ class Land extends Component {
                 </Header.Content>
               </Header>
               {
-                this.state.authFail ?
-                  <Container text='true' textAlign='center' className='login-validation'>The email or password you’ve entered doesn’t match any account.
+                this.state.authFail
+                ? <Container text='true' textAlign='center' className='login-validation'>The email or password you’ve entered doesn’t match any account.
                     <Link to='/signup'>Sign up</Link> for an account.
                   </Container> : null
               }

@@ -31,6 +31,7 @@ module.exports = (io) => {
       board.addGame(state, data)
         .then((result) => {
           const gameID = result[0]
+          socket.roomOwner = gameID
           board.addPlayer(gameID, data.userID)
           game[gameID] = state
           newGame[gameID] = gameID
@@ -160,8 +161,11 @@ module.exports = (io) => {
 
     socket.on('disconnect', () => {
       const id = socket.nickname
+      const gameID = socket.roomOwner
+      delete newGame[gameID]
       delete userStorage[id]
       io.sockets.emit('user joined', userStorage)
+      socket.broadcast.emit('new game', { newGame, socketID: socket.id })
     })
   })
 }

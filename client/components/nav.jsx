@@ -5,12 +5,12 @@ import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar'
 import { Link } from 'react-router-dom'
 
 const Nav = (props) => {
-
+  const username = window.localStorage.displayname || 'Guest'
   return (
     <MuiThemeProvider>
       <Toolbar className='headers'>
         <ToolbarTitle text='Hackopoly' className='title' />
-        <ToolbarTitle text={`Welcome ${window.localStorage.displayname}`} className='name' />
+        <ToolbarTitle text={`Welcome ${username}`} className='name' />
         <Link to='/team'><FlatButton label='Team' primary className='signout' /> </Link>
         <Link to='/profile'><FlatButton label='Chat Search' primary className='signout' /> </Link>
         <Link to='/'><FlatButton label='Sign Out' primary className='signout' /> </Link>

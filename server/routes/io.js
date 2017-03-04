@@ -13,8 +13,9 @@ module.exports = (io) => {
   let userStorage = {}
   io.on('connection', function (socket) {
     socket.on('user joined', (data) => {
+      socket['nickname'] = data.id
       userStorage[data.id] = data
-      socket.emit('user joined', userStorage)
+      io.sockets.emit('user joined', userStorage)
       socket.emit('get games', newGame)
       board.lookupGame(data.id)
         .then((results) => {
@@ -22,7 +23,7 @@ module.exports = (io) => {
             socket.emit('pending games', results[0])
           }
         })
-    })    
+    })
     socket.on('new game', (data) => {
       data.socketID = socket.id
       data.userPosition = [91, 91]
@@ -30,6 +31,7 @@ module.exports = (io) => {
       board.addGame(state, data)
         .then((result) => {
           const gameID = result[0]
+          socket.roomOwner = gameID
           board.addPlayer(gameID, data.userID)
           game[gameID] = state
           newGame[gameID] = gameID
@@ -155,6 +157,15 @@ module.exports = (io) => {
 
     socket.on('trade offer', (data) => {
       socket.broadcast.to(data.playerSocket).emit('offer for you', { position: data.position, socket: socket.id, offer: data.offer, offerIndex: data.offerIndex })
+    })
+
+    socket.on('disconnect', () => {
+      const id = socket.nickname
+      const gameID = socket.roomOwner
+      delete newGame[gameID]
+      delete userStorage[id]
+      io.sockets.emit('user joined', userStorage)
+      socket.broadcast.emit('new game', { newGame, socketID: socket.id })
     })
   })
 }

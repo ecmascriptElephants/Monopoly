@@ -22,7 +22,6 @@ export default class Auth extends Component {
       .then(() => {
         axios.post('/tokenauth', { token: window.localStorage.token })
           .then((res) => {
-            console.log(res.data)
             if (res.data.validToken) {
               this.setState({auth: true})
             }

@@ -69,7 +69,6 @@ const BuyProperty = (props) => {
         return numberOfPropertiesInGroup
       }, 0)
       if (propertiesInGroupCount === numberNeeded) {
-        console.log('in buyProperties you have a monopoly')
         for (let i = 0; i < indexes.length; i++) {
           propertiesArray[indexes[i]].Monopoly = true
         }

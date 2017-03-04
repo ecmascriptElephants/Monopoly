@@ -9,7 +9,6 @@ module.exports = {
   },
 
   verifyToken: (token) => {
-    console.log('in jwt.js verifyToken has been invoked! jwt.verify(token, "secret" = ', jwt.verify(token, 'ecmascriptElephant'))
     return jwt.verify(token, 'ecmascriptElephant')
   }
 }

@@ -11,7 +11,6 @@ import Auth from './components/auth'
 import Profile from './components/profile'
 import Team from './components/team'
 import Nav from './components/nav'
-import Loading from './components/Loading'
 
 class App extends Component {
   render () {
@@ -27,7 +26,6 @@ class App extends Component {
             <Route path='/profile' component={Profile} />
             <Route path='/team' component={Team} />
             <Route path='/nav' component={Nav} />
-            <Route path='/loading' component={Loading} />
           </div>
         </Provider>
       </Router>

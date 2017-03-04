@@ -51,7 +51,6 @@ class ShowOffer extends Component {
   }
 
   render () {
-    console.log(this.props.userPropertiesArray[this.props.index][this.props.position])
     return (
       <Modal open={this.props.open} basic size='small'>
         <Header icon='archive' content='Offer' />

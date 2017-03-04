@@ -44,10 +44,8 @@ const MoveToken = (props) => {
   }
 
   const handleMoveToken = () => {
-    console.log('moveTokenjsx handlemovetoken props.specialCardButton = ', props.specialCardButton)
     const doubles = props.doubles
     const diceSum = props.diceSum
-    console.log('movetokenjsx handleMoveToken props.goFlag = ', props.goFlag)
     let jail = false
     let oldUserPosition = props.userPosArray[props.index]
     let userPosition = (props.userPosArray[props.index] + diceSum) % 40
@@ -119,12 +117,10 @@ const MoveToken = (props) => {
                 }
               })
               if (props.specialCardButton) {
-                console.log('in movetokenjsx is working')
                 rentOwed = 10 * (props.dies[0] + props.dies[1])
               } else {
                 rentOwed = (diceSum) * (prop.PropertyObj.RENT[utilityCount])
               }
-              console.log('movetoken line 120 landed on an owned utilities rentOwed = ', rentOwed, diceSum)
             } else if (prop.PropertyObj.PROPERTY_GROUP === 'Stations') {
               let stationCount = -1
               props.userPropertiesArray[propertyOwner].forEach(prop => {
@@ -132,13 +128,11 @@ const MoveToken = (props) => {
                   stationCount += 1
                 }
               })
-              console.log('movetoken line 120 landed on an owned station rentOwed = ', rentOwed, diceSum)
               rentOwed = prop.PropertyObj.RENT[stationCount]
               if (props.doubleRailRoadRentMultiplier) {
                 rentOwed *= 2
               }
             } else {
-              console.log('movetoken line 120 landed on an owned property rentOwed = ', rentOwed, diceSum)
               rentOwed = prop.PropertyObj.RENT[prop.Houses]
               if (prop.Monopoly && prop.Houses === 0) {
                 rentOwed *= 2

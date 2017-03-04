@@ -43,7 +43,6 @@ border-radius: 100%
 
 .login-validation {
   width: 100%!important;
-  /*height: 20px;*/
   background-color: rgba(255, 0, 0, .75);
   border: solid red 1px;
   margin: 0px 0px 5px 0px;
@@ -376,6 +375,23 @@ overflow: auto;
   height: 250px;
 }
 
+.techPic {
+  width: 150px;
+  height: 150px;
+}
+
+.techPic2 {
+  width: 450px;
+  height: 150px;
+}
+
+.marginTech {
+  padding-top: 50px;
+}
+
+.social-space {
+  margin-right: 10px;
+}
 
 .ui list history {
   margin: 1%
@@ -434,6 +450,7 @@ span {
   width: 100%;
   height: 100%;
   margin: 1%;
+  overflow: auto
 }
 
 .user-container {
@@ -488,21 +505,3 @@ span {
     height: 15%;
 }
 
-
-.techPic {
-  width: 150px;
-  height: 150px;
-}
-
-.techPic2 {
-  width: 450px;
-  height: 150px;
-}
-
-.marginTech {
-  padding-top: 50px;
-}
-
-.social-space {
-  margin-right: 10px;
-}

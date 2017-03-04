@@ -50,7 +50,6 @@ module.exports = (io) => {
         var obj = {}
         obj[index] = data
         gameObj.playerInfo[index] = data
-        console.log(index)
         io.to(socket.id).emit('your index', {index})
         socket.broadcast.to(gameObj.playerInfo[0].socketID).emit('player joined', data)
       } else {
@@ -128,7 +127,6 @@ module.exports = (io) => {
     })
 
     socket.on('jail free update', (data) => {
-      console.log('in io.js "jail free update" has been invoked data = ', data)
       socket.broadcast.to(data.gameID).emit('update jail free', { jailFreeArray: data.jailFreeArray, index: data.index })
     })
 

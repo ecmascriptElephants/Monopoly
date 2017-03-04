@@ -18,7 +18,7 @@ const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 const ioRouter = require('./routes/io.js')
 const token = require('./jwt/jwt')
-const mongodb = require('./mongodb/config')
+// const mongodb = require('./mongodb/config')
 const axios = require('axios')
 app.use(cors())
 
@@ -99,11 +99,9 @@ passport.use('local-login', new LocalStrategy({
           if (err) console.error(err)
           if (resp) {
             passport.user = {id: result[0].id, displayname: result[0].displayname}
-            console.log('result[0] = ', result[0])
             passport.token = token.tokenGenerator(result[0].id)
             return done(null, result[0])
           } else {
-            console.log('wrong password')
             // return done(null, false, req.flash('loginMessage', 'Incorrect password.'))
           }
         })

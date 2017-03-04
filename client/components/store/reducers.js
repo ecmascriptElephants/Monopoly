@@ -82,7 +82,6 @@ const setIndex = (state, action) => {
   return newState
 }
 const setPlayerIndex = (state, action) => {
-  console.trace(action.index)
   const newState = {}
   Object.assign(newState, state, { playerIndex: action.index })
   return newState
@@ -134,7 +133,6 @@ const setUserJail = (state, action) => {
   return newState
 }
 const setUserJailFree = (state, action) => {
-  console.log('in reducers setUserJailFree has been invoked; action = ', action, 'state = ', state)
   let newArr = [...state.jailFreeArray.slice(0, action.index),
     action.jailFreeArray,
     ...state.jailFreeArray.slice(action.index + 1)]

@@ -11,14 +11,12 @@ import {
 const Bankrupt = (props) => {
   const handleBankrupt = () => {
     let tempProperties = [...props.userPropertiesArray[props.playerIndex]]
-    console.log('tempProperties', tempProperties)
     let tempCash = props.userCashArray[props.playerIndex]
     tempProperties = []
     props.dispatch(setUserProperties(tempProperties, props.playerIndex))
     props.dispatch(setCash(-tempCash, props.playerIndex))
     props.dispatch(setEndTurn(true))
     props.dispatch(setDiceRoll(false))
-    console.log('end turn invoked')
   }
   return (
     <Button onClick={() => { handleBankrupt() }}>Bankruptcy</Button>

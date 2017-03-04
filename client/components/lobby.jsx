@@ -40,7 +40,6 @@ class Lobby extends Component {
     this.props.dispatch(setUsername(window.localStorage.displayname))
     this.props.dispatch(setUserID(window.localStorage.id))
     sock.userJoined({ id: window.localStorage.id, displayName: window.localStorage.displayname, picture: window.localStorage.picture })
-
     this.joinGame = this.joinGame.bind(this)
     this.newGame = this.newGame.bind(this)
     this.startGame = this.startGame.bind(this)
@@ -54,7 +53,6 @@ class Lobby extends Component {
   componentWillMount () {
     axios.post('/tokenauth', { token: window.localStorage.token })
       .then((res) => {
-        console.log(res.data)
         if (res.data.validToken) {
           this.setState({auth: true})
         }
@@ -84,9 +82,10 @@ class Lobby extends Component {
     })
 
     sock.socket.on('your index', (data) => {
-      console.log('myIndex', data)
       this.props.dispatch(setMyIndex(data.index))
-      this.setState({games: data.newGame})
+      if (data.newGame) {
+        this.setState({games: data.newGame})
+      }
     })
 
     sock.socket.on('player joined', (data) => {
@@ -126,6 +125,7 @@ class Lobby extends Component {
   }
 
   joinGame () {
+    this.setState({showNewGameButton: false})
     this.setState({ join: false })
     sock.join({ username: this.props.username, userID: this.props.userID, gameID: this.props.gameID, picture: window.localStorage.picture })
   }
@@ -167,7 +167,6 @@ class Lobby extends Component {
   }
 
   signOut () {
-    console.log('sign out called')
     window.localStorage.removeItem('token')
     window.localStorage.removeItem('displayname')
     window.localStorage.removeItem('id')
@@ -192,7 +191,7 @@ class Lobby extends Component {
                   </Toolbar>
                   <div className='messages'>
                     { this.state.messages.map((msg, i) => {
-                      return <List>
+                      return <List key={i}>
                         <List.Item>
                           <Image avatar src={`${msg.picture}`} />
                           <List.Content>
@@ -215,7 +214,7 @@ class Lobby extends Component {
                       <ToolbarTitle text='ONLINE USERS' className='title' />
                     </Toolbar>
                     { Object.keys(this.state.onlineUsers).map((user, i) => {
-                      return <List>
+                      return <List key={i}>
                         <List.Item>
                           <Image avatar src={`${this.state.onlineUsers[user].picture}`} />
                           <List.Description as='a'>{this.state.onlineUsers[user].displayName}</List.Description>

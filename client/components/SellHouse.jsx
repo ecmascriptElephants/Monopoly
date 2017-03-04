@@ -19,7 +19,6 @@ const SellHouse = (props) => {
         var house = `h${propertyPosition}`
         let obj = {}
         obj[house] = arr
-        console.log(obj)
         props.setHouse(obj)
         props.increaseFunds(houseSalePrice)
         // sock.updateMoney({ gameID: props.gameID, money: houseSalePrice, index: props.playerIndex })

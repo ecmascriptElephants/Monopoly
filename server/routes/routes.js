@@ -20,7 +20,6 @@ module.exports = (app, express, passport) => {
     if (token.verifyToken(req.body.token) !== undefined) {
       res.send({ validToken: true })
     } else {
-      console.log('in routes.js /tokenauth token is invalid')
       res.send({ validToken: false })
     }
   })

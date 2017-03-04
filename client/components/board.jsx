@@ -78,7 +78,6 @@ class Board extends Component {
   componentWillMount () {
     axios.post('/tokenauth', { token: window.localStorage.token })
       .then((res) => {
-        console.log(res.data)
         if (res.data.validToken && this.props.gameID !== undefined) {
           this.setState({auth: true})
           sock.init({ gameID: this.props.gameID, index: this.props.playerIndex })

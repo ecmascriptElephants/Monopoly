@@ -39,7 +39,6 @@ module.exports = {
     socket.emit('money update', data)
   },
   updateJailFree: (data) => {
-    console.log('in socket.js updateJailFree has been invoked data = ', data)
     socket.emit('jail free update', data)
   },
   loadGame: (gameID) => {

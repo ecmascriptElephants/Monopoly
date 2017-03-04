@@ -93,7 +93,6 @@ class DiceRoll extends Component {
       this.props.dispatch(setCash(data.money, data.index))
     })
     sock.socket.on('update jail free', (data) => {
-      console.log('in diceRoll2 socketon "update jail free" invoked data = ', data)
       this.props.dispatch(setUserJailFree(data.jailFreeArray, data.index))
     })
     sock.socket.on('receive-comment', (comment) => {
@@ -145,7 +144,6 @@ class DiceRoll extends Component {
       let doubles = 0
       if (die1 === die2) {
         doubles = this.state.doubles + 1
-        console.log('in diceRoll2jsx handleRollDice  doubles = ', doubles)
         let newComment = comments.rollDoubles(this.props.username, die1 + die2)
         this.setState({ comment: newComment, showToast: true, dice: [die1, die2] })
         sock.socket.emit('comment', { gameID: this.props.gameID, comment: newComment })
@@ -178,7 +176,6 @@ class DiceRoll extends Component {
   }
 
   setStates (obj) {
-    console.log('setStates obj = ', obj)
     this.setState(obj)
   }
 
@@ -337,14 +334,12 @@ class DiceRoll extends Component {
   }
 
   checkBankruptcy () {
-    console.log('check bankruptcy')
     let usersProperties = [...this.props.userPropertiesArray[this.props.index]]
     let count = 0
     usersProperties.forEach((property) => {
       if (property.Mortgaged) count++
     })
     if (count === usersProperties.length) {
-      console.log('bankruptcy')
       this.props.dispatch(setBankruptcy(true))
     }
   }

@@ -32,7 +32,6 @@ class Trade extends Component {
   }
 
   render () {
-    console.log(this.props.userPropertiesArray[this.props.otherIndex][this.props.position])
     return (
       <div>
         <Button color='black' onClick={() => this.open()}>Trade</Button>

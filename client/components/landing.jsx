@@ -37,7 +37,6 @@ class Land extends Component {
 
   handleLogin (e) {
     e.preventDefault()
-    console.log('handleLOGIN has been invoked!!!')
     axios.post('/login', this.state)
     .then((res) => {
       window.localStorage.setItem('token', res.data.token)
@@ -51,7 +50,6 @@ class Land extends Component {
     .then(() => {
       axios.post('/tokenauth', { token: window.localStorage.token })
         .then((res) => {
-          console.log(res.data)
           if (res.data.validToken) {
             this.setState({auth: true})
           } else {

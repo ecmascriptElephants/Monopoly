@@ -87,7 +87,7 @@ class Land extends Component {
                   </Container> : null
               }
               <Form onSubmit={this.handleLogin}>
-                <Input focus fluid error={this.state.authFail} name='username' placeholder='Username' onChange={this.onUsernameChange} />
+                <Input focus fluid error={this.state.authFail} name='username' placeholder='Email' onChange={this.onUsernameChange} />
                 <Divider horizontal />
                 <Input focus fluid error={this.state.authFail} name='password' placeholder='Password' type='password' onChange={this.onPasswordChange} />
                 <Divider horizontal />

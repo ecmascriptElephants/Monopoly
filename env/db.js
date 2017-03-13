@@ -7,6 +7,7 @@ module.exports = {
   connection: {
     host,
     user,
+    password,
     port,
     database: 'monopoly'
   }

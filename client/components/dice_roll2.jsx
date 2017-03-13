@@ -121,8 +121,8 @@ class DiceRoll extends Component {
         updatedJailPositionsArray[this.props.index] = 0
 
         this.props.dispatch(setUserJail(updatedJailPositionsArray[this.props.index], this.props.index))
-
         this.props.dispatch(setMoveToken(true))
+        this.props.dispatch(setDiceRoll(false))
         this.props.dispatch(setJailRoll(false))
         let newComment = comments.jailDoubles(this.props.username, die1 + die2)
         this.setState({ comment: newComment, showToast: true, dice: [die1, die2] })

@@ -9,9 +9,32 @@ import {
   setUserProperties,
   setCash
 } from '../components/store/actionCreators'
-import { Button } from 'semantic-ui-react'
+import { Button, Image, Modal } from 'semantic-ui-react'
 import comments from '../helper/comment'
+// import Bankrupt from './Bankrupt'
+
 const BuyProperty = (props) => {
+  const close = () => {
+    props.dispatch(setBuyProperty(false))
+  }
+
+  const checkMonopoly = (propertyGroup, numberNeeded) => {
+    const propertiesArray = props.userPropertiesArray[props.playerIndex]
+    const indexes = []
+    let propertiesInGroupCount = propertiesArray.reduce((numberOfPropertiesInGroup, property, index) => {
+      if (property.PropertyObj.PROPERTY_GROUP === propertyGroup) {
+        indexes.push(index)
+        numberOfPropertiesInGroup += 1
+        return numberOfPropertiesInGroup
+      }
+    }, 0)
+    if (propertiesInGroupCount === numberNeeded) {
+      for (let i = 0; i < indexes.length; i++) {
+        propertiesArray[indexes[i]].Monopoly = true
+      }
+      props.dispatch(propertiesArray, props.playerIndex)
+    }
+  }
   const handleBuyPropertyButtonClick = () => {
     let propertyPosition = props.userPosArray[props.index]
     let propertiesArray = [...props.userPropertiesArray[props.playerIndex]]
@@ -53,7 +76,16 @@ const BuyProperty = (props) => {
   }
 
   return (
-    <Button secondary fluid onClick={() => { handleBuyPropertyButtonClick() }}>  Buy This Property. </Button>
+    <Modal open={props.buyPropertyButton} size='small' closeIcon='close' dimmer={false}>
+      <Modal.Header> Buy Property </Modal.Header>
+      <Modal.Content image>
+        <Image wrapped size='medium' centered src={`Property_Cards/${props.userPosArray[props.index]}.png`} />
+      </Modal.Content>
+      <Button.Group vertical>
+        <Button size='large' color='green' onClick={() => { handleBuyPropertyButtonClick() }}>  Buy This Property. </Button>
+        <Button size='large' color='red' onClick={() => { close() }}>  Close </Button>
+      </Button.Group>
+    </Modal>
   )
 }
 
@@ -65,7 +97,8 @@ const mapStateToProps = (state) => {
     userPropertiesArray: state.userPropertiesArray,
     index: state.index,
     userCashArray: state.userCashArray,
-    playerIndex: state.playerIndex
+    playerIndex: state.playerIndex,
+    buyPropertyButton: state.buyPropertyButton
   }
 }
 
@@ -79,8 +112,8 @@ BuyProperty.propTypes = {
   userCashArray: React.PropTypes.array.isRequired,
   setState: React.PropTypes.func.isRequired,
   doubles: React.PropTypes.number.isRequired,
-  userNames: React.PropTypes.array.isRequired,
-  diceSum: React.PropTypes.number.isRequired
+  diceSum: React.PropTypes.number.isRequired,
+  buyPropertyButton: React.PropTypes.bool.isRequired
 }
 
 export default connect(mapStateToProps)(BuyProperty)

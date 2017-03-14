@@ -6,15 +6,23 @@ module.exports = (app, express, passport) => {
     failureFlash: true
   }),
     (req, res) => {
-      res.send({ token: passport.token, user: passport.user })
+      res.send({ token: passport.token, user: passport.user, picture: `https://robohash.org/${passport.user.displayname}` })
     })
 
   app.post('/login', passport.authenticate('local-login', {
-    failureRedirect: '#/'
+    failureRedirect: '/#/'
   }),
     (req, res) => {
-      res.send({ token: passport.token, user: passport.user })
+      res.send({ token: passport.token, user: passport.user, picture: `https://robohash.org/${passport.user.displayname}` })
     })
+
+  app.post('/tokenauth', (req, res) => {
+    if (token.verifyToken(req.body.token) !== undefined) {
+      res.send({ validToken: true })
+    } else {
+      res.send({ validToken: false })
+    }
+  })
 
   app.get('/auth/facebook', passport.authenticate('facebook'))
 
@@ -41,7 +49,7 @@ module.exports = (app, express, passport) => {
   })
 
   app.get('/get-info', (req, res) => {
-    res.send({ token: passport.token, user: passport.user })
+    res.send({ token: passport.token, user: passport.user, picture: passport.photo })
   })
 
   app.get('/user', (req, res) => {
@@ -51,7 +59,6 @@ module.exports = (app, express, passport) => {
   app.post('/chats', (req, res) => {
     let room = req.body.room
     let keyword = req.body.keyword
-    let date = req.body.date
     if (room === 'All Rooms') {
       msgHistory.allHistory(keyword, res)
     } else {

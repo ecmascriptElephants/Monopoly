@@ -1,7 +1,7 @@
 module.exports = {
   DoublesJail: (name, dice) => {
-    return `${name} rolled ${dice}, landing on Go-To-Jail. 
-    Go To Jail. Go Directly To Jail. 
+    return `${name} rolled ${dice}, landing on Go-To-Jail.
+    Go To Jail. Go Directly To Jail.
     Do Not Pass Go. Do Not Collect $200.`
   },
   LandJail: (name) => {
@@ -46,8 +46,8 @@ module.exports = {
     return `You cannot afford the $50 fine.`
   },
 
-  cantIncome: () => {
-    return 'You do not have enough money to pay the $200 income tax.'
+  jailFineInsufficientFunds: (name) => {
+    return `${name} cannot afford the $50 jail fine.`
   },
 
   rolledDoubles: () => {
@@ -74,12 +74,8 @@ module.exports = {
     return `${name} landed on a community space.`
   },
 
-  unowned: (name) => {
-    return `${name} landed on an unowned property!`
-  },
-
-  owned: (user, property, rent, owner) => {
-    return `${user} landed on ${property}. Pay $${rent} to ${owner}.`
+  propertyAlreadyOwned: (name, property) => {
+    return `${name} landed on ${property}, but already owns it.`
   },
 
   rentOwned: (property, rent, owner) => {
@@ -106,7 +102,47 @@ module.exports = {
     return 'You landed on Income Tax. Pay $200'
   },
 
-  LuxuryTab: () => {
-    return 'You landed on Luxury Tax, Pay $100.'
+  squareTypeLuxuryTax: (name) => {
+    return `${name} landed on Luxury Tax, Pay $100.`
+  },
+
+  mortgageProperty: (name, propertyName, amount) => {
+    return `${name} mortgaged ${propertyName} for $${amount}.`
+  },
+
+  unmortgageProperty: (name, propertyName, amount) => {
+    return `${name} unmortgaged ${propertyName} for $${amount}.`
+  },
+
+  boughtHouse: (name, propertyName, amount) => {
+    return `${name} bought a house on ${propertyName} for $${amount}.`
+  },
+
+  boughtHotel: (name, propertyName, amount) => {
+    return `${name} bought a hotel on ${propertyName} for $${amount}.`
+  },
+
+  soldHouse: (name, propertyName, amount) => {
+    return `${name} sold a house on ${propertyName} for $${amount}.`
+  },
+
+  soldHotel: (name, propertyName, amount) => {
+    return `${name} sold a hotel on ${propertyName} for $${amount}.`
+  },
+
+  alreadyHaveHotel: (name, propertyName) => {
+    return `${name} already has a hotel on ${propertyName}.`
+  },
+
+  buyHouseInsufficientFunds: (name, propertyName, amount, cash) => {
+    return `${name} needs $${amount} to buy a house on ${propertyName}, but only has $${cash}.`
+  },
+
+  buyHotelInsufficientFunds: (name, propertyName, amount, cash) => {
+    return `${name} needs $${amount} to buy a hotel on ${propertyName}, but only has $${cash}.`
+  },
+
+  unmortgagePropertyInsufficientFunds: (name, propertyName, amount, money) => {
+    return `${name} needs $${amount} in order to unmortgage ${propertyName}, but only has $${money}.`
   }
 }

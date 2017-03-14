@@ -1,5 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import comments from '../helper/comment'
+import sock from '../helper/socket'
 import {
   setUserProperties
 } from './store/actionCreators'
@@ -16,8 +18,14 @@ const UnMortgage = (props) => {
           property.Mortgaged = false
           props.dispatch(setUserProperties(tempProperties, props.playerIndex))
           props.reduceFunds(mortgageAmount)
+          // sock.updateMoney({ gameID: props.gameID, money: -mortgageAmount, index: props.playerIndex })
+          let newComment = comments.unmortgageProperty(props.username, props.propertyName, mortgageAmount)
+          props.setState({ comment: newComment, showToast: true })
+          sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
         } else {
-          console.log('not Enough money')
+          let newComment = comments.unmortgagePropertyInsufficientFunds(props.username, props.propertyName, mortgageAmount, props.cash)
+          props.setState({ comment: newComment, showToast: true })
+          sock.socket.emit('comment', { gameID: props.gameID, comment: newComment })
         }
       }
     })
@@ -30,15 +38,20 @@ const UnMortgage = (props) => {
 const mapStateToProps = (state) => {
   return {
     userPropertiesArray: state.userPropertiesArray,
+    username: state.username,
+    gameID: state.gameID,
     playerIndex: state.playerIndex
   }
 }
 
 UnMortgage.propTypes = {
   userPropertiesArray: React.PropTypes.array.isRequired,
+  username: React.PropTypes.string.isRequired,
   propertyName: React.PropTypes.string.isRequired,
   playerIndex: React.PropTypes.number.isRequired,
+  gameID: React.PropTypes.number.isRequired,
   reduceFunds: React.PropTypes.func.isRequired,
+  setState: React.PropTypes.func.isRequired,
   cash: React.PropTypes.number.isRequired
 }
 export default connect(mapStateToProps)(UnMortgage)

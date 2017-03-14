@@ -4,6 +4,7 @@ const msgHistory = new mongoose.Schema({
   sender: String,
   message: String,
   room: String,
+  picture: String,
   created: {type: Date, default: Date.now}
 })
 

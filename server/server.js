@@ -19,6 +19,7 @@ const io = require('socket.io')(server)
 const ioRouter = require('./routes/io.js')
 const token = require('./jwt/jwt')
 // const mongodb = require('./mongodb/config')
+const axios = require('axios')
 app.use(cors())
 
 const port = process.env.PORT || 8000
@@ -31,6 +32,7 @@ passport.use(new FacebookStrategy({
   callbackURL: config.callbackURL
 },
   (accessToken, refreshToken, profile, done) => {
+    passport.photo = `https://graph.facebook.com/v2.8/${profile.id}/picture`
     process.nextTick(() => {
       db.raw(`SELECT  * FROM fb_user where fbID = ${Number(profile.id)}`)
         .then((result) => {
@@ -84,8 +86,6 @@ passport.use('local-signup', new LocalStrategy({
   }
 ))
 
-
-
 passport.use('local-login', new LocalStrategy({
   usernameField: 'username',
   passwordField: 'password',
@@ -94,7 +94,6 @@ passport.use('local-login', new LocalStrategy({
   (req, username, password, done) => {
     User.findByUsername(username, (result) => {
       if (result[0].length === 0) {
-        console.log('User not found!')
         return done(null, false, req.flash('loginMessage', 'User not found.'))
       } else {
         result = JSON.parse(JSON.stringify(result[0]))
@@ -105,7 +104,6 @@ passport.use('local-login', new LocalStrategy({
             passport.token = token.tokenGenerator(result[0].id)
             return done(null, result[0])
           } else {
-            console.log('wrong password')
             // return done(null, false, req.flash('loginMessage', 'Incorrect password.'))
           }
         })

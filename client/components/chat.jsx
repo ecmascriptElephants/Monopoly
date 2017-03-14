@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import {Header, Container, Segment, Icon, Divider} from 'semantic-ui-react'
+import {List, Segment, Divider} from 'semantic-ui-react'
 import sock from '../helper/socket'
-
+import escape from 'lodash.escape'
 class Chat extends Component {
   constructor (props) {
     super(props)
@@ -20,13 +20,14 @@ class Chat extends Component {
   }
 
   submitMessage () {
-    let message = document.getElementById('chatBox').value
+    let message = escape(document.getElementById('chatBox').value)
     document.getElementById('chatBox').value = ''
     let sender = this.state.name
     let room = 'board'
     let msgInfo = {sender: sender, message: message, room: room}
+
     JSON.stringify(msgInfo)
-    sock.socket.emit('new-message', msgInfo)
+    sock.socket.emit('new-message', escape(msgInfo))
   }
 
   render () {
@@ -34,24 +35,12 @@ class Chat extends Component {
       return <li>{this.state.name}: {msg}</li>
     })
     return (
-      <Container className='chatBox'>
-        <Segment raised vertical compact className='content'>
-          <Header as='h6' icon textAlign='center'>
-            <Icon name='users' circular />
-            <Header.Content>
-              {this.state.name}
-            </Header.Content>
-          </Header>
-          <Divider />
-          <div>
-            <ul>
-              {messages}
-            </ul>
-          </div>
-          <input id='chatBox' name='chatBox' type='text' />
-          <button onClick={this.submitMessage}>Send</button>
-        </Segment>
-      </Container>
+      <Segment vertical compact className='content'>
+        <Divider />
+        <List items={messages} />
+        <input id='chatBox' name='chatBox' type='text' />
+        <button onClick={this.submitMessage}>Send</button>
+      </Segment>
     )
   }
 }

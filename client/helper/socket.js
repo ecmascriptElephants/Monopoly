@@ -39,6 +39,9 @@ module.exports = {
   updateMoney: (data) => {
     socket.emit('money update', data)
   },
+  updateJailFree: (data) => {
+    socket.emit('jail free update', data)
+  },
   loadGame: (gameID) => {
     socket.emit('load game', gameID)
   },
